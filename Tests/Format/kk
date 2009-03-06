@@ -1,0 +1,31 @@
+# ../../partanalyze Version alpha 0.4.2.0
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Nov  6 2008
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#
+#Thu Nov  6 02:55:50 EST 2008
+#VERBOSITY on
+#Reading clusters from partition test.comments.lst
+#Reading partition input format PARTANALYZER
+#Skipping comment... 
+#2 
+#Finish Reading partition: 
+#clusters= 2 #items= 6 #singletons= 0 last-cluster-#items= 5 Last-item-read= h
+#Reading clusters from partition test.comments2.lst
+#Reading partition input format PARTANALYZER
+#Skipping comment... 
+# 
+#Skipping comment... 
+#This 
+#Skipping comment... 
+#2 
+#Finish Reading partition: 
+#clusters= 2 #items= 6 #singletons= 0 last-cluster-#items= 5 Last-item-read= h
+#Thu Nov  6 02:55:50 EST 2008
+#dist-inters-p1
+2.22045e-16	-0.693147	-0.693147	-0.693147
+#dist-inters-p2
+2.22045e-16	-0.693147	-0.693147	-0.693147
+#dist-p1-p2
+2.22045e-16	-0.693147	-0.693147	-0.693147
+#Thu Nov  6 02:55:50 EST 2008

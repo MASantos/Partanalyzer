@@ -1,0 +1,4320 @@
+/** Partanalyzer
+Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
+Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
+
+Compile Options:
+
+g++ -o partanalyzer partanalyzer.cc
+*/
+
+#include<iostream>
+#include<fstream>
+#include<vector>
+#include<string>
+/**strcmp works well under g++ (GCC) 3.3.3 (SuSE Linux) or g++ (GCC) 4.2.4 (Ubuntu 4.2.4-1ubuntu3 -Gutsy)
+but seems to fail to compile under Ubuntu 8.10 Intrepid, 
+requiring an explicit inclusion of the C header. An apparent wrapper around it is
+the C++ cstring header
+*/
+#include<cstring>
+/**The same happens with
+#include<algorithm> //for sort
+#include<stdlib.h> //atoi, etc.
+#include<string.h> //for strcmp, etc.
+*/
+#include<algorithm> //for sort
+#include<stdlib.h> //atoi, etc.
+//
+#include<sstream>
+#include<map>
+#include<set>
+#include<list>
+#include<math.h>
+#include<time.h>
+///Creating , reading and removing directories
+#include<dirent.h> ///It's become more or less a standard, although not included in ANSI C(++)
+#include<sys/stat.h> ///More random location: others refer to it as living under dir.h or unistd.h ... Looks like rmdir is homeless.
+#include<errno.h>
+//
+/* TESTING CUSTOM GRAPH CLASS 
+*/
+//#include "graph.h"
+
+using namespace std;
+
+///Program name (full path)
+char* program;
+///Program basename
+#define _programb_ "partanalyzer" 
+///Current version
+char* VERSION="alpha 0.4.4.K";
+///Type definition of edge
+typedef double edge;
+///A row is a vector of edges
+typedef vector<edge > row;
+///A column is the same as a row
+typedef row column;
+typedef vector< string > svect;
+typedef vector< svect > smat;
+typedef multiset< string > smset;
+typedef set< string > sset;
+typedef multimap<string,string > smap;
+typedef map<pair<string,string>,edge > graph ;
+typedef pair<string,string> strpair;
+typedef pair<string, pair<sset,double> > neighborhood ;
+typedef map<string, pair<sset,double> > scover ;
+///Type definitions: specific
+typedef svect cluster;
+
+///Converts anything to a string
+template <typename T>
+inline string ToString(const T& x){
+        ostringstream os;
+        os << x;
+        return os.str();
+}
+///Entensivity degree is precisely that parameter of Tsallis and Renyi entropies. This value means using the default.
+#define EXTENSIVITY_DEFAULT -6666.0
+#define EXTENSIVITY_DEFAULT_TSALLIS 2.0
+#define EXTENSIVITY_DEFAULT_RENYI 2.0
+#define EXTENSIVITY_MAX 100.0
+#define _PGM_P2_GRAYSCALE_ 256
+///DEFAULT THERMODYNAMIC COEFF.
+double beta=1.0;
+double mu=0.0;
+///If true program outputs additional information regarding its calculations. This can be already quite a lot.
+bool 	VERBOSE=false;
+///If true, program does not print any comment lines (those starting with #). No warnings will be printed either.
+bool    QUIET=false;
+///Available types of pmetric functions (functions inducing a metric on partitions)
+enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;
+///Available types of pmetric header comments (#BeginViDistances or #EndEditDistances)
+enum flagheader {BEGIN,END};
+///Enummerates the possible ways of generating duplicates for a given MSA
+enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
+///Enummerates possible main program command lines options
+enum prganalysis { prgCCOP=1,prgCDIS,prgVIPP,prgVIST,prgVISR,prgEDSC,prgEDST,prgEDSR,prgBDST,prgTDST,prgRDST,prgBDSR,prgTDSR,prgRDSR,prgINTE,prgMGMX,prgMMXC, prgCLST,prgPMSA,prgMSPI,prgMAPI,prgMRED,prgPSPP,prgPSST,prgPSSR,prgHASS,prgIPAR,prg2MCL,prg2FRE,prgM2PA,prgIPOT,prgADST,prgSPST,prgSPSS,prgSPSO,prgJDST,prgJDSR,prgCEMX} ;
+///Enummerates the possible input format for a partition file
+enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;
+///Available types of Splitstat methods
+enum splitmethod {split,cosine,overlap,fraction=overlap} ;
+///Prints date with a leading # sign calling underlying OS. 
+void systemDate(){
+	system("printf \042#\042 ");
+	system("date");
+}
+///Wrapper of a char* in order to store char* in STL containers. Otherwise, weird memory likages happen, if not simply a segfault.
+class Charr{
+public: char* car;
+};
+
+/**Algebra of string vectors
+a<=b	a is subset of b
+*/
+bool operator<=(svect& cla, svect& clb){
+	long int itfound=0;
+	if(cla.size()>clb.size())return false;
+	for(svect::iterator ita=cla.begin();ita!=cla.end();ita++)
+		for(svect::iterator itb=clb.begin();itb!=clb.end();itb++){
+			//cout<<"CL<= : "<<*ita<<"=="<<*itb<<"?"<<endl; 
+			if((*ita).compare(*itb)==0)itfound++;
+		}
+	if(itfound==cla.size())return true;
+	return false;
+}
+///a<b	a is a strict subset of b
+bool operator<(svect& cla, svect& clb){
+	if(cla.size()<clb.size()&& cla<=clb)return true;
+	return false;
+}
+///b>=a	a is a subset of b
+bool operator>=(svect& cla, svect& clb){
+	if(clb<=cla)return true;
+	return false;
+}
+///b>a	a is a strict subset of b
+bool operator>(svect& cla, svect& clb){
+	if(cla.size()>clb.size()&& cla>=clb)return true;
+	return false;
+}
+///a!=b	a and b are different
+bool operator!=(svect& cla, svect& clb){
+	return !(cla==clb);
+}
+///a==b	a and b are different
+bool operator==(svect& cla, svect& clb){
+	long int itfound=0;
+	if(cla.size()!=clb.size())return false;
+	for(svect::iterator ita=cla.begin();ita!=cla.end();ita++)
+		for(svect::iterator itb=clb.begin();itb!=clb.end();itb++)
+			if((*ita).compare(*itb)==0)itfound++;
+	if(itfound==cla.size()&&cla.size()==clb.size())return true;
+	return false;
+}
+///Intersection of a and b : a*b
+svect operator*(svect& cla, svect& clb){ 
+	svect iab;
+	for(svect::iterator ita=cla.begin();ita!=cla.end();ita++)
+		for(svect::iterator itb=clb.begin();itb!=clb.end();itb++)
+			if((*ita).compare(*itb)==0)iab.push_back(*ita);
+	return iab;
+}
+
+///Union of clusters of a and b : a+b
+svect operator+(svect& cla, svect& clb){ 
+	svect uab;
+	sset suab;
+	for(svect::iterator ita=cla.begin();ita!=cla.end();ita++)
+		suab.insert(*ita);
+	for(svect::iterator itb=clb.begin();itb!=clb.end();itb++)
+		suab.insert(*itb);
+	for(sset::iterator it=suab.begin();it!=suab.end();it++)
+		uab.push_back(*it);
+	return uab;
+}
+///Increment a with b : a=a+b
+svect& operator+=(svect& cla, svect& clb){
+	return (cla=(cla+clb));
+}
+
+///Addition of graphs (matrices). Assumes undirected graph and that elements sorted in the same order.
+graph operator+(graph& ga, graph& gb){
+	graph sg;
+	for(graph::iterator ita=ga.begin();ita!=ga.end();ita++){
+		string a = (ita->first).first ;
+		string b = (ita->first).second ;
+		strpair sp (a,b);
+		edge v=ga[sp];
+		if(gb.find(sp)==gb.end())
+			sp = make_pair (b,a);
+		if(gb.find(sp)!=gb.end()){
+			/*cout<<"ERROR: graph operator+ : unmatched pair ("<<a<<","<<b<<") in graph gb:"<<endl;
+			exit(1);
+			*/
+			v+=gb[sp];
+		}
+		//sg[sp]=ga[sp]+gb[sp];
+		sg[sp]=v;
+	}
+	return sg;
+}
+///Add gb to ga
+graph& operator+=(graph& ga, graph& gb){
+	return ga=ga+gb;
+}
+///Graph (matrix) Multiplication by a scalar (double)
+graph operator*(double& z, graph& ga){
+	graph zg;
+	for(graph::iterator ita=ga.begin();ita!=ga.end();ita++)
+		zg[ita->first]=z*(ita->second);
+	return zg;
+}
+///Simmetric Graph (matrix) Multiplication by a scalar (double)
+graph operator*(graph& ga, double& z){
+	return (z*ga);
+}
+
+///Stream out a graph as a pgm picture file 
+ostream& operator<<(ostream& os, graph& g){
+	/*sset its;
+	for(graph::iterator i=g.begin();i!=g.end();i++){
+		its.insert((i->first).first);
+		its.insert((i->first).second);
+	}*/
+	vector<string > its;
+	graph::iterator i=g.begin();
+	string fi=(i->first).first;
+	its.push_back(fi);
+	for( i=g.begin();i!=g.end();i++){
+		if(fi.compare((i->first).first)!=0)break;
+		fi=(i->first).second;
+		its.push_back(fi);
+	}
+	double mxv=1.0;
+	double mnv=0.0;
+	int grey;
+	strpair sp;
+	os<<"P2"<<endl;
+	os<<its.size()<<" "<<its.size()<<endl;
+	os<<_PGM_P2_GRAYSCALE_<<endl;
+	//for(sset::iterator i=its.begin();i!=its.end();i++){
+		//for(sset::iterator j=its.begin();j!=its.end();j++){
+	for(vector<string >::iterator i=its.begin();i!=its.end();i++){
+		for(vector<string >::iterator j=its.begin();j!=its.end();j++){
+			sp=make_pair (*i,*j);
+			if(g.find(sp)==g.end()) sp=make_pair (*j,*i);
+			if(g.find(sp)==g.end()){
+				cout<<"\nERROR: operator<< : graph unknown pair ("<<*i<<","<<*j<<")"<<endl;	
+				exit(1);
+			}
+			grey=int( (1.0-g[sp])*_PGM_P2_GRAYSCALE_+0.5 );
+			if((*i).compare(*j)==0)grey=0;
+			cout<<grey<<" ";
+		}
+		cout<<endl;
+	}
+	return os;
+}
+
+
+///Stream out a string vector
+ostream& operator<<(ostream& os, svect& cl){
+	os<<"{";
+	for(svect::iterator it=cl.begin();it!=cl.end();it++)
+		os<<*it<<",";
+	os<<"}";
+	return os;
+}
+///Stream out a string set
+ostream& operator<<(ostream& os, sset& cl){
+	os<<"{";
+	for(sset::iterator it=cl.begin();it!=cl.end();it++)
+		os<<*it<<",";
+	os<<"}";
+	return os;
+}
+///Comparison operator for allowing reverse sorting of maps
+struct greaterThan {
+	bool operator() (const int& i, const int& j) const {
+		return i>j;	
+	}
+};
+
+/* TESTING CUSTOM GRAPH CLASS */
+///Definition of sdGraph as a type of graph_base<string, double>
+//typedef base_graph<string, double> sd_bGraph;
+
+///Generates random objects
+class roulette
+{
+	string type; ///long double, int, elephant,...
+	unsigned int _seed;
+	vector<int > _vint;
+public:
+	roulette();
+	void setSeed(unsigned int seed){ srand(seed); _seed=seed;}
+	unsigned int getSeed(){return _seed;}
+	vector<int > spinWheeli(int n);
+	vector<int > spinWheeli(int n,int L);
+	void writeSeed();
+	void writeSeed(char* dir);
+	//vector<long double > spinWheel(int n);
+};
+roulette::roulette(){
+}
+/// n random integers within interval [0,n)
+vector< int> roulette::spinWheeli(int n){
+	spinWheeli(n,n);
+}
+/// n random integers within interval [0,L)
+vector< int> roulette::spinWheeli(int n, int L){ 
+	vector< int > randseq;
+	int i=0;
+	while(n>i++){
+#ifndef DEBUG
+		randseq.push_back((int)floor((double)L*rand()*1.0/RAND_MAX));
+#else
+		int myr=rand();
+		double dmyr=(double)L*myr*1.0/RAND_MAX;
+		randseq.push_back((int)floor(dmyr));
+		cout<<"#DEBUG: roulette : spinWheeli "<<i<<"("<<n<<","<<L<<") : "<<myr<<"("<<RAND_MAX<<","<<dmyr<<")"<<" :  "<<randseq[randseq.size()-1]<<endl;
+		getchar();
+#endif
+	}
+	return randseq;
+}
+///Writes the seed used in the current directory under the file .seed_used
+void roulette::writeSeed(){
+	char* dir="./";
+	writeSeed(dir);
+}
+///Writes the seed used in the provided directory under the file .seed_used
+void roulette::writeSeed(char* dir){
+	stringstream ss;
+	ss<<dir<<"/.seed_used";
+	ofstream of(ss.str().c_str());
+	if(!of){
+		cout<<"#WARNING: coud not open file .seed_used"<<endl;
+	}else{
+		of<<_seed<<endl;
+		of.close();
+	}
+}
+
+///How many partitions exist for a set X? Bell number.
+class BellNumber
+{
+	double _Bn;
+	long int _n;
+	double Stirling_comb(long int n, long int k);
+public:
+	BellNumber();
+	//double term(long int n);
+	double& operator[] (long int n);
+	long int n(){ return _n;}
+};
+BellNumber::BellNumber(){
+	_Bn=1;
+	_n=0;
+}
+double BellNumber::Stirling_comb(long int n, long int k){
+	double c;
+	if(n==k | k==0)return 1.0;
+	if(n<k || n<0 || k<0 ){
+		cout<<"ERROR: Stirling_comb : n<k | n<0 | k<0"<<endl;
+		exit(1);
+	}
+	c=sqrt((double)n/(double)(k*n-k*k));
+	c*=pow((double) n, (double) n);
+	c/=(pow((double)k,(double)k)*pow((double)(n-k),(double)(n-k)));
+	return c;
+}
+
+//double BellNumber::term(long int n=0){
+double& BellNumber::operator[](long int n){
+	_Bn=0.0;
+	BellNumber B;
+	if(n==0) _Bn=1;
+	for(long int k=0;k<n;k++)
+		_Bn+=Stirling_comb(n,k)*B[k];
+		//_Bn+=Stirling_comb(n,k)*term(k);
+	_n=n;
+	return _Bn;
+}
+
+/**Allows dealing with sequences.
+*/
+class Sequence
+{
+        string _seq;
+        string _name;
+        int _length;
+public:
+	///Default constructor
+        Sequence();
+	///Instatiate a sequence given its name label and the sequence proper seq
+        Sequence(string name, string seq);
+	///Get the character at position pos
+        string chrAt(int pos);
+	///Get its lenght
+        int length(){ return _length;}
+	///Calculate its sequence identity with respect to sequence Seq. The latter can be passed by pointer or content
+        double id(Sequence* Seq);
+        double id(Sequence Seq);
+	///Get its name
+        string name(){return _name;}
+	///Get its sequence proper
+        string sequence(){return _seq;}
+	///Set its sequence 
+        void setSeq(string seq){ _seq=seq; _length=_seq.length();}
+	///Set its name
+        void setName(string name){ _name=name;}
+	///Print a sequence with its name adding a newline at the end
+        void print(){cout<<_name<<"\n"<<_seq<<endl;}
+	///Streams out a sequence and its name. Does not add a newline at the end.
+	friend ostream& operator<<(ostream& os , Sequence& s);
+};
+
+ostream& operator<<(ostream& os , Sequence& s){ os<<s._name<<"\n"<<s._seq; return os;}
+
+Sequence::Sequence()
+{
+        _seq="";
+        _name="";
+        _length=0;
+}
+Sequence::Sequence(string name, string seq){
+        _seq=seq;
+        _name=name;
+        _length=_seq.length();
+}
+string Sequence::chrAt(int pos){
+        if(pos<0||pos>_length-1){
+                cout<<"Seeking character beyond sequence boundaries "<<_length<<" : "<<pos<<endl;
+                exit(1);
+        }
+        return _seq.substr(pos,1);
+}
+
+double Sequence::id(Sequence Seq){
+        id(&Seq);
+}
+double Sequence::id(Sequence* Seq)
+{
+        int other_len=Seq->length();
+        int minlen=_length<other_len?_length:other_len;
+        if(minlen!=_length){
+                cout<<"Comparing sequence of different lengths: "<<_name<<" ("<<_length<<") <> "<<Seq->name()<<" ("<<other_len<<")"<<endl;
+                exit(1);
+        }
+        double id=0.0;
+        int starts=0;
+        int ends=_length;
+        bool founds=false;
+        bool founde=false;
+        for(int i=0;i<_length;i++){
+                /// Normalize by the longest sequence
+                /*
+                if(!founds&&chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)starts++;
+                else founds=true;
+                if(!founde&&chrAt(_length-1-i).compare("-")==0&&Seq->chrAt(_length-1-i).compare("-")==0)ends--;
+                else founde=true;
+                */
+                /// Normalize by the shortest sequence
+                if(!founds&& (chrAt(i).compare("-")==0||Seq->chrAt(i).compare("-")==0) )starts++;
+                else founds=true;
+                if(!founde&& (chrAt(_length-1-i).compare("-")==0||Seq->chrAt(_length-1-i).compare("-")==0) )ends--;
+                else founde=true;
+                //
+                if(founds&&founde)break;
+
+        }
+        double norm=0;
+        if(VERBOSE)cout<<"#Sequence comparison starting at position "<<starts+1<<" up to position "<<ends<<endl;
+        for(int i=starts;i<ends;i++){
+                if(chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)continue;
+                norm++;
+                if(chrAt(i).compare(Seq->chrAt(i))==0)id++;
+                //if(strcmp(chrAt(i).c_str(),Seq->chrAt(i).c_str())==0)id+=1.0;
+        }
+        //return id/_length*100.0;
+        //return id/(ends-starts)*100.0;
+        return id/norm*100.0;
+}
+///Type definition of a MSA as a vector of Sequences
+typedef vector< Sequence > MSA; 
+/**Allows to perform operations on multiple sequence aligments. Its main member being of course the MSA object _Seqlist which
+contains the list of all sequences and their names.
+*/
+class MultipleSeqAlign
+{
+        char* _msaf;
+	string _name; ///General purpose label
+        MSA _Seqlist;
+        int _len;
+        int _nseq;
+	roulette ruleta;
+	//double _id_thr; ///For calculating Id statistics: id threshold.
+
+public:
+	///Default constructor
+        MultipleSeqAlign();
+	///Expects a MSA file in fasta format
+        MultipleSeqAlign(char* msaf); 
+	///Expects a MSA object
+	MultipleSeqAlign(MSA& msa);
+	///Allows adding a single Sequence object to the multiple sequence alignment 
+	void addSeq(Sequence*);
+	///Sets its name
+	void setName(string name){ _name=name;}
+	///Gets its name
+	string getName(){ return _name;}
+	/**Sets its file name. This, being just a char* can be used as an additional lable. That can be helpful with multiple sequence alignments
+	generated on the fly, during the calculations.*/
+	void setFileName(char* fname){ _msaf=fname;}
+	///Gets its file name
+	char* getFileName(){ return _msaf;}
+	///Obtains the sequence identity between the two provided Sequences.
+        double SeqId(Sequence Seqa, Sequence Seqb){return Seqa.id(Seqb);}
+        //double SeqId(string SeqaName, string SeqbName);
+	///Obtains the sequence identity between the two provided sequences refered by their indexes within the MSA.
+        double SeqId(int Seqn, int Seqm);
+	///Calculates the overall average sequence identity among all pair of sequences of the MSA.
+        double averageId();
+	///Prints all pair-wise identities 
+        void printPairwiseIds();
+	///Prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50
+        void printAveragePairwiseIds(double thr);
+	///Print the whole multiple sequence alignment
+        void print();
+	///Generates randomly n additional sequences each an exact copy of one of the original sequences
+	MultipleSeqAlign genRedundantMSA(int n);
+	/**Generaes nsamples of MSAs each with redundancy of size n, i.e., each having n redundant sequences. The system clock is used for 
+	generating the seed of the random number generator*/
+	void NsamplesRedMSA(int nsamples, int n);
+	///The same as the previous one, but allows specifying a particular seed
+	void NsamplesRedMSA(unsigned int seed,int nsamples, int n);
+	//Streams out a multiple sequence alignments (in fasta format) wihtout adding a new line at the end
+	friend ostream& operator<<(ostream& os, MultipleSeqAlign& msa);
+};
+
+MultipleSeqAlign::MultipleSeqAlign(){
+        _msaf=NULL;
+        _len=_nseq=0;
+}
+
+MultipleSeqAlign::MultipleSeqAlign(char* msaf)
+{
+        _msaf=msaf;
+        _len=_nseq=0;
+        ifstream _is(_msaf);
+        if(!_is){
+                cout<<"ERROR: MultipleSeqAlign : File not found: "<<_msaf<<endl;
+                exit(1);
+        }
+        if(!QUIET) cout<<"#Reading MSA "<<msaf<<endl;
+        string str;
+        string seq="";
+        Sequence Seq;
+        while(_is>>str){
+                string fchr=str.substr(0,1);
+                if(fchr.compare("#")==0)continue;
+                if(VERBOSE)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
+                if(strcmp(fchr.c_str(),">")==0){
+                        if(VERBOSE)cout<<"#New string: "<<str<<endl;
+                        //if(!strcmp("",seq.c_str())==0){
+                        if(!seq.compare("")==0){
+                                Seq.setSeq(seq);
+                                if(_len==0)_len=Seq.length();
+                                if(!Seq.length()==_len){
+                                        cout<<"ERROR: Sequence length doesn't fit MSA length ("<<_len<<") : "<<Seq.name()<<" ("<<Seq.length()<<")"<<endl;
+                                        exit(1);
+                                }
+                                _Seqlist.push_back(Seq);
+                                if(VERBOSE)Seq.print();
+                        }
+                        Seq.setName(str);
+                        seq="";
+                        continue;
+                }
+                seq+=str;
+        }
+        Seq.setSeq(seq);        ///The last sequence isn't followed by a line starting with ">"
+        _Seqlist.push_back(Seq);
+        _nseq=_Seqlist.size();
+        if(!QUIET) cout<<"#Found "<<_nseq<<" sequences of length "<<_len<<". Last read: "<<(_Seqlist.end()-1)->name()<<endl;
+}
+
+MultipleSeqAlign::MultipleSeqAlign(MSA& msa){
+	if(! msa.size()>0){
+		cout<<"ERROR: Cannot build MSA"<<endl;
+		exit(1);
+	}
+	_msaf=NULL;
+	_Seqlist=msa;
+	_len=_Seqlist[0].length();
+	_nseq=_Seqlist.size();
+}
+
+void MultipleSeqAlign::addSeq(Sequence* Seq){
+        if(_len>0)
+		if(_len!=Seq->length()){
+                	cout<<"Sequence length "<<Seq->name()<<" ("<<Seq->length()<<") doesn't fit MSA's length ("<<_len<<")"<<endl;
+                	exit(1);
+        	}
+        else {
+                _len=Seq->length();
+                _nseq=0;
+        }
+        _Seqlist.push_back(*Seq);
+        _nseq++;
+}
+
+double MultipleSeqAlign::SeqId(int Seqn, int Seqm)
+{
+        if(Seqn<0||Seqm<0||Seqn>_nseq||Seqm>_nseq){
+                cout<<"Sequence indexes out of bound : "<<Seqn<<" , "<<Seqm<<endl;
+                exit(1);
+        }
+        return _Seqlist[Seqn].id( _Seqlist[Seqm] );
+}
+
+double MultipleSeqAlign::averageId()
+{
+        if(!QUIET)cout<<"#Starting averageId calculation"<<endl;
+        double avid=0.0;
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
+                for(MSA::iterator itb=ita+1;itb!=_Seqlist.end();itb++){
+                        avid+=(*ita).id(*itb);
+                        if(VERBOSE){
+                                cout<<"# "<<(*ita).name()<<" - "<<(*itb).name()<<" id="<<(*ita).id(*itb)<<endl;
+                                (*ita).print();
+                                (*itb).print();
+                                for(int i=0;i<_len;i++)
+                                        if((i+1)%10>0)
+                                                cout<<(i+1)%10;
+                                        else
+                                                cout<<" ";
+                                cout<<endl;
+                        }
+                }
+        return avid/(double)(_nseq*(_nseq-1)*0.5);
+}
+
+void MultipleSeqAlign::printPairwiseIds()
+{
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
+                for(MSA::iterator itb=ita+1;itb!=_Seqlist.end();itb++){
+                        string na=(*ita).name();
+                        if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
+                        string nb=(*itb).name();
+                        if(nb.substr(0,1).compare(">")==0)nb=nb.substr(1,nb.length()-1);
+                        cout<<na<<"\t"<<nb<<"\t"<<SeqId(*ita,*itb)<<endl;
+                        //cout<<(*ita).name()<<"\t"<<(*itb).name()<<"\t"<<SeqId(*ita,*itb)<<endl;
+                }
+}
+
+void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0)
+{
+	cout<<"#Id_threshold= "<<thr<<endl;
+        int onn=0;
+        //double thr=50.0;
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++){
+                string na=(*ita).name();
+                if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
+                double id,id2,v,mdid;
+                id=id2=v=mdid=0.0;
+                double idmin=101;
+                double idmax=-1;
+                int nn=0;
+                int nthr=0;
+                for(MSA::iterator itb=_Seqlist.begin();itb!=_Seqlist.end();itb++){
+                        if(ita==itb)continue;
+                        v=SeqId(*ita,*itb);
+                        v=v<=1?v*100:v;
+                        if(v>thr)nthr++;
+                        id+=v;
+                        id2+=v*v;
+                        idmin=v<idmin?v:idmin;
+                        idmax=v>idmax?v:idmax;
+                        nn++;
+                }
+                ///Print AverageID  StdDev. Variance Min Max #edges>50%Id %edges>50 total#edges
+                cout<<na<<"\t"<<id/(double)nn<<"\t"<<sqrt(id2/nn-(id/nn)*(id/nn))<<"\t"<<(id2/nn-(id/nn)*(id/nn))<<"\t"<<idmin<<"\t"<<idmax<<"\t"<<nthr<<"\t"<<(double)nthr/nn*100.0<<"\t"<<nn<<endl;
+                if(VERBOSE&&!onn==0&&!onn==nn)
+                        cout<<"#WARNING: nodes with different number of edges"<<endl;
+                onn=nn;
+        }
+}
+
+void MultipleSeqAlign::print()
+{
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
+                (*ita).print();
+}
+
+MultipleSeqAlign MultipleSeqAlign::genRedundantMSA(int n){
+/*
+	unsigned int seed=time(NULL);
+	genRedundantMSA(n,seed);
+}
+MultipleSeqAlign MultipleSeqAlign::genRedundantMSA(int n, unsigned int seed){
+*/
+	if(_Seqlist.size()==0){ 
+		cout<<"ERROR: No MSA defined"<<endl;
+		exit(1);
+	}
+	vector< int> randseq=ruleta.spinWheeli(n,_Seqlist.size());
+	MSA redlist=_Seqlist;
+	map<int, int> dg;
+	stringstream redstr;
+	//unsigned long int tr=0;
+	long double tr=0.0;
+#ifdef DEBUG
+	cout<<"#DEBUG: picking up random seq..."<<endl;
+#endif
+	for(int i=0;i<randseq.size();i++){
+#ifdef DEBUG
+		cout<<"#DEBUG: Seq# "<<randseq[i]<<endl;
+#endif
+		Sequence rs=_Seqlist[randseq[i]];
+		if(redstr.str().size()>0)redstr<<"\n"<<randseq[i];
+		else redstr<<randseq[i];
+		tr+=pow((long double)randseq[i],(long double)2.0);
+		if(dg.find(randseq[i])==dg.end())dg.insert(pair<int,int>(randseq[i],0));
+		stringstream ss;
+		ss<<_Seqlist[randseq[i]].name()<<"-RED-"<<++dg[randseq[i]];
+		rs.setName(ss.str());
+		redlist.push_back(rs);
+	}
+#ifdef DEBUG
+	cout<<"#DEBUG: done"<<endl;
+#endif
+	MultipleSeqAlign red(redlist);
+	red.setName(redstr.str());
+	tr=sqrt(tr);
+	stringstream sstr;
+	sstr<<"R"<<n<<"-"<<tr;
+	red.setFileName((char*)sstr.str().c_str());
+	return red;
+}
+
+void MultipleSeqAlign::NsamplesRedMSA(int nsamples=1, int n=1){
+	unsigned int seed=time(NULL);
+	NsamplesRedMSA(seed, nsamples, n);
+}
+void MultipleSeqAlign::NsamplesRedMSA(unsigned int seed, int nsamples=1, int n=1){
+	ruleta.setSeed(seed);
+	if(!QUIET){
+		 cout<<"#Generating "<<nsamples<<" samples of MSAs with "<<n<<" sequences redundancy"<<endl;
+		cout<<"#Random seed: "<<seed<<endl;
+		cout<<"#Samples: ";
+	}
+	for(int i=0;i<nsamples;i++){
+		if(!QUIET) cout<<i+1<<"-";
+		MultipleSeqAlign redmsa=genRedundantMSA(n);
+		stringstream redstr;
+		char* fn=redmsa.getFileName();
+		if(!QUIET) cout<<fn<<" ";
+		redstr<<fn<<"/"<<fn<<".fasta";
+#ifdef DEBUG
+		cout<<"#DEBUG: Done first sample...writing..."<<endl;
+		cout<<"#DEBUG: path : "<<redstr.str()<<endl;
+#endif
+		DIR* pdir=opendir(fn);
+		if(!pdir){
+			mode_t perm=0744;
+			int ci=mkdir(fn,perm);
+			if(ci!=0){
+				cout<<"ERROR: could not create directory "<<fn<<endl;
+				exit(1);
+			}
+		}
+		else if(!QUIET) cout<<"\n#WARNING: directory "<<fn<<" already exists. \n#Samples: ";
+			/*
+		errno=0;
+		struct dirent* pent;
+		cout<<"#DEBUG: checking if exists file "<<redstr.str().c_str()<<endl;
+		while((pent=readdir(pdir))){
+			cout<<"#WARNING: directory "<<fn<<" already contains file "<<pent->d_name<<endl;
+			//cout<<"#WARNING: directory "<<fn<<" already contains file "<<endl;
+			if(memcmp(pent->d_name,redstr.str().c_str(),sizeof(pent->d_name))==0){
+				cout<<"ERROR: File "<<redstr<<" already exists!"<<endl;
+				exit(1);
+			}
+		}
+		if(errno){
+			cout<<"ERROR: failure while reading directory "<<fn<<endl;
+			exit(1);
+		}
+			*/
+#ifdef DEBUG
+		cout<<"#DEBUG: writing .fasta file "<<redstr.str().c_str()<<endl;
+#endif
+		ofstream of(redstr.str().c_str());
+		of<<redmsa;
+		of.close();
+		closedir(pdir);
+#ifdef DEBUG
+		getchar();
+#endif
+	}
+	if(!QUIET) cout<<endl;
+	ruleta.writeSeed();
+}
+
+ostream& operator<<(ostream& os, MultipleSeqAlign& msa){
+	for(MSA::iterator seq=msa._Seqlist.begin();seq!=msa._Seqlist.end();seq++)
+		os<<*seq<<endl;
+	return os;
+}
+/*
+*/
+///It defines the neighborhood of a given point, or ball of radius eps around an element 'x'.
+/**
+Allows to deal with (sets of) neighborhood(s) of a given point. In particular, it allows to obtain its most frequent 
+neighborhood: given a list of sets containing a point p, what is the one that repeats more often. 
+If two or more of them have the same frequency, it chooses the first one seen.
+
+It allows the its construction iteratively given other previously instantiated sNeighborhood's.
+
+Its main members point, neighbors and eps, always contain the most frequent neighborhood, with frequency eps, around 'point' (or the largest
+ball around 'point').
+*/
+class sNeighborhood
+{
+public:
+	sNeighborhood();
+	///Basic constructor: given an element and a set, take the latter as the ball (interval) around that element.
+	/**An alternative way of setting up a sNeighborhood is iteratively via the operator += and given other previously
+	instantiated sNeighborhood's
+	*/
+	sNeighborhood(string p, svect* cl);
+	//sNeighborhood(neighborhood nb);
+	string point;
+	///The set of elements of a given ball (interval) around point 'point'.
+	sset neighbors;
+	///Radius of a given ball (interval) around point 'point'. It's also used as frequency of a given set of observed neighbors.
+	double eps;
+	///This is strictly speaking, a list of balls (intervals) 'sset' of radii 'double', assumed around point 'point'.
+	map<sset,double> neighborhoods;
+	///Checks if there are >1 top ranking neighborhoods
+	long int multimode;		
+	///Determines which neighborhood is the most frequent one.
+	/**Runs through each neighborhood in neighborhoods and checks two things:
+		if its radius == eps , i.e., to present one, updates multimode++ 
+		if radius > eps, selects that neighborhood as the current one, updating also the value of eps to radius.
+	*/
+	void setMostFrequentNeighborhood();
+	//sset::iterator gbegin(){ return (neighborhoods.begin()->first).begin();}
+	//sset::iterator gend(){ return (neighborhoods.rbegin()->first).end();}
+	sset::iterator lbegin(){ return (neighbors.begin());}
+	sset::iterator lend(){ return (neighbors.end());}
+	///Prints the list of neighborhoods and correponding radii
+	void gNeighborsList();
+	///Update list of neighborhoods: adds lists of neighborhoods in snbh to the current one.
+	/**This is a local operation, i.e., both sNeighborhoods must be defined around the same point 'point', otherwise it leaves the current one as it is.
+	In case the current has no point defined (weird, but lets consider it) it assumes the same one as in snbh.
+	Then, it runs over all sets of neighbors in snbh and adds each of them to the current list, neighborhoods. If the one found is equal to
+	one already present, both radii are added up; otherwise, the radius is that of the new found set.
+	Finally, it sets the most frequent neighborhood as the current one, i.e., that given by, (string) 'point', (double) 'eps' and (sset) 'neighbors'.
+	This acts, the facto, as an alterantive constructor of sNeighborhood.
+	*/
+	sNeighborhood& operator+=(sNeighborhood& snbh);
+};
+sNeighborhood::sNeighborhood(){
+	point="";
+	eps=0.;
+	multimode=0;
+}
+sNeighborhood::sNeighborhood(string p, svect* cl){
+	point=p;
+        for(cluster::iterator it=cl->begin();it!=cl->end();it++)
+                neighbors.insert(*it);
+	eps=1.;
+	//neighborhoods.insert(pair<sset,double> (neighbors,eps) );
+	neighborhoods[neighbors]=eps;
+	multimode=0;
+}
+void sNeighborhood::setMostFrequentNeighborhood(){
+	for(map<sset,double>::iterator s=neighborhoods.begin();s!=neighborhoods.end();s++){
+		if(s->second==eps)multimode++;
+		if(s->second>eps){
+			neighbors=s->first;
+			eps=s->second;
+		}
+	}
+#ifdef DEBUG
+	cout<<"#DEBUG: item "<<point<<" most freq. cluster ("<<eps<<") ";
+	for(sset::iterator it=neighbors.begin();it!=neighbors.end();it++)
+		cout<<*it<<" ";
+	cout<<" Multimode="<<multimode<<endl;
+#endif
+}
+
+void sNeighborhood::gNeighborsList(){
+	for(map<sset,double>::iterator sit=neighborhoods.begin();sit!=neighborhoods.end();sit++){
+		for(sset::iterator it=sit->first.begin();it!=sit->first.end();it++)
+			cout<<*it<<" ";
+		cout<<" ("<<sit->second<<")/ ";
+	}
+	cout<<" Multimode="<<multimode<<endl;
+}
+
+sNeighborhood& sNeighborhood::operator+=(sNeighborhood& snbh){
+	if(point.compare("")==0)point=snbh.point;
+	if(!point.compare(snbh.point)==0)return *this;
+	for(map<sset,double>::iterator it=snbh.neighborhoods.begin();it!=snbh.neighborhoods.end();it++)
+		neighborhoods[it->first]+=it->second;
+	setMostFrequentNeighborhood();
+	return *this;
+}
+
+/**Main class Partition implements a partition and its algebra
+*/
+class Partition
+{
+	///Filename containing partition
+	char* _partitionf;
+	//PART Partition format offset
+	int _items_offset;
+	///Number of clusters
+	long int _nclusters;
+	///Number of singletons
+	long int _nsingletons;
+	///Number of clusters with only 2 elements
+	long int _npairs;
+	///Number of elements (of underlying space) 
+	long int _nitems;
+	///Index of largest cluster in member smat clusters
+	int _largest_cluster;
+	///Iterator pointing to largest cluster in member smat clusters
+	smat::iterator _it_largest_cluster;
+	///Associated Adjacency matrix
+	graph _Ad;
+	///Update all member elements
+	void _resetMembers();
+	///Read partition from a file
+	void _readClusters();
+	///Phony function depending on file format; Currently, print read format if VERBOSE
+	void partitionInputFormat(partFileFormat iformat);
+	svect _it_found;
+	///Input format for reading partitions: MCL (partFmtMCL), FREE (partFmtFREE) and the default one, partanalyzer's own format (partFmtPART)
+	partFileFormat _piformat;
+	///Specific for MCL format: the partition tab file maps element labels to integers
+	char* _mcltabf;	
+	///The MCL tab file
+	map<int, string> _mcltab;
+	///Unordered list of items
+	vector<string > _vitems;
+public:
+	///Vector of clusters, each being a svect containing number of elements, name of cluster, and all its elements.
+	smat clusters;
+	///Set of elements (treated as strings; represents the underlying set of elements).
+	sset sitems;
+	///Sorted set of singleton elements.
+	sset ssingletons; ///Let's make sure we do not get any duplicated singleton. This is just a cheap patch for trying to speed up isaPartition().
+	///Default Partition constructor
+	Partition();
+	///Instantiate partition from file using format iformat (uses default offset for partanalyzer's own format partFmtPART)
+	// Partition(char* file, partFileFormat iformat);
+	///Instantiate partition from file using format iformat and specified offset (applies only to partanalyzer's own format partFmtPART)
+	Partition(char* file, partFileFormat iformat, int ofs);
+	///Create a partition out of a set of clusters
+	Partition(smat* clustersl, int ofs, char* partf , char* tabf);
+	///Create a consensus partition 
+	void xtrConsPart(multimap<int,string,greaterThan> consPart, int ofs);
+	///Get (and reset) the underlying set of elements sorted by alphanumerically
+	sset getItems();
+	///Get an ordered set with all elements contained in (svect) cl. {Doesn't affect Partition; should be external maybe}
+	sset getItems(cluster* cl);
+	///Check it is a sound Partition of the specified set of elements
+	bool isaPartitionOf(svect& ssetOfElements); 
+	///Check it is a sound Partition of the default set of elements
+	bool isaPartition();
+	///Print partition using the default partanalyzer format
+	void printPartition();
+	///Print partition in the specified format 
+	void printPartition(partFileFormat iformat);
+	///Get number of clusters (including singletons)
+	long int n_clusters(){ return _nclusters;}
+	///Get number of singletons
+	long int n_singletons(){ return _nsingletons;}
+	///Get number of pair clusters
+	long int n_pairs(){ return _npairs;}
+	///Get number of non-singletons clusters
+	long int n_nonSingClusters(){ return _nclusters-_nsingletons;}
+	///Get number of elements
+	long int n_items(){ return _nitems;}
+	///Get cluster offset (used only with partanalyzer's own format partFmtPART)
+	int cluster_offset(){return _items_offset;}
+	///Get index of largest cluster in (smat) Partition::smat
+	int largest_Cluster(){ return _largest_cluster;}
+	///Get iterator pointing to largest cluster in (smat) Partition::smat
+	smat::iterator it_largest_Cluster(){ return _it_largest_cluster;}
+	///Set partition input file format
+	void setPartInputFormat(partFileFormat iformat){ _piformat=iformat;}
+	///Retrieve partition input file format
+	partFileFormat getPartInputFormat(partFileFormat iformat){ return _piformat;}
+	///Load MCL tab file
+	void mclTabFile(char* mcltabf);
+	///Swap labels according to the provided tab file
+	void swapLabels(char* mcltabf);
+	///Entropy of a partition
+	double H();
+	///Cardinality of a partition
+	long int card(){return n_clusters();}
+	///Boltzman Entropy: log (#available states)
+	double BK(){return log( (double)1.0*card() ) ;}
+	///Tsallis Entropy: is equal to H iif q=1 ; q=non-extensivity coefficient
+	double TS(double q);
+	///Renyi Entropy: is equal to H iif q=1 ; q=non-extensivity coefficient
+	double RS(double q);
+	///Calculates the Jeffrey Qnorm (a la Tarantola) of a partition= exp(RS(q)) or expr(TS(q))
+	double JQnorm(double q);
+	///Calculates and prints vi distance againts given partition part2
+	void vipp(Partition* part2);
+	///Calculates and prints edit score distance againts given partition part2
+	void edsc(Partition* part2);
+	///Calculates the Tarantola distance against given partition part2
+	void td(Partition* part2, double q);
+	///Calculates the purity strict values againts the given partition p2
+	double purityStrict(Partition* part2){ return purityScore(part2)[0];}
+	///Calculates the purity lax values againts the given partition p2
+	double purityLax(Partition* part2){ return purityScore(part2)[1];}
+	///Calculates both purity score values againts the given partition p2
+	vector<double> purityScore(Partition* part2);
+	void missing(svect* items_found);
+	void missing();
+	///Given an element, get the name of the cluster that contains it.
+	string getClusterName(string& item);
+	///Given an index from clusters, get the name of that cluster
+	string getClusterName(int& clidx);
+	///Given an element, get the index of the cluster that contains it.
+	int getClusterIdx(string& item);
+	///Two elements are equivalent if they belong to the same cluster
+	bool areEquiv(string a, string b);
+	///Return name of cluster if true; x if false ; NAN1 (NAN2) if first (second) not found.
+	string areWithinSameCluster(string ita, string itb);
+	///Get the filename.
+	char* FileName(){ return _partitionf;}
+	///cluster is a typedef specific for Partition
+	svect getClusterOf(string item);
+	///Build associated Adjacency matrix
+	graph setAdjacencyMatrix();
+	///Build associated Adjacency matrix sorting elements by clusters
+	graph setAdjacencyMatrix_os();
+	///Get AdjacencyMatrix
+	graph Ad(){ if(_Ad.empty()) return setAdjacencyMatrix(); return _Ad;}
+	///Get AdjacencyMatrix with indexes ordered as given by the partition
+	graph Ad_os(){ if(_Ad.empty()) return setAdjacencyMatrix_os(); return _Ad;}
+	//
+	// RELATIONS AND OPERATIONS ON PARTITOINS 
+	//
+	///Project a Partition of N elements onto a subspace of M<=N elements (active view)
+	void SubsProject(sset& itemset);
+	///Calculate the partition intersection of the present one and part2 (passed by pointer)
+	Partition intersection(Partition* part2);
+	///Calculate the partition intersection of the present one and part2 (passed by reference)
+	Partition intersection(Partition& part2){ Partition z=part2; return intersection(&z); }
+	///Define Lattice preorder relation (as an interface)
+	bool lessThan(Partition* part2){ return purityLax(part2)==1?true:false;}
+	///Define Lattice preorder relation (as a binary operator)
+	bool operator<=(Partition& part2);
+	///Define lattice strict preorder relation (as a binary operator)
+	bool operator<(Partition& part2){ return (n_clusters()>part2.n_clusters()&& *this<=part2)?true:false;}
+	///Define equality operater
+	bool operator==(Partition& part2);
+	///Define intersetion of partitions ( as a binary operator ; arguments as refereces)
+	Partition operator*(Partition& part2){ return intersection(&part2); }
+	///Define intersetion of partitions ( as a binary operator ; arguments as pointers)
+	Partition operator*(Partition* part2){ Partition& p=*part2; return operator*(p);}
+	///(TO BE IMPLEMENTED) Define union of partitions (as a binary operator)
+	Partition operator+(Partition& part2);
+};
+
+Partition::Partition(){
+}
+
+graph Partition::setAdjacencyMatrix(){
+	_Ad.clear();
+	if(sitems.empty()) getItems();
+	for(sset::iterator ita=sitems.begin();ita!=sitems.end();ita++){
+		_Ad[ strpair (*ita,*ita) ]= 1.0;
+		if(*ita==*sitems.rbegin()) break; //Otherwise segfault, as j would go past end
+		sset::iterator itb=ita; //Can't declare & double initialize within for-loop?
+		for(itb++ ;itb!=sitems.end();itb++)
+			if( areEquiv(*ita,*itb) ) _Ad[ strpair (*ita,*itb) ]= 1.0;
+			else _Ad[ strpair (*ita,*itb) ]= 0.0;
+	}
+	if(_Ad.empty()){
+		cout<<"\nERROR: Partition::setAdjacencyMatrix() : Failed to build Adjacency Matrix : Partition "<<FileName()<<endl;
+		exit(1);
+	}
+	//if(VERBOSE)cout<<"#TEST\n"<<_Ad;
+	return _Ad;
+}
+
+graph Partition::setAdjacencyMatrix_os(){
+	_Ad.clear();
+	for(vector<string >::iterator ita=_vitems.begin();ita!=_vitems.end();ita++){
+		_Ad[ strpair (*ita,*ita) ]= 1.0;
+		if(*ita==*_vitems.rbegin()) break; //Otherwise segfault, as j would go past end
+		vector<string >::iterator itb=ita; //Can't declare & double initialize within for-loop?
+		for(itb++ ;itb!=_vitems.end();itb++){
+			if( areEquiv(*ita,*itb) ) _Ad[ strpair (*ita,*itb) ]= 1.0;
+			else _Ad[ strpair (*ita,*itb) ]= 0.0;
+			if(VERBOSE)cout<<*ita<<" "<<*itb<<endl;
+		}
+	}
+	if(_Ad.empty()){
+		cout<<"\nERROR: Partition::setAdjacencyMatrix_os() : Failed to build Adjacency Matrix : Partition "<<FileName()<<endl;
+		exit(1);
+	}
+	if(VERBOSE)cout<<"#TEST\n"<<_Ad;
+	return _Ad;
+}
+
+/*
+Partition::Partition(char* file,partFileFormat iformat=partFmtPART){
+	_items_offset=2;
+	_partitionf=file;
+	_piformat=iformat;
+	_readClusters();
+}
+*/
+void Partition::_resetMembers(){
+	_nclusters=clusters.size();
+	_nitems=_nsingletons=0;
+	_largest_cluster=-1;
+	_it_largest_cluster=clusters.end();
+	sitems.clear();
+	ssingletons.clear();
+	long int mxcls=0;
+	int mxclidx=0;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++ ,mxclidx++){
+		if(cl->size()-_items_offset>mxcls){
+			mxcls=cl->size();
+			_largest_cluster=mxclidx;
+			_it_largest_cluster=cl;
+		}
+		if(cl->size()-_items_offset==1) {
+			_nsingletons++; 		//We might assign its value at the end to ssingletons.size(), but this way allows for checking of duplicate singleton clusters, i.e., non-sound partition.
+			ssingletons.insert( (*cl)[_items_offset] );
+		}
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++ , _nitems++)
+			sitems.insert(*it);
+	}
+	//_nsingletons=ssingletons.size(); ///See comment above
+	//setAdjacencyMatrix();
+}
+
+Partition::Partition(char* file, partFileFormat iformat=partFmtPART, int ofs=2){
+	_items_offset=ofs;
+	_partitionf=file;
+	_piformat=iformat;
+	_mcltabf=NULL;
+	_readClusters();
+//	if(_largest_cluster<0||_largest_cluster>=clusters.size())
+//		if(!VERBOSE)cout<<"#WARNING: Partition::Partition : out_of_range index _largest_cluster "<<endl;
+}
+
+Partition::Partition(smat* clustersl, int ofs, char* partf=NULL, char* tabf=NULL){
+	//_partitionf=NULL;
+	//_mcltabf=NULL;
+	_partitionf=partf;
+	_mcltabf=tabf;
+	_piformat=partFmtPART;
+	clusters=*clustersl;
+	_items_offset=ofs;
+	_resetMembers();
+	/*
+	_nclusters=clusters.size();
+	_nsingletons=0;
+	_nitems=0;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
+		if(cl->size()-_items_offset==1){
+			_nsingletons++;
+			ssingletons.insert(cl->begin()+_items_offset,cl->end());
+		}
+		_nitems+=cl->size()-_items_offset;
+	}
+	*/
+	if(_nsingletons!=ssingletons.size()){
+		cout<<"ERROR: Partition::_readClusters : Not a sound Partition : non mutually disjoint singleton clusters"<<endl;
+		cout<<ssingletons<<endl;
+		exit(1);
+	}
+	getItems(); //Update sitems
+	if(_nitems!=sitems.size() || ! sitems.size()>0){
+		cout<<"ERROR: Partition::Partition(smat,int) : _nitems("<<_nitems<<")!=sitems.size("<<sitems.size()<<")"<<endl;
+		exit(1);
+	}
+}
+
+void Partition::xtrConsPart(multimap<int,string,greaterThan> consPart, int ofs=1){
+	_partitionf=NULL;
+	_items_offset=ofs;
+	_nclusters=consPart.size();
+	_nsingletons=0;
+	_nitems=0;
+	string str;
+	for(multimap<int,string,greaterThan>::iterator c=consPart.begin();c!=consPart.end();c++){
+		svect cl;
+		stringstream si;
+		si<<c->first;
+		cl.push_back(si.str());
+		stringstream ss;
+		ss<<c->second;
+		while(ss>>str)cl.push_back(str);
+		if(cl.size()-_items_offset==1)_nsingletons++;
+		_nitems+=cl.size()-_items_offset;
+		clusters.push_back(cl);
+	}
+		
+}
+
+///\f$ H=\sum_k\,p_k\,\log\left(p_k\right) \f$
+double Partition::H(){
+	double H=0.0;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
+		H-=(cl->size()-_items_offset)*log( (double) (cl->size()-_items_offset) );
+	return (H/_nitems+log( (double) _nitems ));
+}
+///\f$ H=\frac{1}{q-1}\,\sum\,p_k^q
+double Partition::TS(double q=EXTENSIVITY_DEFAULT_TSALLIS){
+	if(q==1.0)return H();
+	double S=0.0;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
+		S+=pow( (cl->size()-_items_offset) , q );
+	S=1.0-S/pow(_nitems,q)  ;
+	return ( S/(q-1.0) ) ;
+}
+///\f$ H=\frac{1}{q-1}\,\sum\,p_k^q
+double Partition::RS(double q=EXTENSIVITY_DEFAULT_RENYI){
+	if(q==1.0)return H();
+	double S=0.0;
+	///Renyi for q->oo gives -log sup p_k
+	if(q>EXTENSIVITY_MAX) { 
+		//if(_it_largest_cluster==NULL)cout<<"ERROR: Partition::RS : _it_largest_cluster=NULL"<<endl;
+#ifdef DEBUG
+		cout<<"DEBUG: Partition::RS : _largest_cluster="<<_largest_cluster<<" _items_offset="<<_items_offset<<" _nitems="<<_nitems<<endl;
+		cout<<"DEBUG: max-sup="<<-log( 1.0*(_it_largest_cluster->size()-_items_offset)/_nitems )<<endl;
+#endif
+		return ( -log( 1.0*(_it_largest_cluster->size()-_items_offset)/_nitems ) );
+	}
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
+		S+=pow( (cl->size()-_items_offset) , q );
+	S=log( S/pow(_nitems,q) );
+	return ( S/(1.0-q) ) ;
+}
+
+double Partition::JQnorm(double q=1.0){
+	if(q==1.0)  return exp(H());
+	else
+		return exp(TS(q));
+}
+string Partition::getClusterName(string& item){
+	if(_items_offset!=2){
+		cout<<"Error: partitions were defined with no name label : _items_offset="<<_items_offset<<endl;
+		exit(1);
+	}
+	string clname;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
+		clname=*(cl->begin()+1);
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++)
+			if(strcmp(item.c_str(),it->c_str())==0)return clname;
+	}
+	clname="NAN";
+	return clname;
+}
+
+int Partition::getClusterIdx(string& item){
+	int idx=-1;
+	for(int i=0;i<clusters.size();i++)
+		for(svect::iterator it=clusters[i].begin();it!=clusters[i].end();it++)
+			if(strcmp(item.c_str(),it->c_str())==0)return i;
+	return idx;
+}
+
+bool Partition::areEquiv(string a, string b){
+	if(getClusterIdx(a)==getClusterIdx(b)) return true;
+	return false;
+}
+
+string Partition::getClusterName(int& clidx){
+	if(_items_offset!=2){
+		cout<<"Error: partitions were defined with no name label : _items_offset="<<_items_offset<<endl;
+		exit(1);
+	}
+	if(clidx>clusters.size() || clidx<0){
+		cout<<"Error : cluster index "<<clidx<<" beyond valid range [0-"<<clusters.size()<<")"<<endl;
+		exit(1);
+	}
+	return clusters[clidx][1];
+}
+
+string Partition::areWithinSameCluster(string ita, string itb){
+	string clna,clnb;
+	clna=getClusterName(ita);
+	clnb=getClusterName(itb);
+	string noname="NAN";
+	if(strcmp(clna.c_str(),clnb.c_str())==0){
+		return clna;
+	}
+	else if(strcmp(clna.c_str(),noname.c_str())==0 ){
+		noname="NAN1";
+		return noname;
+	}
+	else if(strcmp(clnb.c_str(),noname.c_str())==0) {
+		noname="NAN2";
+		return noname;
+	}
+	return "x";
+}
+
+void Partition::edsc(Partition* p2){
+	Partition pi=intersection(p2);
+	cout<<(2*pi.card()-card()-p2->card() )<<endl;
+}
+
+void Partition::td(Partition* p2, double q=1.0){
+	cout<<fabs( JQnorm(q)-p2->JQnorm(q) )<<endl;
+}
+	
+void Partition::vipp(Partition* part2){
+//double Partition::vipp(Partition& part2){
+	int ofs2=part2->cluster_offset();
+	long int Nitems=_nitems; //Both partitions are expected to have the same number of items
+	long int Nitemsb=part2->_nitems;
+	//svect it_found;
+	svect it_missing;
+	double Iab,tnab;
+	double Sa,Sb;
+	Sa=Sb=0.0;
+	Iab=tnab=0.0;
+	_it_found.clear();
+	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++){				/// For each cluster cla and
+		Sa+=( cla->size()-_items_offset )*log( (double) ( cla->size()-_items_offset) );
+		for(smat::iterator clb=part2->clusters.begin();clb!=part2->clusters.end();clb++){  	///  clb , find the 
+			if(cla==clusters.begin()) Sb+=( clb->size()-ofs2 )*log( (double) ( clb->size()-ofs2) );
+			double nab=0;
+			for(svect::iterator ita=cla->begin()+_items_offset;ita!=cla->end();ita++){
+				for(svect::iterator itb=clb->begin()+ofs2;itb!=clb->end();itb++){
+					if(strcmp((*ita).c_str(),(*itb).c_str())==0){
+						nab++;							/// number of items they have in common.
+						_it_found.push_back(*ita);
+					}
+					//nab+=strcmp((*ita).c_str(),(*itb).c_str())==0?1.0:0.0;
+				}
+			}
+			tnab+=nab;
+			if(nab>0) Iab+=nab*log(nab);
+		}
+	}
+	//missing(&_it_found);
+	Sa=( Sa/Nitems - log( (double) Nitems ) );
+	if(Nitems==Nitemsb){					/// VI make sense only if number items is equeal.
+		//Sb=( Sb/Nitemsb - log( (double) Nitemsb ) ); 	
+		Sb=( Sb - Nitemsb*log( (double) Nitems ) )/Nitems; 	/// Using the same normalization for both entropies
+	} else {
+		Sb=( Sb - Nitemsb*log( (double) Nitems ) )/Nitems; 	/// Using the same normalization for both entropies
+		tnab+=Nitems-Nitemsb;                          /// is tantamout to assuming each item from partition1 not present in partition2 is a singleton in partition2
+		cout<<"#Nitems= "<<Nitems<<" <> Nitemsb="<<Nitemsb<<" tnab="<<tnab<<endl;
+	}
+	Iab=( Iab-tnab*log((double)Nitems) )/(double)Nitems;	// Iab = Sum_cla Sum_clb nab/N * log( nab/N )
+	cout<<(Sa + Sb - 2.0*Iab )<<"\t"<<Sa<<"\t"<<Sb<<"\t"<<Iab<<endl;
+//	return (Sa + Sb - 2.0*Iab ) ;
+}
+
+void Partition::missing(){
+	missing(&_it_found);
+}
+void Partition::missing(svect* it_found){
+	if(it_found->size()==0) return;
+	svect it_missing;
+        svect::iterator msit;
+        for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++){
+                for(svect::iterator ita=cla->begin()+_items_offset;ita!=cla->end();ita++){
+                        it_missing.push_back(*ita);
+                        msit=it_missing.end();
+                        for(svect::iterator itb=it_found->begin();itb!=it_found->end();itb++)
+                                if(strcmp((*ita).c_str(),(*itb).c_str())==0)
+                                        it_missing.erase(msit);
+                }
+	}
+	if(it_missing.size()>0){
+		cout<<"#Partition1 items MISSING in partition2 : ";
+		for(svect::iterator it=it_missing.begin();it!=it_missing.end();it++)
+			cout<<*it<<" ";
+		cout<<endl;
+	}
+}
+
+void Partition::SubsProject(sset& itemset){
+	if(VERBOSE)cout<<"#Erase : ";
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++)
+			if(itemset.find(*it)==itemset.end()){ //If item it isn't in itemset
+				if(VERBOSE)cout<<*it<<" ";
+				it=cl->erase(it);		//erase it.
+				_nitems--;
+				--it;				//Then adjust appropriately the iterator to point to previous item in cl,
+				int i=atoi( (*cl)[0].c_str() ); //get the number of elements in cl (assumes partFmt=PART) and
+				stringstream ss;
+				ss<<--i;
+				if(i>0)(*cl)[0]=ss.str();		//decreas it by one if there are more elements remaining, otherwise
+				else {
+					cl=clusters.erase(cl)-1; //delete cluster (it was a singleton) and jump to next cluster.
+					if(VERBOSE)cout<<"(Singleton) ";
+					break;
+				}
+				if(VERBOSE)cout<<"(New cluster size= "<<(*cl)[0]<<") ";
+			}
+	if(VERBOSE)cout<<endl;
+	_resetMembers();
+}
+
+Partition Partition::intersection(Partition* part2){
+	int ofs2=part2->cluster_offset();
+	int cln=0;
+	long int nitems=part2->n_items();
+	if(nitems<_nitems)nitems=_nitems;
+	string isize,iname; 
+	smat intersection;
+	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++){
+		for(smat::iterator clb=part2->clusters.begin();clb!=part2->clusters.end();clb++){
+			svect inter_cl; /// Will contain intersection between cla and clb
+			for(svect::iterator ita=cla->begin()+_items_offset;ita!=cla->end();ita++)
+				for(svect::iterator itb=clb->begin()+ofs2;itb!=clb->end();itb++)
+					if(strcmp((*ita).c_str(),(*itb).c_str())==0)
+						inter_cl.push_back(*ita);
+			if(inter_cl.size()>0){ /// Set its size and name. These will be its first two entries
+				cln++;
+				stringstream ssn;
+				ssn<<"N"<<cln;	/// First, the name of the cluster
+				iname=ssn.str();	/// the name of the cluster
+				svect::iterator it;
+				if(_items_offset>1||ofs2>1){
+					it=inter_cl.begin();
+					inter_cl.insert(it,1,iname); 
+				}
+				stringstream sss;/// Second, the size of the cluster
+				int i=(int)(inter_cl.size()-_items_offset+1);
+				sss<<i;
+				isize=sss.str();/// Second, the size of the cluster
+				it=inter_cl.begin();
+				inter_cl.insert(it,1,isize);
+				stringstream rsss; ///Third, the fake reverse-sorting label
+				rsss<<nitems-i;
+				isize=rsss.str();
+				it=inter_cl.begin();
+				inter_cl.insert(it,1,isize); ///Third, the fake reverse-sorting label
+			}
+			if(inter_cl.size()>0)intersection.push_back(inter_cl);
+		}
+	}
+	if(intersection.size()>0){	///Reverse sort : Larger clusters firstl singletons last
+		sort(intersection.begin(),intersection.end());
+		int maxitems=0;
+		for(smat::iterator cl=intersection.begin();cl!=intersection.end();cl++){
+			cl->erase(cl->begin()); ///REmove the first fake reverse-sorting label of each cluster
+			if(cl->size()-_items_offset>maxitems){
+				//maxitems=sitems.size();
+				maxitems=cl->size()-_items_offset;
+				_largest_cluster=clusters.size()-1; //index refering to largest cluster
+				_it_largest_cluster=clusters.begin(); ///pointer refering to largest cluster
+			}
+		}
+	}
+	return Partition(&intersection, ofs2>_items_offset?ofs2:_items_offset);
+}
+
+Partition Partition::operator+(Partition& part2){
+	int ofs2=part2.cluster_offset();
+	int cln=0;
+	long int nitems=part2.n_items();
+	if(nitems<_nitems)nitems=_nitems;
+	string isize,iname; 
+	smat enose;
+	map<long int, smat > pan_enose;
+	svect::iterator iab,iae,ibb,ibe;
+	iab=clusters[largest_Cluster()].begin()+_items_offset; ///Start of largest cluster in this
+	iae=clusters[largest_Cluster()].end();			///and end.
+	svect acl (iab,iae);	///extract only the elements, i.e., w/o the labels.
+	ibb=part2.clusters[part2.largest_Cluster()].begin()+ofs2; ///Start of largest cluster in [art2
+	ibe=part2.clusters[part2.largest_Cluster()].end();	///and its end.
+	svect bcl (ibb,ibe);	///extract only the elements, i.e., w/o the labels.
+	svect enose_cl=acl+bcl; ///First join the two largest clusters
+	enose.push_back(enose_cl); 
+	if(enose_cl.size()<nitems)enose.push_back(enose_cl);
+	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++){
+		if((*cla)<=enose_cl)continue;
+		for(smat::iterator clb=part2.clusters.begin();clb!=part2.clusters.end();clb++){
+			if((*clb)<=enose_cl)continue;
+			svect sum_cl=(*cla)+(*clb);
+			enose.push_back(sum_cl); 
+		}	
+	}
+}
+
+bool isInteger(string& str){
+	for(int i=0;i<str.length();i++)
+		if(!isdigit(str.at(i)))return false;
+	return true;
+}
+
+void Partition::mclTabFile(char* mcltabf){
+	_mcltabf=mcltabf;
+	if(!QUIET)cout<<"#Reading MCL tab file "<<string(_mcltabf)<<endl;
+	ifstream is(_mcltabf);
+	if(!is){
+		cout<<"ERROR: Partition::mclTabFile : Cannot open file "<<string(_mcltabf)<<endl;	
+		exit(1);
+	}
+	string it;
+	int c=0;
+	while(is>>it){
+		//if(!isdigit(it.at(0))){
+		if(!isInteger(it)){
+			getline(is,it);
+			continue;
+		}
+		else{
+			int idx=atoi(it.c_str());
+			is>>it;
+			_mcltab[idx]=it;
+			c++;
+		}
+	}
+	if(n_items()>0 && c!=n_items()){
+		cout<<"ERROR: Partition::mclTabFile : number of keys-items pairs doesn't match number of items read for partition."<<endl;
+		exit(1);
+	}
+	if(!QUIET)cout<<"#MCL tab file: found "<<c<<" key-label pairs. Last label is "<<_mcltab[c-1]<<endl;
+}
+void Partition::swapLabels(char* mcltabf=NULL){
+	if(mcltabf)mclTabFile(mcltabf);
+	if(_mcltabf==NULL){
+		cout<<"#WARNING: Couldn't translate items labels. NO tab file defined."<<endl;
+		return ;
+	}
+	smat nclusters;
+	smat* cls=&clusters;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
+		svect nits;
+		for(svect::iterator it=cl->begin();it!=cl->end();it++){
+			if(it>=cl->begin()+_items_offset) 
+				nits.push_back( _mcltab[ atoi( (*it).c_str() ) ]  );
+			else nits.push_back(*it);
+		}
+		nclusters.push_back(nits);
+	}
+	//if(!QUIET)cout<<"#Items translated according to tabfile. Previous Last item= "<<*((clusters.rbegin())->rbegin())<<endl;
+	clusters=nclusters;
+	_resetMembers();
+	if(!QUIET)cout<<"#Items translated according to tabfile. New Last item= "<<*((nclusters.rbegin())->rbegin())<<endl;
+}
+
+void Partition::partitionInputFormat(partFileFormat iformat=partFmtPART){
+	switch(iformat){
+		case partFmtMCL:
+			if(VERBOSE)cout<<"#Reading partition input format MCL"<<endl;
+			break;
+		case partFmtFREE:
+			if(VERBOSE)cout<<"#Reading partition input format FREE"<<endl;
+			break;
+		case partFmtPART:
+		default:
+			if(VERBOSE)cout<<"#Reading partition input format PARTANALYZER"<<endl;
+			break;
+	}
+}
+
+//bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1){ //Default input format is partanalyzer's own format
+bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1, char* eol="$\0"){ //Default input format is partanalyzer's own format
+	if(!(_is>>it)) return false;
+	if(it.compare("(mclheader")==0){
+		iformat=partFmtMCL;
+		if(!QUIET)cout<<"#Detected partition input format MCL"<<endl;
+	}
+	switch(iformat){
+		case partFmtMCL:
+			if( !isdigit(it.at(0)) ){
+#ifdef DEBUG
+				cout<<"#DEBUG: not a digit seen {"<<it<<"}: nit="<<nit<<endl;
+#endif
+				string line;
+				getline(_is,line);
+				if(_readStringf(_is,it,iformat,nit) ) 
+					return true;
+				else return false;
+			}
+			//if( isdigit(it.at(0)) ){
+			else if(nit>0) return true;
+			else{
+#ifdef DEBUG
+				cout<<"#DEBUG: digit seen {"<<it<<"}: nit="<<nit<<endl;
+#endif
+				string line;
+				int cispos=_is.tellg();
+				cispos-=it.length();
+				//getline(_is,line,'$');
+				getline(_is,line,eol[0]);
+				_is.seekg(cispos);
+				stringstream ss;
+				ss<<line;
+#ifdef DEBUG
+				cout<<"#DEBUG: line seen : {"<<line<<"}"<<endl;
+				cout<<"#DEBUG: stream seen : {"<<ss.str()<<"}"<<endl;
+#endif
+				line.clear();
+				long int nitems=0;
+#ifdef DEBUG			
+				cout<<"#DEBUG: counting clusters elements... ";
+#endif
+				//while(ss>>line && line.compare("$")!=0) ///In MCL, the first number reefers to clusters name; line ends with $
+				while(ss>>line && line.compare(eol)!=0) ///In MCL, the first number reefers to clusters name; line ends with $
+				{
+#ifdef DEBUG
+					cout<<line<<" ";
+#endif
+					nitems++;	
+				}
+#ifdef DEBUG
+				cout<<"\n#DEBUG: nitems count : "<<nitems<<endl;
+#endif
+				stringstream iss;
+				iss<<nitems;
+				it=iss.str();
+				return true;
+			}
+			break;
+		case partFmtFREE:
+			cout<<"ERROR: input format FREE not yet implemented"<<endl;
+			exit(1);
+			break;
+			/*
+			*/
+		case partFmtPART:
+		default:
+			if(strcmp(it.substr(0,1).c_str(),"#")==0){
+				if(VERBOSE)cout<<"#Skipping comment... \n"<<it<<" ";
+				string line;
+				getline(_is,line);
+				//ostringstream oss;
+				//while(oss<<it)
+				//	if(VERBOSE)cout<<oss.str()<<" ";
+				if(VERBOSE)cout<<endl;
+				if(_readStringf(_is,it,iformat) ) 
+					return true;
+				else return false;
+			}
+			else if(iformat==partFmtFREE){
+#ifdef DEBUG
+				cout<<"#DEBUG: element seen {"<<it<<"}: nit="<<nit<<endl;
+#endif
+				string line;
+				int cispos=_is.tellg();
+				cispos-=it.length();
+				getline(_is,line);
+				_is.seekg(cispos);
+#ifdef DEBUG
+				cout<<"#DEBUG: line seen : {"<<line<<"}"<<endl;
+#endif
+#ifdef DEBUG			
+				cout<<"#DEBUG: counting clusters elements... ";
+#endif
+				long int nitems=1;
+				int i=-1;
+				while(line.at(++i)) ///In FREE, simply elements are listed.
+				{
+#ifdef DEBUG
+					cout<<line.at(i);
+#endif
+					if(isspace(line.at(i))) nitems++;	
+				}
+#ifdef DEBUG
+				cout<<"\n#DEBUG: nitems count : "<<nitems<<endl;
+#endif
+				stringstream iss;
+				iss<<nitems;
+				it=iss.str();
+				return true;
+				
+			}
+			break;
+	}
+	return true;
+}
+bool _isComment(ifstream& _is, string& it, partFileFormat& iformat, int nit, char* eol="$\0"){
+	switch(iformat){
+		case partFmtMCL:
+			if( !isdigit(it.at(0) ) ){
+				string line;
+				getline(_is,line);
+				if(_readStringf(_is,it,iformat,nit) ) 
+					return true;
+				else return false;
+			}
+			break;
+		case partFmtPART:
+			break;
+	}
+}
+
+void Partition::_readClusters(){ ///For the time being, we'll assume each cluster has its number of items as the first string, its name as the second and then the items we'll follow:
+	string it;		///That is, e.g, "95 N245 Alx3 Alx4 Cart1 ..." This would require an offset _items_offset=2. However, the lowest offset we expect is 
+	int nit,nitems;	/// _items_offset=1, as at least the first item must be the cluster size. Including the name is optional.
+	_nsingletons=0;
+	_npairs=0;
+	int maxitems=0;
+	svect _items;
+	ifstream _is(_partitionf);
+        if(!_is){
+                cout<<"Cannot open file "<<string(_partitionf)<<endl;
+                exit(1);
+        }
+	nit=0; ///Item-read number
+	_nitems=0;
+	if(!QUIET) cout<<"#Reading clusters from partition "<<_partitionf<<endl;
+	partitionInputFormat(_piformat);
+
+	//while(_is>>it && strcmp(it.substr(0,1).c_str(),"#")!=0){ //Comments only at the end of file and starting with #
+	while(_readStringf(_is,it,_piformat,nit) ){ //Comment anywhere starting with #
+#ifdef DEBUG
+			cout<<"Seen: ("<<it.substr(0,1)<<")";
+#endif
+			if(nit==0){
+				nitems=atoi(it.c_str());	///Number of items to be read.
+				_items.assign(nitems + _items_offset,""); ///create items list accordingly, leaving space for the additional (_items_offset) indexes.
+				_items[nit]=it;				///save the first item
+#ifdef DEBUG
+				cout<<" (_items.size="<<_items.size()<<")"<<"n="<<it<<"\t";
+#endif
+			}
+			//while(nit<nitems+_items_offset-1 && _is>>it){ ///If we haven't read all records, keep reading and setting up the cluster
+			while(nit<nitems+_items_offset-1 && _readStringf(_is,it,_piformat) ){ ///If we haven't read all records, keep reading and setting up the cluster
+				nit++;
+				_items[nit]=it;
+				if(nit>_items_offset-1){
+					sitems.insert(it);///Update set ot items with new element.
+					_vitems.push_back(it);
+#ifdef DEBUG
+					cout<<"[nit="<<nit<<"/sitems<<"<<it<<"]";
+#endif
+				}
+#ifdef DEBUG
+				cout<<it<<"\t";
+#endif
+			}
+			if(nit<nitems+_items_offset-1){
+				cout<<"#"<<program<<": Reading cluster: last item read: "<<_items[nit]<<". Skipping this line and rest of input file."<<endl;
+				break;
+			}
+#ifdef DEBUG
+			cout<<" length="<<_items.size();
+			cout<<endl;
+#endif
+			if(_items.size()==1+_items_offset){
+				_nsingletons++;
+				ssingletons.insert(_items[_items_offset]);
+			}
+			if(_items.size()==2+_items_offset)_npairs++;
+			clusters.push_back(_items);
+			_nitems+=_items.size()-_items_offset;
+			nit=0;
+			if(_items.size()>maxitems){
+				maxitems=_items.size();
+				_largest_cluster=clusters.size()-1; //index refering to largest cluster
+				_it_largest_cluster=clusters.begin(); ///pointer refering to largest cluster
+			}
+	}
+	if(VERBOSE) cout<<"#Finish Reading partition: "<<endl;
+	if(!QUIET) cout<<"#items= "<<_nitems<<" clusters= "<<clusters.size()<<" #singletons= "<<_nsingletons<<" #pairs= "<<_npairs<<" \%non-trivial= "<<(_nsingletons+_npairs)*1.0/clusters.size()<<" largest-cluster-size= "<<maxitems-_items_offset<<" largest-cluster-index= "<<_largest_cluster<<" last-cluster-size= "<<_items.size()-_items_offset<<" Last-item-read= "<<_items[_items.size()-1]<<endl;
+	_nclusters=clusters.size();
+	if(_nsingletons!=ssingletons.size()){
+		cout<<"ERROR: _readClusters : Not a sound Partition : non mutually disjoint singleton clusters"<<endl;
+		cout<<ssingletons<<endl;
+		exit(1);
+	}
+}
+
+void Partition::printPartition(){
+	partFileFormat format=_piformat;
+	printPartition(format);
+}
+
+void Partition::printPartition(partFileFormat format){
+	int ofs=0;
+	switch(format){
+		case partFmtMCL:
+			{
+				if(!QUIET)cout<<"#BeginMCLPartitionMatrix"<<endl;
+				ostringstream oss;
+				cout<<"(mclheader\nmcltype matrix\ndimensions "<<n_items()<<"x"<<n_clusters()<<"\n)"<<endl;
+				cout<<"(mclmatrix\nbegin"<<endl;
+				long int it=0;
+				for(int i=0;i<clusters.size();i++){
+					cout<<i<<"\t";
+					for(int j=_items_offset;j<clusters[i].size();j++,it++)
+						if(_mcltabf!=NULL ){
+							for(map<int,string>::iterator iter=_mcltab.begin();iter!=_mcltab.end();iter++)
+								if((*iter).second.compare(clusters[i][j])==0)cout<<(*iter).first<<" ";
+						}else{
+							cout<<it<<" ";
+							oss<<it<<"\t"<<clusters[i][j]<<endl; //If mcltab file was not declared, built one ad-hoc
+						}
+					cout<<"$"<<endl;
+				}
+				cout<<")"<<endl;
+				if(!QUIET)cout<<"#EndMCLPartitionMatrix"<<endl;
+				//if(_mcltabf!=NULL ){
+					if(!QUIET)cout<<"#BeginMCLTabfile"<<endl;
+					cout<<"#Tab file of partition "<<(FileName()==NULL?"":FileName())<<endl;
+					cout<<oss.str();
+					oss.flush();
+					if(!QUIET)cout<<"#EndMCLTabfile"<<endl;
+				//}
+				break;
+			}
+		case partFmtFREE:
+			ofs=_items_offset;
+		case partFmtPART:
+		default:
+			if(!QUIET)cout<<"#Clusters: "<<clusters.size()<<endl;
+			for(int i=0;i<clusters.size();i++){
+				for(int j=0+ofs;j<clusters[i].size();j++)
+					//cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
+					if(_mcltabf!=NULL && j>=_items_offset)
+						cout<<_mcltab[ atoi( clusters[i][j].c_str() ) ]<<"\t";
+					else
+						cout<<clusters[i][j]<<"\t";
+				cout<<endl;
+			}
+			break;
+	}
+}
+
+//neighborhood Partition::Neighborhood(string item)
+svect Partition::getClusterOf(string item)
+{
+	//sset* mycluster=NULL;
+	//double nf=1.0;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++)
+			if(item.compare(*it)==0) {
+					svect mycluster (cl->begin()+_items_offset,cl->end());
+					return mycluster;
+			}
+	/*
+			{
+				for(it=cl->begin();it!=cl->end();it++)
+					mycluster->insert(*it);
+				break;
+			}
+	if(!mycluster){
+		mycluster->insert("NAN");
+		nf=0.0;
+	}
+	return pair<string,pair<sset,double> > (item,pair<sset,double>(*mycluster,nf));
+	*/
+	svect mycluster;
+	return mycluster;
+}
+
+sset Partition::getItems(cluster* cl)
+{
+	sset clItems;
+	for(cluster::iterator it=cl->begin();it!=cl->end();it++)
+		clItems.insert(*it);
+	return clItems;
+}
+
+sset Partition::getItems()
+{
+	sitems.clear();
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++)
+			sitems.insert(*it);
+#ifdef DEBUG
+	cout<<"Partition::getItems : Items partition ";
+	if(FileName()!=NULL)cout<<FileName();
+	cout<<" : "<<endl;
+	cout<<"{";
+	for(sset::iterator it=sitems.begin();it!=sitems.end();it++)
+		cout<<*it<<",";
+	cout<<"}"<<endl;
+#endif
+	return sitems;
+}
+
+bool Partition::operator==(Partition& part2)
+{
+	bool found;
+	if(_nclusters!=part2.n_clusters())return false;
+	if(_nsingletons!=part2.n_singletons()) return false;
+	if(_nitems!=part2.n_items()) return false;
+	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++)
+		for(svect::iterator ita=cla->begin()+_items_offset;ita!=cla->end();ita++){
+			found=false;
+			for(smat::iterator clb=part2.clusters.begin();clb!=part2.clusters.end();clb++)
+				for(svect::iterator itb=clb->begin()+_items_offset;itb!=clb->end();itb++)
+					if(ita->compare(*itb)==0) found=true;
+			if(!found)return false;
+		}
+	return true;
+}
+
+bool Partition::operator<=(Partition& part2){
+	if(n_clusters()<part2.n_clusters())return false;
+	//if(*this==part2)return true;
+	long int clfound=0;
+	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++)
+		for(smat::iterator clb=part2.clusters.begin();clb!=part2.clusters.end();clb++){
+			svect acl (cla->begin()+_items_offset,cla->end());
+			svect bcl (clb->begin()+part2.cluster_offset(),clb->end());
+			//if(*cla<=*clb)clfound++;
+			if(acl<=bcl)clfound++;
+		}
+	if(clfound==n_clusters())return true;
+	return false;
+}
+
+/*Partition Partition::operator*(Partition& part2){
+	return intersection(&part2);
+}
+*/
+vector<double > Partition::purityScore(Partition* part2){
+	double strict=0.0;
+	double lax=0.0;
+	long int itfound;
+	vector<double > pscores;
+	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++){
+		svect acl (cla->begin()+_items_offset,cla->end());
+		if(acl.size()==1)continue;
+		for(smat::iterator clb=part2->clusters.begin();clb!=part2->clusters.end();clb++){
+			svect bcl (clb->begin()+part2->cluster_offset(),clb->end());
+			if(bcl.size()==1)continue;
+			if(acl<=bcl)lax++;
+			if(acl==bcl)strict++;
+		}
+	}
+	pscores.push_back(strict/(double)part2->n_nonSingClusters()); ///Normalize by the reference partition
+	pscores.push_back(lax/(double)n_nonSingClusters()); ///Normalize by the target partition
+	return pscores;
+}
+
+bool Partition::isaPartition(){
+	svect its;
+	if(sitems.size()==0)getItems();
+	for(sset::iterator it=sitems.begin();it!=sitems.end();it++)
+		its.push_back(*it);
+	return isaPartitionOf(its);
+}
+bool Partition::isaPartitionOf(svect& svecOfelements){///One single clusters does make a sound partitions
+	svect unionOfcls;
+	if(clusters.size()==1){
+		//return true;  ///We shouldn't need to go beyond this, if we can make sure sitems comes always well defined.
+		unionOfcls=clusters[0];	
+		for(int i=0;i<_items_offset;i++)unionOfcls.erase(unionOfcls.begin());
+	}else for(int i=0;i<clusters.size()-1;i++){
+	///With the introduction of Partition::ssingletons, no instantiated Partition can have the same singleton element more than once.
+	///Hence, there is no need in checking singletons againts singletons.
+	///Looping over them means that, on an Opteron 846 2GH, it takes 15sec to check a partition with 502 elements and
+	///on average 185 clusters and 95 singletons. Does skipping singletons helps to significantly improve this figure?
+	///Also, take svect cla= clusters[i]; out of the second loop (that was weird!).
+	///Ok, preliminary test shows an increase in speed of ~28%, i.e, 9.5sec/partition now versus 13.2sec before! (Compared both ways using 
+	///a set of 19 partitions of those same sizes.
+		svect cla= clusters[i];
+		///For the moment, lets assume clusters are not ordered in descending order by size
+		if(cla.size()==1+_items_offset)continue;///SKIP check for singletons, but non-singletons ARE checked againts clb singletons!!
+		//if(cla.size()==1+_items_offset)break;///Makes no difference with respect to 'continue' for a set of 19 partitions of those sizes
+		for(int j=i+1;j<clusters.size();j++){
+			svect clb= clusters[j];
+			int n=0;
+			while(_items_offset>n++) {
+				if(j==i+1)cla.erase(cla.begin()); //Use the same loop as for clb, but got to do it only once for cla!!
+				clb.erase(clb.begin()); 
+			}
+//	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++)
+//		for(smat::iterator clb=clusters.begin();clb!=clusters.end();clb++){
+//			if(cla==clb)continue;
+			svect icl=cla*clb;
+			if(icl.size()>0){
+				cout<<"#ERROR: isaPartitionOf : Non mutually disjoint clusters found : "<<i<<"("<<cla[0]<<" ...) - "<<j<<"("<<clb[0]<<" ...)"<<endl;
+				cout<<"cla="<<cla<<endl;
+				cout<<"clb="<<clb<<endl;
+				cout<<"cli="<<icl<<endl;
+				return false;
+			}
+			svect sum=(cla+clb); 
+			unionOfcls+=sum;
+		}
+	}
+	if(n_singletons()!=n_clusters() && !(unionOfcls==svecOfelements)){
+		cout<<"#ERROR: isaPartitionOf : Clusters' union ("<<unionOfcls.size()<<") does  not cover the whole underlying set of elements ("<<svecOfelements.size()<<")"<<endl;
+		cout<<"#Union="<<unionOfcls<<"\n#Set="<<svecOfelements<<endl;	
+		return false;
+	}
+	return true;
+}
+
+///Type definition of a vector of partitions. Useful with trying to process multiple partitions at once, like in class PartitionStats
+typedef vector<Partition > ppvect;
+
+/**Implements operations between multiple partitions. The most important one is determining the 
+consensus partition among a given set of partitions of a same set X
+*/
+class PartitionStats
+{
+	///List of file that contain our paritions
+	vector<Charr > _fnamel;
+	///Main member: Vector of (instantiated) Partitions
+	vector<Partition > _partitionl;
+	///Cover of underlying set: Maps a sNeighborhood to each element
+	map<string,sNeighborhood> _cover;
+	///The consensus partition in raw format (offset=1) order by cluster size from largest to smallest.
+	multimap<int,string,greaterThan> _consPart;
+	//Partition _consensusPartition;
+	///Hasse diagram/hierarchy of partitions
+	map<long int, ppvect > _hasseNodes;
+	///Consensus Adjacency matrix (graph): Assumes all partitions defined on the same underlying set
+	graph _Ad;
+	///Number of partitions. Equals _partitionl.size()
+	int _npart;
+	int _clsnofs;
+	///Tsallis/Renyi Extensivity degree
+	double _entensivity_degree;
+	bool SETUPCONSENSUSP;
+	bool _DIST_SUBSPROJECT;
+	long int _pmetric(Partition& p1, Partition& p2, const int f);
+	double _pmetric(Partition& p1, Partition& p2, const double f);
+	double _pmetric(Partition& p1, Partition& p2, pmetricv metric);
+	double _f(Partition& p, pmetricv metric);
+	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF);
+public:
+	BellNumber BellN;
+	PartitionStats();
+	///Instantiates a PartitionStats out of a list of filenames, a common file input format, a common cluster-offset value and a common normalization factor gauge (default=0).
+	PartitionStats(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs, int clstat_normalization_ofs);
+	///Checks if each of the provided partitions is a sound partition, i.e., if all clusters are pair-wise disjoint.
+	int arePartitions();
+	///Builds the cover _cover of the underlying set of elements out of the list of partitions.
+	void getCover();
+	///Check if _cover has been build.
+	bool hasaCover(){ if(_cover.size()>1)return true; return false ;}
+	///Prints out _cover, eventually printing out also the consensus if SETUPCONSENSUSP=true within the same loop. Notice this doesn't instantiates a consensus partition, but just prints it.
+	void printCover(bool SETUPCONSENSUSP);
+	///Used by printCover to print the consensus partition 
+	void printConsensusPart();
+	//void getConsensusPartition();
+	///Explicitly build and instantiate a new partition which is the consensus one of the given list of partitions. 
+	Partition getConsensusPartition();
+	///Build consensus adjacency matrix
+	void setConsensus_Ad();
+	///Returns consensus adjacency matrix
+	graph Ad(){ if(_Ad.empty()) setConsensus_Ad(); return _Ad;}
+	///Print grey-scale image (pgm) of consensus adjacency matrix
+	void pgm_Ad(){cout<<"#BeginConsensusAdjacencyMatrixPGMImage\n"<<_Ad<<"#EndConsensusAdjacencyMatrixPGMImage"<<endl;}
+	///Print consensus adjacency matrix in raw format: list of rows for each edge : strA strB double
+	void get_Ad();
+	///Calculate cosine distance between associated Adjacency matrices
+	void getAdCos();
+	///Calculate all pair-wise purity scores
+	void getPurity();
+	///Calculate purity scores of all againts the first partition (reference)
+	void getPurityRef();
+	///Compare cluster by cluster against the first partition's clusters (reference) and print overlap (fraction elements present in referece cluster)
+	void getSplitsRef(splitmethod similarity);
+	///get cardinality of partition
+	long int card(Partition p){ return p.card();}
+	///Get Shannon entropy of partition
+	double H(Partition p){ return p.H();}
+	///Get Boltzman entropy of partition
+	double BK(Partition p){ return p.BK();}
+	///Get Tsallis entropy of partition
+	double TS(Partition p, double q){ return p.TS(q);}
+	double TS(Partition p){ return p.TS();}
+	///Get Renyi entropy of partition
+	double RS(Partition p, double q){ return p.RS(q);}
+	double RS(Partition p){ return p.RS();}
+	///Get Jeffreys Qnorm (a la Tarantola) of partition
+	double JQnorm(Partition p, double q){ return p.JQnorm(q);}
+	///Print the value of the (information theoretic) potential associated with each partition
+	void iPotential(pmetricv pm);
+	///Calculates edit score distance between part1 and part2 using pmetric.
+	long int ES(Partition& p1, Partition& p2){ return _pmetric(p1,p2,0);}
+	///Calculates VI (Shannon) distance between part1 and part2 using pmetric. Should give the same as using partition explicitly built-in vipp function. Already checked?
+	//double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,0.0);}
+	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}
+	///Calculates Boltzman distance between part1 and part2 using pmetric.
+	double BK(Partition& p1, Partition& p2){ return _pmetric(p1,p2, boltzmann);}
+	///Calculates Tsallis distance between part1 and part2 using pmetric.
+	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}
+	///Calculates Renyi distance between part1 and part2 using pmetric.
+	double RS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, renyi);}
+	///Calculates Tarantola distance between part1 and part2 using Jeffrey's Qnorm.
+	double TD(Partition& p1, Partition& p2){ return _pmetric(p1,p2, jeffreyQnorm);}
+	///Calculates all distances againts the specified reference partition. Argument pmetricv specifies which metric to use (VI, Edit score,...)
+	void distances(Partition& p, pmetricv pm);
+	///Calculates all distances againts the reference partition. This is the first partition read. Argument pmetricv specifies which metric to use (VI, Edit score,...)
+	void distancesRef(pmetricv pm);
+	///Calculates all pair-wise distances. Argument pmetricv specifies which metric to use (VI, Edit score,...)
+	void distances(pmetricv pm);
+	///Aproximate calculation of pair-wise distance between paritions with different number of elements
+	/// It stripps of all elements that aren't share and calculates the distance using simply the rest.
+	void distances_Subsprojection(pmetricv pm); 
+	///Equivalent one for distances againts a common reference partition.
+	void distancesRef_Subsprojection(pmetricv pm); 
+	///Prints the Hasse diagram corresponding to the given list of partitions.
+	void printHasseDiagram();
+	///Print 
+	void printHasseNodes();
+};
+
+PartitionStats::PartitionStats(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=2,int clstat_normalization_ofs=0){
+	_clsnofs=clstat_normalization_ofs;
+	_fnamel=fnames;
+	_npart=0;
+	_DIST_SUBSPROJECT=false;
+	_entensivity_degree=extensivity;
+	if(VERBOSE){
+		cout<<"#Instantiating each partition ("<<fnames.size()<<"/"<<_fnamel.size()<<") ..."<<endl;
+		cout<<"#First partition... "<<fnames[0].car<<"/"<<_fnamel[0].car<<endl;
+		cout<<"#Last partition... "<<fnames[fnames.size()-1].car<<"/"<<_fnamel[_fnamel.size()-1].car<<endl;
+	}
+	
+	for(vector<Charr >::iterator f=_fnamel.begin();f!=_fnamel.end();f++){
+		_npart++;
+		if(!QUIET)cout<<"#Partition "<<_npart<<endl;
+		Partition q=Partition(f->car,iformat,ofs);
+		_partitionl.push_back(q);
+		_hasseNodes[q.n_clusters()].push_back(q);
+	}
+	if(_npart<1){
+		cout<<"ERROR: invalid number of partitions "<<_npart<<"<1 : Check value provided for option norm"<<endl;
+		exit(1);
+	}
+	if(_npart>300&&!QUIET){
+		cout<<"#Finished instantiating all partitions."<<endl;
+		systemDate();
+	}
+}
+
+///Distance metric induced by the cardinality : \f$d\left(P,P'\right)\,\equiv\,2\,card\left(P,P'\right)\,-\,card\left(P\right)\,-\,card\left(P'\right)\f$
+long int PartitionStats::_pmetric(Partition& p1, Partition& p2, const int f){
+	return ( 2*card(p1*p2)-card(p1)-card(p2) );
+}
+/* ///Distance metric induced by the entropy : \f$d\left(P,P'\right)\,\equiv\,2\,H\left(P,P'\right)\,-\,H\left(P\right)\,-\,H\left(P'\right)\f$
+double PartitionStats::_pmetric(Partition& p1, Partition& p2, const double f=0.0){
+	return ( 2.0*H(p1*p2)-H(p1)-H(p2) );
+}*/
+///Distance metric induced by the entropy : \f$d\left(P,P'\right)\,\equiv\,2\,H\left(P,P'\right)\,-\,H\left(P\right)\,-\,H\left(P'\right)\f$
+double PartitionStats::_pmetric(Partition& p1, Partition& p2, pmetricv metric){
+	if(metric==jeffreyQnorm) return fabs(log(_f(p1,metric))-log(_f(p2,metric))); //Tarantola distance
+	Partition q=p1*p2;
+	return ( 2.0*_f(q,metric)-_f(p1,metric)-_f(p2,metric) );
+	//return ( 2.0*_f(p1*p2,metric)-_f(p1,metric)-_f(p2,metric) );
+}
+double PartitionStats::_f(Partition& p, pmetricv metric){ //POTENTIAL ASSOCIATED WITH A PARTITION.
+	double f;
+	switch(metric){
+		case boltzmann:
+				f=BK(p);
+				break;
+		//case entropy:
+		case shannon:
+				f=H(p);
+				break;
+		case cardinality:
+				if(VERBOSE)cout<<"#WARNING: PartitionStats::_f : using cardinality as double"<<endl;
+				f=card(p);
+				break;
+		case tsallis:	
+				if(_entensivity_degree==EXTENSIVITY_DEFAULT)
+					f=TS(p);
+				else
+					f=TS(p,_entensivity_degree);
+				break;
+		case renyi:
+				if(_entensivity_degree==EXTENSIVITY_DEFAULT)
+					f=RS(p);
+				else
+					f=RS(p,_entensivity_degree);
+				break;
+		case jeffreyQnorm:
+				f=JQnorm(p,_entensivity_degree);
+				break;
+		default:
+				cout<<"ERROR: PartitionStats::_f : unknown metric."<<endl;
+				exit(1);
+				break;
+	}			
+	return f;
+}
+
+void PartitionStats::iPotential(pmetricv metric=renyi){
+	if(!QUIET)cout<<"#BeginIPotential"<<endl;
+	for(vector<Partition >::iterator p=_partitionl.begin();p!=_partitionl.end();p++)
+		cout<<p->FileName()<<"\t"<<_f(*p,metric)<<endl;
+	if(!QUIET)cout<<"#EndIPotential"<<endl;
+}
+
+int PartitionStats::arePartitions(){
+	int nopart=0;
+	int np=1;
+	for(vector<Partition >::iterator p=_partitionl.begin();p!=_partitionl.end();p++,np++)
+		if(!p->isaPartition()){
+			nopart++;
+			cout<<"ERROR:\t"<<np<<"\t"<<p->FileName()<<endl;
+		}else if(!QUIET) cout<<"#Partition "<<np<<" OK"<<endl;
+	return nopart;
+}
+
+void PartitionStats::getCover(){
+	if(VERBOSE)
+		cout<<"#Counting neighborhoods..."<<endl;
+	for(vector<Partition >::iterator p=_partitionl.begin();p!=_partitionl.end();p++){
+		sset its=p->getItems();
+		for(sset::iterator it=its.begin();it!=its.end();it++){
+			svect cl=p->getClusterOf(*it);
+#ifdef DEBUG
+			cout<<"#DEBUG: cluster for item "<<*it<<" : ";
+			for(svect::iterator i=cl.begin();i!=cl.end();i++)
+				cout<<*i<<" ";
+			cout<<endl;
+#endif
+			sNeighborhood itemNeighborhood(*it,&cl);
+			_cover[*it]+=itemNeighborhood;
+			if(VERBOSE){
+				cout<<"#Current map of Neighborhoods "<<*it<<" : ";
+				_cover[*it].gNeighborsList();
+			}
+		}
+	}
+}
+
+void PartitionStats::printCover(bool PRINTCONSENSUP=false){
+	long int npart=_npart+_clsnofs;
+	cout<<"#BeginCover"<<endl;
+	cout<<"#Cover size= "<<_cover.size()<<endl;
+	map<string,int> ccl;
+	int cclso=0;
+	for(map<string,sNeighborhood>::iterator it=_cover.begin();it!=_cover.end();it++){
+		cout<<it->first;
+		cout<<"\t"<<(it->second).eps<<"\t"<<(it->second).eps/(double)npart*100.0;
+		cout<<"\t"<<(it->second).neighbors.size();
+		stringstream ss;
+		for(sset::iterator p=(it->second).neighbors.begin();p!=(it->second).neighbors.end();p++){
+			cout<<"\t"<<*p;
+			if(PRINTCONSENSUP)ss<<"\t"<<*p;	
+		}
+		if(_cover[it->first].multimode>0)cout<<"\tMultimode="<<_cover[it->first].multimode;	
+		if(PRINTCONSENSUP){
+			ccl[ss.str()]=1;   ///ccl is a simple map with a string as key. Thus each neighbors set appears only once.
+			if(ccl.size()>cclso){	///If the map increased in size it means that the last set of neighbors is a new one
+				cclso=ccl.size(); ///update then the counter and add this set to the consensus partition.
+				_consPart.insert(pair<int, string> ((it->second).neighbors.size(),ss.str()) );
+			}
+		}
+		if(VERBOSE)if((it->second).neighbors.size()==1)cout<<"\tSingleton";
+		cout<<endl;
+	}
+	cout<<"#EndCover"<<endl;
+}
+
+//void PartitionStats::getConsensusPartition(){
+Partition PartitionStats::getConsensusPartition(){
+	Partition _consensusPartition;
+	if(!hasaCover()){
+		cout<<"#W: Cover not yet defined. Setting up cover."<<endl;
+		getCover();
+	}
+	if(!_consPart.size()>0){
+		map<string,int> ccl;
+		int cclso=0;
+		for(map<string,sNeighborhood>::iterator it=_cover.begin();it!=_cover.end();it++){
+			stringstream ss;
+			for(sset::iterator p=(it->second).neighbors.begin();p!=(it->second).neighbors.end();p++){
+				ss<<"\t"<<*p;	
+			}
+			ccl[ss.str()]=1;   ///ccl is a simple map with a string as key. Thus each neighbors set appears only once.
+			if(ccl.size()>cclso){	///If the map increased in size it means that the last set of neighbors is a new one
+				cclso=ccl.size(); ///update then the counter and add this set to the consensus partition.
+				_consPart.insert(pair<int, string> ((it->second).neighbors.size(),ss.str()) );
+			}
+		}
+	}
+	_consensusPartition.xtrConsPart(_consPart);
+	return _consensusPartition;
+}
+
+void PartitionStats::printConsensusPart(){
+	int n=0;
+	if(!QUIET)cout<<"#calculating Bell Number..."<<endl;
+	//systemDate();
+	//long int bn=4;
+	//cout<<"#Bell_number ~ "<<BellN[_cover.size()]<<endl;
+	//cout<<"#Bell_number ~ "<<BellN[bn]<<endl;
+	//systemDate();
+	if(!QUIET)cout<<"#BeginConsensusPartition"<<endl;
+	for(multimap<int,string,greaterThan>::iterator cl=_consPart.begin();cl!=_consPart.end();cl++)
+		cout<<cl->first<<"\tN"<<++n<<"\t"<<cl->second<<endl;
+	if(!QUIET)cout<<"#EndConsensusPartition"<<endl;
+}
+
+void PartitionStats::setConsensus_Ad(){
+	_Ad.clear();
+	if(VERBOSE)cout<<"#PartitionStats::setConsensus_Ad() : _partitionl.size()="<<_partitionl.size()<<endl;
+	ppvect::iterator p=_partitionl.begin();
+	if(_partitionl.size()==1)
+		_Ad=p->Ad_os();
+	else
+		_Ad=p->Ad();
+	for(p++ ;p!=_partitionl.end();p++){
+		if(VERBOSE)cout<<"#PartitionStats::setConsensus_Ad() : "<<p->FileName();
+		graph g=p->Ad();
+		_Ad+=g;
+		if(VERBOSE)cout<<" ... OK"<<endl;
+	}
+	double z=1.0/_partitionl.size();
+	_Ad=z*_Ad;
+	if(_Ad.empty()){
+		cout<<"ERROR: PartitionStats::setConsensus_Ad() : Failed to build Adjacency Matrix"<<endl;
+		exit(1);
+	}
+}
+
+void PartitionStats::get_Ad(){
+	if(_Ad.empty()) setConsensus_Ad();
+	cout<<"#BeginConsensusAdjacencyMatrix"<<endl;
+	for(graph::iterator i=_Ad.begin();i!=_Ad.end();i++){
+		string a = (i->first).first ;
+		string b = (i->first).second ;
+		strpair sp (a,b);
+		cout<<a<<"\t"<<b<<"\t"<<_Ad[sp]<<endl;
+	}
+	cout<<"#EndConsensusAdjacencyMatrix"<<endl;
+}
+
+void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false){
+	if(QUIET)return;
+	switch(hd){
+		case BEGIN:
+			switch(metric){
+				//case entropy:
+				case shannon:
+					cout<<"#BeginVIScores"<<endl;
+					break;
+				case cardinality:
+					cout<<"#BeginEditScores"<<endl;
+					break;
+				case boltzmann:
+					cout<<"#BeginBoltzmannDistances"<<endl;
+					break;
+				case tsallis:
+					cout<<"#BeginTsallisDistances q= "<<_entensivity_degree<<endl;
+					break;
+				case renyi:
+					cout<<"#BeginRenyiDistances q= "<<_entensivity_degree<<endl;
+					break;
+				case jeffreyQnorm:
+					cout<<"#BeginTarantolaJQNDistances q= "<<_entensivity_degree<<endl;
+					break;
+			}
+			if(!usingREF)cout<<"#Partition(target)\tPartition(ref)\tDist. target-intersection\tDist. ref-intersection\tDist. target-ref"<<endl;
+			break;
+		case END:
+			switch(metric){
+				//case entropy:
+				case shannon:
+					cout<<"#EndVIScores"<<endl;
+					break;
+				case cardinality:
+					cout<<"#EndEditScores"<<endl;
+					break;
+				case boltzmann:
+					cout<<"#EndBoltzmannDistances"<<endl;
+					break;
+				case tsallis:
+					cout<<"#EndTsallisDistances"<<endl;
+					break;
+				case renyi:
+					cout<<"#EndRenyiDistances"<<endl;
+					break;
+				case jeffreyQnorm:
+					cout<<"#EndTarantolaJQNDistances q= "<<_entensivity_degree<<endl;
+					break;
+			}
+			break;
+	}
+}
+
+void PartitionStats::distancesRef_Subsprojection(pmetricv metric=shannon){
+	_DIST_SUBSPROJECT=true;
+	if(!QUIET)cout<<"#Using DIST_SUBSPROJECT"<<endl;
+	distancesRef(metric);
+	_DIST_SUBSPROJECT=false;
+}
+void PartitionStats::distancesRef(pmetricv pm=shannon){
+	Partition p=_partitionl[0];
+	bool usingREF=true;
+	distancesPrintHeadComment(pm,(flagheader) BEGIN, usingREF);
+	if(!QUIET){
+		cout<<"#Partition(reference):"<<p.FileName()<<endl;
+		cout<<"#Partition(target)\ttarget-intersection\tref-intersection\ttarget-ref"<<endl;
+	}
+	for(int j=1;j<_partitionl.size();j++){
+		if(_DIST_SUBSPROJECT) p=_partitionl[0];
+		Partition pb=_partitionl[j];
+		//if(p==pb)continue;
+		Partition pi=p*pb;
+		if(_DIST_SUBSPROJECT){
+			if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;
+			p.SubsProject(pi.sitems);
+			pb.SubsProject(pi.sitems);
+		}
+#ifdef DEBUG
+		cout<<"#_DIST_SUBSPROJECT="<<_DIST_SUBSPROJECT<<endl;
+		cout<<"#"<<p.FileName()<<endl;
+		p.printPartition();
+		cout<<"#"<<pb.FileName()<<endl;
+		pb.printPartition();
+#endif
+		switch(pm){
+			//case entropy:
+			case shannon:
+				cout<<pb.FileName()<<"\t"<<VI(pb,pi)<<"\t"<<VI(pi,p)<<"\t"<<VI(pb,p)<<endl;
+				break;
+			case cardinality:
+				cout<<pb.FileName()<<"\t"<<ES(pb,pi)<<"\t"<<ES(pi,p)<<"\t"<<ES(pb,p)<<endl;
+				break;
+			case boltzmann:
+				cout<<pb.FileName()<<"\t"<<BK(pb,pi)<<"\t"<<BK(pi,p)<<"\t"<<BK(pb,p)<<endl;
+				break;
+			case tsallis:
+				cout<<pb.FileName()<<"\t"<<TS(pb,pi)<<"\t"<<TS(pi,p)<<"\t"<<TS(pb,p)<<endl;
+				break;
+			case renyi:
+				cout<<pb.FileName()<<"\t"<<RS(pb,pi)<<"\t"<<RS(pi,p)<<"\t"<<RS(pb,p)<<endl;
+				break;
+			case jeffreyQnorm:
+				cout<<pb.FileName()<<"\t"<<TD(pb,pi)<<"\t"<<TD(pi,p)<<"\t"<<TD(pb,p)<<endl;
+				break;
+			default:
+				cout<<"ERROR: PartitionStat::distancesRef() : unknown metric case"<<endl;
+				exit(1);
+		}
+	}
+	distancesPrintHeadComment(pm,(flagheader) END, usingREF);
+}
+
+void PartitionStats::distances_Subsprojection(pmetricv metric=shannon){
+	_DIST_SUBSPROJECT=true;
+	if(!QUIET)cout<<"#Using DIST_SUBSPROJECT"<<endl;
+	distances(metric);
+	_DIST_SUBSPROJECT=false;
+}
+
+void PartitionStats::distances(pmetricv pm=shannon){
+	distancesPrintHeadComment(pm,(flagheader) BEGIN);
+	for(int i=0;i<_partitionl.size()-1;i++){
+		Partition pa=_partitionl[i];
+		for(int j=i+1;j<_partitionl.size();j++){
+			if(_DIST_SUBSPROJECT) pa=_partitionl[i];
+			Partition pb=_partitionl[j];
+			Partition pi=pa*pb;
+			if(_DIST_SUBSPROJECT){
+				if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;
+				pa.SubsProject(pi.sitems);
+				pb.SubsProject(pi.sitems);
+			}
+			switch(pm){
+				//case entropy:
+				case shannon:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<VI(pa,pi)<<"\t"<<VI(pi,pb)<<"\t"<<VI(pa,pb)<<endl;
+					break;
+				case cardinality:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<ES(pa,pi)<<"\t"<<ES(pi,pb)<<"\t"<<ES(pa,pb)<<endl;
+					break;
+				case boltzmann:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<BK(pa,pi)<<"\t"<<BK(pi,pb)<<"\t"<<BK(pa,pb)<<endl;
+					break;
+				case tsallis:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<TS(pa,pi)<<"\t"<<TS(pi,pb)<<"\t"<<TS(pa,pb)<<endl;
+					break;
+				case renyi:
+					//cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<RS(pa,pi)<<"\t"<<RS(pi,pb)<<"\t"<<RS(pa,pb)<<endl;
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<RS(pa,pi)<<"\t"<<RS(pi,pb)<<"\t"<<RS(pa,pb)<<endl;
+					break;
+				case jeffreyQnorm:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<TD(pa,pi)<<"\t"<<TD(pi,pb)<<"\t"<<TD(pa,pb)<<endl;
+					break;
+				default:
+					cout<<"ERROR: PartitionStat::distances() : unknown metric case"<<endl;
+					exit(1);
+			}
+		}
+	}	
+	distancesPrintHeadComment(pm,(flagheader) END);
+	_DIST_SUBSPROJECT=false;
+}
+
+void PartitionStats::getSplitsRef(splitmethod similarity=overlap){
+	//cout.setf(ios::fixed,ios::floatfield);
+	Partition* pa=&_partitionl[0];
+	stringstream ss;
+	stringstream sss;
+	int grey;
+	double value;
+	cout<<"#BeginSplitAnalysis: Method=\t";
+	switch(similarity){
+		case cosine:	
+			cout<<"Cosine Nomarlization Similarity [Leicht, E.A. et al., PRE, 73, 26120 (2006)]"<<endl;
+			break;
+		case split:
+			cout<<"Split [Overlap fraction iif reference cluster is subset of target cluster; 0 otherwise]"<<endl;
+			break;
+		case overlap:
+			cout<<"Overlap [Overlap fraction]"<<endl;
+			break;
+		default:
+			cout<<"ERROR:  PartitionStats::getSplitRef : Unknown method."<<endl;
+			exit(1);
+			break;
+	}
+	cout<<"#Reference(columns): "<<pa->FileName()<<endl;
+	for(int j=1;j<_partitionl.size();j++){
+		cout<<"#Clusters\t";
+		Partition* pb=&_partitionl[j];
+		int width,height;
+		width=pb->n_clusters(); 
+		height=pa->n_clusters();
+		if(similarity!=cosine){
+			width++; //last column will contain the total for each cluster of pb
+			height++; //last row will contain the total for each cluster of pb
+		}
+		ss<<"P2"<<endl;
+		ss<<width<<" "<<height<<endl;
+		ss<<_PGM_P2_GRAYSCALE_<<endl;
+		for(smat::iterator cl=pb->clusters.begin();cl!=pb->clusters.end();cl++)
+			cout<<*(cl->begin()+1)<<"\t";
+		cout<<"Totals"<<endl;
+		double atotal;
+		int bidx;
+		vector< double > btotal (pb->clusters.size(),0.0);
+		vector< int > bsplit (pb->clusters.size(),0);
+		for(smat::iterator cla=pa->clusters.begin();cla!=pa->clusters.end();cla++){
+			cout<<*(cla->begin()+1)<<"\t";
+			svect acl(cla->begin()+pa->cluster_offset(),cla->end());
+			grey=0;
+			value=atotal=0.0;
+			bidx=-1;
+			for(smat::iterator cl=pb->clusters.begin();cl!=pb->clusters.end();cl++){
+				svect bcl(cl->begin()+pb->cluster_offset(),cl->end());
+				svect incl=acl*bcl;
+				value=1.0*incl.size();
+				bidx++;
+				switch(similarity){
+					case cosine:
+						value/=sqrt(1.0*acl.size()*bcl.size());
+						break;
+					case split:
+						if(acl<=bcl) {
+							value/=bcl.size() ;
+						}
+						else value=0.0;
+						break;
+					case overlap:
+						//svect ucl=acl+bcl;
+						value/=bcl.size();
+						break;
+				}
+				grey=int( value*(_PGM_P2_GRAYSCALE_-1)+0.0 );
+				printf("%4.2f\t",value);
+				ss<<grey<<" ";
+				//atotal+=value;//ROW TOTALS
+				if(acl<=bcl){
+					btotal[bidx]+=value; //COLUMN TOTALS
+				}
+				if(acl==bcl){
+					atotal=1.0;//ROW TOTALS
+				}
+				if(incl.size()>0){
+					bsplit[bidx]++;//NUMBER OF SPLITS FOR EACH COLUMN
+				}
+			}
+			printf("%4.2f\n",atotal);//PRINT ROW TOTALS
+			grey=int( atotal*(_PGM_P2_GRAYSCALE_-1)+0.0 );//PLOT ROW TOTALS
+			ss<<grey;
+			ss<<endl;
+		}
+		cout<<"Totals\t";
+		for(int i=0;i<btotal.size();i++){
+			printf("%4.2f\t",btotal[i]);//PRINT COLUMN TOTALS
+			if(similarity!=cosine){
+				grey=int( btotal[i]*(_PGM_P2_GRAYSCALE_-1)+0.0 );
+				ss<<grey<<" ";//PLOT COLUMN TOTALS
+			}
+		}
+		cout<<endl;
+		if(similarity!=cosine){
+			ss<<0<<endl;
+		}
+		cout<<"#NOverlaps\n#";
+		for(smat::iterator cl=pb->clusters.begin();cl!=pb->clusters.end();cl++)
+			cout<<*(cl->begin()+1)<<"\t";
+		cout<<endl<<"#";
+		for(int i=0;i<btotal.size();i++){
+			printf("%5d\t",bsplit[i]);
+		}
+		cout<<endl;
+	}
+	cout<<"#EndSplitAnalysis"<<endl;
+	cout<<"#BeginSplitImage"<<endl;
+	cout<<ss.str();
+	cout<<"#EndSplitImage"<<endl;
+}
+
+void PartitionStats::getPurityRef(){
+	Partition* pa=&_partitionl[0];
+	if(!QUIET)cout<<"#BeginPurityScores\n#Reference: "<<pa->FileName()<<endl;
+	if(!QUIET)cout<<"#Partition(target)\tPurity Strict(raw)\tPurity Lax(raw)\tPurity Strict\tPurity Lax"<<endl;
+	int ns,nl;
+	double ps,pl;
+	vector<double> pscores;
+	for(int j=1;j<_partitionl.size();j++){
+		Partition* pb=&_partitionl[j];
+		pscores=pb->purityScore(pa);
+		ps=pscores[0];
+		pl=pscores[1];
+		ns=(int)(ps*(double)pa->n_nonSingClusters());
+		nl=(int)(pl*(double)pb->n_nonSingClusters());
+		cout<<pb->FileName()<<"\t"<<ns<<"\t"<<nl<<"\t"<<ps<<"\t"<<pl<<endl;
+	}
+	if(!QUIET)cout<<"#EndPurityScores"<<endl;
+}
+
+void PartitionStats::getPurity(){
+	if(!QUIET)cout<<"#BeginPurityScores"<<endl;
+	if(!QUIET)cout<<"#Partition(target)\tPartition(ref)\tPurity Strict(raw)\tPurity Lax(raw)\tPurity Strict\tPurity Lax"<<endl;
+	int ns,nl;
+	double ps,pl;
+	vector<double> pscores;
+	for(int i=0;i<_partitionl.size()-1;i++){
+		Partition* pa=&_partitionl[i];
+		for(int j=i+1;j<_partitionl.size();j++){
+			Partition* pb=&_partitionl[j];
+			pscores=pa->purityScore(pb);
+			ps=pscores[0];
+			pl=pscores[1];
+			ns=(int)(ps*(double)pb->n_nonSingClusters());
+			nl=(int)(pl*(double)pa->n_nonSingClusters());
+			cout<<pa->FileName()<<"\t"<<pb->FileName()<<"\t"<<ns<<"\t"<<nl<<"\t"<<ps<<"\t"<<pl<<endl;
+			pscores=pb->purityScore(pa);
+			ps=pscores[0];
+			pl=pscores[1];
+			ns=(int)(ps*(double)pa->n_nonSingClusters());
+			nl=(int)(pl*(double)pb->n_nonSingClusters());
+			cout<<pb->FileName()<<"\t"<<pa->FileName()<<"\t"<<ns<<"\t"<<nl<<"\t"<<ps<<"\t"<<pl<<endl;
+		}
+	}
+	if(!QUIET)cout<<"#EndPurityScores"<<endl;
+}
+
+void PartitionStats::printHasseDiagram(){
+	long int level,nextlevel;
+	map<long int, ppvect >::reverse_iterator rit=_hasseNodes.rbegin();
+	long int maxlevel=rit->first;
+	cout<<"#BeginHasseDiagram"<<endl;
+	cout<<"#Partition1  >  Partition2\tedge\tPart1-#clusters\tPart2-#nclusters"<<endl;
+	map<long int, ppvect >::iterator h1=_hasseNodes.begin();
+	level=h1->first;
+	for( ;level!=maxlevel; h1++, level=h1->first){
+		map<long int, ppvect >::iterator h2=h1;
+		h2++;
+		nextlevel=h2->first;
+		if(VERBOSE)cout<<"#level="<<level<<" nextlevel="<<nextlevel<<" ("<<maxlevel<<") Checking intersection:"<<endl;
+		for(ppvect::iterator pa=_hasseNodes[h1->first].begin();pa!=_hasseNodes[h1->first].end();pa++)
+			for(ppvect::iterator pb=_hasseNodes[h2->first].begin();pb!=_hasseNodes[h2->first].end();pb++){
+				Partition q=(*pa)*(*pb);
+				if(VERBOSE)cout<<"#pa="<<(*pa).FileName()<<" /\\ "<<"pb="<<(*pb).FileName()<<endl;
+					if(q==*pb){
+						cout<<(*pa).FileName()<<"\t"<<(*pb).FileName()<<"\t"<<"1"<<"\t"<<(*pa).n_clusters()<<"\t"<<(*pb).n_clusters()<<endl;
+					}
+			}
+	}
+	cout<<"#EndHasseDiagram"<<endl;
+}
+
+void PartitionStats::printHasseNodes(){
+	cout<<"#BeginHasseNodes (hierarchy)"<<endl;
+	for(map<long int, ppvect >::iterator h=_hasseNodes.begin();h!=_hasseNodes.end();h++){
+		cout<<h->first<<"\t"<<(h->second).size();
+		for(ppvect::iterator pa=_hasseNodes[h->first].begin();pa!=_hasseNodes[h->first].end();pa++)
+			cout<<"\t"<<pa->FileName();
+		cout<<endl;
+	}
+	cout<<"#EndHasseNodes"<<endl;
+}
+
+
+/**Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .
+It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair
+of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily)
+name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like
+coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element 
+does not exist in the provided partition.
+*/
+class MatrixOfValues
+{
+	char* _mxofvf;
+	ifstream _is;
+	svect _items;
+	smap	_pairs;
+	graph  _graph;
+	row _mx;
+	long int _nedges;
+	long int _nitems;
+	edge _Tweight;
+	int _getIndexOfItem(string str);
+public:
+	MatrixOfValues();
+	MatrixOfValues(char* file);
+	///Get File name
+	char* FileName(){return _mxofvf ;}
+	///Read matrix of values from file
+	void readMxValues();
+	///Print matrix of values to standard output
+	void printMatrix();
+	///Get value of k-th edge
+	double v(int k) { return _mx[k]; }
+	///Get value of edge between i-th and j-th elements
+	double v(int i, int j); 
+	///Get value of edge spanned by nodes a and b
+	double v(string a , string b, REDMxVal useRED);
+	///Merge two matrix of values
+	void merge(MatrixOfValues* matrix2);
+	///Merge two matrix of values and add cluster information for each edge
+	void merge(MatrixOfValues* mx2, Partition* pt);
+	///Cull edges specified in list matrix2
+	void cull(MatrixOfValues* matrix2);
+	///Cull edges spanned by nodes a and b
+	strpair cullEdge(string a, string b);
+	///Analyze cluster
+	void clusteranalysis();
+	///Get the number of edges present in the graph
+	long int n_edges(){ return _nedges;}
+	///Get the number of items spanning the actual graph
+	long int n_items(){ return _nitems;}
+	///Checks wether the edge was defined or not
+	bool existEdge(string a, string b);
+	///Gets total sum of edge weights
+	edge W(){ return _Tweight;}
+};
+
+strpair MatrixOfValues::cullEdge(string a, string b){
+	if(_graph.find(strpair (a,b))!=_graph.end() ) return strpair (a,b);
+	if(_graph.find(strpair (b,a))!=_graph.end() ) return strpair (b,a);
+	cout<<"ERROR: MatrixOfValues::cullEdge : "<<FileName()<<" : Not found edge between nodes "<<a<<" and "<<b<<endl;
+	exit(1);
+}
+
+bool MatrixOfValues::existEdge(string a, string b){
+	if(_graph.find(strpair (a,b))!=_graph.end() || _graph.find(strpair (b,a))!=_graph.end() )
+		return true;
+	else
+		return false;
+}
+
+double MatrixOfValues::v(int i, int j) {
+	int k;
+	k=((2*_nitems-2-i)*(i+1))/2+j-_nitems;
+	//cout<<"k... "<<(_nitems-1-i/2.0)*(i+1)<<"+"<<j<<"-"<<_nitems<<endl;
+	//cout<<"mx["<<k<<"]="<<_mx[k]<<endl;
+	return _mx[k] ;
+}
+double MatrixOfValues::v(string a , string b, REDMxVal useRED=useOrgRED){
+	/**As we are passing a copy, we can change here a,b without changing the orignal variables.
+	If it's an aritifically generated redundant sequences (-RED-#), use same matrix values as original. 
+	Drop substring tail starting at -RED
+	If useOrgRED, matrix value for redundant sequence is that of the original one: IDEAL DUPLICATE.
+	If not, see if useOwnRED: redundant sequences are expected to have their own defined matrix values, e.g., introducing noise on the origingal
+	matrix.
+	if it is useZeroRED, use default edge value (see below) for the redundant sequences.
+	Otherwise, not yet defined. Meanwhile, like useZeroRED.
+	*/
+	switch (useRED ){
+		case useOrgRED:
+				a=a.substr(0,a.find("-RED"));
+				b=b.substr(0,b.find("-RED"));
+				///Should be valid only for the artificially generated duplicates. Care should be taken that it doesn't affect other cases
+				if(a.compare(b)==0)return 1.0;
+				break;
+		case useOwnRED:
+		case useZeroRED:
+		default:
+				break;
+	}
+	if(VERBOSE)cout<<"#Searching for pair "<<a<<" , "<<b<<endl;
+	if(_graph[pair<string,string> (a,b)]) return _graph[pair<string,string> (a,b)];
+	if(_graph[pair<string,string> (b,a)]) return _graph[pair<string,string> (b,a)];
+	/**Using a map with doubles as values (pair of strings as keys) does not allow in an easy way to distinguish between
+	    a key with a value=0 or a key that simply was not previously defined.
+	    as we are dealing here with graphs, i.e, those keys represent edges, and the values represent numerical weight 
+	    (and given that I haven't found an easy walkaround) for the time being I'll silently ignore and just print the
+	    value for the first key. Still I leave the checking above, otherwise we may assign a zero to an otherwise non-zero edge.
+	   cout<<"ERROR in reading matrix "<<_mxofvf<<" : Pair not found "<<a<<" , "<<b<<endl; */
+	return _graph[pair<string,string> (a,b)];
+	exit(1);
+}
+
+MatrixOfValues::MatrixOfValues(char* file){
+	_mxofvf=file;
+	readMxValues();
+}
+
+int MatrixOfValues::_getIndexOfItem(string str){
+	int i;
+	for(i=0;i<_items.size();i++)
+		if( strcmp(str.c_str() , _items[i].c_str())==0 )
+			return i;
+	cout<<"ERROR: index for "<<str<<" not found. nitems= "<<_items.size()<<" i="<<i<<endl;
+	exit(1);
+}
+
+void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a square matrix and we don't care about the diagonal values. 
+	string pa,pb,s;	///Thus input matrix element (i,j) is located at index k=(_nitems-1-i/2)*(i+1)+j-_nitems  of vector _mx, where i,j=0,1,2,... and 
+	edge v;		///
+	long int rep;
+        ifstream _is(_mxofvf);
+        if(!_is){
+                cout<<"Cannot open file "<<string(_mxofvf)<<endl;
+                exit(1);
+        }
+	row mrow;
+	_nedges=0;
+	_nitems=0;
+	_Tweight=0;
+	int a,b,c,m;
+	if(!QUIET) cout<<"#Reading matrix "<<_mxofvf<<" ... ";
+	while(_is>>pa){
+		if(pa.substr(0,1).compare("#")==0){
+			getline(_is,pa);
+			continue;
+		}
+		_is>>pb ; _is>>v;
+#ifdef DEBUG
+		cout<<"Seen: "<<pa<<" "<<pb<<" "<<v<<endl;
+#endif
+		if(pa==pb) continue; 
+		a=b=c=0;
+		for(int i=0;i<_items.size();i++){
+			if(strcmp(_items[i].c_str(),pa.c_str())==0)a=1;
+			if(strcmp(_items[i].c_str(),pb.c_str())==0)b=1;
+			//if(a==1&&b==1)break;
+		}
+		
+		if(a==0){ _items.push_back(pa); _nitems++;}
+		if(b==0){ _items.push_back(pb); _nitems++;}
+		//if(a*b==1)continue;
+		_nedges++;
+		_mx.push_back(v);
+		_pairs.insert(pair<string,string> (pa,pb) );
+		//_graph.insert( pair<pair<string,string>,edge> (pair<string,string> (pa,pb), v) );
+		//pair<graph::iterator,bool> ret;
+		_graph[pair<string,string> (pa,pb)]=v ;
+		_Tweight+=v;
+#ifdef DEBUG
+		cout<<"#inserting pair: "<<pa<<" "<<pb<<" #pairs="<<_pairs.size()<<endl;
+#endif
+	}
+	if(!QUIET) cout<<"#\n#Finish Reading matrix: #items="<<_nitems<<" #matrixelements="<<_mx.size()<<" #pairs="<<_pairs.size()<<" TWeight="<<_Tweight<<endl;
+}
+
+void MatrixOfValues::cull(MatrixOfValues* mx2){
+        if(!QUIET) cout<<"#Cull edges specified in list= "<<mx2->_mxofvf<<" from graph mx= "<<_mxofvf<<endl;
+        for(smap::iterator it2=mx2->_pairs.begin();it2!=mx2->_pairs.end();it2++){
+		strpair sp=cullEdge(it2->first,it2->second);
+		cout<<sp.first<<"\t"<<sp.second<<"\t"<<v(sp.first,sp.second)<<endl;
+	}
+}
+
+void MatrixOfValues::merge(MatrixOfValues* mx2){
+        if(_pairs.size()!=mx2->_pairs.size()){
+                cout<<program<<" : Error: graphs contain different number of edges : mx1= "<<_pairs.size()<<" mx2= "<<mx2->_pairs.size()<<endl;
+                exit(1);
+        }
+        if(!QUIET) cout<<"#Merging graph mx1="<<_mxofvf<<" + mx2="<<mx2->_mxofvf<<endl;
+        for(smap::iterator it=_pairs.begin();it!=_pairs.end();it++)
+                cout<<it->first<<"\t"<<it->second<<"\t"<<v(it->first,it->second)<<"\t"<<mx2->v(it->first,it->second)<<endl;
+}
+
+void MatrixOfValues::merge(MatrixOfValues* mx2, Partition* pt){
+        if(_pairs.size()!=mx2->_pairs.size()){
+                cout<<program<<" : Error: graphs contain different number of edges : mx1= "<<_pairs.size()<<" mx2= "<<mx2->_pairs.size()<<endl;
+                exit(1);
+        }
+        if(!QUIET) cout<<"#Merging graph mx1="<<_mxofvf<<" + mx2="<<mx2->_mxofvf<<" and partition "<<pt->FileName()<<endl;
+	string clname;
+	map<string,int> unassigneditems;
+        for(smap::iterator it=_pairs.begin();it!=_pairs.end();it++){
+		clname=pt->areWithinSameCluster(it->first,it->second);
+		if(strcmp(clname.c_str(),"NAN1")==0)
+			unassigneditems.insert( pair<string,int> (it->first,1) );
+		else if(strcmp(clname.c_str(),"NAN2")==0)
+			unassigneditems.insert( pair<string,int> (it->second,1) );
+                //cout<<v(it->first,it->second)<<"\t"<<mx2->v(it->first,it->second)<<"\t"<<clname<<"\t"<<it->first<<"\t"<<it->second<<endl;
+                ///Old version of overlapVspearson-toxmgrace script requires an additional dummy column...to be removed soon...
+		cout<<v(it->first,it->second)<<"\t"<<mx2->v(it->first,it->second)<<"\t"<<2<<"\t"<<clname<<"\t"<<it->first<<"\t"<<it->second<<endl;
+	}
+	if(!QUIET) if(unassigneditems.size()>0){
+		cout<<"#Warning: items not found in any cluster: "<<unassigneditems.size()<<" ";
+		for(map<string,int>::iterator it=unassigneditems.begin();it!=unassigneditems.end();it++)
+			cout<<it->first<<" ";
+		cout<<endl;
+	}
+}
+
+void MatrixOfValues::printMatrix(){
+	if(!QUIET)cout<<"#items "<<_nitems<<endl;
+	if(!QUIET)cout<<"#Number of pairs: "<<_pairs.size()<<endl;
+	for(smap::iterator it=_pairs.begin();it!=_pairs.end();it++)
+		cout<<it->first<<"\t"<<it->second<<"\t"<<v(it->first,it->second)<<endl;
+}
+
+/**Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this while project.
+*/
+class ccop
+{
+	MatrixOfValues* _MX;
+	Partition* _part;
+	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;
+	long int _nintra,_ninter;
+	double _chi2;
+public:
+	ccop(MatrixOfValues* MX, Partition* part);
+	ccop(MatrixOfValues* MX, Partition* part, double thr);
+	void checkConsistency();
+	void distribution();
+	//double mx(string a, string b){ return _MX(a,b);}
+	double threshold(){return _threshold;}
+	//vector< double > observables;
+	bool isSparseGraph;
+};
+
+ccop::ccop(MatrixOfValues* MX, Partition* part){
+	_MX=MX;
+	_part=part;
+	_threshold=-1.0;
+	_chi2=0.0;
+	long int posNedges2=_part->n_items()*(_part->n_items()-1);
+	isSparseGraph=(2*_MX->n_edges()< posNedges2)?true:false;
+	//_runCheck();
+}
+
+ccop::ccop(MatrixOfValues* MX, Partition* part, double thr){
+	_MX=MX;
+	_part=part;
+	_threshold=thr;
+	_chi2=0.0;
+	long int posNedges2=_part->n_items()*(_part->n_items()-1);
+	isSparseGraph=(2*_MX->n_edges()< posNedges2)?true:false;
+	//_runCheck();
+}
+
+void ccop::distribution(){
+	int ofs,cln;
+	ofs=_part->cluster_offset();
+	cout<<"#BeginIntraClusterDistribution"<<endl;
+	for(smat::iterator cla=_part->clusters.begin();cla!=_part->clusters.end();cla++)
+		if(cla->size()>1+ofs) //Ignore singletons
+			for(svect::iterator ita=cla->begin()+ofs;ita!=cla->end();ita++)
+				for(svect::iterator itb=ita+1;itb!=cla->end();itb++)
+					cout<<*ita<<"\t"<<*itb<<"\t"<<_MX->v(*ita,*itb)<<endl;
+	cout<<"#EndIntraClusterDistribution"<<endl;
+	cout<<"#BeginInterClusterDistribution"<<endl;
+	for(smat::iterator cla=_part->clusters.begin();cla!=_part->clusters.end();cla++)
+		for(smat::iterator clb=_part->clusters.begin();clb!=_part->clusters.end();clb++)
+			if(clb!=cla)
+				for(svect::iterator ita=cla->begin()+ofs;ita!=cla->end();ita++)
+					for(svect::iterator itb=clb->begin()+ofs;itb!=clb->end();itb++)
+						cout<<*ita<<"\t"<<*itb<<"\t"<<_MX->v(*ita,*itb)<<endl;
+	cout<<"#EndInterClusterDistribution"<<endl;
+}
+
+//void ccop::_runCheck(){
+void ccop::checkConsistency(){
+	int ofs,cln;
+	int nstableclusters=0;
+	long int nstableclusters_size=0;
+	_w_intra=_w_inter=_f_intra_thr=0.0;
+	_nintra=_ninter=0;
+	long int nintra,ninter;
+	double w_intra,w_inter,sw_inter,w_intra_thr,cw_intra_thr,tf_intra_thr;
+	double cw_intra,cw_inter,cf_intra_thr;
+	double cw_chi2,c_chi2,w_chi2,c_Qval,Qval;
+	Qval=c_Qval=w_chi2=0.0;
+	ofs=_part->cluster_offset();
+	long int non_singleton_nodes,total_nodes;
+	int non_singletons;
+	non_singletons=0;
+	non_singleton_nodes=total_nodes=0;
+	cln=0;
+	double expected;
+	w_intra=w_inter=sw_inter=w_intra_thr=tf_intra_thr=0.0;
+	double Z=0.0; // PARTITION FUNCTION
+	double Cv=0.0;
+	double cE,E,S;
+	cE=E=S=0.0;
+	double N=0.0;
+	double pa;
+	double Es,TE,Ei;
+	Es=TE=Ei=0.0;
+	cout.setf(ios::fixed,ios::floatfield);
+	if(!QUIET)cout<<"#Calculating consistency check..."<<endl;
+	cout<<"#partition-size= "<<_part->clusters.size()<<" offset= "<<ofs<<" threshold= "<<_threshold<<endl;
+	//cout<<"#\n#Clusters averages: w_intra/w_inter\tw_intra\tw_inter\tintra_thr\tnintra\tninter"<<endl;
+	//cout<<"#\n#Clusters averages: chi2\tw_chi2\tw_intra\tw_inter\tintra_thr\tnintra\tninter"<<endl;
+	//cout<<"#\n#Clusters averages: chi2\tw_chi2\tintra\tinter\tw_intra\tw_inter\tintra_thr\tnintra\tninter"<<endl;
+	cout<<"#\n#Clusters values: \n#index\tClname\tsize\tw_intra\t\tw_inter\t\t<w_intra>\t<w_inter>  f_intra_thr\tnintra\tninter"<<endl;
+	for(smat::iterator cla=_part->clusters.begin();cla!=_part->clusters.end();cla++){
+		total_nodes+=cla->size()-ofs;
+		if(cla->size()>1+ofs){ //Ignore singletons
+			non_singletons++;
+			non_singleton_nodes+=cla->size()-ofs;
+			cw_intra=cw_inter=cf_intra_thr=cw_intra_thr=0.0;
+			cw_chi2=c_chi2=0.0;
+			nintra=ninter=0;
+			for(svect::iterator ita=cla->begin()+ofs;ita!=cla->end();ita++){
+				for(svect::iterator itb=ita+1;itb!=cla->end();itb++)
+					if(_MX->existEdge(*ita,*itb)){
+						//Number of intra-cluster edges
+						nintra++;
+						//Intra-cluster weight 
+						cw_intra+=_MX->v(*ita,*itb);
+						if(_MX->v(*ita,*itb)>_threshold) { 
+							//Fraction of intra-cluster edges above threshold
+							cf_intra_thr+=1.0; 
+							//Intra-cluster weight above threshold
+							cw_intra_thr+=_MX->v(*ita,*itb) ;
+						}
+						if(VERBOSE) cout<<"#"<<*ita<<" - "<<*itb<<" = "<<_MX->v(*ita,*itb)<<endl;
+					}
+				for(smat::iterator clb=_part->clusters.begin();clb!=_part->clusters.end();clb++)
+					if(clb!=cla)
+						for(svect::iterator itb=clb->begin()+ofs;itb!=clb->end();itb++)
+							if(_MX->existEdge(*ita,*itb)){ 
+								//Number of inter-cluster edges
+								ninter++;
+								//Inter-cluster weight 
+								cw_inter+=_MX->v(*ita,*itb);
+								if(clb->size()==1+ofs) {
+									//Inter-cluster weight between a non-singleton and a singleton
+									sw_inter+=_MX->v(*ita,*itb);
+								//Thermodynamic magnitudes
+									//Ensemble probability
+									pa=exp(-beta*(-0.5*_MX->v(*ita,*itb)-mu));
+									//Entropy
+									S+=-pa*log(pa);
+									//Internal energy
+									E+=-0.5*_MX->v(*ita,*itb)*pa;
+									//Heat capacity
+									Cv+=0.25*_MX->v(*ita,*itb)*_MX->v(*ita,*itb)*pa;
+									//Chi-square
+									_chi2+=pow(1.0-_part->n_items()*pa,2);
+								}
+							}
+			}
+			cE=-cw_intra-0.5*cw_inter;
+			//double pa=(1.0*cla->size()-ofs)/_part->n_items(); // probability of cluster
+			pa=exp(-beta*(cE-mu*(1.0*cla->size()-ofs)));
+			Z+=pa;
+			S+=-pa*log(pa);
+			/// Thermodynamic averages
+			//N+=(1.0*cla->size()-ofs)*pa;
+			N+=_part->n_items()*pa;
+			w_intra+=cw_intra*pa;
+			E+=cE*pa;
+			Cv+=cE*cE*pa;
+			w_inter+=0.5*cw_inter*pa;
+			w_intra_thr+=cw_intra_thr*pa;
+			tf_intra_thr+=(cf_intra_thr/nintra*100.0)*pa;
+			//Surface tension
+			Es+=0.5*cw_intra;
+			Ei+=cw_inter;
+			///Expected (random) in/out-going weight
+			//expected=pow(cw_intra+cw_inter,2); 
+			//cw_chi2=pow(cw_intra-expected,2)/expected;
+			expected=1.0*cla->size()-ofs;
+			c_chi2=pow(_part->n_items()*pa-expected,2)/expected;
+			///Expected (random) in/out-going edges
+			expected=(nintra+ninter)==0?0:pow((double)(nintra+ninter),2);
+			//c_chi2=pow(nintra-expected,2)/expected;
+			c_Qval+=expected;
+			/// Newman & et al. modularity value
+			Qval+=(double)nintra;
+			/// Cluster averages
+			if(nintra>0)cw_intra/=(double)nintra;
+			if(ninter>0)cw_inter/=(double)ninter;
+			if(nintra>0)cf_intra_thr/=(double)nintra/100.0;
+			cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<c_chi2<<endl;
+			//w_chi2+=cw_chi2;
+			_chi2+=c_chi2;
+			// Overall Cluster averages
+			_w_intra+=cw_intra;
+			_w_inter+=cw_inter;
+			_f_intra_thr+=cf_intra_thr;
+			//Don't know what was this meant for...
+			if(cw_inter==0){
+				nstableclusters++;
+				nstableclusters_size+=cla->size()-ofs;
+			}
+		}
+	}
+	TE=-(Es+Ei+sw_inter);
+	Es=-(Es-Ei-sw_inter);
+	double zeta=Es/TE;
+	Z+=_part->n_singletons();
+	N+=_part->n_items()*_part->n_singletons();
+	S=S/Z+log(Z);
+	E/=Z;
+	Cv=Cv/Z-(E*E);
+	w_inter+=0.5*sw_inter;
+	if(!QUIET)cout<<"#TEST: nsing="<<_part->n_singletons()<<" nitems="<<_part->n_items()<<" sw_inter="<<sw_inter<<endl;
+	///expected is a dummy variable, so we can use it here too and avoid declaring more variables.
+	//expected=0.5*non_singleton_nodes*(non_singleton_nodes-1.0);
+	expected=0.5*total_nodes*(total_nodes-1.0);
+	c_Qval/=pow(expected,2);
+	Qval/=expected;
+	Qval-=c_Qval;
+	cout<<"#Thermodynamic averages: Beta= "<<beta<<" mu= "<<mu<<" F="<<beta*E-S-mu*N/Z<<" logZ= "<<log(Z)<<endl;
+	cout<<"#w_intra\tw_inter\tw_intra_thr\tg=w_intra_thr/w_intra\tf_intra_thr\tN\tCv\tE"<<endl;
+	cout<<w_intra/Z<<"\t"<<w_inter/Z<<"\t"<<w_intra_thr/Z<<"\t"<<w_intra_thr/w_intra<<"\t"<<tf_intra_thr/Z<<"\t"<<N/Z<<"\t"<<Cv<<"\t"<<E<<endl;
+	cout<<"#Partition averages: "<<endl;
+	cout<<"#TE\tEs\tZeta\t\tQval\tw_intra\t\tw_inter\tf_intra_thr\tnon_singletons\t#non-singleton-nodes\tfraction-non-singleton-nodes\t#total-nodes"<<endl;
+	cout<<TE<<"\t"<<Es<<"\t"<<zeta<<"\t"<<Qval<<"\t"<<_w_intra/non_singletons<<"\t"<<_w_inter/non_singletons<<"\t"<<_f_intra_thr/non_singletons<<"\t"<<non_singletons<<"\t"<<non_singleton_nodes<<"\t"<<non_singleton_nodes*1.0/total_nodes<<"\t"<<total_nodes<<endl;
+	//cout<<"#stable_clusters/size= "<<nstableclusters<<" "<<nstableclusters_size<<"\t"<<_chi2<<endl;
+	cout<<-Ei<<"\t"<<-sw_inter<<endl;
+}
+
+// ####################################################### END CLASSES ####################################### \\
+// ####################################################### START MAIN  ####################################### \\
+
+void printHelp(){
+	cout<<"Usage:"<<endl;
+	cout<<"       "<<_programb_<<" [-h|--help] (Use --help for more details)"<<endl;
+	cout<<"       "<<_programb_<<" -version "<<endl;
+	cout<<"   (For analyzing partitions)                                          "<<endl;
+        cout<<"       "<<_programb_<<" [-V][-q] [-fmt] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -c [-tab tab_file] matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -d matrix-of-values partition1 [partition_offset (=2)]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -jstat [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -rstat [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -tstat [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -vstat [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -estat [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -pstat [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -clstat [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -adjstat [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -splitstat [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -info [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] [-fmt] -hasse [-cons] [-ofs partition_offset (=2)] partition1 [ partition2 [ ... ]]"<<endl;
+	cout<<"   (For converting between different partition formats)                 "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -toFREE partition [partition1_offset (=2) ]" <<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
+	cout<<"   (For analyzing Multiple Sequence Alignments)                        "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -msa multiple_seq_alignment.fasta"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -msa_avgid [-thr threshold=50] multiple_seq_alignment.fasta"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -pmsa multiple_seq_alignment.fasta "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
+	cout<<"   (For dealing with -interaction- matrices)                           "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -m matrix-of-values1 matrix-of-values2 "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -color matrix-of-values1 matrix-of-values2 partition [partition_offset (=2)]"<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -ce matrix-of-values1 matrix-of-values2 "<<endl;
+	cout<<"       "<<_programb_<<" [-V][-q] -print matrix-of-values "<<endl;
+}
+void printHelpLong(){
+	cout<<"                                                                       "<<endl;
+	cout<<_programb_<<" aims at being a general program for analyzing (sets of) partitions."<<endl;
+	cout<<" Here a partition is defined as in set theory of mathematics (see      "<<endl;
+	cout<<" http://en.wikipedia.org/wiki/Partition_of_a_set). It also allows to   "<<endl;
+	cout<<" edit (rudimentarily), as well as generate, partitions.                "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<" Whenever many input files are expected, one can either list them as   "<<endl;
+	cout<<" command line arguments, or list them in a file and use option -f to   "<<endl;
+	cout<<" specify that file.                                                    "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<" For calculating distances between partitions with different number of "<<endl;
+	cout<<" elements, use option --DIST_SUBSPROJECT right before any *stat command."<<endl;
+	cout<<" Works only with a *stat distance command, i.e., not  purity scores.   "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<" OPTIONS:                                                              "<<endl;
+	cout<<"For analyzing partitions                                               "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -v Calculate VI distances between partition1 & partition2       "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -e Calculate the edit score distance between partition1 and     "<<endl;
+	cout<<"               partition2                                              "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -p Calculates the purity scores of partition2 (the target)      "<<endl;
+	cout<<"               againts the partition1 (the reference).                 "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -i Calculate the intersection of  partition1 & partition2       "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -c [-tab tab_file]                                              "<<endl;
+	cout<<"          Check cluster consistency according to the given matrix. If  "<<endl;
+	cout<<"          partition and graph matrix label items differently, use the  "<<endl;
+	cout<<"          option -tab to provide a tab file specifying the conversion. "<<endl;
+	cout<<"          (See below for syntaxis of the matrix and tab file)          "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -d Calculate intra and inter cluster distribution of weight     "<<endl;
+	cout<<"          according to the given matrix                                "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -jstat [-ext extensivity]                                       "<<endl;
+	cout<<"       -jstat -ref                                                     "<<endl;
+	cout<<"          Calculates Tarantola distance  for each pair of partitions.  "<<endl;
+	cout<<"          For that it uses the Jeffrey's Qnorm based on Shannon Entropy."<<endl;
+	cout<<"          With option -ref, the first partition is taken as a reference"<<endl;
+	cout<<"          and it calculates the distances of all againts that one.     "<<endl;
+	cout<<"          Default extensivity coefficient is "<<EXTENSIVITY_DEFAULT_RENYI<<"."<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -rstat [-ext extensivity]                                       "<<endl;
+	cout<<"       -rstat -ref                                                     "<<endl;
+	cout<<"          Calculates Renyi distances for each pair of partitions.      "<<endl;
+	cout<<"          With option -ref, the first partition is taken as a reference"<<endl;
+	cout<<"          and it calculates the distances of all againts that one.     "<<endl;
+	cout<<"          Default extensivity coefficient is "<<EXTENSIVITY_DEFAULT_RENYI<<"."<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -tstat [-ext extensivity]                                       "<<endl;
+	cout<<"       -tstat -ref                                                     "<<endl;
+	cout<<"          Calculates Tsallis distances for each pair of partitions.    "<<endl;
+	cout<<"          With option -ref, the first partition is taken as a reference"<<endl;
+	cout<<"          and it calculates the distances of all againts that one.     "<<endl;
+	cout<<"          Default extensivity coefficient is "<<EXTENSIVITY_DEFAULT_TSALLIS<<"."<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -vstat                                                          "<<endl;
+	cout<<"       -vstat -ref                                                     "<<endl;
+	cout<<"          Calculates the VI distance for each pair of partitions.      "<<endl;
+	cout<<"          With option -ref, the first partition is taken as a reference"<<endl;
+	cout<<"          and it calculates the distances of all againts that one.     "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -estat                                                          "<<endl;
+	cout<<"       -estat -ref                                                     "<<endl;
+	cout<<"          Calculates the Edit Score distance for each pair of partitions"<<endl;
+	cout<<"          With option -ref, the first partition is taken as a reference"<<endl;
+	cout<<"          and it calculates the distances of all againts that one.     "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -pstat                                                          "<<endl;
+	cout<<"       -pstat -ref                                                     "<<endl;
+	cout<<"          Calculates the purity scores (strict and lax) for each pair  "<<endl;
+	cout<<"          of partitions. With option -ref, it calculates the purity    "<<endl;
+	cout<<"          scores of all againts the first one, which is taken as a     "<<endl;
+	cout<<"          reference.                                                   "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -ipot entropy [-ext extensivity]                                "<<endl;
+	cout<<"          Calculates (information theoretic) potential (entropy) of each"<<endl;
+	cout<<"          partition. The possible values for entropy are:              "<<endl;
+	cout<<"          v | shannon                                                  "<<endl;
+	cout<<"          e | cardinality                                              "<<endl;
+	cout<<"          r | renyi                                                    "<<endl;
+	cout<<"          t | tsallis                                                  "<<endl;
+	cout<<"          Both, long and short option names are valid.                 "<<endl;
+	cout<<"          Default extensivity coefficient is "<<EXTENSIVITY_DEFAULT_RENYI<<"."<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -clstat [-ofs ofs]                                              "<<endl;
+	cout<<"       -clstat [-norm gaug] [-cons|-consensus]                         "<<endl;
+	cout<<"       -clstat                                                         "<<endl;
+	cout<<"          For each item, determines the most frequent cluster where    "<<endl;
+	cout<<"          it appears among all the clusters of all the given partitions."<<endl;
+	cout<<"          It also prints its size and observed frequency (both, raw    "<<endl;
+	cout<<"          count and %).                                                "<<endl;
+	cout<<"          Option -ofs,see below, allows to specify a partition offset. "<<endl;
+	cout<<"          Option -norm gaug gauges the normalization used for          "<<endl;
+	cout<<"                 determining the %frequencies. By default these are    "<<endl;
+	cout<<"                 calculated by counting how many times the mode cluster"<<endl;
+	cout<<"                 is found at each of the different partitions and then "<<endl;
+	cout<<"                 dividing by the number of partitions N. With this     "<<endl;
+	cout<<"                 option, that count gets divided by N+gaug, where gaug "<<endl;
+	cout<<"                 can be negative or positive.                          "<<endl;
+	cout<<"          Option -cons or -consensus will print the consensus partition"<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -adjstat                                                        "<<endl;
+	cout<<"          Determines the average adjacency matrix from the provided    "<<endl;
+	cout<<"          partitions. The adjacency matrix of a partition is the graph "<<endl;
+	cout<<"		 where edges (0 or 1 ) represent two elements belonging to the"<<endl;
+	cout<<"		 same subfamily. The average adjacency matrix has edges with  "<<endl;
+	cout<<"		 continous values [0,1]. The output consists in a matrix of   "<<endl;
+	cout<<"		 values and a gray-scale image of it in PGM format.           "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -splitstat (Split-Merge plot)                                   "<<endl;
+	cout<<"          Determines the overlap of each cluster to those of the       "<<endl;
+	cout<<"          reference partition (the first). Possible values are for     "<<endl;
+	cout<<"          the overlap are:                                             "<<endl;
+	cout<<"          -over fraction elements in common relative to the target cluster."<<endl;
+	cout<<"          -cos  cosine normalized similarity                           "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"          It outputs:                                                  "<<endl;
+	cout<<"          -Confusion matrix (in % of the target clusters) taking       "<<endl;
+	cout<<"            the first partition as reference and the second as target. "<<endl;
+	cout<<"          -number of overlaps for each target cluster                  "<<endl;
+	cout<<"          -Split-Merge image showing the CT. In addition it show two   "<<endl;
+	cout<<"		   reference color bars: a bottom color bar representing the  "<<endl;
+	cout<<"            perfect split transformations (black), the merge-only      "<<endl;
+	cout<<"            (white) ones and those cases in between (different grey    "<<endl;
+	cout<<"            levels); a right-most column shows whether these are perfect"<<endl;
+	cout<<"            matches (black) or not (white).                            "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -info    [-ofs ofs]                                             "<<endl;
+	cout<<"       --isPart [-ofs ofs]                                             "<<endl;
+	cout<<"       --isaPart [-ofs ofs]                                            "<<endl;
+	cout<<"       --is-partition [-ofs ofs]                                       "<<endl;
+	cout<<"           For each partition checks whether it is a sound partition   "<<endl;
+	cout<<"           or not, i.e., whether all of its clusters are pair-wise     "<<endl;
+	cout<<"           disjoint. With option -q, only error message will be printed"<<endl;
+	cout<<"           in case partition is not sound, otherwise it'll keep silent."<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -hasse prints the local Hasse Diagram (graph) spanned by the    "<<endl;
+	cout<<"              given partitions.                                        "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"For converting between different partition formats                     "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -toMCL [-tab mcl_tab_file] converts partition from PART format  "<<endl;
+	cout<<"           to MCL's format. If additional tab file is provided, output "<<endl;
+	cout<<"           will contain the specific label index given in the tab file."<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -toFREE converts partition from PART format to FREE format.     "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -MCLtoPART [-tab mcl_tabl_file]                                 "<<endl;
+	cout<<"           converts partition from MCL format to PART format.          "<<endl;
+	cout<<"           If additional tab file is provided, output will contain     "<<endl;
+	cout<<"           items' labels, instead of simply their MCL index number.    "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"For analyzing Multiple Sequence Alignments                             "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -msa Given a multiple sequence alignment in fasta format, it    "<<endl;
+	cout<<"          prints all pair-wise sequence identities.                    "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -msa-avgid [-thr threshold ]                                    "<<endl;
+	cout<<"          Similar as option -msa, but prints for each sequence a       "<<endl;
+	cout<<"          statistics of its pair-wise sequence identity to all other   "<<endl;
+	cout<<"          sequences. This consists of average Seq.Id, standard         "<<endl;
+	cout<<"          deviation, variance, minimum Seq.Id, maximum Seq.Id, number  "<<endl;
+	cout<<"          of pairs with Seq.Id > threshold, fraction of pairs with Seq."<<endl;
+	cout<<"          Id. > threshold and total number of pairs.                   "<<endl;
+	cout<<"          Option -thr allows to provide a specific threshold to use.   "<<endl;
+	cout<<"                      default value is 50%. Values are floating numbers"<<endl;
+	cout<<"                      within [0,100].                                  "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --msa-redundant                                                 "<<endl;
+	cout<<"       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed]          "<<endl;
+	cout<<"          Duplicates sequences chosen at random in the given multiple  "<<endl;
+	cout<<"          sequence alignment. Wtihout options, only one is chosen.     "<<endl;
+	cout<<"          Option -nsam  Generate nsam samples of MSAs with nseq dupli- "<<endl;
+	cout<<"                        cated sequences. Each sample is written is its "<<endl;
+	cout<<"                        own directory.                                 "<<endl;
+	cout<<"                 -nseq  Specify the number of sequences to duplicate.  "<<endl;
+	cout<<"                 -seed  Specify the seed of the random number generator"<<endl;
+	cout<<"          All options are expected to be integer values. The value of  "<<endl;
+	cout<<"          the seed is written within .seed_used allowing for repeated  "<<endl;
+	cout<<"          experiments.                                                 "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -pmsa Prints the given multiple sequence alignment. Useful for  "<<endl;
+	cout<<"             debugging.                                                "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"For dealing with -interaction- matrices                                "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -m Merge two graph matrices into one that contains both values  "<<endl;
+	cout<<"          for each pair of items, i.e., the resulting graph looks like "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"                        stringA stringB  float1 float2                 "<<endl;
+	cout<<"                           ...    ...      ...    ...                  "<<endl;
+	cout<<"          where float1, float2 are the matrix values of matrix1 and    "<<endl;
+	cout<<"          matrix2, respectively. Both matrices are expected to contain "<<endl;
+	cout<<"          the same set of pair of items, i.e., the same set of edges.  "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -color as option -m, but in addition includes the name of the   "<<endl;
+	cout<<"          cluster each pair of values belong to. If they belong to     "<<endl;
+	cout<<"          different clusters the label is \042x\042. The label is NAN  "<<endl;
+	cout<<"          if any of the item does not belong to any of the clusters    "<<endl;
+	cout<<"          defined in the given partition. The format of the output is  "<<endl;
+	cout<<"                 float1A flaot2 clustername_AB stringA stringB         "<<endl;
+	cout<<"                   ...     ...      ...          ...    ...            "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -ce                                                             "<<endl;
+	cout<<"       --cull-edge                                                     "<<endl;
+	cout<<"          Culls from matrix of values edges specified in second file.  "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -print Print the given interaction matrix. For debugging.       "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"General options                                                        "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -V verbose. For debugging.                                      "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -q quiet mode. Do not print out comment lines (that start with  "<<endl;
+	cout<<"          `#').                                                        "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       -fmt [input_file_format]                                        "<<endl;
+	cout<<"       --format [input_file_format]                                    "<<endl;
+	cout<<"          Possible values are: PART,MCL and FREE. See below.           "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"File formats:                                                          "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       matrix-of-values:                                               "<<endl;
+	cout<<"                        stringA stringB  float                         "<<endl;
+	cout<<"                        stringA stringC  float                         "<<endl;
+	cout<<"                          ...     ...     ...                          "<<endl;
+	cout<<"                        stringZ stringV  float                         "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       tab file:                                                       "<<endl;
+	cout<<"                        integer1  string1                              "<<endl;
+	cout<<"                        integer2  string2                              "<<endl;
+	cout<<"                          ...       ...                                "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       partition:                                                      "<<endl;
+	cout<<"         PART: (default, i.e., partition_offset=2)                     "<<endl;
+	cout<<"               sizeA clusterA_name  item_1 item_2 ... item_sizeA       "<<endl;
+	cout<<"               sizeB clusterB_name  item_1 item_2 ... item_sizeB       "<<endl;
+	cout<<"                ...      ...       ...    ...         ...              "<<endl;
+	cout<<"            or (partition_offset=1):                                   "<<endl;
+	cout<<"               sizeA  item_1 item_2 ... item_sizeA                     "<<endl;
+	cout<<"                ...    ...    ...         ...                          "<<endl;
+	cout<<"         FREE: (not yet implemented) (partition_offset=0)              "<<endl;
+	cout<<"               item_1 item_2 ... item_sizeA                            "<<endl;
+	cout<<"                ...    ...         ...                                 "<<endl;
+	cout<<"         MCL : MCL's own matrix format for partitions. See MCL manual. "<<endl;
+}
+void printCopyright(){
+	cout<<"# "<<program<<" Version "<<VERSION<<endl;
+	cout<<"# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build "<<__DATE__<<endl;
+	cout<<"# Licensed under the GNU GPL version 3 or later.       "<<endl;
+	cout<<"# (see http://www.gnu.org/copyleft/gpl.html )          "<<endl;
+	cout<<"#"<<endl;
+}
+void printVersion(){
+	cout<<"# "<<program<<" Version "<<VERSION<<". Build "<<__DATE__<<endl;
+}
+void printCommandLineError(){
+	cout<<_programb_<<" : Unknown option or incorrect syntax. Use -h for syntax summary."<<endl;
+}
+void exitWithHelp()
+{
+	printHelp();
+	//printCommandLineError();
+	exit(1);
+}
+
+//void readListInputFiles(ifstream is, vector<Charr> infilenames){
+void readListInputFiles(char* argv0, vector<Charr>& infilenames){
+	ifstream is(argv0);
+	if(!is){
+		cout<<"ERROR: Cannot open file "<<argv0<<endl;
+		exit(1);
+	}
+	string fn;
+	Charr f;
+	if(!QUIET)cout<<"#Getting list of partitions from "<<argv0<<endl;
+	while(is>>fn){ 
+		if(fn.compare(0,1,"#")==0){ // It's a comment line...
+			getline(is,fn);
+			continue;		// ignore the whole line and get to the next one.
+		}
+		f.car = new char[fn.size()+1];
+		strcpy(f.car,fn.c_str());
+		infilenames.push_back(f);
+	}
+	if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries.\n#First entry seen "<<infilenames[0].car<<"\n#Last ("<<infilenames.size()<<") entry seen "<<infilenames[infilenames.size()-1].car<<endl;
+}
+
+int main(int argc, char* argv[]) {
+	program=argv[0];
+        if(argc<2) exitWithHelp();
+	if(!QUIET&& !( strcmp(argv[1],"-q")==0 || strcmp(argv[1],"--help")==0 || strcmp(argv[1],"-help")==0 || strcmp(argv[1],"-h")==0 )){
+		printCopyright();
+		systemDate();
+	}
+	vector<Charr > infilenames;
+	bool SETUPCONSENSUSP=false;
+	bool MCLTABF=false;
+	bool DIST_SUBSPROJECT=false;
+	char* msaf;
+	char* partitionf1;
+	char* partitionf2;
+	char* mxofval;
+	char* mxofvalb;
+	pmetricv metric=shannon;
+	double extensivity=EXTENSIVITY_DEFAULT;
+        double threshold=-1; //Default threshold
+        double Id_threshold=50.0; //Default Seq. Id threshold
+	int cluster1_offset=2; //Default cluster offset
+	int cluster2_offset=cluster1_offset;
+	int clstat_normalization_ofs=0;
+	//int analysis=2;
+	prganalysis analysis=prgVIPP;
+	///Default partition input format: partanalyzer's own format.
+	partFileFormat piformat=partFmtPART;
+	///Default partition output format: partanalyzer's own format.
+	partFileFormat poformat=partFmtPART;
+	int Nsamples=1;
+	int Nseq=1;
+	int seed=-1;
+	/* TESTING CUSTOM GRAPH CLASS
+	graph_base<string, double> mygraph;
+	string a,b;
+	a="a";b="b"; 
+	//mygraph.insert(pair<string,string>(a,b),0.0);
+	mygraph[pair<string,string>(a,b)]=0.5;
+	mygraph.insert(pair<string,string>(a,a),1.0);
+	mygraph.insert(pair<string,string>(b,b),1.0);
+	cout<<"GRAPH"<<endl;
+	cout<<mygraph[pair<string,string>(a,a)]<<"\t"<<mygraph[pair<string,string>(a,b)]<<endl;
+	cout<<mygraph[pair<string,string>(a,b)]<<"\t"<<mygraph[pair<string,string>(b,b)]<<endl;
+	exit(0);
+	*/
+	if(argc>1){
+		argc--;
+		argv++;
+///General Options
+		if (strcmp(*argv,"--help")==0 || strcmp(*argv,"-help")==0){
+			cout<<"\t\t\t"<<_programb_<<" (Partition Analyzer)\n"<<endl;
+			printHelp();
+			printHelpLong();
+			cout<<"\nLicense"<<endl;
+			printCopyright();
+			exit(0);
+		}
+		if (strcmp(*argv,"-h")==0){
+			printHelp();
+			exit(0);
+		}
+		if(strcmp(*argv,"-version")==0){
+			printCopyright();
+			exit(0);
+		}
+		if(strcmp(*argv,"-V")==0){
+			argc--;
+			argv++;
+			VERBOSE=true;
+			cout<<"#VERBOSITY on"<<endl;
+		}
+		if(strcmp(*argv,"-q")==0){
+			argc--;
+			argv++;
+			QUIET=true;
+		}
+		if(strcmp(*argv,"-fmt")==0||strcmp(*argv,"--format")==0){
+			argc--;
+			argv++;
+			if(argc<2)printCommandLineError();
+			if(strcmp(*argv,"MCL")==0||strcmp(*argv,"mcl")==0)
+				piformat=partFmtMCL;
+			else if(strcmp(*argv,"FREE")==0||strcmp(*argv,"free")==0)
+				piformat=partFmtFREE;
+			else if(strcmp(*argv,"PART")==0||strcmp(*argv,"part")==0)
+				piformat=partFmtPART;
+			else
+				piformat=partFmtPART;
+			argc--;
+			argv++;
+		}
+///(For analyzing partitions)
+		if(strcmp(*argv,"--DIST_SUBSPROJECT")==0){
+			argc--;
+			argv++;
+			DIST_SUBSPROJECT=true;
+		}
+		if(strcmp(*argv,"-beta")==0){
+			if(argc<5)printCommandLineError();
+			argc--;
+			argv++;
+			beta=atof(argv[0]);
+			argc--;
+			argv++;
+		}
+		if(strcmp(*argv,"-mu")==0){
+			if(argc<5)printCommandLineError();
+			argc--;
+			argv++;
+			mu=atof(argv[0]);
+			argc--;
+			argv++;
+		}
+		if(strcmp(*argv,"-print")==0){
+			mxofval=argv[1];
+        		MatrixOfValues MX(mxofval);
+			MX.printMatrix();
+			exit(0);
+		}
+		///Calculate intra-cluster and inter-cluster distribution of weights
+		else if(strcmp(*argv,"-d")==0){
+			analysis=prgCDIS;
+			if(argc<3)printCommandLineError();
+			mxofval=argv[1];
+			partitionf1=argv[2];
+        		if(argc>3) cluster1_offset=atoi(argv[4]);
+		}
+		///Check consistency of partition according to weights in maxofval
+		else if(strcmp(*argv,"-c")==0){
+			argc--;argv++;
+			analysis=prgCCOP;
+			if(argc<2)printCommandLineError();
+			piformat=partFmtPART; //Enforcing partanalyzer's own input format. We don't want to deal with graphs in other formats yet.
+			if(strcmp(*argv,"-tab")==0){
+				if(argc<4)printCommandLineError();
+				argc--;argv++;
+				partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				MCLTABF=true;
+				argc--;argv++;
+			}
+			mxofval=argv[0];
+			partitionf1=argv[1];
+			argc--;argv++;
+			argc--;argv++;
+        		if(argc>0) threshold=atof(argv[0]);
+        		if(argc>1) cluster1_offset=atoi(argv[1]);
+			
+		}
+		else if (strcmp(*argv,"-v")==0||strcmp(*argv,"-e")==0||strcmp(*argv,"-p")==0||strcmp(*argv,"-i")==0){
+			if(strcmp(*argv,"-v")==0)///analysis="vipp";
+				analysis=prgVIPP;
+			else if(strcmp(*argv,"-e")==0)
+				analysis=prgEDSC;
+			else if(strcmp(*argv,"-p")==0)
+				analysis=prgPSPP;
+			else if(strcmp(*argv,"-i")==0)
+				analysis=prgINTE;
+			else {
+				cout<<"ERROR: invalid binary option"<<endl;
+				exit(1);
+			}
+				
+			if(argc<3)printCommandLineError();
+			partitionf1=argv[1];
+			partitionf2=argv[2];
+			if(argc>3) cluster1_offset=atoi(argv[3]);
+			if(argc>4) cluster2_offset=atoi(argv[4]);
+		}
+		else if (strcmp(*argv,"-ipot")==0||strcmp(*argv,"-iPot")==0){
+			analysis=prgIPOT;
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"v")==0|strcmp(*argv,"shannon")==0)
+				metric=shannon;
+			else if(strcmp(*argv,"e")==0|strcmp(*argv,"cardinality")==0)
+				metric=cardinality;
+			else if(strcmp(*argv,"r")==0|strcmp(*argv,"renyi")==0)
+				metric=renyi;
+			else if(strcmp(*argv,"t")==0|strcmp(*argv,"tsallis")==0)
+				metric=tsallis;
+			else if(strcmp(*argv,"j")==0|strcmp(*argv,"tarantola")==0|strcmp(*argv,"jeffrey")==0|strcmp(*argv,"tjqn")==0){ //TARANTOLA-JEFFREY QNORM
+				metric=jeffreyQnorm;
+				extensivity=1.0;//DEFAULT VALUE FOR TARANTOLA QNORM
+			}
+			else {
+				cout<<"ERROR: main : -iPot : unknown metric"<<endl;
+				exit(1);
+			}
+			argc--;argv++;
+			if(strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				extensivity=atof(argv[0]);
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-vstat")==0||strcmp(*argv,"-estat")==0||strcmp(*argv,"-bstat")==0||strcmp(*argv,"-tstat")==0||strcmp(*argv,"-rstat")==0||strcmp(*argv,"-jstat")==0){
+			if(strcmp(*argv,"-vstat")==0)///analysis="vipp";
+				analysis=prgVIST;
+			else if(strcmp(*argv,"-bstat")==0)
+				analysis=prgBDST;
+			else if(strcmp(*argv,"-tstat")==0)
+				analysis=prgTDST;
+			else if(strcmp(*argv,"-rstat")==0)
+				analysis=prgRDST;
+			else if(strcmp(*argv,"-jstat")==0){
+				analysis=prgJDST;
+				extensivity=1.0;//SET 1 AS DEFAULT FOR TARANTOLA-JEFFREY QNORM DISTANCE
+			}
+			else
+				analysis=prgEDST;
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
+				if(argc<4)printCommandLineError();
+				argc--;argv++;
+				extensivity=atof(argv[0]);
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-ref")==0){
+				switch(analysis){
+					case prgVIST: analysis=prgVISR; break;
+					case prgEDST: analysis=prgEDSR; break;
+					case prgBDST: analysis=prgBDSR; break;
+					case prgTDST: analysis=prgTDSR; break;
+					case prgRDST: analysis=prgRDSR; break;
+					case prgJDST: analysis=prgJDSR; break;
+				}
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-pstat")==0){
+			analysis=prgPSST;
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-ref")==0){
+				analysis=prgPSSR;
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-ofs")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				cluster1_offset=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-splitstat")==0){
+			analysis=prgSPST;
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-sim")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				analysis=prgSPSS;
+			}
+			if(strcmp(*argv,"-over")==0||strcmp(*argv,"--overlap")==0||strcmp(*argv,"--fraction")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				analysis=prgSPSO;
+			}
+			if(strcmp(*argv,"-split")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				analysis=prgSPST;
+			}
+			if(strcmp(*argv,"-ofs")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				cluster1_offset=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-adjstat")==0){
+			analysis=prgADST;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-ofs")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				cluster1_offset=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-clstat")==0){
+			analysis=prgCLST;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-ofs")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				cluster1_offset=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-norm")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				clstat_normalization_ofs=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-cons")==0||strcmp(*argv,"-consensus")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				SETUPCONSENSUSP=true;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+				//if(VERBOSE)cout<<"#Option -f read "<<infilenames.size()<<" partitions"<<endl;
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
+			analysis=prgIPAR;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-ofs")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				cluster1_offset=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+		else if (strcmp(*argv,"-hasse")==0){
+			analysis=prgHASS;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-ofs")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				cluster1_offset=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-f")==0){
+				if(!QUIET)cout<<"#Seen option -f"<<endl;
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				readListInputFiles(argv[0],infilenames);
+				/*
+				ifstream is(argv[0]);
+				if(!is){
+					cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
+					exit(1);
+				}
+				string fn;
+				Charr f;
+				if(!QUIET)cout<<"#Getting list of partitions from "<<argv[0]<<endl;
+				while(is>>fn){
+					f.car = new char[fn.size()+1];
+					strcpy(f.car,fn.c_str());
+					infilenames.push_back(f);
+				}
+				if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries. First seen "<<infilenames[0].car<<endl;
+				*/
+			}
+			else
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+					infilenames.push_back( f );
+				}
+		}
+///(For converting between different partition formats)
+		else if (strcmp(*argv,"-toMCL")==0||strcmp(*argv,"-toFREE")==0||strcmp(*argv,"-MCLtoPART")==0 ||\
+			 strcmp(*argv,"-toPART")==0||strcmp(*argv,"-FREEtoPART")==0){
+			if(strcmp(*argv,"-toMCL")==0){
+				analysis=prg2MCL;
+				poformat=partFmtMCL;
+			}
+			else if(strcmp(*argv,"-toFREE")==0){
+				analysis=prg2FRE;
+				poformat=partFmtFREE;
+			}
+			else if(strcmp(*argv,"-toPART")==0){
+				analysis=prg2FRE;
+				poformat=partFmtPART;
+			}
+			else if(strcmp(*argv,"-MCLtoPART")==0){
+				analysis=prgM2PA;
+				piformat=partFmtMCL;
+				poformat=partFmtPART;
+			}
+			else if(strcmp(*argv,"-FREEtoPART")==0){
+				analysis=prgM2PA;
+				piformat=partFmtFREE;
+				poformat=partFmtPART;
+			}
+			else {
+				cout<<"ERROR: unknown conversion option"<<endl;
+				exit(1);
+			}
+			argc--;argv++;
+			if(argc<1)printCommandLineError();
+			if( (analysis==prgM2PA || analysis==prg2MCL )&& strcmp(*argv,"-tab")==0){
+				argc--;argv++;
+				if(argc<2)printCommandLineError();
+				partitionf2=argv[0]; //Its a MCL tab file, but we use the available char* variable partitionf2.
+				MCLTABF=true;
+				argc--;argv++;
+			}
+			partitionf1=argv[0];
+		}
+///(For analyzing Multiple Sequence Alignments)
+                else if (strcmp(*argv,"-pmsa")==0){
+                        analysis=prgPMSA;
+                        if(argc<2)printCommandLineError();
+                        msaf=argv[1];
+                }
+                else if (strcmp(*argv,"-msa")==0){
+                        analysis=prgMSPI;
+                        if(argc<2)printCommandLineError();
+                        msaf=argv[1];
+                }
+                else if (strcmp(*argv,"-msa_avgid")==0){
+                        analysis=prgMAPI;
+                        if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-thr")==0){
+                        	if(argc<3)printCommandLineError();
+				argc--;argv++;
+				Id_threshold=atof(argv[0]);
+				argc--;argv++;
+			}
+                        msaf=argv[0];
+			argc--;argv++;
+                }
+		else if (strcmp(*argv,"--msa-redundant")==0){
+			analysis=prgMRED;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-nsam")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				Nsamples=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-nseq")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				Nseq=atoi(argv[0]);
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-seed")==0){
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				seed=atoi(argv[0]);
+				if(seed<0)seed*=-1;
+				argc--;argv++;
+			}
+                        msaf=argv[0];
+			argc--;argv++;
+		}
+///(For dealing with -interaction- matrices) 
+		else if (strcmp(*argv,"-m")==0){
+			///analysis="merge matrices";
+			analysis=prgMGMX;
+			if(argc<3)printCommandLineError();
+			mxofval=argv[1];
+			mxofvalb=argv[2];
+		}
+		else if (strcmp(*argv,"-ce")==0 || strcmp(*argv,"--cull-edge")==0 || strcmp(*argv,"--cull-edges")==0){
+			analysis=prgCEMX;
+			if(argc<3)printCommandLineError();
+			mxofval=argv[1];
+			mxofvalb=argv[2];
+		}
+		else if (strcmp(*argv,"-color")==0){
+			///analysis="merge matrices with color";
+			analysis=prgMMXC;
+			//piformat=partFmtPART; //Enforcing partanalyzer's own input format. We don't want to deal with graphs in other formats yet.
+			if(argc<4)printCommandLineError();
+			mxofval=argv[1];
+			mxofvalb=argv[2];
+			partitionf1=argv[3];
+			if(argc>4) cluster1_offset=atoi(argv[4]);
+		}
+		else {
+			printCommandLineError();
+			exit(1);
+		}
+	}
+#ifdef DEBUG
+	QUIET=false;
+	cout<<"#DEBUG MODE\tRUNNING IN DEBUGGING MODE\tQUIET=false (ignoring -q option). Additional debugging info with '-V' option"<<endl;
+	cout<<"#DEBUG MODE: prgrama task : analysis="<<analysis<<endl;
+#endif
+	switch(analysis){
+///(For analyzing partitions)
+		case prgCDIS:
+		case prgCCOP:{
+        		MatrixOfValues MX(mxofval);
+		        if(!QUIET) systemDate();
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+			//if(MCLTABF)partition.mclTabFile(partitionf2);
+			if(MCLTABF)partition.swapLabels(partitionf2);
+			ccop do_ccop(&MX,&partition,threshold);
+			switch(analysis){
+				case prgCCOP:	
+					do_ccop.checkConsistency();
+					break;
+				case prgCDIS:	
+					do_ccop.distribution();
+					break;
+			}
+			break;
+			}
+		case prgVIPP:
+		case prgEDSC:
+		case prgINTE:{ 
+			Partition partition1(partitionf1,piformat,cluster1_offset);
+			Partition partition2(partitionf2,piformat,cluster2_offset);
+			if(!QUIET) systemDate();
+			Partition intersection_1_2=partition1*partition2;
+			if(analysis==prgINTE){
+				if(!QUIET)cout<<"#Printing Intersection"<<endl;
+				intersection_1_2.printPartition(piformat);
+				exit(0);
+			}
+			if(!QUIET)cout<<"#dist-inters-p1"<<endl;
+			if(analysis==prgVIPP)
+				partition1.vipp(&intersection_1_2);
+			else
+				partition1.edsc(&intersection_1_2);
+			if(!QUIET)cout<<"#dist-inters-p2"<<endl;
+			if(analysis==prgVIPP)
+				partition2.vipp(&intersection_1_2);
+			else
+				partition2.edsc(&intersection_1_2);
+			if(!QUIET)cout<<"#dist-p1-p2"<<endl;
+			if(analysis==prgVIPP)
+		        	partition1.vipp(&partition2);
+			else
+		        	partition1.edsc(&partition2);
+			partition1.missing();
+			break;
+			}
+		case prgPSPP:{
+			//Reference partition
+			Partition partition1(partitionf1,piformat,cluster1_offset);
+			//Target partition
+			Partition partition2(partitionf2,piformat,cluster2_offset);
+			//target againts reference
+			vector<double> pscores=partition2.purityScore(&partition1);
+			//cout<<"purityLax= "<<pscores[1]<<" purityStrict= "<<pscores[0]<<endl;
+			cout<<" purityStrict= "<<pscores[0]<<"\tpurityLax= "<<pscores[1]<<endl;
+			break;
+			}
+		case prgIPOT:{
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			partstats.iPotential(metric);
+			break;
+			}
+		case prgVIST:
+		case prgEDST:
+		case prgBDST:
+		case prgTDST:
+		case prgRDST:
+		case prgJDST:
+		case prgVISR:
+		case prgEDSR:
+		case prgBDSR:
+		case prgTDSR:
+		case prgRDSR:
+		case prgJDSR:
+		case prgPSSR:
+		case prgPSST:{
+			if(VERBOSE){
+				cout<<"#Reading "<<infilenames.size()<<" partitions: ";
+				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
+					cout<<fn->car<<"\t";
+				cout<<endl;
+			}
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			//pmetricv metric=shannon;
+			switch(analysis){
+				case prgPSSR:
+					partstats.getPurityRef();
+					break;
+				case prgPSST:
+					partstats.getPurity();
+					break;
+				case prgVIST:
+				case prgEDST:
+				case prgBDST:
+				case prgTDST:
+				case prgRDST:
+				case prgJDST:
+					switch(analysis){
+						case prgVIST: metric=shannon; break;
+						case prgEDST: metric=cardinality ; break;
+						case prgBDST: metric=boltzmann; break;
+						case prgTDST: metric=tsallis; break;
+						case prgRDST: metric=renyi; break;
+						case prgJDST: metric=jeffreyQnorm; break;
+						deafault: cout<<"ERROR: unknown metric option"; exit(1); break;
+					}
+					if(!DIST_SUBSPROJECT) partstats.distances(metric);
+					else	partstats.distances_Subsprojection(metric);
+					break;
+				case prgVISR:
+				case prgEDSR:
+				case prgBDSR:
+				case prgTDSR:
+				case prgRDSR:
+				case prgJDSR:
+					switch(analysis){
+						case prgVISR: metric=shannon; break;
+						case prgEDSR: metric=cardinality; break;
+						case prgBDSR: metric=boltzmann; break;
+						case prgTDSR: metric=tsallis; break;
+						case prgRDSR: metric=renyi; break;
+						case prgJDSR: metric=jeffreyQnorm; break;
+					}
+					if(!DIST_SUBSPROJECT) partstats.distancesRef(metric);
+					else	partstats.distancesRef_Subsprojection(metric);
+					break;
+			}
+			break;
+			}
+		case prgSPST:
+		case prgSPSO:
+		case prgSPSS:{
+			if(VERBOSE){
+				cout<<"#Reading "<<infilenames.size()<<" partitions: ";
+				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
+					cout<<fn->car<<"\t";
+				cout<<endl;
+			}
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			splitmethod method=overlap;
+			switch(analysis){
+				case prgSPSS:
+					method=cosine;
+					break;
+				case prgSPSO:
+					method=overlap;
+					break;
+				case prgSPST:
+					method=split;
+					break;
+			}
+			partstats.getSplitsRef(method); //Without arguments=>method=split
+			break;
+			}
+		case prgADST:{
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			partstats.get_Ad();
+			partstats.pgm_Ad();
+			break;
+			}
+		case prgCLST:{
+			if(VERBOSE){
+				cout<<"Reading "<<infilenames.size()<<" partitions: ";
+				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
+					cout<<fn->car<<"\t";
+				cout<<endl;
+			}
+			if(!QUIET)cout<<"#Analyzing neighborhoods..."<<endl;
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			partstats.getCover();
+			if(!QUIET)cout<<"#Printing neighborhoods..."<<endl;
+			partstats.printCover(SETUPCONSENSUSP);
+			if(SETUPCONSENSUSP){
+				if(!QUIET)cout<<"#Printing consensus partition..."<<endl;
+				partstats.printConsensusPart();
+			}
+			Partition ConsensusPart = partstats.getConsensusPartition();
+			if(!ConsensusPart.isaPartition()){
+				cout<<"ERROR: consensus Partition is not a sound partition"<<endl;
+				exit(1);
+			}else{ if(!QUIET)cout<<"#Consensus Partition is a sound partition\n#clusters/elements: "<<ConsensusPart.n_clusters()<<" "<<ConsensusPart.n_items()<<endl;}
+			break;
+			}
+		case prgIPAR:{
+			if(VERBOSE){
+				cout<<"Reading "<<infilenames.size()<<" partitions: ";
+				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
+					cout<<fn->car<<"\t";
+				cout<<endl;
+			}
+			if(!QUIET)cout<<"#Analyzing if partitions are sound..."<<endl;
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			if(!QUIET){systemDate(); cout<<"#Finished instantiating all partitions. Starting analysis..."<<endl;}
+			int nopart= partstats.arePartitions();
+			if(!QUIET)if(nopart>0){
+					cout<<"#WRONG partitions found:\n"<<nopart<<endl;
+					exit(1);
+				}else
+					cout<<"#OK All partitions are sound partitions"<<endl;
+			break;
+			}
+		case prgHASS:{
+			if(VERBOSE){
+				cout<<"Reading "<<infilenames.size()<<" partitions: ";
+				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
+					cout<<fn->car<<"\t";
+				cout<<endl;
+			}
+			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			partstats.printHasseNodes();
+			partstats.printHasseDiagram();
+			break;
+			}
+///(For converting between different partition formats)
+		case prg2MCL:
+		case prg2FRE:
+		case prgM2PA:{
+		        Partition partition(partitionf1,piformat);
+			if(MCLTABF)partition.mclTabFile(partitionf2);
+			partition.printPartition(poformat);
+			break;
+			}
+///(For analyzing Multiple Sequence Alignments)
+		case prgPMSA:{
+                        MultipleSeqAlign msa(msaf);
+                        if(!QUIET)cout<<"#avgSeqId "<<msa.averageId()<<endl;
+                        msa.print();
+			break;
+			}
+		case prgMSPI:{
+                        MultipleSeqAlign msa(msaf);
+                        cout<<"#avgSeqId "<<msa.averageId()<<endl;
+                        msa.printPairwiseIds();
+			break;
+			}
+		case prgMAPI:{
+                        MultipleSeqAlign msa(msaf);
+                        cout<<"#avgSeqId "<<msa.averageId()<<endl;
+                        msa.printAveragePairwiseIds(Id_threshold);
+			break;
+			}
+		case prgMRED:{
+                        MultipleSeqAlign msa(msaf);
+			if(seed>0)msa.NsamplesRedMSA(seed,Nsamples,Nseq);
+			else msa.NsamplesRedMSA(Nsamples,Nseq);
+			break;
+			}
+///(For dealing with -interaction- matrices) 
+		case prgMGMX:
+		case prgCEMX:
+		case prgMMXC:{
+			MatrixOfValues mxa(mxofval);
+			MatrixOfValues mxb(mxofvalb);
+			switch(analysis){
+				case prgMGMX:
+					mxa.merge(&mxb);
+					break;
+				case prgMMXC:{
+					Partition partition(partitionf1,piformat,cluster1_offset);
+					mxa.merge(&mxb,&partition);
+					break;
+					}
+				case prgCEMX:
+					mxa.cull(&mxb);
+					break;
+			}
+			/*
+			if(analysis==prgMGMX){
+				mxa.merge(&mxb);
+				exit(0);
+			}
+			Partition partition(partitionf1,piformat,cluster1_offset);
+			mxa.merge(&mxb,&partition);
+			*/
+			//MX.printMatrix();
+			break;
+			}
+		default:
+			cout<<"ERROR: main: not listed program task : analysis="<<analysis<<endl;
+			exit(1);
+			//exitWithHelp();
+			break;
+	}
+	//partition.printPartition();
+	//partition1.do_vipp(&partition2,threshold);
+	if(!QUIET) systemDate();
+#ifdef DEBUG
+	cout<<"#DEBUG MODE\tRUNNING IN DEBUGGING MODE\tQUIET=false (ignoring -q option)"<<endl;
+#endif
+
+	return 0;
+}

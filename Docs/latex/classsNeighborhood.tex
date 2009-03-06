@@ -1,0 +1,84 @@
+\section{s\-Neighborhood Class Reference}
+\label{classsNeighborhood}\index{sNeighborhood@{sNeighborhood}}
+It defines the neighborhood of a given point, or ball of radius eps around an element 'x'.  
+
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf s\-Neighborhood} (string p, svect $\ast$cl)
+\begin{CompactList}\small\item\em Basic constructor: given an element and a set, take the latter as the ball (interval) around that element. \item\end{CompactList}\item 
+void {\bf set\-Most\-Frequent\-Neighborhood} ()
+\begin{CompactList}\small\item\em Determines which neighborhood is the most frequent one. \item\end{CompactList}\item 
+sset::iterator {\bf lbegin} ()\label{classsNeighborhood_a3}
+
+\item 
+sset::iterator {\bf lend} ()\label{classsNeighborhood_a4}
+
+\item 
+void {\bf g\-Neighbors\-List} ()\label{classsNeighborhood_a5}
+
+\begin{CompactList}\small\item\em Prints the list of neighborhoods and correponding radii. \item\end{CompactList}\item 
+{\bf s\-Neighborhood} \& {\bf operator+=} ({\bf s\-Neighborhood} \&snbh)
+\begin{CompactList}\small\item\em Update list of neighborhoods: adds lists of neighborhoods in snbh to the current one. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+string {\bf point}\label{classsNeighborhood_o0}
+
+\item 
+sset {\bf neighbors}\label{classsNeighborhood_o1}
+
+\begin{CompactList}\small\item\em The set of elements of a given ball (interval) around point 'point'. \item\end{CompactList}\item 
+double {\bf eps}\label{classsNeighborhood_o2}
+
+\begin{CompactList}\small\item\em Radius of a given ball (interval) around point 'point'. It's also used as frequency of a given set of observed neighbors. \item\end{CompactList}\item 
+map$<$ sset, double $>$ {\bf neighborhoods}\label{classsNeighborhood_o3}
+
+\begin{CompactList}\small\item\em This is strictly speaking, a list of balls (intervals) 'sset' of radii 'double', assumed around point 'point'. \item\end{CompactList}\item 
+long int {\bf multimode}\label{classsNeighborhood_o4}
+
+\begin{CompactList}\small\item\em Checks if there are $>$1 top ranking neighborhoods. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+It defines the neighborhood of a given point, or ball of radius eps around an element 'x'. 
+
+Allows to deal with (sets of) neighborhood(s) of a given point. In particular, it allows to obtain its most frequent neighborhood: given a list of sets containing a point p, what is the one that repeats more often. If two or more of them have the same frequency, it chooses the first one seen.
+
+It allows the its construction iteratively given other previously instantiated s\-Neighborhood's.
+
+Its main members point, neighbors and eps, always contain the most frequent neighborhood, with frequency eps, around 'point' (or the largest ball around 'point'). 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{sNeighborhood@{s\-Neighborhood}!sNeighborhood@{sNeighborhood}}
+\index{sNeighborhood@{sNeighborhood}!sNeighborhood@{s\-Neighborhood}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}s\-Neighborhood::s\-Neighborhood (string {\em p}, svect $\ast$ {\em cl})}\label{classsNeighborhood_a1}
+
+
+Basic constructor: given an element and a set, take the latter as the ball (interval) around that element. 
+
+An alternative way of setting up a s\-Neighborhood is iteratively via the operator += and given other previously instantiated s\-Neighborhood's
+
+\subsection{Member Function Documentation}
+\index{sNeighborhood@{s\-Neighborhood}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!sNeighborhood@{s\-Neighborhood}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf s\-Neighborhood} \& s\-Neighborhood::operator+= ({\bf s\-Neighborhood} \& {\em snbh})}\label{classsNeighborhood_a6}
+
+
+Update list of neighborhoods: adds lists of neighborhoods in snbh to the current one. 
+
+This is a local operation, i.e., both s\-Neighborhoods must be defined around the same point 'point', otherwise it leaves the current one as it is. In case the current has no point defined (weird, but lets consider it) it assumes the same one as in snbh. Then, it runs over all sets of neighbors in snbh and adds each of them to the current list, neighborhoods. If the one found is equal to one already present, both radii are added up; otherwise, the radius is that of the new found set. Finally, it sets the most frequent neighborhood as the current one, i.e., that given by, (string) 'point', (double) 'eps' and (sset) 'neighbors'. This acts, the facto, as an alterantive constructor of s\-Neighborhood.\index{sNeighborhood@{s\-Neighborhood}!setMostFrequentNeighborhood@{setMostFrequentNeighborhood}}
+\index{setMostFrequentNeighborhood@{setMostFrequentNeighborhood}!sNeighborhood@{s\-Neighborhood}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void s\-Neighborhood::set\-Most\-Frequent\-Neighborhood ()}\label{classsNeighborhood_a2}
+
+
+Determines which neighborhood is the most frequent one. 
+
+Runs through each neighborhood in neighborhoods and checks two things: if its radius == eps , i.e., to present one, updates multimode++ if radius $>$ eps, selects that neighborhood as the current one, updating also the value of eps to radius.
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+partanalyze.cc\end{CompactItemize}

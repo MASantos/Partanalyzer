@@ -1,0 +1,279 @@
+			./partanalyze (Partition Analyzer)
+                                                                       
+./partanalyze aims at being a general program for analyzing (sets of) partitions.
+ Here a partition is defined as in set theory of mathematics (see      
+ http://en.wikipedia.org/wiki/Partition_of_a_set). It also allows to   
+ edit (rudimentarily), as well as generate, partitions.                
+                                                                       
+Examples:
+#For lastest options check the help from the program
+./partanalyze -h
+
+#Check consistency of a given partition test.subfam.lst based on a matrix of interactions given by test-blast_pairwise_id.
+#How large are the intra-cluster values compared to the inter-cluster ones.
+./partanalyze -c test-blast_pairwise_id test.subfam.lst
+
+#Calculate VI distance between two partitions and between each of them and their intersection
+# Definition of VI distance: Given two partitions P1 and P2, with cluster size distributions
+# {n_k} and {n_k'} respectively, where k and k' are indexes to each of their corresponding clusters, and 
+# such that Sum_k n_k = Sum_k n'_k = N, the VI distance is defined as
+# 
+#	VI (P1,P2)  = Sum_k n_k/N * log( n_k/N) + Sum_k' n_k'/N * log( n_k'/N) - 2 * Sum_k Sum_k' n_kk'/N log(n_kk'/N)
+# where  n_kk' is the number of items common to cluster k of P1 and cluster k' of P2.
+# This definition satisfies the triangular inequality, i.e., for any three partitions P1,P2 and P, it is
+# 	VI (P1, P) + VI (P,P2) >= VI (P1,P2)
+./partanalyze -v test.subfam.lst test.subfam.lst2
+
+#Print the intersection of 2 partitions test.subfam.lst and test.subfam.lst2
+./partanalyze -i test.subfam.lst test.subfam.lst2
+#Performs the intersection of P1 and P2 as induced by the intersection operation on
+# the underlying set (the one that contains all elements). This gives a new partition
+# I such that each cluster of I is obtained as an intersection of one cluster of P1 and
+# one of P2 (all againts all).
+
+#Print the purity scores for partition1 (target) againts partition2 (reference)
+./partanalyze -purity test.subfam.lst test.subfam.lst2
+
+#It outputs the purity strict and purity lax values. 
+#Purity strict of P1 againts P2 := the number of non-singleton clusters of P1 that
+# are exactly identical to one of P2, divided by the number of non-singleton clusters
+# of P2 (the reference).
+#Purity Lax of P1 againts P2 := the number of non-singleton clusters of P1 that
+# are subsets of a cluster of P2, divided by the number of non-singleton clusters
+# of P1 (the target).
+
+#For debugging: print the interaction matrix read by the program
+./partanalyze -p test-blast_pairwise_id
+
+
+Full help (as of version alpha 0.4.4.D)
+			partanalyzer (Partition Analyzer)
+
+Usage:
+       partanalyzer [-h|--help] (Use --help for more deails)
+       partanalyzer -version 
+   (For analyzing partitions)                                          
+       partanalyzer [-V][-q] [-fmt] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
+       partanalyzer [-V][-q] -c matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
+       partanalyzer [-V][-q] [-fmt] -rstat [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -tstat [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -vstat [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -estat [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -pstat [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -clstat [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -info [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       partanalyzer [-V][-q] [-fmt] -hasse [-cons] [-ofs partition_offset (=2)] partition1 [ partition2 [ ... ]]
+   (For converting between different partition formats)                 
+       partanalyzer [-V][-q] --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+       partanalyzer [-V][-q] --toFREE partition [partition1_offset (=2) ]
+       partanalyzer [-V][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+   (For analyzing Multiple Sequence Alignments)                        
+       partanalyzer [-V][-q] -msa multiple_seq_alignment.fasta
+       partanalyzer [-V][-q] -msa_avgid [-thr threshold=50] multiple_seq_alignment.fasta
+       partanalyzer [-V][-q] -pmsa multiple_seq_alignment.fasta 
+       partanalyzer [-V][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta 
+   (For dealing with -interaction- matrices)                           
+       partanalyzer [-V][-q] -m matrix-of-values1 matrix-of-values2 
+       partanalyzer [-V][-q] -color matrix-of-values1 matrix-of-values2 partition [partition_offset (=2)]
+       partanalyzer [-V][-q] -print matrix-of-values 
+                                                                       
+partanalyzer aims at being a general program for analyzing (sets of) partitions.
+ Here a partition is defined as in set theory of mathematics (see      
+ http://en.wikipedia.org/wiki/Partition_of_a_set). It also allows to   
+ edit (rudimentarily), as well as generate, partitions.                
+                                                                       
+ Whenever many input files are expected, one can either list them as   
+ command line arguments, or list them in a file and use option -f to   
+ specify that file.                                                    
+                                                                       
+ For calculating distances between partitions with different number of 
+ elements, use option -DIST_SUBSPROJECT right before any *stat command.
+ Works only with a *stat distance command, i.e., not  purity scores.   
+                                                                       
+ OPTIONS:                                                              
+   (For analyzing partitions)                                          
+       -v Calculate VI distances between partition1 & partition2       
+                                                                       
+       -e Calculate the edit score distance between partition1 and     
+               partition2                                              
+                                                                       
+       -p Calculates the purity scores of partition2 (the target)      
+               againts the partition1 (the reference).                 
+                                                                       
+       -i Calculate the intersection of  partition1 & partition2       
+                                                                       
+       -c Check cluster consistency according to the given matrix (See 
+          below for syntaxis of the matrix)                            
+                                                                       
+       -rstat [-ext extensivity]                                       
+       -rstat -ref                                                     
+          Calculates Renyi distances for each pair of partitions.      
+          With option -ref, the first partition is taken as a reference
+          and it calculates the distances of all againts that one.     
+          Default extensivity coefficient is 2.                        
+                                                                       
+       -tstat [-ext extensivity]                                       
+       -tstat -ref                                                     
+          Calculates Tsallis distances for each pair of partitions.    
+          With option -ref, the first partition is taken as a reference
+          and it calculates the distances of all againts that one.     
+          Default extensivity coefficient is 2.                        
+                                                                       
+       -vstat                                                          
+       -vstat -ref                                                     
+          Calculates the VI distance for each pair of partitions.      
+          With option -ref, the first partition is taken as a reference
+          and it calculates the distances of all againts that one.     
+                                                                       
+       -estat                                                          
+       -estat -ref                                                     
+          Calculates the Edit Score distance for each pair of partitions
+          With option -ref, the first partition is taken as a reference
+          and it calculates the distances of all againts that one.     
+                                                                       
+       -pstat                                                          
+       -pstat -ref                                                     
+          Calculates the purity scores (strict and lax) for each pair  
+          of partitions. With option -ref, it calculates the purity    
+          scores of all againts the first one, which is taken as a     
+          reference.                                                   
+                                                                       
+       -ipot entropy [-ext extensivity]                                
+          Calculates (information theoretic) potential (entropy) of each
+          partition. The possible values for entropy are:              
+          v | shannon                                                  
+          e | cardinality                                              
+          r | renyi                                                    
+          t | tsallis                                                  
+          Both, long and short option names are valid.                 
+          Default extensivity coefficient is 2.                        
+                                                                       
+       -clstat [-ofs ofs]                                              
+       -clstat [-norm gaug] [-cons|-consensus]                         
+       -clstat                                                         
+          For each item, determines the most frequent cluster where    
+          it appears among all the clusters of all the given partitions.
+          It also prints its size and observed frequency (both, raw    
+          count and %).                                                
+          Option -ofs,see below, allows to specify a partition offset. 
+          Option -norm gaug gauges the normalization used for          
+                 determining the %frequencies. By default these are    
+                 calculated by counting how many times the mode cluster
+                 is found at each of the different partitions and then 
+                 dividing by the number of partitions N. With this     
+                 option, that count gets divided by N+gaug, where gaug 
+                 can be negative or positive.                          
+          Option -cons or -consensus will print the consensus partition
+                                                                       
+       -info    [-ofs ofs]                                             
+       --isPart [-ofs ofs]                                             
+       --isaPart [-ofs ofs]                                            
+       --is-partition [-ofs ofs]                                       
+           For each partition checks whether it is a sound partition   
+           or not, i.e., whether all of its clusters are pair-wise     
+           disjoint. With option -q, only error message will be printed
+           in case partition is not sound, otherwise it'll keep silent.
+                                                                       
+       -hasse prints the local Hasse Diagram (graph) spanned by the    
+              given partitions.                                        
+                                                                       
+   (For converting between different pariition formats)                
+       -toMCL [-tab mcl_tab_file] converts partition from PART format  
+           to MCL's format. If additional tab file is provided, output 
+           will contain the specific label index given in the tab file.
+                                                                       
+       -toFREE converts partition from PART format to FREE format.     
+                                                                       
+       -MCLtoPART [-tab mcl_tabl_file]                                 
+           converts partition from MCL format to PART format.          
+           If additional tab file is provided, output will contain     
+           items' labels, instead of simply their MCL index number.    
+                                                                       
+   (For analyzing Multiple Sequence Alignments)                        
+       -msa Given a multiple sequence alignment in fasta format, it    
+          prints all pair-wise sequence identities.                    
+                                                                       
+       -msa-avgid [-thr threshold ]                                    
+          Similar as option -msa, but prints for each sequence a       
+          statistics of its pair-wise sequence identity to all other   
+          sequences. This consists of average Seq.Id, standard         
+          deviation, variance, minimum Seq.Id, maximum Seq.Id, number  
+          of pairs with Seq.Id > threshold, fraction of pairs with Seq.
+          Id. > threshold and total number of pairs.                   
+          Option -thr allows to provide a specific threshold to use.   
+                      default value is 50%. Values are floating numbers
+                      within [0,100].                                  
+                                                                       
+       --msa-redundant                                                 
+       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed]          
+          Duplicates sequences chosen at random in the given multiple  
+          sequence alignment. Wtihout options, only one is chosen.     
+          Option -nsam  Generate nsam samples of MSAs with nseq dupli- 
+                        cated sequences. Each sample is written is its 
+                        own directory.                                 
+                 -nseq  Specify the number of sequences to duplicate.  
+                 -seed  Specify the seed of the random number generator
+          All options are expected to be integer values. The value of  
+          the seed is written within .seed_used allowing for repeated  
+          experiments.                                                 
+                                                                       
+       -pmsa Prints the given multiple sequence alignment. Useful for  
+             debugging.                                                
+                                                                       
+   (For dealing with -interaction- matrices)                           
+       -m Merge two graph matrices into one that contains both values  
+          for each pair of items, i.e., the resulting graph looks like 
+                                                                       
+                        stringA stringB  float1 float2                 
+                           ...    ...      ...    ...                  
+          where float1, float2 are the matrix values of matrix1 and    
+          matrix2, respectively. Both matrices are expected to contain 
+          the same set of pair of items, i.e., the same set of edges.  
+                                                                       
+       -color as option -m, but in addition includes the name of the   
+          cluster each pair of values belong to. If they belong to     
+          different clusters the label is "x". The label is NAN  
+          if any of the item does not belong to any of the clusters    
+          defined in the given partition. The format of the output is  
+                 float1A flaot2 clustername_AB stringA stringB         
+                   ...     ...      ...          ...    ...            
+                                                                       
+       -print Print the given interaction matrix. For debugging.       
+                                                                       
+   General options                                                     
+       -V verbose. For debugging.                                      
+                                                                       
+       -q quiet mode. Do not print out comment lines (that start with  
+          `#').                                                        
+                                                                       
+       -fmt [input_file_format]                                        
+       --format [input_file_format]                                    
+          Possible values are: PART,MCL and FREE. See below.           
+                                                                       
+   File formats:                                                       
+       matrix-of-values:                                               
+                        stringA stringB  float                         
+                        stringA stringC  float                         
+                          ...     ...     ...                          
+                        stringZ stringV  float                         
+                                                                       
+       partition:                                                      
+         PART: (default, i.e., partition_offset=2)                     
+               sizeA clusterA_name  item_1 item_2 ... item_sizeA       
+               sizeB clusterB_name  item_1 item_2 ... item_sizeB       
+                ...      ...       ...    ...         ...              
+            or (partition_offset=1):                                   
+               sizeA  item_1 item_2 ... item_sizeA                     
+                ...    ...    ...         ...                          
+         FREE: (not yet implemented) (partition_offset=0)              
+               item_1 item_2 ... item_sizeA                            
+                ...    ...         ...                                 
+         MCL : MCL's own matrix format for partitions. See MCL manual. 
+
+License
+# ./partanalyze Version alpha 0.4.4.D
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Nov 23 2008
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#

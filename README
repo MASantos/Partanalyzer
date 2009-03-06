@@ -1,0 +1,24 @@
+In order to compile just issue
+	make 
+
+this updates the tags file and generates the executable.
+
+To (re)build the documentation issue
+	make documention
+
+To remove the executable and tags file
+	make distclean
+
+
+List of contents:
+dir	Docs		Code documentation automatically generated with doxygen. Depends on how good the comment lines in the source code are.
+dir	Tests		Contains several tests files and scripts to check the partanalyze executable.
+file	Doxyfile	Configuration file for doxygen. Required to build the Docs directory.
+file	Makefile	Makefile for partanalyze, its tests and documentation.
+file	MAN		Brief manual for partanalze. Basically contains the full help output one gets with `partanalyze --help'.
+file	README		This file.
+file	TODO		Lists pending improvements 
+file	kk.cc		Testbench for implementing unfamiliar C++ code, like using the library dirent.h for dealing with directories.
+file	partanalyze.cc	THE C++ source of partanalyze
+file	tags		Tags file for partanalyze.cc
+

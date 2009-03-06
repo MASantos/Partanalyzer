@@ -1,0 +1,756 @@
+# ./overlapVScorrelation-color-ng Version alpha 0.1
+# Copyright (c) Miguel A. Santos, May. 2008 .Build Aug  8 2008
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#Fri Aug  8 18:25:14 EDT 2008
+#Analyzing neighborhoods...
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/001/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/002/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/003/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/004/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/005/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/006/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/007/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/008/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/009/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/010/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/011/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/012/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/013/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/014/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/015/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/016/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/017/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/018/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/019/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/020/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/021/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/022/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/023/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/024/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/025/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/026/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 62 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/027/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/028/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/029/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/030/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 68 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/031/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/032/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/033/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/034/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/035/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/036/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/037/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/038/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/039/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/040/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/041/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/042/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/043/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/044/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/045/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/046/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/047/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/048/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/049/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/050/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/051/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/052/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/053/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/054/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/055/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/056/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/057/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/058/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/059/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/060/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/061/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/062/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/063/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/064/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/065/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/066/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/067/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/068/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/069/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/070/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/071/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/072/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/073/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/074/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/075/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/076/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/077/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/078/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/079/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/080/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/081/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/082/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/083/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/084/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/085/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/086/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/087/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/088/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 61 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/089/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/090/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/091/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/092/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/093/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 65 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/094/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/095/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 52 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/096/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 56 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/097/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/098/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 52 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/099/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 59 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/100/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/101/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/102/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 44 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/103/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/104/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/105/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/106/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/107/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 59 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/108/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/109/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 54 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/110/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/111/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/112/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/113/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/114/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/115/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/116/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/117/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/118/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/119/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/120/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/121/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/122/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/123/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/124/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/125/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/126/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/127/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/128/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/129/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/130/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/131/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/132/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/133/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/134/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/135/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/136/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/137/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/138/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/139/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou4f3_2791.1
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/140/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/141/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/142/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/143/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/144/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/145/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/146/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/147/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/148/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/149/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/150/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/151/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/152/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/153/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/154/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/155/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/156/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/157/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/158/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/159/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/160/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/161/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/162/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/163/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/164/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/165/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/166/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 67 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/167/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 66 #items= 167 last-cluster-#items= 3 Last-item-read= Pou6f1_1731.2
+#Reading clusters from partition /home/shoshana/song/SP/HOM3/168-CV-entropy/168/subfamily_list.lst
+#Finish Reading partitions: 
+#clusters= 65 #items= 167 last-cluster-#items= 3 Last-item-read= Pbx1_3203.1
+#Printing neighborhoods...
+#Cover size= 168
+Alx3_3418.2	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Alx4_1744.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Arx_1738.2	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Bapx1_2343.1	153	91.0714	2	Bapx1_2343.1	Nkx3-1_2923.2
+Barhl1_2590.2	157	93.4524	2	Barhl1_2590.2	Barhl2_3868.1
+Barhl2_3868.1	157	93.4524	2	Barhl1_2590.2	Barhl2_3868.1
+Barx1_2877.1	158	94.0476	2	Barx1_2877.1	Barx2_3447.2
+Barx2_3447.2	158	94.0476	2	Barx1_2877.1	Barx2_3447.2
+Bsx_3483.2	158	94.0476	1	Bsx_3483.2
+Cart1_0997.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Cdx1_2245.1	166	98.8095	2	Cdx1_2245.1	Cdx2_4272.1
+Cdx2_4272.1	166	98.8095	2	Cdx1_2245.1	Cdx2_4272.1
+Cphx_3484.1	167	99.4048	1	Cphx_3484.1
+Crx_3485.1	159	94.6429	3	Crx_3485.1	Otx1_2325.1	Otx2_3441.1
+Cutl1_3494.1	167	99.4048	1	Cutl1_3494.1
+Dbx1_3486.1	165	98.2143	3	Dbx1_3486.1	Dbx2_3487.1	Hlx1_2350.1
+Dbx2_3487.1	165	98.2143	3	Dbx1_3486.1	Dbx2_3487.1	Hlx1_2350.1
+Dlx1_1741.2	163	97.0238	5	Dlx1_1741.2	Dlx2_2273.2	Dlx3_1030.1	Dlx4_3488.2	Dlx5_3419.2
+Dlx2_2273.2	163	97.0238	5	Dlx1_1741.2	Dlx2_2273.2	Dlx3_1030.1	Dlx4_3488.2	Dlx5_3419.2
+Dlx3_1030.1	163	97.0238	5	Dlx1_1741.2	Dlx2_2273.2	Dlx3_1030.1	Dlx4_3488.2	Dlx5_3419.2
+Dlx4_3488.2	163	97.0238	5	Dlx1_1741.2	Dlx2_2273.2	Dlx3_1030.1	Dlx4_3488.2	Dlx5_3419.2
+Dlx5_3419.2	163	97.0238	5	Dlx1_1741.2	Dlx2_2273.2	Dlx3_1030.1	Dlx4_3488.2	Dlx5_3419.2
+Dmbx1_2277.1	156	92.8571	3	Dmbx1_2277.1	Pax6_3838.3	Vsx1_1728.1
+Dobox4_3956.2	167	99.4048	1	Dobox4_3956.2
+Dobox5_3493.1	155	92.2619	1	Dobox5_3493.1
+Duxl_1286.2	167	99.4048	1	Duxl_1286.2
+Emx2_3420.1	164	97.619	1	Emx2_3420.1
+En1_3123.2	165	98.2143	2	En1_3123.2	En2_0952.1
+En2_0952.1	165	98.2143	2	En1_3123.2	En2_0952.1
+Esx1_3124.2	167	99.4048	1	Esx1_3124.2
+Evx1_3952.2	165	98.2143	2	Evx1_3952.2	Evx2_2645.3
+Evx2_2645.3	165	98.2143	2	Evx1_3952.2	Evx2_2645.3
+Gbx1_2883.2	163	97.0238	2	Gbx1_2883.2	Gbx2_3110.1
+Gbx2_3110.1	163	97.0238	2	Gbx1_2883.2	Gbx2_3110.1
+Gsc_2327.3	165	98.2143	1	Gsc_2327.3
+Gsh2_3990.2	160	95.2381	1	Gsh2_3990.2
+Hdx_3845.3	167	99.4048	1	Hdx_3845.3
+Hlx1_2350.1	165	98.2143	3	Dbx1_3486.1	Dbx2_3487.1	Hlx1_2350.1
+Hlxb9_3422.1	164	97.619	1	Hlxb9_3422.1
+Hmbox1_2674.1	167	99.4048	1	Hmbox1_2674.1
+Hmx1_3423.1	162	96.4286	3	Hmx1_3423.1	Hmx2_3424.3	Hmx3_3490.2
+Hmx2_3424.3	162	96.4286	3	Hmx1_3423.1	Hmx2_3424.3	Hmx3_3490.2
+Hmx3_3490.2	162	96.4286	3	Hmx1_3423.1	Hmx2_3424.3	Hmx3_3490.2
+Homez_1063.2	167	99.4048	1	Homez_1063.2
+Hoxa10_2318.1	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxa11_2218.1	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxa13_3126.1	157	93.4524	4	Hoxa13_3126.1	Hoxb13_3479.1	Hoxc13_3127.1	Hoxd13_2356.1
+Hoxa1_3425.1	165	98.2143	2	Hoxa1_3425.1	Hoxd1_3448.1
+Hoxa2_3079.1	156	92.8571	5	Hoxa2_3079.1	Hoxa3_2783.2	Hoxb3_1720.2	Hoxd3_1742.2	Ipf1_3815.1
+Hoxa3_2783.2	156	92.8571	5	Hoxa2_3079.1	Hoxa3_2783.2	Hoxb3_1720.2	Hoxd3_1742.2	Ipf1_3815.1
+Hoxa4_3426.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxa5_3415.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxa6_1040.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxa7_2668.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxa9_2622.2	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxb13_3479.1	157	93.4524	4	Hoxa13_3126.1	Hoxb13_3479.1	Hoxc13_3127.1	Hoxd13_2356.1
+Hoxb3_1720.2	156	92.8571	5	Hoxa2_3079.1	Hoxa3_2783.2	Hoxb3_1720.2	Hoxd3_1742.2	Ipf1_3815.1
+Hoxb4_2627.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxb5_3122.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxb6_3428.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxb7_3953.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxb8_3780.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxb9_3413.1	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxc10_2779.2	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxc11_3718.2	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxc12_3480.1	159	94.6429	2	Hoxc12_3480.1	Hoxd12_3481.1
+Hoxc13_3127.1	157	93.4524	4	Hoxa13_3126.1	Hoxb13_3479.1	Hoxc13_3127.1	Hoxd13_2356.1
+Hoxc4_3491.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxc5_2630.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxc6_3954.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxc8_3429.2	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Hoxc9_2367.2	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxd10_2368.2	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxd11_3873.1	159	94.6429	9	Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+Hoxd12_3481.1	159	94.6429	2	Hoxc12_3480.1	Hoxd12_3481.1
+Hoxd13_2356.1	157	93.4524	4	Hoxa13_3126.1	Hoxb13_3479.1	Hoxc13_3127.1	Hoxd13_2356.1
+Hoxd1_3448.1	165	98.2143	2	Hoxa1_3425.1	Hoxd1_3448.1
+Hoxd3_1742.2	156	92.8571	5	Hoxa2_3079.1	Hoxa3_2783.2	Hoxb3_1720.2	Hoxd3_1742.2	Ipf1_3815.1
+Hoxd8_2644.1	154	91.6667	14	Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+Ipf1_3815.1	156	92.8571	5	Hoxa2_3079.1	Hoxa3_2783.2	Hoxb3_1720.2	Hoxd3_1742.2	Ipf1_3815.1
+Irx2_0900.3	163	97.0238	5	Irx2_0900.3	Irx3_0920.1	Irx4_2242.3	Irx5_2385.1	Irx6_2623.2
+Irx3_0920.1	163	97.0238	5	Irx2_0900.3	Irx3_0920.1	Irx4_2242.3	Irx5_2385.1	Irx6_2623.2
+Irx4_2242.3	163	97.0238	5	Irx2_0900.3	Irx3_0920.1	Irx4_2242.3	Irx5_2385.1	Irx6_2623.2
+Irx5_2385.1	163	97.0238	5	Irx2_0900.3	Irx3_0920.1	Irx4_2242.3	Irx5_2385.1	Irx6_2623.2
+Irx6_2623.2	163	97.0238	5	Irx2_0900.3	Irx3_0920.1	Irx4_2242.3	Irx5_2385.1	Irx6_2623.2
+Isl2_3430.1	167	99.4048	1	Isl2_3430.1
+Isx_3445.1	163	97.0238	1	Isx_3445.1
+Lbx2_3869.2	167	99.4048	1	Lbx2_3869.2
+Lhx1_2240.2	163	97.0238	4	Lhx1_2240.2	Lhx3_3431.1	Lhx4_1719.2	Lhx5_2279.1
+Lhx2_0953.2	166	98.8095	2	Lhx2_0953.2	Lhx9_3492.1
+Lhx3_3431.1	163	97.0238	4	Lhx1_2240.2	Lhx3_3431.1	Lhx4_1719.2	Lhx5_2279.1
+Lhx4_1719.2	163	97.0238	4	Lhx1_2240.2	Lhx3_3431.1	Lhx4_1719.2	Lhx5_2279.1
+Lhx5_2279.1	163	97.0238	4	Lhx1_2240.2	Lhx3_3431.1	Lhx4_1719.2	Lhx5_2279.1
+Lhx6_2272.1	166	98.8095	2	Lhx6_2272.1	Lhx8_2247.2
+Lhx8_2247.2	166	98.8095	2	Lhx6_2272.1	Lhx8_2247.2
+Lhx9_3492.1	166	98.8095	2	Lhx2_0953.2	Lhx9_3492.1
+Lmx1a_2238.2	165	98.2143	2	Lmx1a_2238.2	Lmx1b_3433.2
+Lmx1b_3433.2	165	98.2143	2	Lmx1a_2238.2	Lmx1b_3433.2
+Meis1_2335.1	163	97.0238	5	Meis1_2335.1	Mrg1_2246.2	Mrg2_2302.1	Pknox1_2364.2	Pknox2_3077.2
+Meox1_2310.2	166	98.8095	1	Meox1_2310.2
+Mrg1_2246.2	163	97.0238	5	Meis1_2335.1	Mrg1_2246.2	Mrg2_2302.1	Pknox1_2364.2	Pknox2_3077.2
+Mrg2_2302.1	163	97.0238	5	Meis1_2335.1	Mrg1_2246.2	Mrg2_2302.1	Pknox1_2364.2	Pknox2_3077.2
+Msx1_3031.2	160	95.2381	3	Msx1_3031.2	Msx2_3449.1	Msx3_3206.1
+Msx2_3449.1	160	95.2381	3	Msx1_3031.2	Msx2_3449.1	Msx3_3206.1
+Msx3_3206.1	160	95.2381	3	Msx1_3031.2	Msx2_3449.1	Msx3_3206.1
+Nkx1-1_3856.3	161	95.8333	2	Nkx1-1_3856.3	Nkx1-2_3214.1
+Nkx1-2_3214.1	161	95.8333	2	Nkx1-1_3856.3	Nkx1-2_3214.1
+Nkx2-2_2823.1	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Nkx2-3_3435.1	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Nkx2-4_3074.1	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Nkx2-5_3436.1	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Nkx2-6_3437.1	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Nkx2-9_3082.1	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Nkx3-1_2923.2	153	91.0714	2	Bapx1_2343.1	Nkx3-1_2923.2
+Nkx6-1_2825.1	165	98.2143	2	Nkx6-1_2825.1	Nkx6-3_3446.1
+Nkx6-3_3446.1	165	98.2143	2	Nkx6-1_2825.1	Nkx6-3_3446.1
+Obox1_3970.2	154	91.6667	4	Obox1_3970.2	Obox2_3438.2	Obox3_3439.1	Obox5_2284.1
+Obox2_3438.2	154	91.6667	4	Obox1_3970.2	Obox2_3438.2	Obox3_3439.1	Obox5_2284.1
+Obox3_3439.1	154	91.6667	4	Obox1_3970.2	Obox2_3438.2	Obox3_3439.1	Obox5_2284.1
+Obox5_2284.1	154	91.6667	4	Obox1_3970.2	Obox2_3438.2	Obox3_3439.1	Obox5_2284.1
+Obox6_3440.2	167	99.4048	1	Obox6_3440.2
+Og2x_3719.1	167	99.4048	1	Og2x_3719.1
+Otp_3496.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Otx1_2325.1	159	94.6429	3	Crx_3485.1	Otx1_2325.1	Otx2_3441.1
+Otx2_3441.1	159	94.6429	3	Crx_3485.1	Otx1_2325.1	Otx2_3441.1
+Pax4_3989.2	167	99.4048	1	Pax4_3989.2
+Pax6_3838.3	156	92.8571	3	Dmbx1_2277.1	Pax6_3838.3	Vsx1_1728.1
+Pax7_3783.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Pbx1_3203.1	167	99.4048	1	Pbx1_3203.1
+Phox2a_3947.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Phox2b_3948.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Pitx1_2312.1	160	95.2381	3	Pitx1_2312.1	Pitx2_2274.3	Pitx3_3497.2
+Pitx2_2274.3	160	95.2381	3	Pitx1_2312.1	Pitx2_2274.3	Pitx3_3497.2
+Pitx3_3497.2	160	95.2381	3	Pitx1_2312.1	Pitx2_2274.3	Pitx3_3497.2
+Pknox1_2364.2	163	97.0238	5	Meis1_2335.1	Mrg1_2246.2	Mrg2_2302.1	Pknox1_2364.2	Pknox2_3077.2
+Pknox2_3077.2	163	97.0238	5	Meis1_2335.1	Mrg1_2246.2	Mrg2_2302.1	Pknox1_2364.2	Pknox2_3077.2
+Pou1f1_3818.1	166	98.8095	1	Pou1f1_3818.1
+Pou2f1_3081.2	160	95.2381	3	Pou2f1_3081.2	Pou2f2_3748.1	Pou2f3_3986.2
+Pou2f2_3748.1	160	95.2381	3	Pou2f1_3081.2	Pou2f2_3748.1	Pou2f3_3986.2
+Pou2f3_3986.2	160	95.2381	3	Pou2f1_3081.2	Pou2f2_3748.1	Pou2f3_3986.2
+Pou3f1_3819.1	159	94.6429	4	Pou3f1_3819.1	Pou3f2_2824.1	Pou3f3_3235.2	Pou3f4_3773.1
+Pou3f2_2824.1	159	94.6429	4	Pou3f1_3819.1	Pou3f2_2824.1	Pou3f3_3235.2	Pou3f4_3773.1
+Pou3f3_3235.2	159	94.6429	4	Pou3f1_3819.1	Pou3f2_2824.1	Pou3f3_3235.2	Pou3f4_3773.1
+Pou3f4_3773.1	159	94.6429	4	Pou3f1_3819.1	Pou3f2_2824.1	Pou3f3_3235.2	Pou3f4_3773.1
+Pou4f3_2791.1	167	99.4048	1	Pou4f3_2791.1
+Pou6f1_1731.2	167	99.4048	1	Pou6f1_1731.2
+Prop1_3949.1	165	98.2143	1	Prop1_3949.1
+Prrx1_3442.1	150	89.2857	3	Prrx1_3442.1	Prrx2_3072.1	Shox2_2641.2
+Prrx2_3072.1	150	89.2857	3	Prrx1_3442.1	Prrx2_3072.1	Shox2_2641.2
+Rax_3443.1	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Rhox11_1765.2	167	99.4048	1	Rhox11_1765.2
+Rhox6_4251.1	167	99.4048	1	Rhox6_4251.1
+Shox2_2641.2	150	89.2857	3	Prrx1_3442.1	Prrx2_3072.1	Shox2_2641.2
+Six1_0935.2	163	97.0238	5	Six1_0935.2	Six2_2307.2	Six3_1732.2	Six4_2860.1	Six6_2267.4
+Six2_2307.2	163	97.0238	5	Six1_0935.2	Six2_2307.2	Six3_1732.2	Six4_2860.1	Six6_2267.4
+Six3_1732.2	163	97.0238	5	Six1_0935.2	Six2_2307.2	Six3_1732.2	Six4_2860.1	Six6_2267.4
+Six4_2860.1	163	97.0238	5	Six1_0935.2	Six2_2307.2	Six3_1732.2	Six4_2860.1	Six6_2267.4
+Six6_2267.4	163	97.0238	5	Six1_0935.2	Six2_2307.2	Six3_1732.2	Six4_2860.1	Six6_2267.4
+Tcf1_2666.2	166	98.8095	2	Tcf1_2666.2	Tcf2_0913.2
+Tcf2_0913.2	166	98.8095	2	Tcf1_2666.2	Tcf2_0913.2
+Tgif1_2342.2	166	98.8095	2	Tgif1_2342.2	Tgif2_3451.1
+Tgif2_3451.1	166	98.8095	2	Tgif1_2342.2	Tgif2_3451.1
+Titf1_1722.2	153	91.0714	7	Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+Tlx2_3498.2	164	97.619	1	Tlx2_3498.2
+Uncx4.1_2281.2	150	89.2857	10	Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+Vax1_3499.1	163	97.0238	2	Vax1_3499.1	Vax2_3500.1
+Vax2_3500.1	163	97.0238	2	Vax1_3499.1	Vax2_3500.1
+Vsx1_1728.1	156	92.8571	3	Dmbx1_2277.1	Pax6_3838.3	Vsx1_1728.1
+#ENDCover
+#Printing consensus partition...
+#calculating Bell Number...
+#Fri Aug  8 18:25:15 EDT 2008
+#Bell_number ~ 822.426
+#Fri Aug  8 18:25:15 EDT 2008
+#ConsensusPart
+14	N1		Hoxa4_3426.1	Hoxa5_3415.1	Hoxa6_1040.1	Hoxa7_2668.2	Hoxb4_2627.1	Hoxb5_3122.2	Hoxb6_3428.2	Hoxb7_3953.1	Hoxb8_3780.2	Hoxc4_3491.1	Hoxc5_2630.2	Hoxc6_3954.2	Hoxc8_3429.2	Hoxd8_2644.1
+10	N2		Alx3_3418.2	Alx4_1744.1	Arx_1738.2	Cart1_0997.1	Otp_3496.1	Pax7_3783.1	Phox2a_3947.1	Phox2b_3948.1	Rax_3443.1	Uncx4.1_2281.2
+9	N3		Hoxa10_2318.1	Hoxa11_2218.1	Hoxa9_2622.2	Hoxb9_3413.1	Hoxc10_2779.2	Hoxc11_3718.2	Hoxc9_2367.2	Hoxd10_2368.2	Hoxd11_3873.1
+7	N4		Nkx2-2_2823.1	Nkx2-3_3435.1	Nkx2-4_3074.1	Nkx2-5_3436.1	Nkx2-6_3437.1	Nkx2-9_3082.1	Titf1_1722.2
+5	N5		Dlx1_1741.2	Dlx2_2273.2	Dlx3_1030.1	Dlx4_3488.2	Dlx5_3419.2
+5	N6		Hoxa2_3079.1	Hoxa3_2783.2	Hoxb3_1720.2	Hoxd3_1742.2	Ipf1_3815.1
+5	N7		Irx2_0900.3	Irx3_0920.1	Irx4_2242.3	Irx5_2385.1	Irx6_2623.2
+5	N8		Meis1_2335.1	Mrg1_2246.2	Mrg2_2302.1	Pknox1_2364.2	Pknox2_3077.2
+5	N9		Six1_0935.2	Six2_2307.2	Six3_1732.2	Six4_2860.1	Six6_2267.4
+4	N10		Hoxa13_3126.1	Hoxb13_3479.1	Hoxc13_3127.1	Hoxd13_2356.1
+4	N11		Lhx1_2240.2	Lhx3_3431.1	Lhx4_1719.2	Lhx5_2279.1
+4	N12		Obox1_3970.2	Obox2_3438.2	Obox3_3439.1	Obox5_2284.1
+4	N13		Pou3f1_3819.1	Pou3f2_2824.1	Pou3f3_3235.2	Pou3f4_3773.1
+3	N14		Crx_3485.1	Otx1_2325.1	Otx2_3441.1
+3	N15		Dbx1_3486.1	Dbx2_3487.1	Hlx1_2350.1
+3	N16		Dmbx1_2277.1	Pax6_3838.3	Vsx1_1728.1
+3	N17		Hmx1_3423.1	Hmx2_3424.3	Hmx3_3490.2
+3	N18		Msx1_3031.2	Msx2_3449.1	Msx3_3206.1
+3	N19		Pitx1_2312.1	Pitx2_2274.3	Pitx3_3497.2
+3	N20		Pou2f1_3081.2	Pou2f2_3748.1	Pou2f3_3986.2
+3	N21		Prrx1_3442.1	Prrx2_3072.1	Shox2_2641.2
+2	N22		Bapx1_2343.1	Nkx3-1_2923.2
+2	N23		Barhl1_2590.2	Barhl2_3868.1
+2	N24		Barx1_2877.1	Barx2_3447.2
+2	N25		Cdx1_2245.1	Cdx2_4272.1
+2	N26		En1_3123.2	En2_0952.1
+2	N27		Evx1_3952.2	Evx2_2645.3
+2	N28		Gbx1_2883.2	Gbx2_3110.1
+2	N29		Hoxa1_3425.1	Hoxd1_3448.1
+2	N30		Hoxc12_3480.1	Hoxd12_3481.1
+2	N31		Lhx2_0953.2	Lhx9_3492.1
+2	N32		Lhx6_2272.1	Lhx8_2247.2
+2	N33		Lmx1a_2238.2	Lmx1b_3433.2
+2	N34		Nkx1-1_3856.3	Nkx1-2_3214.1
+2	N35		Nkx6-1_2825.1	Nkx6-3_3446.1
+2	N36		Tcf1_2666.2	Tcf2_0913.2
+2	N37		Tgif1_2342.2	Tgif2_3451.1
+2	N38		Vax1_3499.1	Vax2_3500.1
+1	N39		Bsx_3483.2
+1	N40		Cphx_3484.1
+1	N41		Cutl1_3494.1
+1	N42		Dobox4_3956.2
+1	N43		Dobox5_3493.1
+1	N44		Duxl_1286.2
+1	N45		Emx2_3420.1
+1	N46		Esx1_3124.2
+1	N47		Gsc_2327.3
+1	N48		Gsh2_3990.2
+1	N49		Hdx_3845.3
+1	N50		Hlxb9_3422.1
+1	N51		Hmbox1_2674.1
+1	N52		Homez_1063.2
+1	N53		Isl2_3430.1
+1	N54		Isx_3445.1
+1	N55		Lbx2_3869.2
+1	N56		Meox1_2310.2
+1	N57		Obox6_3440.2
+1	N58		Og2x_3719.1
+1	N59		Pax4_3989.2
+1	N60		Pbx1_3203.1
+1	N61		Pou1f1_3818.1
+1	N62		Pou4f3_2791.1
+1	N63		Pou6f1_1731.2
+1	N64		Prop1_3949.1
+1	N65		Rhox11_1765.2
+1	N66		Rhox6_4251.1
+1	N67		Tlx2_3498.2
+#EndConsensusPart
+#Fri Aug  8 18:25:15 EDT 2008

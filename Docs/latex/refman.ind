@@ -1,0 +1,102 @@
+\begin{theindex}
+
+  \item {BellNumber}, 3
+
+  \indexspace
+
+  \item {ccop}, 4
+  \item {Charr}, 5
+
+  \indexspace
+
+  \item {getConsensusPartition}
+    \subitem {Partition\-Stats}, 16
+  \item {greaterThan}, 6
+
+  \indexspace
+
+  \item {id}
+    \subitem {Sequence}, 19
+  \item {intersection}
+    \subitem {Partition}, 13
+  \item {isaPartitionOf}
+    \subitem {Partition}, 13
+
+  \indexspace
+
+  \item {MatrixOfValues}, 7
+  \item {Matrix\-Of\-Values}
+    \subitem {merge}, 7
+    \subitem {readMxValues}, 7
+    \subitem {v}, 7
+  \item {merge}
+    \subitem {Matrix\-Of\-Values}, 7
+  \item {MultipleSeqAlign}, 9
+    \subitem {Multiple\-Seq\-Align}, 10
+  \item {Multiple\-Seq\-Align}
+    \subitem {MultipleSeqAlign}, 10
+    \subitem {NsamplesRedMSA}, 10
+    \subitem {printAveragePairwiseIds}, 10
+    \subitem {setFileName}, 10
+
+  \indexspace
+
+  \item {NsamplesRedMSA}
+    \subitem {Multiple\-Seq\-Align}, 10
+
+  \indexspace
+
+  \item {operator+}
+    \subitem {Partition}, 14
+  \item {operator+=}
+    \subitem {s\-Neighborhood}, 21
+
+  \indexspace
+
+  \item {Partition}, 11
+    \subitem {intersection}, 13
+    \subitem {isaPartitionOf}, 13
+    \subitem {operator+}, 14
+    \subitem {Partition}, 13
+    \subitem {purityScore}, 14
+    \subitem {vipp}, 14
+  \item {PartitionStats}, 15
+  \item {Partition\-Stats}
+    \subitem {getConsensusPartition}, 16
+    \subitem {printCover}, 16
+  \item {printAveragePairwiseIds}
+    \subitem {Multiple\-Seq\-Align}, 10
+  \item {printCover}
+    \subitem {Partition\-Stats}, 16
+  \item {purityScore}
+    \subitem {Partition}, 14
+
+  \indexspace
+
+  \item {readMxValues}
+    \subitem {Matrix\-Of\-Values}, 7
+  \item {roulette}, 17
+
+  \indexspace
+
+  \item {Sequence}, 18
+    \subitem {id}, 19
+  \item {setFileName}
+    \subitem {Multiple\-Seq\-Align}, 10
+  \item {setMostFrequentNeighborhood}
+    \subitem {s\-Neighborhood}, 21
+  \item {sNeighborhood}, 20
+    \subitem {s\-Neighborhood}, 21
+  \item {s\-Neighborhood}
+    \subitem {operator+=}, 21
+    \subitem {setMostFrequentNeighborhood}, 21
+    \subitem {sNeighborhood}, 21
+
+  \indexspace
+
+  \item {v}
+    \subitem {Matrix\-Of\-Values}, 7
+  \item {vipp}
+    \subitem {Partition}, 14
+
+\end{theindex}

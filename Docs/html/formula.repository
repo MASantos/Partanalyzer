@@ -1,0 +1,3 @@
+\form#0:$ H=\sum_k\,p_k\,\log\left(p_k\right) $
+\form#1:$d\left(P,P'\right)\,\equiv\,2\,card\left(P,P'\right)\,-\,card\left(P\right)\,-\,card\left(P'\right)$
+\form#2:$d\left(P,P'\right)\,\equiv\,2\,H\left(P,P'\right)\,-\,H\left(P\right)\,-\,H\left(P'\right)$

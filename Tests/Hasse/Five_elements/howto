@@ -1,0 +1,4 @@
+printf "2 N1 2 3\n2 N2 4 5\n1 N3 1\n" > p3E
+
+less viVsed-distances-raw.dat|grep p1 | awk '{print $NF,$(NF-1)}' | xmgrace -pipe
+

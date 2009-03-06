@@ -1,0 +1,82 @@
+-Bug: Multimode info seems to give wrong values when making consensus w/o LOO. See Tests/Consensus/Fail
+
+-Given a Partition and the original MSA, output the MSA+subfam annotation. Also, output a version of it ready for 
+	SDPred. This is necessary for following: How to determine SDP for the consensus partition? Currently we don't have
+	its corresponding MSA+subfam annotation.
+
+-Implement Overlap (scalar product) between two Adjaciency matrices. 
+-Implement Overlap (scalar product) between two Partitions: 1st, build the corresponding adjaciency graphs A_ij, such
+	that A_ij=1 iff (i,j) belong to same cluster, otherwise A_ij=0 . Then take the scalar product <A|A'>. Here, A'
+	has its rows and columns ordered as in A, which is taken as a reference.
+
+-Implement Average Graph: Given set of input partitions, calculate average Adjaciency matrix (as defined below).
+	Analogously, given set of input graphs, calculate average graph.
+
+-Implement: 
+	Erase clusters by range of indexes or by names;
+	Erase elements given list of names
+	Add clusters
+	Add elements to given cluster
+
+-Implement: Automatically generate all partitions for the set S=[1,...,N]
+
+-HasseDiagram generates a segmentation fault when trying it with ~200 files. Not sure what the reason is. Is it
+the number of files? Small tests didn't show any problem.
+
+-Normalize VI by log N ? Needs prove that this is indeed the max possible attainable value.
+
+-Adapt ccop for dealing with redundant sequences: all done??
+
+-Merge sciphy-entropy into the code: This would allow a comprehensive battery of tests & calculations very fast and
+	with a small hard disk footprint.
+
+-Implement other robustness tests based on consensus:
+	-Subsampling: Generalizing the LOO to leav-k-out, a.k.a, k-fold cross-validation. However, instead of proceeding
+	with the validation step. Simply, take the consensus of all the samples. Golub et al. Machine Learning 2003, Strehl
+	and Ghosh, J.Mach.Learning Resear.2002, 
+
+	-
+-Implement robustness test againts 
+	[ cancel that: swapping of elements between clusters. This seems akin
+	to the robustness test of Newman&GirvinPRE2004 by way of random rewiring. In our case
+	we always have all possible edges present. Thus the only rewiring that effectively 
+	change a partition is that corresponding to swapping elements between different 
+	clusters. Be beta_k the probability of choosing an element i of cluster C_k containing
+	k elements, and alpha that of swapping i and j of C_k'. The probability of such a
+	step is
+			beta_k*beta_k'*alpha 
+	]
+	againts the robustness test of Newman et al. PRE2008, which could be considered as follows:
+	From a givna MSA, get your cluster (say psi-phy or consensus) and do a LOO (leave one out). Now generate 
+	a new set of random sequences [maybe, with the conditition that AA content at each position of the MSA is conserved].
+	Build the MSA, get a cluster using previous algoritm, and do a LOO. 
+
+-When comparing partitions Pn,Pn' of different size n<n', the lattice of  partitions Pn, where the non-common elements
+	have been added as singletons, is a sublattice of the lattice of partitions Pn'. This defines an embedding of
+	the smaller lattice into the larger one. Whence, the proper way of calculating V(Pn,Pn') is adding to Pn all
+	non-commong elements as singletons. (Right now, this is still a conjecture. Needs a formal proof)
+
+	Implement V(Pn,Pn').
+
+-Test a distance metric given by the scalar field: 
+			Sum_k p_k log( p_k )
+	where 
+			p_k=n_k/N*Sum_ij e^{w_ij}/Z
+	with i,j elements of cluster k and w_ij is the weight of edge joining i,j. The 
+	normalization constant Z is
+			Z = Sum_k p_k 
+	and N is the total number of elements in the underlying set.
+
+-Automatically check if any partition is a sound partition? Might take a too long a time for large sets...
+
+-Allow option -f for all cases. This will force to write a more syntetic code reusing the -f option several times
+	elimminating the need for the individual char* variables (partition1, partition2, mxofval,etc.).
+
+-Set up a test bench for partanalyze.
+
+-Implement an efficient algorithm for calculating the Bell number. Current one is of little use.
+
+-Implement a 'quiet' option: no comment lines shall be printed. Not yet available for all cases.
+
+-Allow reading options in any order: in main substitute if(argc>1) by while(argc>1) . Does it do the job?
+

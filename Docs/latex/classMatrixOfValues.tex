@@ -1,0 +1,63 @@
+\section{Matrix\-Of\-Values Class Reference}
+\label{classMatrixOfValues}\index{MatrixOfValues@{MatrixOfValues}}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Matrix\-Of\-Values} (char $\ast$file)\label{classMatrixOfValues_a1}
+
+\item 
+void {\bf read\-Mx\-Values} ()
+\item 
+void {\bf print\-Matrix} ()\label{classMatrixOfValues_a3}
+
+\item 
+double {\bf v} (int k)\label{classMatrixOfValues_a4}
+
+\item 
+double {\bf v} (int i, int j)\label{classMatrixOfValues_a5}
+
+\item 
+double {\bf v} (string a, string b, REDMx\-Val use\-RED)
+\item 
+void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$matrix2)\label{classMatrixOfValues_a7}
+
+\item 
+void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$mx2, {\bf Partition} $\ast$pt)
+\item 
+void {\bf clusteranalysis} ()\label{classMatrixOfValues_a9}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Allows dealing with graph. A matrix of values here, in each line, specifies an edge value for a given pair of elements . It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily) name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element does not exist in the provided partition. 
+
+
+
+\subsection{Member Function Documentation}
+\index{MatrixOfValues@{Matrix\-Of\-Values}!merge@{merge}}
+\index{merge@{merge}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::merge ({\bf Matrix\-Of\-Values} $\ast$ {\em mx2}, {\bf Partition} $\ast$ {\em pt})}\label{classMatrixOfValues_a8}
+
+
+Old version of overlap\-Vspearson-toxmgrace script requires an additional dummy column...to be removed soon... \index{MatrixOfValues@{Matrix\-Of\-Values}!readMxValues@{readMxValues}}
+\index{readMxValues@{readMxValues}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::read\-Mx\-Values ()}\label{classMatrixOfValues_a2}
+
+
+Later on we'll assume \_\-mx represents a square matrix and we don't care about the diagonal values. 
+
+Thus input matrix element (i,j) is located at index k=(\_\-nitems-1-i/2)$\ast$(i+1)+j-\_\-nitems of vector \_\-mx, where i,j=0,1,2,... and \index{MatrixOfValues@{Matrix\-Of\-Values}!v@{v}}
+\index{v@{v}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Matrix\-Of\-Values::v (string {\em a}, string {\em b}, REDMx\-Val {\em use\-RED} = use\-Org\-RED)}\label{classMatrixOfValues_a6}
+
+
+Should be valid only for the artificially generated duplicates. Care should be taken that it doesn't affect other cases
+
+As we are passing a copy, we can change here a,b without changing the orignal variables. If it's an aritifically generated redundant sequences (-RED-\#), use same matrix values as original. Drop substring tail starting at -RED If use\-Org\-RED, matrix value for redundant sequence is that of the original one: IDEAL DUPLICATE. If not, see if use\-Own\-RED: redundant sequences are expected to have their own defined matrix values, e.g., introducing noise on the origingal matrix. if it is use\-Zero\-RED, use default edge value (see below) for the redundant sequences. Otherwise, not yet defined. Meanwhile, like use\-Zero\-RED.
+
+Using a map with doubles as values (pair of strings as keys) does not allow in an easy way to distinguish between a key with a value=0 or a key that simply was not previously defined. as we are dealing here with graphs, i.e, those keys represent edges, and the values represent numerical weight (and given that I haven't found an easy walkaround) for the time being I'll silently ignore and just print the value for the first key. Still I leave the checking above, otherwise we may assign a zero to an otherwise non-zero edge. cout$<$$<$\char`\"{}ERROR in reading matrix \char`\"{}$<$$<$\_\-mxofvf$<$$<$\char`\"{} : Pair not found \char`\"{}$<$$<$a$<$$<$\char`\"{} , \char`\"{}$<$$<$b$<$$<$endl; 
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+partanalyze.cc\end{CompactItemize}

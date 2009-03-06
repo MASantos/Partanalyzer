@@ -1,0 +1,98 @@
+\section{Multiple\-Seq\-Align Class Reference}
+\label{classMultipleSeqAlign}\index{MultipleSeqAlign@{MultipleSeqAlign}}
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+{\bf Multiple\-Seq\-Align} ()\label{classMultipleSeqAlign_a0}
+
+\begin{CompactList}\small\item\em Default constructor. \item\end{CompactList}\item 
+{\bf Multiple\-Seq\-Align} (char $\ast$msaf)
+\begin{CompactList}\small\item\em Expects a MSA file in fasta format. \item\end{CompactList}\item 
+{\bf Multiple\-Seq\-Align} (MSA \&msa)\label{classMultipleSeqAlign_a2}
+
+\begin{CompactList}\small\item\em Expects a MSA object. \item\end{CompactList}\item 
+void {\bf add\-Seq} ({\bf Sequence} $\ast$)\label{classMultipleSeqAlign_a3}
+
+\begin{CompactList}\small\item\em Allows adding a single {\bf Sequence} object to the multiple sequence alignment. \item\end{CompactList}\item 
+void {\bf set\-Name} (string name)\label{classMultipleSeqAlign_a4}
+
+\begin{CompactList}\small\item\em Sets its name. \item\end{CompactList}\item 
+string {\bf get\-Name} ()\label{classMultipleSeqAlign_a5}
+
+\begin{CompactList}\small\item\em Gets its name. \item\end{CompactList}\item 
+void {\bf set\-File\-Name} (char $\ast$fname)
+\item 
+char $\ast$ {\bf get\-File\-Name} ()\label{classMultipleSeqAlign_a7}
+
+\begin{CompactList}\small\item\em Gets its file name. \item\end{CompactList}\item 
+double {\bf Seq\-Id} ({\bf Sequence} Seqa, {\bf Sequence} Seqb)\label{classMultipleSeqAlign_a8}
+
+\begin{CompactList}\small\item\em Obtains the sequence identity between the two provided Sequences. \item\end{CompactList}\item 
+double {\bf Seq\-Id} (int Seqn, int Seqm)\label{classMultipleSeqAlign_a9}
+
+\begin{CompactList}\small\item\em Obtains the sequence identity between the two provided sequences refered by their indexes within the MSA. \item\end{CompactList}\item 
+double {\bf average\-Id} ()\label{classMultipleSeqAlign_a10}
+
+\begin{CompactList}\small\item\em Calculates the overall average sequence identity among all pair of sequences of the MSA. \item\end{CompactList}\item 
+void {\bf print\-Pairwise\-Ids} ()\label{classMultipleSeqAlign_a11}
+
+\begin{CompactList}\small\item\em Prints all pair-wise identities. \item\end{CompactList}\item 
+void {\bf print\-Average\-Pairwise\-Ids} (double thr)
+\begin{CompactList}\small\item\em Prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50. \item\end{CompactList}\item 
+void {\bf print} ()\label{classMultipleSeqAlign_a13}
+
+\begin{CompactList}\small\item\em Print the whole multiple sequence alignment. \item\end{CompactList}\item 
+{\bf Multiple\-Seq\-Align} {\bf gen\-Redundant\-MSA} (int n)\label{classMultipleSeqAlign_a14}
+
+\begin{CompactList}\small\item\em Generates randomly n additional sequences each an exact copy of one of the original sequences. \item\end{CompactList}\item 
+void {\bf Nsamples\-Red\-MSA} (int nsamples, int n)
+\item 
+void {\bf Nsamples\-Red\-MSA} (unsigned int seed, int nsamples, int n)\label{classMultipleSeqAlign_a16}
+
+\begin{CompactList}\small\item\em The same as the previous one, but allows specifying a particular seed. \item\end{CompactList}\end{CompactItemize}
+\subsection*{Friends}
+\begin{CompactItemize}
+\item 
+ostream \& {\bf operator$<$$<$} (ostream \&os, {\bf Multiple\-Seq\-Align} \&msa)\label{classMultipleSeqAlign_n0}
+
+\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Allows to perform operations on multiple sequence aligments. Its main member being of course the MSA object \_\-Seqlist which contains the list of all sequences and their names. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{MultipleSeqAlign@{Multiple\-Seq\-Align}!MultipleSeqAlign@{MultipleSeqAlign}}
+\index{MultipleSeqAlign@{MultipleSeqAlign}!MultipleSeqAlign@{Multiple\-Seq\-Align}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Multiple\-Seq\-Align::Multiple\-Seq\-Align (char $\ast$ {\em msaf})}\label{classMultipleSeqAlign_a1}
+
+
+Expects a MSA file in fasta format. 
+
+The last sequence isn't followed by a line starting with \char`\"{}$>$\char`\"{} 
+
+\subsection{Member Function Documentation}
+\index{MultipleSeqAlign@{Multiple\-Seq\-Align}!NsamplesRedMSA@{NsamplesRedMSA}}
+\index{NsamplesRedMSA@{NsamplesRedMSA}!MultipleSeqAlign@{Multiple\-Seq\-Align}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Multiple\-Seq\-Align::Nsamples\-Red\-MSA (int {\em nsamples}, int {\em n})}\label{classMultipleSeqAlign_a15}
+
+
+Generaes nsamples of MSAs each with redundancy of size n, i.e., each having n redundant sequences. The system clock is used for generating the seed of the random number generator \index{MultipleSeqAlign@{Multiple\-Seq\-Align}!printAveragePairwiseIds@{printAveragePairwiseIds}}
+\index{printAveragePairwiseIds@{printAveragePairwiseIds}!MultipleSeqAlign@{Multiple\-Seq\-Align}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Multiple\-Seq\-Align::print\-Average\-Pairwise\-Ids (double {\em thr} = 50.0)}\label{classMultipleSeqAlign_a12}
+
+
+Prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50. 
+
+Print Average\-ID Std\-Dev. Variance Min Max \#edges$>$50\%Id edges$>$50 total\#edges \index{MultipleSeqAlign@{Multiple\-Seq\-Align}!setFileName@{setFileName}}
+\index{setFileName@{setFileName}!MultipleSeqAlign@{Multiple\-Seq\-Align}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Multiple\-Seq\-Align::set\-File\-Name (char $\ast$ {\em fname})\hspace{0.3cm}{\tt  [inline]}}\label{classMultipleSeqAlign_a6}
+
+
+Sets its file name. This, being just a char$\ast$ can be used as an additional lable. That can be helpful with multiple sequence alignments generated on the fly, during the calculations. 
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+partanalyze.cc\end{CompactItemize}

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+SRC=partanalyze.cc
+EXE=partanalyzer
+DEST=/usr2/software/users/CCOP
+LATESTV=partanalyze-latest
+##############################################
+VERSION="`grep VERSION= $SRC | sed 's@.*\s\([.0-9a-zA-Z]*\)";@\1@g' | sed 's@\.@@g' | awk '{print "A"$1}'`"
+
+cp $EXE $DEST/${EXE}-v$VERSION
+
+cd $DEST
+	rm $LATESTV
+	ln -s ${EXE}-v$VERSION $LATESTV
+cd ..
+ls -lFh $DEST/${EXE}-v$VERSION
+ls -lFh $DEST/$LATESTV

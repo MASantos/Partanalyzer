@@ -1,0 +1,22 @@
+# Some useful hints on setting up data files for testing (At least, there was a time when I used these commands...)
+#Generate all MSA starting with smallest size file
+for if in $( for f in *.fa ; do wc -l $f ;done |sort -g| awk '{print $NF}' ) ; do myclustalw $if ; done
+
+#Running SCIPHY starting with smallest size file
+for if in $( for f in *.fa ; do wc -l $f ;done |sort -g| awk '{printf  "%ssta\n",$NF}' ) ; do mysciphy $if >& out_$if ; done
+
+#Generate subfamily list files
+for if in *.subfam ; do genSubfamilyList $if ; done
+
+#Summarize cluster sizes
+(printf "#Parition size\t#Non-singletons\t#singletons\tCluster\n" ; ( for if in c*lst ; do ps=`cat $if|wc -l` ; ns=`cat $if|grep "^1[[:space:]]"|wc -l` ; nns=$(( $ps - $ns )) ; printf "%d\t%d\t%d\t%s\n" $ps $nns $ns $if ; done | sort -rg ) ) > size-sciphy-dist_tre-subfam_entropy.lst
+
+#Create small test case
+grep "ZNF28_281_359\|Q5H9V1_HUMAN_495-573\|ZNF28_HUMAN_498-576\|Q3MI94_HUMAN_147-225\|ZN578_HUMAN_146-224\|Q6ZP55_HUMAN_245-323" blast_pairwise_id-all_clusters_4-50.copy | awk 'BEGIN{h[1]="ZNF28_281_359";h[2]="Q5H9V1_HUMAN_495-573";h[3]="ZNF28_HUMAN_498-576";h[4]="Q3MI94_HUMAN_147-225";h[5]="ZN578_HUMAN_146-224";h[6]="Q6ZP55_HUMAN_245-323"}{for(i=1;i<7;i++)for(j=1;j<7;j++)if(($1==h[i]&&$2==h[j])||($1==h[j]&&$2==h[i])){print $0;next}}'> test-blast_pairwise_id
+
+# WARNING !!!!    BLAST results DOES NOT CONTAIN ALL PAIRS  !!??     Number of items= 3924  number of hits=389 !!!!
+#Finish Reading matrix: #items=3924 #mxelements=973494    
+msantos@helix:~/DNA-PROTEIN/ZINC-FINGER/BIG-FAMILIES-BETE/clusters-for-bete> grep Q3MI94_HUMAN_147-225 blast_pairwise_id-all_clusters_4-50 | wc -l
+389
+grep "^Query=\|Q3MI94_HUMAN_147-225" blast-all_clusters_4-50_out |less
+

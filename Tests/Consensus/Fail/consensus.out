@@ -1,0 +1,49 @@
+# /home/shoshana/msantos/DNA-PROTEIN/PRG/wodaks/partanalyze/partanalyze Version alpha 0.4.1.7
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Oct 20 2008
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#
+#Mon Oct 20 12:22:48 EDT 2008
+#Analyzing neighborhoods...
+#Partition 1
+#Reading clusters from partition p1
+#Finish Reading partition: 
+#clusters= 3 #items= 5 #singletons= 2 last-cluster-#items= 3 Last-item-read= E
+#Partition 2
+#Reading clusters from partition p2
+#Finish Reading partition: 
+#clusters= 2 #items= 5 #singletons= 0 last-cluster-#items= 4 Last-item-read= E
+#Partition 3
+#Reading clusters from partition p3
+#Finish Reading partition: 
+#clusters= 4 #items= 5 #singletons= 3 last-cluster-#items= 3 Last-item-read= A
+#Partition 4
+#Reading clusters from partition p4
+#Finish Reading partition: 
+#clusters= 3 #items= 5 #singletons= 1 last-cluster-#items= 3 Last-item-read= E
+#Partition 5
+#Reading clusters from partition p5
+#Finish Reading partition: 
+#clusters= 3 #items= 5 #singletons= 1 last-cluster-#items= 3 Last-item-read= D
+#Printing neighborhoods...
+#BeginCover
+#Cover size= 5
+A	2	40	3	A	B	C	Multimode=3
+B	3	60	2	B	C	Multimode=4
+C	3	60	2	B	C	Multimode=4
+D	3	60	1	D	Multimode=3
+E	3	60	1	E	Multimode=4
+#EndCover
+#Printing consensus partition...
+#calculating Bell Number...
+#BeginConsensusPartition
+3	N1		A	B	C
+2	N2		B	C
+1	N3		D
+1	N4		E
+#EndConsensusPartition
+#ERROR: isaPartitionOf : Non mutually disjoint clusters found : 0(A ...) - 1(B ...)
+cla={A,B,C,}
+clb={B,C,}
+cli={B,C,}
+ERROR: consensus Partition is not a sound partition

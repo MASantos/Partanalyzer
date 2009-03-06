@@ -1,0 +1,36 @@
+\section{roulette Class Reference}
+\label{classroulette}\index{roulette@{roulette}}
+Generates random objects.  
+
+
+\subsection*{Public Member Functions}
+\begin{CompactItemize}
+\item 
+void {\bf set\-Seed} (unsigned int seed)\label{classroulette_a1}
+
+\item 
+unsigned int {\bf get\-Seed} ()\label{classroulette_a2}
+
+\item 
+vector$<$ int $>$ {\bf spin\-Wheeli} (int n)\label{classroulette_a3}
+
+\begin{CompactList}\small\item\em n random integers within interval [0,n) \item\end{CompactList}\item 
+vector$<$ int $>$ {\bf spin\-Wheeli} (int n, int L)\label{classroulette_a4}
+
+\begin{CompactList}\small\item\em n random integers within interval [0,L) \item\end{CompactList}\item 
+void {\bf write\-Seed} ()\label{classroulette_a5}
+
+\begin{CompactList}\small\item\em Writes the seed used in the current directory under the file .seed\_\-used. \item\end{CompactList}\item 
+void {\bf write\-Seed} (char $\ast$dir)\label{classroulette_a6}
+
+\begin{CompactList}\small\item\em Writes the seed used in the provided directory under the file .seed\_\-used. \item\end{CompactList}\end{CompactItemize}
+
+
+\subsection{Detailed Description}
+Generates random objects. 
+
+
+
+The documentation for this class was generated from the following file:\begin{CompactItemize}
+\item 
+partanalyze.cc\end{CompactItemize}

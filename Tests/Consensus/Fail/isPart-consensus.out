@@ -1,0 +1,20 @@
+# /home/shoshana/msantos/DNA-PROTEIN/PRG/wodaks/partanalyze/partanalyze Version alpha 0.4.1.7
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Oct 20 2008
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#
+#Mon Oct 20 12:22:48 EDT 2008
+#Analyzing if partitions are sound...
+#Partition 1
+#Reading clusters from partition consensus
+#Finish Reading partition: 
+#clusters= 4 #items= 7 #singletons= 2 last-cluster-#items= 3 Last-item-read= E
+#Mon Oct 20 12:22:48 EDT 2008
+#Finished instantiating all partitions. Starting analysis...
+#ERROR: isaPartitionOf : Non mutually disjoint clusters found : 0(A ...) - 1(B ...)
+cla={A,B,C,}
+clb={B,C,}
+cli={B,C,}
+ERROR:	1	consensus
+#WRONG partitions found:
+1

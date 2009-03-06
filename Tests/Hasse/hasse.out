@@ -1,0 +1,107 @@
+# /home/shoshana/msantos/DNA-PROTEIN/PRG/wodaks/partanalyze/partanalyze Version alpha 0.4.1.7
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Oct 20 2008
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#
+#Mon Oct 20 12:22:48 EDT 2008
+#Partition 1
+#Reading clusters from partition p0
+#Finish Reading partition: 
+#clusters= 4 #items= 4 #singletons= 4 last-cluster-#items= 3 Last-item-read= 4
+#Partition 2
+#Reading clusters from partition p1
+#Finish Reading partition: 
+#clusters= 1 #items= 4 #singletons= 0 last-cluster-#items= 6 Last-item-read= 4
+#Partition 3
+#Reading clusters from partition p21
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 1 last-cluster-#items= 3 Last-item-read= 1
+#Partition 4
+#Reading clusters from partition p22
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 1 last-cluster-#items= 3 Last-item-read= 2
+#Partition 5
+#Reading clusters from partition p23
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 1 last-cluster-#items= 3 Last-item-read= 3
+#Partition 6
+#Reading clusters from partition p24
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 1 last-cluster-#items= 3 Last-item-read= 4
+#Partition 7
+#Reading clusters from partition p25
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 0 last-cluster-#items= 4 Last-item-read= 4
+#Partition 8
+#Reading clusters from partition p26
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 0 last-cluster-#items= 4 Last-item-read= 4
+#Partition 9
+#Reading clusters from partition p27
+#Finish Reading partition: 
+#clusters= 2 #items= 4 #singletons= 0 last-cluster-#items= 4 Last-item-read= 3
+#Partition 10
+#Reading clusters from partition p31
+#Finish Reading partition: 
+#clusters= 3 #items= 4 #singletons= 2 last-cluster-#items= 3 Last-item-read= 2
+#Partition 11
+#Reading clusters from partition p32
+#Finish Reading partition: 
+#clusters= 3 #items= 4 #singletons= 2 last-cluster-#items= 3 Last-item-read= 3
+#Partition 12
+#Reading clusters from partition p33
+#Finish Reading partition: 
+#clusters= 3 #items= 4 #singletons= 2 last-cluster-#items= 3 Last-item-read= 3
+#Partition 13
+#Reading clusters from partition p34
+#Finish Reading partition: 
+#clusters= 3 #items= 4 #singletons= 2 last-cluster-#items= 3 Last-item-read= 3
+#Partition 14
+#Reading clusters from partition p35
+#Finish Reading partition: 
+#clusters= 3 #items= 4 #singletons= 2 last-cluster-#items= 3 Last-item-read= 4
+#Partition 15
+#Reading clusters from partition p36
+#Finish Reading partition: 
+#clusters= 3 #items= 4 #singletons= 2 last-cluster-#items= 3 Last-item-read= 4
+#BeginHasseNodes (hierarchy)
+1	p1
+2	p21	p22	p23	p24	p25	p26	p27
+3	p31	p32	p33	p34	p35	p36
+4	p0
+#EndHasseNodes
+#BeginHasseDiagram
+#Partition1  >  Partition2	edge	Part1-#clusters	Part2-#nclusters
+p1	p21	1	1	2
+p1	p22	1	1	2
+p1	p23	1	1	2
+p1	p24	1	1	2
+p1	p25	1	1	2
+p1	p26	1	1	2
+p1	p27	1	1	2
+p21	p31	1	2	3
+p21	p32	1	2	3
+p21	p36	1	2	3
+p22	p31	1	2	3
+p22	p33	1	2	3
+p22	p35	1	2	3
+p23	p32	1	2	3
+p23	p33	1	2	3
+p23	p34	1	2	3
+p24	p34	1	2	3
+p24	p35	1	2	3
+p24	p36	1	2	3
+p25	p31	1	2	3
+p25	p34	1	2	3
+p26	p32	1	2	3
+p26	p35	1	2	3
+p27	p33	1	2	3
+p27	p36	1	2	3
+p31	p0	1	3	4
+p32	p0	1	3	4
+p33	p0	1	3	4
+p34	p0	1	3	4
+p35	p0	1	3	4
+p36	p0	1	3	4
+#EndHasseDiagram
+#Mon Oct 20 12:22:49 EDT 2008
