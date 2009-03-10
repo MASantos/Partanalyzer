@@ -20,10 +20,12 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
-#include "partanalyzer.h"
 
-///Current version
-const char* VERSION="alpha 0.4.4.K";
+#ifndef _PARTANALYZER_MAIN
+#define  _PARTANALYZER_MAIN 1
+#endif
+
+#include "partanalyzer.h"
 
 ///Current name (full path) of Partanalyzer
 char* program;
@@ -89,22 +91,22 @@ int main(int argc, char* argv[]) {
 			printHelp();
 			exit(0);
 		}
-		if(strcmp(*argv,"-version")==0){
+		if(strcmp(*argv,"--version")==0){
 			printCopyright();
 			exit(0);
 		}
-		if(strcmp(*argv,"-V")==0){
+		if(strcmp(*argv,"--verbose")==0){
 			argc--;
 			argv++;
 			VERBOSE=true;
 			cout<<"#VERBOSITY on"<<endl;
 		}
-		if(strcmp(*argv,"-q")==0){
+		if(strcmp(*argv,"-q")==0||strcmp(*argv,"--quiet")==0){
 			argc--;
 			argv++;
 			QUIET=true;
 		}
-		if(strcmp(*argv,"-fmt")==0||strcmp(*argv,"--format")==0){
+		if(strcmp(*argv,"-t")==0||strcmp(*argv,"--format")==0||strcmp(*argv,"--fmt")==0){
 			argc--;
 			argv++;
 			if(argc<2)printCommandLineError();
@@ -141,14 +143,14 @@ int main(int argc, char* argv[]) {
 			argc--;
 			argv++;
 		}
-		if(strcmp(*argv,"-print")==0){
+		if(strcmp(*argv,"--print-matrix")==0||strcmp(*argv,"--print-graph")==0){
 			mxofval=argv[1];
         		MatrixOfValues MX(mxofval);
 			MX.printMatrix();
 			exit(0);
 		}
 		///Calculate intra-cluster and inter-cluster distribution of weights
-		else if(strcmp(*argv,"-d")==0){
+		else if(strcmp(*argv,"-d")==0||strcmp(*argv,"--intra-inter-edge-dist")==0){
 			analysis=prgCDIS;
 			if(argc<3)printCommandLineError();
 			mxofval=argv[1];
@@ -156,7 +158,7 @@ int main(int argc, char* argv[]) {
         		if(argc>3) cluster1_offset=atoi(argv[4]);
 		}
 		///Check consistency of partition according to weights in maxofval
-		else if(strcmp(*argv,"-c")==0){
+		else if(strcmp(*argv,"-c")==0||strcmp(*argv,"--check-consistency-of-partition")==0||strcmp(*argv,"--ccop")==0){
 			argc--;argv++;
 			analysis=prgCCOP;
 			if(argc<2)printCommandLineError();
@@ -176,14 +178,16 @@ int main(int argc, char* argv[]) {
         		if(argc>1) cluster1_offset=atoi(argv[1]);
 			
 		}
-		else if (strcmp(*argv,"-v")==0||strcmp(*argv,"-e")==0||strcmp(*argv,"-p")==0||strcmp(*argv,"-i")==0){
-			if(strcmp(*argv,"-v")==0)///analysis="vipp";
+		else if (strcmp(*argv,"-v")==0||strcmp(*argv,"-e")==0||strcmp(*argv,"-p")==0||strcmp(*argv,"-i")==0\
+			||strcmp(*argv,"--vi-distance")==0||strcmp(*argv,"--edit-distance")==0\
+			||strcmp(*argv,"--purity-scores")==0||strcmp(*argv,"--intersection")==0){
+			if(strcmp(*argv,"-v")==0||strcmp(*argv,"--vi-distance")==0)///analysis="vipp";
 				analysis=prgVIPP;
-			else if(strcmp(*argv,"-e")==0)
+			else if(strcmp(*argv,"-e")==0||strcmp(*argv,"--edit-distance")==0)
 				analysis=prgEDSC;
-			else if(strcmp(*argv,"-p")==0)
+			else if(strcmp(*argv,"-p")==0||strcmp(*argv,"--purity-scores")==0)
 				analysis=prgPSPP;
-			else if(strcmp(*argv,"-i")==0)
+			else if(strcmp(*argv,"-i")==0||strcmp(*argv,"--intersection")==0)
 				analysis=prgINTE;
 			else {
 				cout<<"ERROR: invalid binary option"<<endl;
@@ -196,7 +200,7 @@ int main(int argc, char* argv[]) {
 			if(argc>3) cluster1_offset=atoi(argv[3]);
 			if(argc>4) cluster2_offset=atoi(argv[4]);
 		}
-		else if (strcmp(*argv,"-ipot")==0||strcmp(*argv,"-iPot")==0){
+		else if (strcmp(*argv,"-n")==0||strcmp(*argv,"--ipot")==0||strcmp(*argv,"--iPot")==0){
 			analysis=prgIPOT;
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
@@ -235,16 +239,17 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-vstat")==0||strcmp(*argv,"-estat")==0||strcmp(*argv,"-bstat")==0||strcmp(*argv,"-tstat")==0||strcmp(*argv,"-rstat")==0||strcmp(*argv,"-jstat")==0){
-			if(strcmp(*argv,"-vstat")==0)///analysis="vipp";
+		else if (strcmp(*argv,"-V")==0||strcmp(*argv,"-E")==0||strcmp(*argv,"-B")==0||strcmp(*argv,"-T")==0||strcmp(*argv,"-R")==0||strcmp(*argv,"-J")==0\
+			||strcmp(*argv,"--vstat")==0||strcmp(*argv,"--estat")==0||strcmp(*argv,"--bstat")==0||strcmp(*argv,"--tstat")==0||strcmp(*argv,"--rstat")==0||strcmp(*argv,"--jstat")==0){
+			if(strcmp(*argv,"--vstat")==0||strcmp(*argv,"-V")==0)///analysis="vipp";
 				analysis=prgVIST;
-			else if(strcmp(*argv,"-bstat")==0)
+			else if(strcmp(*argv,"--bstat")==0||strcmp(*argv,"-B")==0)
 				analysis=prgBDST;
-			else if(strcmp(*argv,"-tstat")==0)
+			else if(strcmp(*argv,"--tstat")==0||strcmp(*argv,"-T")==0)
 				analysis=prgTDST;
-			else if(strcmp(*argv,"-rstat")==0)
+			else if(strcmp(*argv,"--rstat")==0||strcmp(*argv,"-R")==0)
 				analysis=prgRDST;
-			else if(strcmp(*argv,"-jstat")==0){
+			else if(strcmp(*argv,"--jstat")==0||strcmp(*argv,"-J")==0){
 				analysis=prgJDST;
 				extensivity=1.0;//SET 1 AS DEFAULT FOR TARANTOLA-JEFFREY QNORM DISTANCE
 			}
@@ -282,7 +287,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-pstat")==0){
+		else if (strcmp(*argv,"-P")==0||strcmp(*argv,"--pstat")==0){
 			analysis=prgPSST;
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
@@ -308,22 +313,22 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-splitstat")==0){
+		else if (strcmp(*argv,"-S")==0||strcmp(*argv,"--split-merge-analysis")==0||strcmp(*argv,"--splitstat")==0){
 			analysis=prgSPST;
-			if(argc<3)printCommandLineError("-splitstat");
+			if(argc<3)printCommandLineError("--splitstat");
 			argc--;argv++;
 			if(strcmp(*argv,"-sim")==0){
-				if(argc<3)printCommandLineError("-splitstat -sim");
+				if(argc<3)printCommandLineError("--splitstat -sim");
 				argc--;argv++;
 				analysis=prgSPSS;
 			}
 			if(strcmp(*argv,"-over")==0||strcmp(*argv,"--overlap")==0||strcmp(*argv,"--fraction")==0){
-				if(argc<3)printCommandLineError("-splitstat -over");
+				if(argc<3)printCommandLineError("--splitstat -over");
 				argc--;argv++;
 				analysis=prgSPSO;
 			}
 			if(strcmp(*argv,"-split")==0){
-				if(argc<3)printCommandLineError("-splitstat -sim");
+				if(argc<3)printCommandLineError("--splitstat -sim");
 				argc--;argv++;
 				analysis=prgSPST;
 			}
@@ -344,7 +349,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-adjstat")==0){
+		else if (strcmp(*argv,"-A")==0||strcmp(*argv,"-adjstat")==0){
 			analysis=prgADST;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
@@ -365,7 +370,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-clstat")==0){
+		else if (strcmp(*argv,"-C")==0||strcmp(*argv,"-clstat")==0){
 			analysis=prgCLST;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
@@ -398,7 +403,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
+		else if (strcmp(*argv,"-I")==0||strcmp(*argv,"-info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
 			analysis=prgIPAR;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
@@ -419,7 +424,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-hasse")==0){
+		else if (strcmp(*argv,"-H")==0||strcmp(*argv,"-hasse")==0){
 			analysis=prgHASS;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
@@ -458,26 +463,26 @@ int main(int argc, char* argv[]) {
 				}
 		}
 ///(For converting between different partition formats)
-		else if (strcmp(*argv,"-toMCL")==0||strcmp(*argv,"-toFREE")==0||strcmp(*argv,"-MCLtoPART")==0 ||\
-			 strcmp(*argv,"-toPART")==0||strcmp(*argv,"-FREEtoPART")==0){
-			if(strcmp(*argv,"-toMCL")==0){
+		else if (strcmp(*argv,"--toMCL")==0||strcmp(*argv,"--toFREE")==0||strcmp(*argv,"--MCLtoPART")==0 ||\
+			 strcmp(*argv,"--toPART")==0||strcmp(*argv,"--FREEtoPART")==0){
+			if(strcmp(*argv,"--toMCL")==0){
 				analysis=prg2MCL;
 				poformat=partFmtMCL;
 			}
-			else if(strcmp(*argv,"-toFREE")==0){
+			else if(strcmp(*argv,"--toFREE")==0){
 				analysis=prg2FRE;
 				poformat=partFmtFREE;
 			}
-			else if(strcmp(*argv,"-toPART")==0){
+			else if(strcmp(*argv,"--toPART")==0){
 				analysis=prg2FRE;
 				poformat=partFmtPART;
 			}
-			else if(strcmp(*argv,"-MCLtoPART")==0){
+			else if(strcmp(*argv,"--MCLtoPART")==0){
 				analysis=prgM2PA;
 				piformat=partFmtMCL;
 				poformat=partFmtPART;
 			}
-			else if(strcmp(*argv,"-FREEtoPART")==0){
+			else if(strcmp(*argv,"--FREEtoPART")==0){
 				analysis=prgM2PA;
 				piformat=partFmtFREE;
 				poformat=partFmtPART;
@@ -498,17 +503,17 @@ int main(int argc, char* argv[]) {
 			partitionf1=argv[0];
 		}
 ///(For analyzing Multiple Sequence Alignments)
-                else if (strcmp(*argv,"-pmsa")==0){
+                else if (strcmp(*argv,"--print-msa")==0){
                         analysis=prgPMSA;
                         if(argc<2)printCommandLineError();
                         msaf=argv[1];
                 }
-                else if (strcmp(*argv,"-msa")==0){
+                else if (strcmp(*argv,"--msa-seqid-stat")==0){
                         analysis=prgMSPI;
                         if(argc<2)printCommandLineError();
                         msaf=argv[1];
                 }
-                else if (strcmp(*argv,"-msa_avgid")==0){
+                else if (strcmp(*argv,"--msa-seqid-avg")==0){
                         analysis=prgMAPI;
                         if(argc<2)printCommandLineError();
 			argc--;argv++;
@@ -548,20 +553,24 @@ int main(int argc, char* argv[]) {
 			argc--;argv++;
 		}
 ///(For dealing with -interaction- matrices) 
-		else if (strcmp(*argv,"-m")==0){
+		else if (strcmp(*argv,"--edge-dist")==0){
+			analysis=prgEDMX;
+			if(argc<2)printCommandLineError();
+			mxofval=argv[1];
+			if(argc>2){
+				analysis=prgEDMP;
+				partitionf1=argv[2];
+			}
+			if(argc>3)cluster1_offset=atoi(argv[4]);
+		}
+		else if (strcmp(*argv,"-m")==0||strcmp(*argv,"--merge-graphs")==0){
 			///analysis="merge matrices";
 			analysis=prgMGMX;
 			if(argc<3)printCommandLineError();
 			mxofval=argv[1];
 			mxofvalb=argv[2];
 		}
-		else if (strcmp(*argv,"-ce")==0 || strcmp(*argv,"--cull-edge")==0 || strcmp(*argv,"--cull-edges")==0){
-			analysis=prgCEMX;
-			if(argc<3)printCommandLineError();
-			mxofval=argv[1];
-			mxofvalb=argv[2];
-		}
-		else if (strcmp(*argv,"-color")==0){
+		else if (strcmp(*argv,"-r")==0||strcmp(*argv,"--merge-graphs-color")==0){
 			///analysis="merge matrices with color";
 			analysis=prgMMXC;
 			//piformat=partFmtPART; //Enforcing partanalyzer's own input format. We don't want to deal with graphs in other formats yet.
@@ -570,6 +579,12 @@ int main(int argc, char* argv[]) {
 			mxofvalb=argv[2];
 			partitionf1=argv[3];
 			if(argc>4) cluster1_offset=atoi(argv[4]);
+		}
+		else if (strcmp(*argv,"-l")==0 || strcmp(*argv,"--cull-edges")==0){
+			analysis=prgCEMX;
+			if(argc<3)printCommandLineError();
+			mxofval=argv[1];
+			mxofvalb=argv[2];
 		}
 		else {
 			printCommandLineError();
@@ -860,6 +875,23 @@ int main(int argc, char* argv[]) {
 			mxa.merge(&mxb,&partition);
 			*/
 			//MX.printMatrix();
+			break;
+			}
+		case prgEDMX:
+		case prgEDMP:{
+			MatrixOfValues mxa(mxofval);
+			switch(analysis){
+				case prgEDMP:{
+					if(VERBOSE)cout<<"#With partition"<<endl;
+					Partition partition(partitionf1,piformat,cluster1_offset);
+					mxa.edgeDistribution(&partition);
+					break;
+					}
+				case prgEDMX:
+					if(VERBOSE)cout<<"#WithOUT partition"<<endl;
+					mxa.edgeDistribution();
+					break;
+			}
 			break;
 			}
 		default:

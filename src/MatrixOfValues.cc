@@ -25,6 +25,75 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "MatrixOfValues.h"
 
+void MatrixOfValues::edgeDistribution(Partition* part){
+	sset nodes;
+	cout<<"#BeginEdgeDistribution"<<endl;
+	cout<<"#Node\t\tAverage\t\tStd.Dev\t\tStd.Err.\tSkew.\t\tMin.\t\tMax.\t\tSampleSize";
+	if(!(part==NULL))cout<<"\tClusterSize\tCluster"<<endl;
+	else cout<<endl;
+	int n=nodes.size();
+	int clsize=-1;
+	string clname="";
+	string tmps;
+	for(smap::iterator p=_pairs.begin();p!=_pairs.end();p++){
+		nodes.insert(p->first);
+		if(n<nodes.size()){
+			n=nodes.size();
+			if(!(part==NULL)){
+				tmps=p->first;
+				clsize=part->getClusterSize(p->first);
+				clname=part->getClusterName(tmps);
+			}
+			edgeDistribution(p->first,clsize,clname);
+		}
+		nodes.insert(p->second);
+		if(n<nodes.size()){
+			n=nodes.size();
+			if(!(part==NULL)){
+				tmps=p->second;
+				clsize=part->getClusterSize(p->second);
+				clname=part->getClusterName(tmps);
+			}
+			edgeDistribution(p->second,clsize,clname);
+		}
+	}
+	cout<<"#EndEdgeDistribution"<<endl;
+}
+
+void MatrixOfValues::edgeDistribution(const string& sa, int clusterSize, string clName){
+	double min=9999999999.0;
+	double max=-min;
+	double avg=0.0;
+	double std=0.0;
+	double skewness=0.0;
+	int samplesize=0;
+	//edge v;
+	for(graph::iterator g=_graph.begin();g!=_graph.end();g++){
+		const edge& v=g->second;
+		const string& sb1=(g->first).first;
+		const string& sb2=(g->first).second;
+		if(sa.compare(sb1)==0||sa.compare(sb2)==0){
+			samplesize++;
+			avg+=v;
+			std+=pow(v,2);
+			skewness+=pow(v,3);
+			min=v<min?v:min;
+			max=v>max?v:max;
+		}
+	}
+	avg/=(1.0*samplesize);
+	std/=(1.0*samplesize);
+	skewness=skewness/(1.0*samplesize);
+	skewness=skewness-3*avg*std+2*pow(avg,3);
+	std-=pow(avg,2);
+	std=sqrt(std);
+	skewness/=pow(std,3);
+	printf("%s\t%4.2e\t%4.2e\t%4.2e\t%4.2e\t%4.2e\t%4.2e\t%d",sa.c_str(),avg,std,std/sqrt(1.0*samplesize),skewness,min,max,samplesize);
+	if(clusterSize>0)printf("\t%d\t%s\n",clusterSize,clName.c_str());
+	else printf("\n");
+	//cout<<sa<<"\t"<<avg<<"\t"<<std<<"\t"<<std/sqrt(1.0*samplesize)<<"\t"<<skewness<<"\t"<<min<<"\t"<<max<<"\t"<<samplesize<<endl;
+}
+
 strpair MatrixOfValues::cullEdge(string a, string b){
 	if(_graph.find(strpair (a,b))!=_graph.end() ) return strpair (a,b);
 	if(_graph.find(strpair (b,a))!=_graph.end() ) return strpair (b,a);

@@ -20,11 +20,11 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
-#include "partanalyzer.h"
-#include "partanalyzer_includes.h"
-
 #ifndef _HELPFUNCTIONS_H
 #define _HELPFUNCTIONS_H 1
+
+#include "partanalyzer.h"
+#include "partanalyzer_includes.h"
 
 void printCopyright();
 

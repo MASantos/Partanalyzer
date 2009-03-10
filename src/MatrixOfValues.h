@@ -81,6 +81,9 @@ public:
 	bool existEdge(string a, string b);
 	///Gets total sum of edge weights
 	edge W(){ return _Tweight;}
+	///For each node, print distribution of edge weights. Add information of cluster size and name
+	void edgeDistribution(const string& sa, int clusterSize=-1, string clusterName="NAN" );
+	void edgeDistribution(Partition* pt=NULL);
 };
 
 #endif //END _CLASS_MATRIXOFVALUES_H

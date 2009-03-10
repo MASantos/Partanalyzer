@@ -46,8 +46,14 @@ g++ -o partanalyzer partanalyzer.cc
 #include "MatrixOfValues.h"
 #include "Ccop.h"
 
-///Current version
-extern const char* VERSION;
+
+#ifdef _PARTANALYZER_MAIN
+const char* VERSION="alpha 0.5";
+
+bool 	VERBOSE=false;
+
+bool    QUIET=false;
+#endif
 
 //void readListInputFiles(ifstream is, vector<Charr> infilenames){
 inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){

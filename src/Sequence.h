@@ -20,11 +20,11 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
-#include "partanalyzer_includes.h"
-#include "partanalyzer_definitions.h"
-
 #ifndef _CLASS_SEQUENCE_H
 #define _CLASS_SEQUENCE_H 1
+
+#include "partanalyzer_includes.h"
+#include "partanalyzer_definitions.h"
 
 /**Allows dealing with sequences (protein sequences, DNA sequences,etc.).
  * */

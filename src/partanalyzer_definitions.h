@@ -29,14 +29,17 @@ Compile Options:
 g++ -o partanalyzer partanalyzer.cc
 */
 
-
-
 #ifndef _PARTANALYZER_DEFINITIONS_HEADER
 #define _PARTANALYZER_DEFINITIONS_HEADER 1
 
 #include "partanalyzer_includes.h"
 
-
+///Current version
+extern const char* VERSION;
+///If true program outputs additional information regarding its calculations. This can be already quite a lot.
+extern bool 	VERBOSE;
+///If true, program does not print any comment lines (those starting with #). No warnings will be printed either.
+extern bool    QUIET;
 ///Current name (full path) of partanalyzer
 extern char* program;
 ///Original Program basename
@@ -73,10 +76,7 @@ inline string ToString(const T& x){
 #define EXTENSIVITY_DEFAULT_RENYI 2.0
 #define EXTENSIVITY_MAX 100.0
 #define _PGM_P2_GRAYSCALE_ 256
-///If true program outputs additional information regarding its calculations. This can be already quite a lot.
-static bool 	VERBOSE=false;
-///If true, program does not print any comment lines (those starting with #). No warnings will be printed either.
-static bool    QUIET=false;
+
 ///Available types of pmetric functions (functions inducing a metric on partitions)
 enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;
 ///Available types of pmetric header comments (#BeginViDistances or #EndEditDistances)
@@ -84,7 +84,7 @@ enum flagheader {BEGIN,END};
 ///Enummerates the possible ways of generating duplicates for a given MSA
 enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
 ///Enummerates possible main program command lines options
-enum prganalysis { prgCCOP=1,prgCDIS,prgVIPP,prgVIST,prgVISR,prgEDSC,prgEDST,prgEDSR,prgBDST,prgTDST,prgRDST,prgBDSR,prgTDSR,prgRDSR,prgINTE,prgMGMX,prgMMXC, prgCLST,prgPMSA,prgMSPI,prgMAPI,prgMRED,prgPSPP,prgPSST,prgPSSR,prgHASS,prgIPAR,prg2MCL,prg2FRE,prgM2PA,prgIPOT,prgADST,prgSPST,prgSPSS,prgSPSO,prgJDST,prgJDSR,prgCEMX} ;
+enum prganalysis { prgCCOP=1,prgCDIS,prgVIPP,prgVIST,prgVISR,prgEDSC,prgEDST,prgEDSR,prgBDST,prgTDST,prgRDST,prgBDSR,prgTDSR,prgRDSR,prgINTE,prgMGMX,prgMMXC, prgCLST,prgPMSA,prgMSPI,prgMAPI,prgMRED,prgPSPP,prgPSST,prgPSSR,prgHASS,prgIPAR,prg2MCL,prg2FRE,prgM2PA,prgIPOT,prgADST,prgSPST,prgSPSS,prgSPSO,prgJDST,prgJDSR,prgCEMX,prgEDMX,prgEDMP} ;
 ///Enummerates the possible input format for a partition file
 enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;
 ///Available types of Splitstat methods

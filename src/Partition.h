@@ -143,6 +143,8 @@ public:
 	vector<double> purityScore(Partition* part2);
 	void missing(svect* items_found);
 	void missing();
+	///Given an element, get the size of the cluster that contains it.
+	int getClusterSize(const string& item);
 	///Given an element, get the name of the cluster that contains it.
 	string getClusterName(string& item);
 	///Given an index from clusters, get the name of that cluster

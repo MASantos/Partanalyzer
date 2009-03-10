@@ -217,6 +217,22 @@ double Partition::JQnorm(double q=1.0){
 	else
 		return exp(TS(q));
 }
+
+int Partition::getClusterSize(const string& item){
+	if(_items_offset!=2){
+		cout<<"Error: partitions were defined with no name label : _items_offset="<<_items_offset<<endl;
+		exit(1);
+	}
+	int clsize;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
+		clsize=atoi( (*(cl->begin()+0)).c_str() );
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++)
+			if(strcmp(item.c_str(),it->c_str())==0)return clsize;
+	}
+	clsize=-1;
+	return clsize;
+}
+
 string Partition::getClusterName(string& item){
 	if(_items_offset!=2){
 		cout<<"Error: partitions were defined with no name label : _items_offset="<<_items_offset<<endl;
