@@ -47,7 +47,7 @@ g++ -o partanalyzer partanalyzer.cc
 #include "Ccop.h"
 
 ///Current version
-static const char* VERSION="alpha 0.4.4.K";
+extern const char* VERSION;
 
 //void readListInputFiles(ifstream is, vector<Charr> infilenames){
 inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){

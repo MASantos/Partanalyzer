@@ -22,6 +22,12 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "partanalyzer.h"
 
+///Current version
+const char* VERSION="alpha 0.4.4.K";
+
+///Current name (full path) of Partanalyzer
+char* program;
+
 int main(int argc, char* argv[]) {
 	program=argv[0];
         if(argc<2) exitWithHelp();

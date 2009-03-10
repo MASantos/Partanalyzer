@@ -37,9 +37,9 @@ g++ -o partanalyzer partanalyzer.cc
 #include "partanalyzer_includes.h"
 
 
-///Program name (full path)
-static char* program;
-///Program basename
+///Current name (full path) of partanalyzer
+extern char* program;
+///Original Program basename
 #define _programb_ "partanalyzer"
 
 ///Type definition of edge
