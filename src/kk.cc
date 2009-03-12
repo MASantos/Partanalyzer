@@ -12,6 +12,25 @@ string getSubstr(string a){
 	a=a.substr(0,a.find("-RED"));
 	return a;
 }
+
+/*
+template<class T> class kk {
+public:
+	map<int, T> k;
+	T& operator[] (int i){ return k[i];}
+	class iterator;
+	iterator& begin(){ return k.begin() ;}
+	iterator& end(){ return k.end() ;}
+};
+
+template<class T> class kk::iterator : public std::iterator<std::random_access_iterator_tag,kk>{
+	map<int, T>& mymap;
+public:
+	iterator():mymap(){}
+	iterator(const map<int, T>& mup):mymap(mup){}
+	
+};
+*/
 int main(){
 	/*
 	map<string , double > mymap;
@@ -99,6 +118,8 @@ int main(){
 		//else
 		//	cout<<st<<" doesn't start with a digit"<<endl;
 	*/
+	/*
+	*/
 	vector< int > v;
 	cout<<"Declaring vector: v={";
 	for(int i=0;i<10;i++){
@@ -125,6 +146,10 @@ int main(){
 	string stra="I am 21 characters long.";
 	string strb="Four";
 	string strc="I am 84 characters long.I am 84 characters long.I am 84 characters long.I am 84 characters long.";
+	map<pair<string,string>,double> mymap;
+	mymap[pair<string,string> (stra,stra)]=1.0;
+	mymap[pair<string,string> (stra,strb)]=2.0;
+	mymap[pair<string,string> (strc,strb)]=3.0;
 	cout<<"stra="<<stra<<endl;
 	cout<<"strb="<<strb<<endl;
 	cout<<"strc="<<strc<<endl;
@@ -135,5 +160,12 @@ int main(){
 	cout<<"sizeof(long int)="<<sizeof(long int)<<endl;
 	cout<<"sizeof(double)="<<sizeof(double)<<endl;
 	cout<<"sizeof(*str)="<<sizeof(&stra)<<endl;
+	cout<<"sizeof(mymap)="<<sizeof(mymap)<<endl;
+	/*
+	cout<<"Instantiating template class kk"<<endl;
+	kk<int> mmap;
+	mmap[0]=1;
+	cout<<"First element : mmap[0]= "<<mmap[0]<<endl;
+	*/
 	return 0;	
 }
