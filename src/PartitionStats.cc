@@ -255,6 +255,113 @@ void PartitionStats::get_Ad(){
 	cout<<"#EndConsensusAdjacencyMatrix"<<endl;
 }
 
+void  PartitionStats::get_FuzzyConsensusPartition(){
+	if(VERBOSE) cout<<"#Setting up FuzzyConsensusPartition"<<endl;
+	if(_Ad.empty()) setConsensus_Ad();
+	vector< svect > fuzzyclusters; 
+	for(graph::iterator i=_Ad.begin();i!=_Ad.end();i++){
+		string a = (i->first).first ;
+		string b = (i->first).second ;
+		strpair sp (a,b);
+		if(_Ad[sp]>0 && a.compare(b)!=0){
+			if(VERBOSE) cout<<"#Element "<<a<<" is in relation with "<<b<<endl;
+			if(fuzzyclusters.size()==0){
+				svect tes;
+				tes.push_back(a);
+				tes.push_back(b);
+				fuzzyclusters.push_back(tes);
+				if(VERBOSE) cout<<"#\tCreated initial fuzzy cluster"<<endl;
+			}
+			else {
+				bool found=false;
+				for(vector<svect >::iterator cl=fuzzyclusters.begin();cl!=fuzzyclusters.end();cl++){
+					if( (find(cl->begin(),cl->end(),a)!=cl->end()) && (find(cl->begin(),cl->end(),b)==cl->end()) ){
+						cl->push_back(b);
+						found=true;
+						if(VERBOSE) cout<<"#\tAdded to previous cluster of "<<a<<endl;
+					}
+					else if( (find(cl->begin(),cl->end(),b)!=cl->end()) && (find(cl->begin(),cl->end(),a)==cl->end()) ){
+						cl->push_back(a);
+						found=true;
+						if(VERBOSE) cout<<"#\tAdded to previous cluster of "<<b<<endl;
+					}
+					else if( (find(cl->begin(),cl->end(),a)==cl->end()) && (find(cl->begin(),cl->end(),b)==cl->end()) ){
+						found=true;
+						if(VERBOSE) cout<<"#\tAlready present "<<b<<endl;
+					}
+					if(found)break;
+				}
+				if(!found){
+					svect tes;
+					tes.push_back(a);
+					tes.push_back(b);
+					fuzzyclusters.push_back(tes);
+					if(VERBOSE) cout<<"#\tCreated a new fuzzy cluster"<<endl;
+				}
+			}
+		}
+	}
+	sort(fuzzyclusters.begin(),fuzzyclusters.end(),containerLargerThan);
+	for(vector<svect >::iterator cl=fuzzyclusters.begin();cl!=fuzzyclusters.end();cl++){
+		//sort(cl->begin(),cl->end(),greaterThan);
+		sort(cl->begin(),cl->end());
+	}
+	unique(fuzzyclusters.begin(),fuzzyclusters.end());
+	cout<<"#BeginFuzzyConsensusPartition"<<endl;
+	int n=0;
+	for(int cl=0;cl<fuzzyclusters.size();cl++){
+		cout<<fuzzyclusters[cl].size()<<"\tN"<<cl;
+		for(svect::iterator sit=fuzzyclusters[cl].begin();sit!=fuzzyclusters[cl].end();sit++){
+			cout<<"\t"<<*sit;
+			n++;
+		}
+		cout<<endl;
+	}
+	cout<<"#EndFuzzyConsensusPartition"<<endl;
+	//DETERMINE FUZZY CHARACTERISTIC FUNCTION
+	vector< map<string, double > > characteristicFunction;
+	characteristicFunction.resize(fuzzyclusters.size());
+	//characteristicFunction.assign(fuzzyclusters.size(),sizeOf(map<string, double >));
+	for(graph::iterator i=_Ad.begin();i!=_Ad.end();i++){
+		string a = (i->first).first ;
+		string b = (i->first).second ;
+		svect tmpv;
+		tmpv.assign(2,a);
+		tmpv[1]=b;
+		double mx=-1.0;
+		for(svect::iterator ra=tmpv.begin();ra!=tmpv.end();ra++){
+			for(int cl=0;cl<fuzzyclusters.size();cl++){
+				for(svect::iterator sit=fuzzyclusters[cl].begin();sit!=fuzzyclusters[cl].end();sit++){
+					if(ra->compare(*sit)==0)continue;
+					strpair sp (*ra,*sit);
+					if(_Ad[sp]>mx)mx=_Ad[sp];
+					if(VERBOSE)cout<<"#\tmembership-a("<<*sit<<") of "<<*ra<<" into "<<cl<<" = "<<mx<<endl;
+					sp=pair<string,string> (*sit,*ra);
+					if(_Ad[sp]>mx)mx=_Ad[sp];
+					if(VERBOSE)cout<<"#\tmembership-b("<<*sit<<") of "<<*ra<<" into "<<cl<<" = "<<mx<<endl;
+				}
+				if(VERBOSE)cout<<"#MEMBERSHIP of "<<*ra<<" into "<<cl<<" = "<<mx<<endl;
+				characteristicFunction[cl].insert(pair<string,double> (*ra,mx) );
+			}
+		}
+	}
+	cout<<"#BeginFuzzyClusterMembership"<<endl;
+	cout<<"#Clusters";
+	for(int cl=0;cl<fuzzyclusters.size();cl++){
+		cout<<"\tN"<<cl;
+	}
+	cout<<endl;
+	for(map<string, double>::iterator el=characteristicFunction[0].begin();el!=characteristicFunction[0].end();el++){
+		cout<<el->first;
+		for(int cl=0;cl<fuzzyclusters.size();cl++){
+			cout<<"\t"<<characteristicFunction[cl][el->first];
+		}
+		cout<<endl;
+	}	
+	cout<<"#EndFuzzyClusterMembership"<<endl;
+
+}
+
 void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false){
 	if(QUIET)return;
 	switch(hd){

@@ -20,12 +20,15 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
-#include "partanalyzer_includes.h"
-#include "partanalyzer_definitions.h"
-#include "partanalyzer_basic_operations.h"
+
+#include <algorithm>
 
 #ifndef _CLASS_PARTITIONSTATS_H
 #define _CLASS_PARTITIONSTATS_H 1
+
+#include "partanalyzer_includes.h"
+#include "partanalyzer_definitions.h"
+#include "partanalyzer_basic_operations.h"
 
 #include "Partition.h"
 #include "sNeighborhood.h"
@@ -93,6 +96,8 @@ public:
 	void pgm_Ad(){cout<<"#BeginConsensusAdjacencyMatrixPGMImage\n"<<_Ad<<"#EndConsensusAdjacencyMatrixPGMImage"<<endl;}
 	///Print consensus adjacency matrix in raw format: list of rows for each edge : strA strB double
 	void get_Ad();
+	///Print fuzzy partition associated to the consensus adjacency matrix
+	void get_FuzzyConsensusPartition();
 	///Calculate cosine distance between associated Adjacency matrices
 	void getAdCos();
 	///Calculate all pair-wise purity scores

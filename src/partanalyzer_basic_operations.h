@@ -214,10 +214,30 @@ inline ostream& operator<<(ostream& os, sset& cl){
 	return os;
 }
 ///Comparison operator for allowing reverse sorting of maps
+/*
+template<class T> bool greatherThan(T& i, T&j){
+	return i>j;
+}
+*/
+struct greaterThan {
+	template<class T> bool operator() (T& i, T& j){
+		return i>j;	
+	}
+};
+/*
 struct greaterThan {
 	bool operator() (const int& i, const int& j) const {
 		return i>j;	
 	}
+};
+*/
+
+//struct setLargerThan {
+struct containerLargerThan {
+        template<class C> bool operator () (C* ca, C* cb) {
+        //bool operator () (sset sa, sset sb) {
+                return ca->size()>cb->size();
+        }
 };
 
 /* TESTING CUSTOM GRAPH CLASS */

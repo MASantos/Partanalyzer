@@ -195,7 +195,7 @@ void printHelpLong(){
 	cout<<"                 can be negative or positive.                          "<<endl;
 	cout<<"          Option -cons or -consensus will print the consensus partition"<<endl;
 	cout<<"                                                                       "<<endl;
-	cout<<"       -A , --adjstat                                                  "<<endl;
+	cout<<"       -A , --adjacency-stat , {--adjstat}                             "<<endl;
 	cout<<"          Determines the average adjacency matrix from the provided    "<<endl;
 	cout<<"          partitions. The adjacency matrix of a partition is the graph "<<endl;
 	cout<<"		 where edges (0 or 1 ) represent two elements belonging to the"<<endl;

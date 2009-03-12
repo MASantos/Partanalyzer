@@ -349,10 +349,15 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-A")==0||strcmp(*argv,"-adjstat")==0){
+		else if (strcmp(*argv,"-A")==0||strcmp(*argv,"--adjacency-stat")==0||strcmp(*argv,"--adjstat")==0){
 			analysis=prgADST;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
+			if(strcmp(*argv,"--print-fuzzy-partition")==0||strcmp(*argv,"-fuzzy")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				analysis=prgASFP;
+			}
 			if(strcmp(*argv,"-ofs")==0){
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
@@ -370,7 +375,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-C")==0||strcmp(*argv,"-clstat")==0){
+		else if (strcmp(*argv,"-C")==0||strcmp(*argv,"--cluster-stat")==0||strcmp(*argv,"--clstat")==0){
 			analysis=prgCLST;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
@@ -754,10 +759,12 @@ int main(int argc, char* argv[]) {
 			partstats.getSplitsRef(method); //Without arguments=>method=split
 			break;
 			}
-		case prgADST:{
+		case prgADST:
+		case prgASFP:{
 			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
 			partstats.get_Ad();
 			partstats.pgm_Ad();
+			if(analysis==prgASFP) partstats.get_FuzzyConsensusPartition();
 			break;
 			}
 		case prgCLST:{

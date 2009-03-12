@@ -84,7 +84,27 @@ enum flagheader {BEGIN,END};
 ///Enummerates the possible ways of generating duplicates for a given MSA
 enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
 ///Enummerates possible main program command lines options
-enum prganalysis { prgCCOP=1,prgCDIS,prgVIPP,prgVIST,prgVISR,prgEDSC,prgEDST,prgEDSR,prgBDST,prgTDST,prgRDST,prgBDSR,prgTDSR,prgRDSR,prgINTE,prgMGMX,prgMMXC, prgCLST,prgPMSA,prgMSPI,prgMAPI,prgMRED,prgPSPP,prgPSST,prgPSSR,prgHASS,prgIPAR,prg2MCL,prg2FRE,prgM2PA,prgIPOT,prgADST,prgSPST,prgSPSS,prgSPSO,prgJDST,prgJDSR,prgCEMX,prgEDMX,prgEDMP} ;
+enum prganalysis { prgCCOP=1,prgCDIS,
+	prgPSPP,prgPSST,prgPSSR,
+	prgVIPP,prgVIST,prgVISR,
+	prgEDSC,prgEDST,prgEDSR,
+	prgBDST,prgBDSR,
+	prgTDST,prgTDSR,
+	prgRDST,prgRDSR,
+	prgJDST,prgJDSR,
+	prgINTE,
+	prgMGMX,prgMMXC, 
+	prgCLST,
+	prgPMSA,prgMSPI,prgMAPI,prgMRED,
+	prgHASS,
+	prgIPAR,
+	prg2MCL,prg2FRE,prgM2PA,
+	prgIPOT,
+	prgADST,prgASFP,
+	prgSPST,prgSPSS,prgSPSO,
+	prgCEMX,
+	prgEDMX,prgEDMP
+} ;
 ///Enummerates the possible input format for a partition file
 enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;
 ///Available types of Splitstat methods
