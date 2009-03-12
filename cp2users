@@ -5,7 +5,7 @@ EXE=partanalyzer
 DEST=/usr2/software/users/CCOP
 LATESTV=partanalyze-latest
 ##############################################
-VERSION="`grep VERSION= $SRC | sed 's@.*\s\([.0-9a-zA-Z]*\)";@\1@g' | sed 's@\.@@g' | awk '{print "A"$1}'`"
+VERSION="`grep VERSION= $SRC | sed 's@.*\s\([()-.0-9a-zA-Z]*\)";@\1@g' | sed 's@\.@@g' | awk '{print "A"$1}'`"
 
 cp $EXE $DEST/${EXE}-v$VERSION
 
