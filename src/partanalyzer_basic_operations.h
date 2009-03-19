@@ -233,10 +233,11 @@ struct greaterThan {
 */
 
 //struct setLargerThan {
+template <class C>
 struct containerLargerThan {
-        template<class C> bool operator () (C* ca, C* cb) {
+        bool operator () (C ca, C cb) {
         //bool operator () (sset sa, sset sb) {
-                return ca->size()>cb->size();
+                return (ca.size())>(cb.size());
         }
 };
 

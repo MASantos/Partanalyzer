@@ -258,7 +258,7 @@ void PartitionStats::get_Ad(){
 void  PartitionStats::get_FuzzyConsensusPartition(){
 	if(VERBOSE) cout<<"#Setting up FuzzyConsensusPartition"<<endl;
 	if(_Ad.empty()) setConsensus_Ad();
-	vector< svect > fuzzyclusters; 
+	vector< svect > fuzzyclusters;
 	for(graph::iterator i=_Ad.begin();i!=_Ad.end();i++){
 		string a = (i->first).first ;
 		string b = (i->first).second ;
@@ -301,7 +301,8 @@ void  PartitionStats::get_FuzzyConsensusPartition(){
 			}
 		}
 	}
-	sort(fuzzyclusters.begin(),fuzzyclusters.end(),containerLargerThan);
+	containerLargerThan<svect> svectComparator;	
+	sort(fuzzyclusters.begin(),fuzzyclusters.end(), svectComparator);
 	for(vector<svect >::iterator cl=fuzzyclusters.begin();cl!=fuzzyclusters.end();cl++){
 		//sort(cl->begin(),cl->end(),greaterThan);
 		sort(cl->begin(),cl->end());
@@ -351,13 +352,15 @@ void  PartitionStats::get_FuzzyConsensusPartition(){
 		cout<<"\tN"<<cl;
 	}
 	cout<<endl;
+	//characteristicFunction vector<map<string::double>>
 	for(map<string, double>::iterator el=characteristicFunction[0].begin();el!=characteristicFunction[0].end();el++){
-		cout<<el->first;
-		for(int cl=0;cl<fuzzyclusters.size();cl++){
-			cout<<"\t"<<characteristicFunction[cl][el->first];
+		cout<<el->first; //first is the key.
+		for(int cl=0;cl<fuzzyclusters.size();cl++){ //foreach cluster.
+			cout<<"\t"<<characteristicFunction[cl][el->first]; //why not el->second?
 		}
 		cout<<endl;
 	}	
+	
 	cout<<"#EndFuzzyClusterMembership"<<endl;
 
 }
