@@ -30,9 +30,9 @@ srcdir = $(WDIR)/$(SRCD)
 .SUFFIXES: .cc .cpp .o .h
 
 CC=g++
-CFLAGS = -c -O2
+CPPFLAGS =-c -O2 -g
 LDFLAGS = 
-#CFLAGS="-DDEBUG"
+#CPPFLAGS="-DDEBUG"
 BIN = partanalyzer
 SRC = \
 	Roulette.cc \
@@ -105,7 +105,7 @@ touch:
 	touch $(SRCS)
 
 debug: $(TAGS) touch 
-	CFLAGS="$(CFLAGS) -DDEBUG" make 
+	CPPFLAGS="$(CPPFLAGS) -DDEBUG" make 
 $(TAGS):
 	$(CTAGS) $(SRCS)
 
@@ -114,13 +114,13 @@ $(BIN): $(OBJ) $(HEADERS)
 	$(LINKBIN)
 
 $(BIN).DEBUG: $(OBJ) $(HEADERS)
-	$(CC) -o $(BIN) $(CFLAGS) -DDEBUG $(OBJ)
+	$(CC) -o $(BIN) $(CPPFLAGS) -DDEBUG $(OBJ)
 	$(LINKBIN)
 
 compile: $(OBJ)
 	
 %.cc%.o%.h:  
-	$(CC) $(CFLAGS) $<
+	$(CC) -g $(CPPFLAGS) $<
 
 clean: 
 	rm $(OBJ) 2>/dev/null
