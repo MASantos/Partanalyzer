@@ -29,9 +29,13 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 ///Current name (full path) of Partanalyzer
 char* program;
+double beta;
+double mu;
 
 int main(int argc, char* argv[]) {
 	program=argv[0];
+	beta=0.01;
+	mu=0.0;
         if(argc<2) exitWithHelp();
 	if(!QUIET&& !( strcmp(argv[1],"-q")==0 || strcmp(argv[1],"--help")==0 || strcmp(argv[1],"-help")==0 || strcmp(argv[1],"-h")==0 )){
 		printCopyright();
@@ -618,7 +622,7 @@ int main(int argc, char* argv[]) {
 #ifdef DEBUG
 	QUIET=false;
 	cout<<"#DEBUG MODE\tRUNNING IN DEBUGGING MODE\tQUIET=false (ignoring -q option). Additional debugging info with '-V' option"<<endl;
-	cout<<"#DEBUG MODE: prgrama task : analysis="<<analysis<<endl;
+	cout<<"#DEBUG MODE: program task : analysis="<<analysis<<endl;
 #endif
 	switch(analysis){
 ///(For analyzing partitions)

@@ -42,6 +42,10 @@ extern bool 	VERBOSE;
 extern bool    QUIET;
 ///Current name (full path) of partanalyzer
 extern char* program;
+///Beta parameter for thermodynamic averages done in Ccop
+extern double beta;
+///mu parameter for thermodynamic averages done in Ccop
+extern double mu;
 ///Original Program basename
 #define _programb_ "partanalyzer"
 

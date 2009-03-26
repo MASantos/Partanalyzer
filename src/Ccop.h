@@ -20,19 +20,19 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
+#ifndef _CLASS_CCOP_H
+#define _CLASS_CCOP_H 1
+
 #include "partanalyzer_includes.h"
 #include "partanalyzer_definitions.h"
 #include "partanalyzer_basic_operations.h"
-
-#ifndef _CLASS_CCOP_H
-#define _CLASS_CCOP_H 1
 
 #include "Partition.h"
 #include "MatrixOfValues.h"
 
 ///DEFAULT THERMODYNAMIC COEFF.
-static double beta=1.0;
-static double mu=0.0;
+//extern double beta;
+//extern double mu;
 
 /**Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this whole project.
  * */
