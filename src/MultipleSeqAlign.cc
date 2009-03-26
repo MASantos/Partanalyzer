@@ -98,24 +98,24 @@ void MultipleSeqAlign::addSeq(Sequence* Seq){
         _nseq++;
 }
 
-double MultipleSeqAlign::SeqId(int Seqn, int Seqm)
+double MultipleSeqAlign::SeqId(int Seqn, int Seqm, vector<int>* positions)
 {
         if(Seqn<0||Seqm<0||Seqn>_nseq||Seqm>_nseq){
                 cout<<"Sequence indexes out of bound : "<<Seqn<<" , "<<Seqm<<endl;
                 exit(1);
         }
-        return _Seqlist[Seqn].id( _Seqlist[Seqm] );
+        return _Seqlist[Seqn].id( _Seqlist[Seqm] , positions);
 }
 
-double MultipleSeqAlign::averageId()
+double MultipleSeqAlign::averageId(vector<int>* positions)
 {
         if(!QUIET)cout<<"#Starting averageId calculation"<<endl;
         double avid=0.0;
         for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
                 for(MSA::iterator itb=ita+1;itb!=_Seqlist.end();itb++){
-                        avid+=(*ita).id(*itb);
+                        avid+=(*ita).id(*itb,positions);
                         if(VERBOSE){
-                                cout<<"# "<<(*ita).name()<<" - "<<(*itb).name()<<" id="<<(*ita).id(*itb)<<endl;
+                                cout<<"# "<<(*ita).name()<<" - "<<(*itb).name()<<" id="<<(*ita).id(*itb,positions)<<endl;
                                 (*ita).print();
                                 (*itb).print();
                                 for(int i=0;i<_len;i++)
@@ -129,7 +129,7 @@ double MultipleSeqAlign::averageId()
         return avid/(double)(_nseq*(_nseq-1)*0.5);
 }
 
-void MultipleSeqAlign::printPairwiseIds()
+void MultipleSeqAlign::printPairwiseIds(vector<int>* positions)
 {
         for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
                 for(MSA::iterator itb=ita+1;itb!=_Seqlist.end();itb++){
@@ -137,12 +137,12 @@ void MultipleSeqAlign::printPairwiseIds()
                         if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
                         string nb=(*itb).name();
                         if(nb.substr(0,1).compare(">")==0)nb=nb.substr(1,nb.length()-1);
-                        cout<<na<<"\t"<<nb<<"\t"<<SeqId(*ita,*itb)<<endl;
+                        cout<<na<<"\t"<<nb<<"\t"<<SeqId(*ita,*itb,positions)<<endl;
                         //cout<<(*ita).name()<<"\t"<<(*itb).name()<<"\t"<<SeqId(*ita,*itb)<<endl;
                 }
 }
 
-void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0)
+void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0, vector<int>* positions)
 {
 	cout<<"#Id_threshold= "<<thr<<endl;
         int onn=0;
@@ -158,7 +158,7 @@ void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0)
                 int nthr=0;
                 for(MSA::iterator itb=_Seqlist.begin();itb!=_Seqlist.end();itb++){
                         if(ita==itb)continue;
-                        v=SeqId(*ita,*itb);
+                        v=SeqId(*ita,*itb,positions);
                         v=v<=1?v*100:v;
                         if(v>thr)nthr++;
                         id+=v;

@@ -77,7 +77,7 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] --toFREE partition [partition1_offset (=2) ]" <<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
 	cout<<"   For analyzing Multiple Sequence Alignments                        "<<endl;
-	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat multiple_seq_alignment.fasta"<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --print-msa multiple_seq_alignment.fasta "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
@@ -248,8 +248,14 @@ void printHelpLong(){
 	cout<<"For analyzing Multiple Sequence Alignments                             "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-seqid-stat                                                "<<endl;
+	cout<<"       --msa-seqid-stat [--positions file]                             "<<endl;
 	cout<<"          Given a multiple sequence alignment in fasta format, it      "<<endl;
-	cout<<"          prints all pair-wise sequence identities.                    "<<endl;
+	cout<<"          prints all pair-wise sequence identities. By default, it     "<<endl;
+	cout<<"          calculates identities over the full sequence length. The     "<<endl;
+	cout<<"          second version allows to specify the (reduced) set of positions"<<endl;
+	cout<<"          we want to consider in comparing sequences. These should be  "<<endl;
+	cout<<"          specified in a file, each separated by space,tabs, new lines,"<<endl;
+	cout<<"          etc. The positions are understood as columns of the MSA.     "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-seqid-avg [-thr threshold ]                               "<<endl;
 	cout<<"          Similar as option --msa-seqid-avg, but prints for each sequence"<<endl;

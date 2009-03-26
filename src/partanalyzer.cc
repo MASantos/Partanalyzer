@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 	char* partitionf2;
 	char* mxofval;
 	char* mxofvalb;
+	vector<int> positions;
 	pmetricv metric=shannon;
 	double extensivity=EXTENSIVITY_DEFAULT;
         double threshold=-1; //Default threshold
@@ -516,7 +517,25 @@ int main(int argc, char* argv[]) {
                 else if (strcmp(*argv,"--msa-seqid-stat")==0){
                         analysis=prgMSPI;
                         if(argc<2)printCommandLineError();
-                        msaf=argv[1];
+                        argc--;argv++;
+                        if(strcmp(*argv,"--positions")==0){
+                                if(argc<3)printCommandLineError();
+                                argc--;argv++;
+                                ifstream is(argv[0]);
+                                if(!is){
+                                        cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
+                                        exit(1);
+                                }
+                                argc--;argv++;
+                                int pos;
+                                if(!QUIET)cout<<"#Using only specific MSA columns (positions):\n#";
+                                while(is>>pos){
+                                        if(!QUIET)cout<<"\t"<<pos;
+                                        positions.push_back(pos);
+                                }
+                                if(!QUIET)cout<<endl;
+                        }
+                        msaf=argv[0];
                 }
                 else if (strcmp(*argv,"--msa-seqid-avg")==0){
                         analysis=prgMAPI;
@@ -838,8 +857,8 @@ int main(int argc, char* argv[]) {
 			}
 		case prgMSPI:{
                         MultipleSeqAlign msa(msaf);
-                        cout<<"#avgSeqId "<<msa.averageId()<<endl;
-                        msa.printPairwiseIds();
+                        cout<<"#avgSeqId "<<msa.averageId(&positions)<<endl;
+                        msa.printPairwiseIds(&positions);
 			break;
 			}
 		case prgMAPI:{

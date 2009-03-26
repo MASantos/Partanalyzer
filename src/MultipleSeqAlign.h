@@ -62,17 +62,17 @@ public:
 	void setFileName(char* fname){ _msaf=fname;}
 	///Gets its file name
 	char* getFileName(){ return _msaf;}
-	///Obtains the sequence identity between the two provided Sequences.
-        double SeqId(Sequence Seqa, Sequence Seqb){return Seqa.id(Seqb);}
+	///Obtains the sequence identity between the two provided Sequences using the specified positions.
+        double SeqId(Sequence Seqa, Sequence Seqb, vector<int>* positions=NULL){return Seqa.id(Seqb,positions);}
         //double SeqId(string SeqaName, string SeqbName);
 	///Obtains the sequence identity between the two provided sequences refered by their indexes within the MSA.
-        double SeqId(int Seqn, int Seqm);
+        double SeqId(int Seqn, int Seqm,vector<int>* positions=NULL);
 	///Calculates the overall average sequence identity among all pair of sequences of the MSA.
-        double averageId();
+        double averageId(vector<int>* positions=NULL);
 	///Prints all pair-wise identities 
-        void printPairwiseIds();
+        void printPairwiseIds(vector<int>* positions=NULL);
 	///Prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50
-        void printAveragePairwiseIds(double thr);
+        void printAveragePairwiseIds(double thr,vector<int>* positions=NULL);
 	///Print the whole multiple sequence alignment
         void print();
 	///Generates randomly n additional sequences each an exact copy of one of the original sequences

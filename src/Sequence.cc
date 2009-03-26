@@ -46,6 +46,66 @@ string Sequence::chrAt(int pos){
         return _seq.substr(pos,1);
 }
 
+double Sequence::id(Sequence Seq, vector<int >* positions){
+        id(&Seq, positions);
+}
+double Sequence::id(Sequence* Seq,vector<int>* positions)
+{
+        int other_len=Seq->length();
+        int minlen=_length<other_len?_length:other_len;
+        if(minlen!=_length){
+                cout<<"Comparing sequence of different lengths: "<<_name<<" ("<<_length<<") <> "<<Seq->name()<<" ("<<other_len<<")"<<endl;
+                exit(1);
+        }
+        double id=0.0;
+        int starts=0;
+        int ends=_length;
+        bool founds=false;
+        bool founde=false;
+        bool all_positions=true;
+        for(int i=0;i<_length;i++){
+                /// Normalize by the longest sequence
+                /*
+                if(!founds&&chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)starts++;
+                else founds=true;
+                if(!founde&&chrAt(_length-1-i).compare("-")==0&&Seq->chrAt(_length-1-i).compare("-")==0)ends--;
+                else founde=true;
+                */
+                /// Normalize by the shortest sequence
+                if(!founds&& (chrAt(i).compare("-")==0||Seq->chrAt(i).compare("-")==0) )starts++;
+                else founds=true;
+                if(!founde&& (chrAt(_length-1-i).compare("-")==0||Seq->chrAt(_length-1-i).compare("-")==0) )ends--;
+                else founde=true;
+                //
+                if(founds&&founde)break;
+
+        }
+        double norm=0;
+        if(VERBOSE)cout<<"#Sequence comparison starting at position "<<starts+1<<" up to position "<<ends<<endl;
+        int selected_pos=-9999;
+        for(int i=starts;i<ends;i++){
+                //if(!(positions==NULL)&&positions->empty()>0){
+                if(!positions->empty()){
+                        all_positions=false;
+                        for(vector<int>::iterator c=positions->begin();c!=positions->end();c++){
+                                if(i==*c){
+                                        selected_pos=i;
+                                        break;
+                                }
+                        }
+                        if(selected_pos!=i)continue;
+                        if(VERBOSE)cout<<"#Position: "<<i<<endl;
+                }else exit(1);
+                if(chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)continue;
+                norm++;
+                if(chrAt(i).compare(Seq->chrAt(i))==0)id++;
+                //if(strcmp(chrAt(i).c_str(),Seq->chrAt(i).c_str())==0)id+=1.0;
+        }
+        //return id/_length*100.0;
+        //return id/(ends-starts)*100.0;
+        return id/norm*100.0;
+}
+/*
 double Sequence::id(Sequence Seq){
         id(&Seq);
 }
@@ -64,12 +124,12 @@ double Sequence::id(Sequence* Seq)
         bool founde=false;
         for(int i=0;i<_length;i++){
                 /// Normalize by the longest sequence
-                /*
+                /<
                 if(!founds&&chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)starts++;
                 else founds=true;
                 if(!founde&&chrAt(_length-1-i).compare("-")==0&&Seq->chrAt(_length-1-i).compare("-")==0)ends--;
                 else founde=true;
-                */
+                >/
                 /// Normalize by the shortest sequence
                 if(!founds&& (chrAt(i).compare("-")==0||Seq->chrAt(i).compare("-")==0) )starts++;
                 else founds=true;
@@ -91,6 +151,6 @@ double Sequence::id(Sequence* Seq)
         //return id/(ends-starts)*100.0;
         return id/norm*100.0;
 }
-
+*/
 #endif //END _CLASS_SEQUENCE
 

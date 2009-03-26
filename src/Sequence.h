@@ -43,8 +43,9 @@ public:
 	///Get its lenght
         int length(){ return _length;}
 	///Calculate its sequence identity with respect to sequence Seq. The latter can be passed by pointer or content
-        double id(Sequence* Seq);
-        double id(Sequence Seq);
+        ///A non null second parameter specifies which positions will be considered to calculate the sequence similarity, all by default.
+        double id(Sequence* Seq, vector<int>* positions=NULL);
+        double id(Sequence Seq, vector<int>* positions=NULL);
 	///Get its name
         string name(){return _name;}
 	///Get its sequence proper
