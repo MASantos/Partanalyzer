@@ -30,7 +30,7 @@ srcdir = $(WDIR)/$(SRCD)
 .SUFFIXES: .cc .cpp .o .h
 
 CC=g++
-CPPFLAGS =-c -O2 -g
+CPPFLAGS =-O2
 LDFLAGS = 
 #CPPFLAGS="-DDEBUG"
 BIN = partanalyzer
