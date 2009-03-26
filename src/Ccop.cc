@@ -208,7 +208,7 @@ void ccop::checkConsistency(){
 	E/=Z;
 	Cv=Cv/Z-(E*E);
 	w_inter+=0.5*sw_inter;
-	if(!QUIET)cout<<"#TEST: nsing="<<_part->n_singletons()<<" nitems="<<_part->n_items()<<" sw_inter="<<sw_inter<<endl;
+	//if(!QUIET)cout<<"#TEST: nsing="<<_part->n_singletons()<<" nitems="<<_part->n_items()<<" sw_inter="<<sw_inter<<endl;
 	///expected is a dummy variable, so we can use it here too and avoid declaring more variables.
 	//expected=0.5*non_singleton_nodes*(non_singleton_nodes-1.0);
 	expected=0.5*total_nodes*(total_nodes-1.0);
@@ -219,10 +219,10 @@ void ccop::checkConsistency(){
 	cout<<"#w_intra\tw_inter\tw_intra_thr\tg=w_intra_thr/w_intra\tf_intra_thr\tN\tCv\tE"<<endl;
 	cout<<w_intra/Z<<"\t"<<w_inter/Z<<"\t"<<w_intra_thr/Z<<"\t"<<w_intra_thr/w_intra<<"\t"<<tf_intra_thr/Z<<"\t"<<N/Z<<"\t"<<Cv<<"\t"<<E<<endl;
 	cout<<"#Partition averages: "<<endl;
-	cout<<"#TE\tEs\tZeta\t\tQval\tw_intra\t\tw_inter\tf_intra_thr\tnon_singletons\t#non-singleton-nodes\tfraction-non-singleton-nodes\t#total-nodes"<<endl;
+	cout<<"#TE\tEs\tZeta=Es/TE\t\tQval\tw_intra\t\tw_inter\tf_intra_thr\tnon_singletons\t#non-singleton-nodes\tfraction-non-singleton-nodes\t#total-nodes"<<endl;
 	cout<<TE<<"\t"<<Es<<"\t"<<zeta<<"\t"<<Qval<<"\t"<<_w_intra/non_singletons<<"\t"<<_w_inter/non_singletons<<"\t"<<_f_intra_thr/non_singletons<<"\t"<<non_singletons<<"\t"<<non_singleton_nodes<<"\t"<<non_singleton_nodes*1.0/total_nodes<<"\t"<<total_nodes<<endl;
 	//cout<<"#stable_clusters/size= "<<nstableclusters<<" "<<nstableclusters_size<<"\t"<<_chi2<<endl;
-	cout<<-Ei<<"\t"<<-sw_inter<<endl;
+	if(!QUIET)cout<<"#TE=-(Es*+Ei+sw_inter) ; Es=-(Es*-Ei-sw_inter)\n# -Ei\t-sw_inter\tEs*\n# "<<-Ei<<"\t"<<-sw_inter<<"\t"<<Ei+sw_inter-Es<<endl;
 }
 
 #endif //END _CLASS_CCOP
