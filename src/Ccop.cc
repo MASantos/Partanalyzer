@@ -80,6 +80,7 @@ void ccop::checkConsistency(){
 	double cw_chi2,c_chi2,w_chi2,c_Qval,Qval;
 	Qval=c_Qval=w_chi2=0.0;
 	ofs=_part->cluster_offset();
+	long int K=_part->clusters.size(); //number of clusters
 	long int non_singleton_nodes,total_nodes;
 	int non_singletons;
 	non_singletons=0;
@@ -104,7 +105,7 @@ void ccop::checkConsistency(){
 	cout<<"#\n#Clusters values: \n#index\tClname\tsize\tw_intra\t\tw_inter\t\t<w_intra>\t<w_inter>  f_intra_thr\tnintra\tninter"<<endl;
 	for(smat::iterator cla=_part->clusters.begin();cla!=_part->clusters.end();cla++){
 		total_nodes+=cla->size()-ofs;
-		if(cla->size()>1+ofs){ //Ignore singletons
+		if(cla->size()>1+ofs){ //Do not check consistency of singletons
 			non_singletons++;
 			non_singleton_nodes+=cla->size()-ofs;
 			cw_intra=cw_inter=cf_intra_thr=cw_intra_thr=0.0;
@@ -150,7 +151,7 @@ void ccop::checkConsistency(){
 								}
 							}
 			}
-			cE=-cw_intra-0.5*cw_inter;
+			cE=-cw_intra/K-0.5*cw_inter;
 			//double pa=(1.0*cla->size()-ofs)/_part->n_items(); // probability of cluster
 			pa=exp(-beta*(cE-mu*(1.0*cla->size()-ofs)));
 			Z+=pa;
@@ -182,7 +183,9 @@ void ccop::checkConsistency(){
 			if(nintra>0)cw_intra/=(double)nintra;
 			if(ninter>0)cw_inter/=(double)ninter;
 			if(nintra>0)cf_intra_thr/=(double)nintra/100.0;
-			cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<c_chi2<<endl;
+			//c_chi2 becomes inf too often...
+			//cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<"\t"<<c_chi2<<endl;
+			cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<endl;
 			//w_chi2+=cw_chi2;
 			_chi2+=c_chi2;
 			// Overall Cluster averages

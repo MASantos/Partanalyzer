@@ -34,7 +34,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 static double beta=1.0;
 static double mu=0.0;
 
-/**Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this while project.
+/**Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this whole project.
  * */
 class ccop
 {
