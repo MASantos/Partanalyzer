@@ -51,8 +51,12 @@ public:
         MultipleSeqAlign(char* msaf); 
 	///Expects a MSA object
 	MultipleSeqAlign(MSA& msa);
+	///Subsample MSA at given positions
+	MultipleSeqAlign xtractPositions(vector<int>* positions=NULL);
 	///Allows adding a single Sequence object to the multiple sequence alignment 
 	void addSeq(Sequence*);
+	///Is MSA empty?
+	bool empty(){ return _Seqlist.empty(); }
 	///Sets its name
 	void setName(string name){ _name=name;}
 	///Gets its name

@@ -40,6 +40,8 @@ public:
         Sequence(string name, string seq);
 	///Get the character at position pos
         string chrAt(int pos);
+	///Copy extracting from sequence the given positions
+	string xtractPositions(vector<int>* positions=NULL);
 	///Get its lenght
         int length(){ return _length;}
 	///Calculate its sequence identity with respect to sequence Seq. The latter can be passed by pointer or content

@@ -33,17 +33,32 @@ Sequence::Sequence()
         _name="";
         _length=0;
 }
+
 Sequence::Sequence(string name, string seq){
         _seq=seq;
         _name=name;
         _length=_seq.length();
 }
+
 string Sequence::chrAt(int pos){
         if(pos<0||pos>_length-1){
                 cout<<"Seeking character beyond sequence boundaries "<<_length<<" : "<<pos<<endl;
                 exit(1);
         }
         return _seq.substr(pos,1);
+}
+
+string Sequence::xtractPositions(vector<int>* positions){
+	string nseq="NAS";
+	if(positions->empty())return nseq;
+	stringstream ss;
+	for(vector<int>::iterator it=positions->begin();it!=positions->end();it++){
+		for(int i=0;i<_length;i++){
+			if(i==*it) ss<<chrAt(i);
+		}
+	}
+	ss>>nseq;
+	return nseq;
 }
 
 double Sequence::id(Sequence Seq, vector<int >* positions){

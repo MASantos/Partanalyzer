@@ -541,6 +541,27 @@ int main(int argc, char* argv[]) {
                         }
                         msaf=argv[0];
                 }
+                else if (strcmp(*argv,"--msa-extract-positions")==0){
+                        analysis=prgMSXP;
+                        if(argc<3)printCommandLineError();
+                        argc--;argv++;
+                        ifstream is(argv[0]);
+                        if(!is){
+                                cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
+                                exit(1);
+                        }
+                        argc--;argv++;
+                        int pos;
+                        if(!QUIET)cout<<"#Using only specific MSA columns (positions):\n#";
+                        while(is>>pos){
+                                if(!QUIET)cout<<"\t"<<pos;
+				//User gives positions starting at 1; Sequence starts them at 0
+                                positions.push_back(--pos);
+                        }
+                        if(!QUIET)cout<<endl;
+                        if(argc<1)printCommandLineError("Missing MSA file");
+                        msaf=argv[0];
+		}
                 else if (strcmp(*argv,"--msa-seqid-avg")==0){
                         analysis=prgMAPI;
                         if(argc<2)printCommandLineError();
@@ -863,6 +884,12 @@ int main(int argc, char* argv[]) {
                         MultipleSeqAlign msa(msaf);
                         cout<<"#avgSeqId "<<msa.averageId(&positions)<<endl;
                         msa.printPairwiseIds(&positions);
+			break;
+			}
+		case prgMSXP:{
+                        MultipleSeqAlign msa(msaf);
+                        MultipleSeqAlign nmsa=msa.xtractPositions(&positions);
+			nmsa.print();
 			break;
 			}
 		case prgMAPI:{

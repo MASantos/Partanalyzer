@@ -32,6 +32,8 @@ void printVersion();
 
 void printCommandLineError(const string label="");
 
+void printCommandLineError(char* lastSeeOption);
+
 void systemDate();
 
 void printHelp();

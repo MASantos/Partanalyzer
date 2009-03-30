@@ -98,6 +98,22 @@ void MultipleSeqAlign::addSeq(Sequence* Seq){
         _nseq++;
 }
 
+MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){
+	MultipleSeqAlign nmsa;
+	nmsa.setName("NAA");
+	if(positions->empty())return nmsa;
+	string sq;
+	string name;
+	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+		name=st->name();
+		sq=st->xtractPositions(positions);
+		Sequence seq(name,sq);
+		nmsa.addSeq(&seq);
+	}
+	if(!nmsa.empty())nmsa.setName(getName());
+	return nmsa;
+}
+
 double MultipleSeqAlign::SeqId(int Seqn, int Seqm, vector<int>* positions)
 {
         if(Seqn<0||Seqm<0||Seqn>_nseq||Seqm>_nseq){

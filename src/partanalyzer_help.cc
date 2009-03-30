@@ -46,6 +46,11 @@ void printCommandLineError(const string label){ //Defaults: label=""
 	exit(1);
 }
 
+void printCommandLineError(char* lastSeenOption){
+        cout<<_programb_<<" : "<<lastSeenOption<<" : Unknown option or incorrect syntax. Use -h for syntax summary."<<endl;
+	exit(1);
+}
+
 void exitWithHelp()
 {
 	printHelp();
@@ -79,6 +84,7 @@ void printHelp(){
 	cout<<"   For analyzing Multiple Sequence Alignments                        "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta"<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --print-msa multiple_seq_alignment.fasta "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
 	cout<<"   For dealing with -interaction- matrices                           "<<endl;
@@ -267,6 +273,10 @@ void printHelpLong(){
 	cout<<"          Option -thr allows to provide a specific threshold to use.   "<<endl;
 	cout<<"                      default value is 50%. Values are floating numbers"<<endl;
 	cout<<"                      within [0,100].                                  "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --msa-extract-positions positions_file msa_file                 "<<endl;
+	cout<<"          From the given MSA, extract only columns specified in file   "<<endl;
+	cout<<"          positions_file.                                              "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed]          "<<endl;
 	cout<<"          Duplicates sequences chosen at random in the given multiple  "<<endl;
