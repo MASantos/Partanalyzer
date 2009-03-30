@@ -67,7 +67,188 @@ void ccop::distribution(){
 	cout<<"#EndInterClusterDistribution"<<endl;
 }
 
-//void ccop::_runCheck(){
+void ccop::_getIntraClusterValuesPerElement(\
+	svect::iterator ita, smat::iterator cla, \ //Element ita of cluster cla
+	long int& nintra, double& cw_intra, \ //number of intra-cluster edges and their total weight
+	double& cf_intra_thr, double& cw_intra_thr\ //fraction of edges above threshold and their combined weight
+	){
+				for(svect::iterator itb=ita+1;itb!=cla->end();itb++)//No self-edges; Running over upper-half diagonal
+					if(_MX->existEdge(*ita,*itb)){
+						//Number of intra-cluster edges
+						nintra++;
+						//Intra-cluster weight 
+						cw_intra+=_MX->v(*ita,*itb);
+						if(_MX->v(*ita,*itb)>_threshold) { 
+							//Fraction of intra-cluster edges above threshold
+							cf_intra_thr+=1.0; 
+							//Intra-cluster weight above threshold
+							cw_intra_thr+=_MX->v(*ita,*itb) ;
+						}
+						if(VERBOSE) cout<<"#"<<*ita<<" - "<<*itb<<" = "<<_MX->v(*ita,*itb)<<endl;
+					}
+}
+
+void ccop::_getInterClusterValuesPerElement(\
+	svect::iterator ita, smat::iterator cla, \ //Element ita of cluster cla
+	int& ofs, long int& ninter, \ //Offset of clusters and number of inter-cluster edges
+	double& cw_inter, double& sw_inter, \ //total weight of inter-cluster edges and total inter-cluster weight against singletons
+	double& pa, double& S, \ //Statistical Mechanics (SM) probability of cluster cla and its SM entropy
+	double& E, double& Cv\ //SM internal energy of cluster cla and its specific heat (variance of E)
+	){
+	for(smat::iterator clb=_part->clusters.begin();clb!=_part->clusters.end();clb++){
+		if(clb!=cla)
+			for(svect::iterator itb=clb->begin()+ofs;itb!=clb->end();itb++)
+				if(_MX->existEdge(*ita,*itb)){ 
+					//Number of inter-cluster edges
+					ninter++;
+					//Inter-cluster weight 
+					cw_inter+=_MX->v(*ita,*itb);
+					if(clb->size()==1+ofs) {
+						//Inter-cluster weight between a non-singleton and a singleton
+						sw_inter+=_MX->v(*ita,*itb);
+					//Thermodynamic magnitudes
+						//Ensemble probability
+						pa=exp(-beta*(-0.5*_MX->v(*ita,*itb)-mu));
+						//Entropy
+						S+=-pa*log(pa);
+						//Internal energy
+						E+=-0.5*_MX->v(*ita,*itb)*pa;
+						//Heat capacity
+						Cv+=0.25*_MX->v(*ita,*itb)*_MX->v(*ita,*itb)*pa;
+						//Chi-square
+						_chi2+=pow(1.0-_part->n_items()*pa,2);
+					}
+				}
+	}
+}
+
+void ccop::_evaluateCluster(\
+	smat::iterator cla, long int& K, \
+	int& ofs,int& non_singletons,\
+	long int& non_singleton_nodes,double& cw_intra,\
+	double& cw_inter, double& cf_intra_thr, \
+	double& cw_intra_thr, double& w_intra_thr, \
+	double& cw_chi2, double& c_chi2, \
+	long int& nintra, long int& ninter, \
+	double& sw_inter, double& w_intra, \
+	double& w_inter, double& tf_intra_thr, \
+	double& pa, double& S, \
+	double& E, double& Cv, \
+	double& cE, double& N, \
+	double& Z, double& Es, \
+	double& Ei, double& expected, \
+	double& c_Qval, double& Qval, \
+	int& nstableclusters, long int& nstableclusters_size\
+	){
+			non_singletons++;
+			non_singleton_nodes+=cla->size()-ofs;
+			cw_intra=cw_inter=cf_intra_thr=cw_intra_thr=0.0;
+			cw_chi2=c_chi2=0.0;
+			nintra=ninter=0;
+			for(svect::iterator ita=cla->begin()+ofs;ita!=cla->end();ita++){
+				_getIntraClusterValuesPerElement(\
+					ita,cla,\
+					nintra,cw_intra,\
+					cf_intra_thr,cw_intra_thr\
+					);
+				_getInterClusterValuesPerElement(\
+					ita,cla,\
+					ofs,ninter,\
+					cw_inter,sw_inter,\
+					pa,S,\
+					E,Cv\
+					);
+			}
+			cE=-cw_intra/K-0.5*cw_inter;
+			//double pa=(1.0*cla->size()-ofs)/_part->n_items(); // probability of cluster
+			pa=exp(-beta*(cE-mu*(1.0*cla->size()-ofs)));
+			Z+=pa;
+			S+=-pa*log(pa);
+			/// Thermodynamic averages
+			//N+=(1.0*cla->size()-ofs)*pa;
+			N+=_part->n_items()*pa;
+			w_intra+=cw_intra*pa;
+			E+=cE*pa;
+			Cv+=cE*cE*pa;
+			w_inter+=0.5*cw_inter*pa;
+			w_intra_thr+=cw_intra_thr*pa;
+			tf_intra_thr+=(cf_intra_thr/nintra*100.0)*pa;
+			//Surface tension
+			Es+=0.5*cw_intra;
+			Ei+=cw_inter;
+			///Expected (random) in/out-going weight
+			expected=1.0*cla->size()-ofs;
+			c_chi2=pow(_part->n_items()*pa-expected,2)/expected;
+			///Expected (random) in/out-going edges
+			expected=(nintra+ninter)==0?0:pow((double)(nintra+ninter),2);
+			//c_chi2=pow(nintra-expected,2)/expected;
+			c_Qval+=expected;
+			/// Newman & et al. modularity value
+			Qval+=(double)nintra;
+			/// Cluster averages
+			if(nintra>0)cw_intra/=(double)nintra;
+			if(ninter>0)cw_inter/=(double)ninter;
+			if(nintra>0)cf_intra_thr/=(double)nintra/100.0;
+			//c_chi2 becomes inf too often...
+			//cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<"\t"<<c_chi2<<endl;
+			cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<endl;
+			//w_chi2+=cw_chi2;
+			_chi2+=c_chi2;
+			// Overall Cluster averages
+			_w_intra+=cw_intra;
+			_w_inter+=cw_inter;
+			_f_intra_thr+=cf_intra_thr;
+			//Don't know what was this meant for...
+			if(cw_inter==0){
+				nstableclusters++;
+				nstableclusters_size+=cla->size()-ofs;
+			}
+}
+
+void ccop::_checkClusters(\
+	long int& K, int& ofs,\
+	long int& total_nodes,\
+	int& non_singletons,long int& non_singleton_nodes,\
+	double& cw_intra,double& cw_inter, \
+	double& cf_intra_thr, double& cw_intra_thr, \
+	double& w_intra_thr, double& cw_chi2, \
+	double& c_chi2, long int& nintra, \
+	long int& ninter, double& sw_inter, \
+	double& w_intra, double& w_inter, \
+	double& tf_intra_thr, double& pa, \
+	double& S, double& E, \
+	double& Cv, double& cE, \
+	double& N, double& Z, \
+	double& Es, double& Ei, \
+	double& expected, double& c_Qval, \
+	double& Qval, int& nstableclusters, \
+	long int& nstableclusters_size\
+	){
+	for(smat::iterator cla=_part->clusters.begin();cla!=_part->clusters.end();cla++){
+		total_nodes+=cla->size()-ofs;
+		if(cla->size()>1+ofs){ //Do not check consistency of singletons
+			_evaluateCluster(\
+				cla, K, \
+				ofs,non_singletons,\
+				non_singleton_nodes,cw_intra,\
+				cw_inter,cf_intra_thr,\
+				cw_intra_thr,w_intra_thr,\
+				cw_chi2,c_chi2,\
+				nintra,ninter,\
+				sw_inter,w_intra,\
+				w_inter,tf_intra_thr,\
+				pa,S,\
+				E,Cv,\
+				cE,N,\
+				Z,Es,\
+				Ei,expected,\
+				c_Qval,Qval,\
+				nstableclusters,nstableclusters_size\
+				);
+		}
+	}
+}
+
 void ccop::checkConsistency(){
 	int ofs,cln;
 	int nstableclusters=0;
@@ -99,106 +280,26 @@ void ccop::checkConsistency(){
 	cout.setf(ios::fixed,ios::floatfield);
 	if(!QUIET)cout<<"#Calculating consistency check..."<<endl;
 	cout<<"#partition-size= "<<_part->clusters.size()<<" offset= "<<ofs<<" threshold= "<<_threshold<<endl;
-	//cout<<"#\n#Clusters averages: w_intra/w_inter\tw_intra\tw_inter\tintra_thr\tnintra\tninter"<<endl;
-	//cout<<"#\n#Clusters averages: chi2\tw_chi2\tw_intra\tw_inter\tintra_thr\tnintra\tninter"<<endl;
-	//cout<<"#\n#Clusters averages: chi2\tw_chi2\tintra\tinter\tw_intra\tw_inter\tintra_thr\tnintra\tninter"<<endl;
 	cout<<"#\n#Clusters values: \n#index\tClname\tsize\tw_intra\t\tw_inter\t\t<w_intra>\t<w_inter>  f_intra_thr\tnintra\tninter"<<endl;
-	for(smat::iterator cla=_part->clusters.begin();cla!=_part->clusters.end();cla++){
-		total_nodes+=cla->size()-ofs;
-		if(cla->size()>1+ofs){ //Do not check consistency of singletons
-			non_singletons++;
-			non_singleton_nodes+=cla->size()-ofs;
-			cw_intra=cw_inter=cf_intra_thr=cw_intra_thr=0.0;
-			cw_chi2=c_chi2=0.0;
-			nintra=ninter=0;
-			for(svect::iterator ita=cla->begin()+ofs;ita!=cla->end();ita++){
-				for(svect::iterator itb=ita+1;itb!=cla->end();itb++)
-					if(_MX->existEdge(*ita,*itb)){
-						//Number of intra-cluster edges
-						nintra++;
-						//Intra-cluster weight 
-						cw_intra+=_MX->v(*ita,*itb);
-						if(_MX->v(*ita,*itb)>_threshold) { 
-							//Fraction of intra-cluster edges above threshold
-							cf_intra_thr+=1.0; 
-							//Intra-cluster weight above threshold
-							cw_intra_thr+=_MX->v(*ita,*itb) ;
-						}
-						if(VERBOSE) cout<<"#"<<*ita<<" - "<<*itb<<" = "<<_MX->v(*ita,*itb)<<endl;
-					}
-				for(smat::iterator clb=_part->clusters.begin();clb!=_part->clusters.end();clb++)
-					if(clb!=cla)
-						for(svect::iterator itb=clb->begin()+ofs;itb!=clb->end();itb++)
-							if(_MX->existEdge(*ita,*itb)){ 
-								//Number of inter-cluster edges
-								ninter++;
-								//Inter-cluster weight 
-								cw_inter+=_MX->v(*ita,*itb);
-								if(clb->size()==1+ofs) {
-									//Inter-cluster weight between a non-singleton and a singleton
-									sw_inter+=_MX->v(*ita,*itb);
-								//Thermodynamic magnitudes
-									//Ensemble probability
-									pa=exp(-beta*(-0.5*_MX->v(*ita,*itb)-mu));
-									//Entropy
-									S+=-pa*log(pa);
-									//Internal energy
-									E+=-0.5*_MX->v(*ita,*itb)*pa;
-									//Heat capacity
-									Cv+=0.25*_MX->v(*ita,*itb)*_MX->v(*ita,*itb)*pa;
-									//Chi-square
-									_chi2+=pow(1.0-_part->n_items()*pa,2);
-								}
-							}
-			}
-			cE=-cw_intra/K-0.5*cw_inter;
-			//double pa=(1.0*cla->size()-ofs)/_part->n_items(); // probability of cluster
-			pa=exp(-beta*(cE-mu*(1.0*cla->size()-ofs)));
-			Z+=pa;
-			S+=-pa*log(pa);
-			/// Thermodynamic averages
-			//N+=(1.0*cla->size()-ofs)*pa;
-			N+=_part->n_items()*pa;
-			w_intra+=cw_intra*pa;
-			E+=cE*pa;
-			Cv+=cE*cE*pa;
-			w_inter+=0.5*cw_inter*pa;
-			w_intra_thr+=cw_intra_thr*pa;
-			tf_intra_thr+=(cf_intra_thr/nintra*100.0)*pa;
-			//Surface tension
-			Es+=0.5*cw_intra;
-			Ei+=cw_inter;
-			///Expected (random) in/out-going weight
-			//expected=pow(cw_intra+cw_inter,2); 
-			//cw_chi2=pow(cw_intra-expected,2)/expected;
-			expected=1.0*cla->size()-ofs;
-			c_chi2=pow(_part->n_items()*pa-expected,2)/expected;
-			///Expected (random) in/out-going edges
-			expected=(nintra+ninter)==0?0:pow((double)(nintra+ninter),2);
-			//c_chi2=pow(nintra-expected,2)/expected;
-			c_Qval+=expected;
-			/// Newman & et al. modularity value
-			Qval+=(double)nintra;
-			/// Cluster averages
-			if(nintra>0)cw_intra/=(double)nintra;
-			if(ninter>0)cw_inter/=(double)ninter;
-			if(nintra>0)cf_intra_thr/=(double)nintra/100.0;
-			//c_chi2 becomes inf too often...
-			//cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<"\t"<<c_chi2<<endl;
-			cout<<non_singletons<<"\t"<<(*cla)[1]<<"\t"<<cla->size()-ofs<<"\t"<<cw_intra*nintra<<"\t"<<cw_inter*ninter<<"\t"<<cw_intra<<"\t"<<cw_inter<<"\t"<<(int)cf_intra_thr<<"\t"<<nintra<<"\t"<<ninter<<endl;
-			//w_chi2+=cw_chi2;
-			_chi2+=c_chi2;
-			// Overall Cluster averages
-			_w_intra+=cw_intra;
-			_w_inter+=cw_inter;
-			_f_intra_thr+=cf_intra_thr;
-			//Don't know what was this meant for...
-			if(cw_inter==0){
-				nstableclusters++;
-				nstableclusters_size+=cla->size()-ofs;
-			}
-		}
-	}
+	_checkClusters(\
+		K, ofs,
+		total_nodes, non_singletons,\
+		non_singleton_nodes,cw_intra,\
+		cw_inter,cf_intra_thr,\
+		cw_intra_thr, w_intra_thr,\
+		cw_chi2,c_chi2,\
+		nintra,ninter,\
+		sw_inter,w_intra,\
+		w_inter,tf_intra_thr,\
+		pa,S,\
+		E,Cv,\
+		cE,N,\
+		Z,Es,\
+		Ei,expected,\
+		c_Qval,Qval,\
+		nstableclusters,nstableclusters_size\
+		);
+	
 	TE=-(Es+Ei+sw_inter);
 	Es=-(Es-Ei-sw_inter);
 	double zeta=Es/TE;
@@ -208,9 +309,6 @@ void ccop::checkConsistency(){
 	E/=Z;
 	Cv=Cv/Z-(E*E);
 	w_inter+=0.5*sw_inter;
-	//if(!QUIET)cout<<"#TEST: nsing="<<_part->n_singletons()<<" nitems="<<_part->n_items()<<" sw_inter="<<sw_inter<<endl;
-	///expected is a dummy variable, so we can use it here too and avoid declaring more variables.
-	//expected=0.5*non_singleton_nodes*(non_singleton_nodes-1.0);
 	expected=0.5*total_nodes*(total_nodes-1.0);
 	c_Qval/=pow(expected,2);
 	Qval/=expected;

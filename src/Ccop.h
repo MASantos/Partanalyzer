@@ -43,10 +43,64 @@ class ccop
 	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;
 	long int _nintra,_ninter;
 	double _chi2;
+
+	void _checkClusters(\
+		long int& K, int& ofs,\
+		long int& total_nodes, int& non_singletons,\
+		long int& non_singleton_nodes, double& cw_intra,\
+		double& cw_inter, double& cf_intra_thr, \
+		double& cw_intra_thr, double& w_intra_thr, \
+		double& cw_chi2, double& c_chi2, \
+		long int& nintra, long int& ninter, \
+		double& sw_inter, double& w_intra, \
+		double& w_inter, double& tf_intra_thr, \
+		double& pa, double& S, \
+		double& E, double& Cv, \
+		double& cE, double& N, \
+		double& Z, double& Es, \
+		double& Ei, double& expected, \
+		double& c_Qval, double& Qval, \
+		int& nstableclusters, long int& nstableclusters_size\
+		);
+
+	void _evaluateCluster(\
+		smat::iterator cla , long int& K, \
+		int& ofs, int& non_singletons,\
+		long int& non_singleton_nodes,double& cw_intra,\
+		double& cw_inter, double& cf_intra_thr, \
+		double& cw_intra_thr, double& w_intra_thr, \
+		double& cw_chi2, double& c_chi2, \
+		long int& nintra, long int& ninter, \
+		double& sw_inter, double& w_intra, \
+		double& w_inter, double& tf_intra_thr, \
+		double& pa, double& S, \
+		double& E, double& Cv, \
+		double& cE, double& N, \
+		double& Z, double& Es, \
+		double& Ei, double& expected, \
+		double& c_Qval, double& Qval, \
+		int& nstableclusters, long int& nstableclusters_size\
+		);
+
+	void _getIntraClusterValuesPerElement(\
+		svect::iterator ita, smat::iterator cla, \
+		long int& nintra, double& cw_intra, \
+		double& cf_intra_thr, double& cw_intra_thr\
+		);
+
+	void _getInterClusterValuesPerElement(\
+		svect::iterator ita, smat::iterator cla, \
+		int& ofs, long int& ninter, \
+		double& cw_inter, double& sw_inter, \
+		double& pa, double& S, \
+		double& E, double& Cv\
+		);
+
 public:
 	ccop(MatrixOfValues* MX, Partition* part);
 	ccop(MatrixOfValues* MX, Partition* part, double thr);
 	void checkConsistency();
+	
 	void distribution();
 	//double mx(string a, string b){ return _MX(a,b);}
 	double threshold(){return _threshold;}
