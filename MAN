@@ -54,13 +54,13 @@ For debugging: print the interaction matrix read by the program
 ./partanalyze --print-matrix test-blast_pairwise_id
 
 
-Full help (as of version alpha 0.5)
+Full help (as of version alpha 0.5.0.2)
 			partanalyzer (Partition Analyzer)
 
 Usage:
        partanalyzer [-h|--help] (Use --help for more details)
        partanalyzer --version 
-   (For analyzing partitions)                                          
+   For analyzing partitions                                          
        partanalyzer [--verbose][-q] [-t] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
        partanalyzer [--verbose][-q] -c [-tab tab_file] matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
        partanalyzer [--verbose][-q] -d matrix-of-values partition1 [partition_offset (=2)]
@@ -69,16 +69,17 @@ Usage:
        partanalyzer [--verbose][-q] [-t] --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        partanalyzer [--verbose][-q] [-t] (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
        partanalyzer [--verbose][-q] [-t] (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
-   (For converting between different partition formats)                 
+   For converting between different partition formats                 
        partanalyzer [--verbose][-q] --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]
        partanalyzer [--verbose][-q] --toFREE partition [partition1_offset (=2) ]
        partanalyzer [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
-   (For analyzing Multiple Sequence Alignments)                        
-       partanalyzer [--verbose][-q] --msa-seqid-stat multiple_seq_alignment.fasta
+   For analyzing Multiple Sequence Alignments                        
+       partanalyzer [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta
        partanalyzer [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta
+       partanalyzer [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta
        partanalyzer [--verbose][-q] --print-msa multiple_seq_alignment.fasta 
        partanalyzer [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta 
-   (For dealing with -interaction- matrices)                           
+   For dealing with -interaction- matrices                           
        partanalyzer [--verbose][-q] --edge-dist matrix-of-values [partition [partition_offset (=2)] ] 
        partanalyzer [--verbose][-q] -m matrix-of-values1 matrix-of-values2 
        partanalyzer [--verbose][-q] -r matrix-of-values1 matrix-of-values2 partition [partition_offset (=2)]
@@ -108,7 +109,7 @@ For analyzing partitions
           Calculate the edit score distance between partition1 and     
                partition2                                              
                                                                        
-       -p , --purity-scores                                            
+       -p , -purity-scores                                             
           Calculates the purity scores of partition2 (the target)      
                againts the partition1 (the reference).                 
                                                                        
@@ -122,7 +123,7 @@ For analyzing partitions
           (See below for syntaxis of the matrix and tab file)          
                                                                        
        -d , --intra-inter-edge-dist                                    
-          Calculate intra and inter cluster distribution of weight     
+          Calculate intra and inter cluster distribution of weights    
           according to the given matrix                                
                                                                        
        -J , --jstat [-ext extensivity] [-ref]                          
@@ -190,7 +191,7 @@ For analyzing partitions
                  can be negative or positive.                          
           Option -cons or -consensus will print the consensus partition
                                                                        
-       -A , --adjstat                                                  
+       -A , --adjacency-stat , {--adjstat}                             
           Determines the average adjacency matrix from the provided    
           partitions. The adjacency matrix of a partition is the graph 
 		 where edges (0 or 1 ) represent two elements belonging to the
@@ -198,7 +199,7 @@ For analyzing partitions
 		 continous values [0,1]. The output consists in a matrix of   
 		 values and a gray-scale image of it in PGM format.           
                                                                        
-       -S , --split-merge , {--splitstat}                              
+       -S , --split-merge-analysis , {--splitstat}                     
          (Split-Merge plot)                                            
           Determines the overlap of each cluster to those of the       
           reference partition (the first). Possible values are for     
@@ -243,8 +244,14 @@ For converting between different partition formats
 For analyzing Multiple Sequence Alignments                             
                                                                        
        --msa-seqid-stat                                                
-          Given a multiple sequence alignment in fasta format, it    
-          prints all pair-wise sequence identities.                    
+       --msa-seqid-stat [--positions file]                             
+          Given a multiple sequence alignment in fasta format, it      
+          prints all pair-wise sequence identities. By default, it     
+          calculates identities over the full sequence length. The     
+          second version allows to specify the (reduced) set of positions
+          we want to consider in comparing sequences. These should be  
+          specified in a file, each separated by space,tabs, new lines,
+          etc. The positions are understood as columns of the MSA.     
                                                                        
        --msa-seqid-avg [-thr threshold ]                               
           Similar as option --msa-seqid-avg, but prints for each sequence
@@ -256,6 +263,10 @@ For analyzing Multiple Sequence Alignments
           Option -thr allows to provide a specific threshold to use.   
                       default value is 50%. Values are floating numbers
                       within [0,100].                                  
+                                                                       
+       --msa-extract-positions positions_file msa_file                 
+          From the given MSA, extract only columns specified in file   
+          positions_file.                                              
                                                                        
        --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed]          
           Duplicates sequences chosen at random in the given multiple  
@@ -313,7 +324,7 @@ General options
        --verbose                                                       
           For debugging.                                               
                                                                        
-       -q                                                              
+       -q , --quiet                                                    
           quiet mode. Do not print out comment lines (that start with  
           `#').                                                        
                                                                        
@@ -347,8 +358,8 @@ File formats:
          MCL : MCL's own matrix format for partitions. See MCL manual. 
 
 License
-# partanalyzer Version alpha 0.5(SSF)
-# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Mar 11 2009
+# ./partanalyzer Version alpha 0.5.0.2
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Mar 30 2009
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #
