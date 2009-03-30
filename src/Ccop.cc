@@ -68,9 +68,12 @@ void ccop::distribution(){
 }
 
 void ccop::_getIntraClusterValuesPerElement(\
-	svect::iterator ita, smat::iterator cla, \ //Element ita of cluster cla
-	long int& nintra, double& cw_intra, \ //number of intra-cluster edges and their total weight
-	double& cf_intra_thr, double& cw_intra_thr\ //fraction of edges above threshold and their combined weight
+ //Element ita of cluster cla
+	svect::iterator ita, smat::iterator cla, \
+//number of intra-cluster edges and their total weight
+	long int& nintra, double& cw_intra, \
+//fraction of edges above threshold and their combined weight
+	double& cf_intra_thr, double& cw_intra_thr\
 	){
 				for(svect::iterator itb=ita+1;itb!=cla->end();itb++)//No self-edges; Running over upper-half diagonal
 					if(_MX->existEdge(*ita,*itb)){
@@ -89,11 +92,16 @@ void ccop::_getIntraClusterValuesPerElement(\
 }
 
 void ccop::_getInterClusterValuesPerElement(\
-	svect::iterator ita, smat::iterator cla, \ //Element ita of cluster cla
-	int& ofs, long int& ninter, \ //Offset of clusters and number of inter-cluster edges
-	double& cw_inter, double& sw_inter, \ //total weight of inter-cluster edges and total inter-cluster weight against singletons
-	double& pa, double& S, \ //Statistical Mechanics (SM) probability of cluster cla and its SM entropy
-	double& E, double& Cv\ //SM internal energy of cluster cla and its specific heat (variance of E)
+//Element ita of cluster cla
+	svect::iterator ita, smat::iterator cla, \
+//Offset of clusters and number of inter-cluster edges
+	int& ofs, long int& ninter, \
+//total weight of inter-cluster edges and total inter-cluster weight against singletons
+	double& cw_inter, double& sw_inter, \
+//Statistical Mechanics (SM) probability of cluster cla and its SM entropy
+	double& pa, double& S, \
+//SM internal energy of cluster cla and its specific heat (variance of E)
+	double& E, double& Cv\
 	){
 	for(smat::iterator clb=_part->clusters.begin();clb!=_part->clusters.end();clb++){
 		if(clb!=cla)
