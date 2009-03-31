@@ -99,8 +99,9 @@ double Sequence::id(Sequence* Seq,vector<int>* positions)
         if(VERBOSE)cout<<"#Sequence comparison starting at position "<<starts+1<<" up to position "<<ends<<endl;
         int selected_pos=-9999;
         for(int i=starts;i<ends;i++){
+		if(VERBOSE)cout<<" starts="<<starts<<" ends="<<ends<<" : i="<<i<<endl;
                 //if(!(positions==NULL)&&positions->empty()>0){
-                if(!positions->empty()){
+                if(!(positions==NULL || positions->empty() ) ){
                         all_positions=false;
                         for(vector<int>::iterator c=positions->begin();c!=positions->end();c++){
                                 if(i==*c){
@@ -110,7 +111,7 @@ double Sequence::id(Sequence* Seq,vector<int>* positions)
                         }
                         if(selected_pos!=i)continue;
                         if(VERBOSE)cout<<"#Position: "<<i<<endl;
-                }else exit(1);
+                }
                 if(chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)continue;
                 norm++;
                 if(chrAt(i).compare(Seq->chrAt(i))==0)id++;
@@ -167,5 +168,11 @@ double Sequence::id(Sequence* Seq)
         return id/norm*100.0;
 }
 */
+
+void Sequence::print(){
+	if(_name.compare("")==0||_seq.compare("")==0)return;
+	cout<<_name<<"\n"<<_seq<<endl;
+}
+
 #endif //END _CLASS_SEQUENCE
 

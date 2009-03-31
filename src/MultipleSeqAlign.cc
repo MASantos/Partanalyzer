@@ -41,16 +41,16 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
                 exit(1);
         }
         if(!QUIET) cout<<"#Reading MSA "<<msaf<<endl;
-        string str;
-        string seq="";
-        Sequence Seq;
+        string str; //String read from file
+        string seq=""; //String containing sequence read from file
+        Sequence Seq; //Actual sequence structure
         while(_is>>str){
                 string fchr=str.substr(0,1);
                 if(fchr.compare("#")==0)continue;
                 if(VERBOSE)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
                 if(strcmp(fchr.c_str(),">")==0){
+                        if(VERBOSE)Seq.print();
                         if(VERBOSE)cout<<"#New string: "<<str<<endl;
-                        //if(!strcmp("",seq.c_str())==0){
                         if(!seq.compare("")==0){
                                 Seq.setSeq(seq);
                                 if(_len==0)_len=Seq.length();
@@ -59,7 +59,6 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
                                         exit(1);
                                 }
                                 _Seqlist.push_back(Seq);
-                                if(VERBOSE)Seq.print();
                         }
                         Seq.setName(str);
                         seq="";
@@ -127,8 +126,14 @@ double MultipleSeqAlign::averageId(vector<int>* positions)
 {
         if(!QUIET)cout<<"#Starting averageId calculation"<<endl;
         double avid=0.0;
-        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
+        if(VERBOSE){
+		cout<<"#_Seqlist.size()="<<_Seqlist.size();
+		if(positions!=NULL)cout<<" positions->empty()"<<positions->empty()<<endl;
+		else cout<<" positions is NULL"<<endl;
+	}
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++){
                 for(MSA::iterator itb=ita+1;itb!=_Seqlist.end();itb++){
+                        if(VERBOSE)cout<<"#calculating pair-wise id..."<<endl;
                         avid+=(*ita).id(*itb,positions);
                         if(VERBOSE){
                                 cout<<"# "<<(*ita).name()<<" - "<<(*itb).name()<<" id="<<(*ita).id(*itb,positions)<<endl;
@@ -142,6 +147,7 @@ double MultipleSeqAlign::averageId(vector<int>* positions)
                                 cout<<endl;
                         }
                 }
+	}
         return avid/(double)(_nseq*(_nseq-1)*0.5);
 }
 
@@ -193,7 +199,7 @@ void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0, vector<int>* pos
 
 void MultipleSeqAlign::print()
 {
-        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++)
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-0;ita++)
                 (*ita).print();
 }
 

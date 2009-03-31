@@ -57,7 +57,7 @@ public:
 	///Set its name
         void setName(string name){ _name=name;}
 	///Print a sequence with its name adding a newline at the end
-        void print(){cout<<_name<<"\n"<<_seq<<endl;}
+        void print();
 	///Streams out a sequence and its name. Does not add a newline at the end.
 	friend ostream& operator<<(ostream& os , Sequence& s);
 };

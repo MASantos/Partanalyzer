@@ -148,12 +148,6 @@ int main(int argc, char* argv[]) {
 			argc--;
 			argv++;
 		}
-		if(strcmp(*argv,"--print-matrix")==0||strcmp(*argv,"--print-graph")==0){
-			mxofval=argv[1];
-        		MatrixOfValues MX(mxofval);
-			MX.printMatrix();
-			exit(0);
-		}
 		///Calculate intra-cluster and inter-cluster distribution of weights
 		else if(strcmp(*argv,"-d")==0||strcmp(*argv,"--intra-inter-edge-dist")==0){
 			analysis=prgCDIS;
@@ -513,7 +507,7 @@ int main(int argc, char* argv[]) {
 			partitionf1=argv[0];
 		}
 ///(For analyzing Multiple Sequence Alignments)
-                else if (strcmp(*argv,"--print-msa")==0){
+                else if (strcmp(*argv,"--msa-print")==0||strcmp(*argv,"--print-msa")==0){
                         analysis=prgPMSA;
                         if(argc<2)printCommandLineError();
                         msaf=argv[1];
@@ -634,6 +628,12 @@ int main(int argc, char* argv[]) {
 			if(argc<3)printCommandLineError();
 			mxofval=argv[1];
 			mxofvalb=argv[2];
+		}
+		else if(strcmp(*argv,"--print-matrix")==0||strcmp(*argv,"--print-graph")==0){
+			mxofval=argv[1];
+        		MatrixOfValues MX(mxofval);
+			MX.printMatrix();
+			exit(0);
 		}
 		else {
 			printCommandLineError();
