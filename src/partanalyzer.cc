@@ -535,6 +535,11 @@ int main(int argc, char* argv[]) {
                                 if(!QUIET)cout<<endl;
                         }
                         msaf=argv[0];
+			argc--;argv++;
+                        if(argc>0){
+				msafb=argv[0];
+				analysis=prgMMPI;
+			}
                 }
                 else if (strcmp(*argv,"--msa-seqid-avg")==0){
                         analysis=prgMAPI;
@@ -903,12 +908,19 @@ int main(int argc, char* argv[]) {
                         msa.printAveragePairwiseIds(Id_threshold);
 			break;
 			}
+		case prgMMPI:
 		case prgMMAI:{
                         MultipleSeqAlign msa1(msaf);
                         MultipleSeqAlign msa2(msafb);
                         cout<<"#avgSeqId-MSA1 "<<msa1.averageId()<<endl;
                         cout<<"#avgSeqId-MSA2 "<<msa2.averageId()<<endl;
-                        msa1.printAveragePairwiseIds(msa2,Id_threshold);
+                        switch(analysis){
+				case prgMMAI:
+					msa1.printAveragePairwiseIds(msa2,Id_threshold,&positions);
+					break;
+				case prgMMPI:
+					msa1.printPairwiseIds(msa2,&positions);
+			}
 			break;
 			}
 		case prgMRED:{
