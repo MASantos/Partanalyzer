@@ -169,7 +169,7 @@ void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0, vector<int>* pos
 	cout<<"#Id_threshold= "<<thr<<endl;
         int onn=0;
         //double thr=50.0;
-        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-1;ita++){
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-0;ita++){
                 string na=(*ita).name();
                 if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
                 double id,id2,v,mdid;
