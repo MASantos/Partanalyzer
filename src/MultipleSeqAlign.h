@@ -53,6 +53,10 @@ public:
 	MultipleSeqAlign(MSA& msa);
 	///Subsample MSA at given positions
 	MultipleSeqAlign xtractPositions(vector<int>* positions=NULL);
+	///Get begin iterator to _Seqlist
+	MSA::iterator beginSeq(){ return _Seqlist.begin();}
+	///Get end iterator to _Seqlist
+	MSA::iterator endSeq(){ return _Seqlist.end();}
 	///Allows adding a single Sequence object to the multiple sequence alignment 
 	void addSeq(Sequence*);
 	///Is MSA empty?
@@ -76,7 +80,11 @@ public:
 	///Prints all pair-wise identities 
         void printPairwiseIds(vector<int>* positions=NULL);
 	///Prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50
-        void printAveragePairwiseIds(double thr,vector<int>* positions=NULL);
+        void printAveragePairwiseIds(double thr=50.0,vector<int>* positions=NULL);
+	///Given alternative MSA, prints all pair-wise identities 
+        void printPairwiseIds(MultipleSeqAlign& msa, vector<int>* positions=NULL);
+	///Given alternative MSA, prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50. 
+        void printAveragePairwiseIds(MultipleSeqAlign& msa, double thr,vector<int>* positions=NULL);
 	///Print the whole multiple sequence alignment
         void print();
 	///Generates randomly n additional sequences each an exact copy of one of the original sequences

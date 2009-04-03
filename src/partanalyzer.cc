@@ -46,6 +46,7 @@ int main(int argc, char* argv[]) {
 	bool MCLTABF=false;
 	bool DIST_SUBSPROJECT=false;
 	char* msaf;
+	char* msafb;
 	char* partitionf1;
 	char* partitionf2;
 	char* mxofval;
@@ -535,6 +536,23 @@ int main(int argc, char* argv[]) {
                         }
                         msaf=argv[0];
                 }
+                else if (strcmp(*argv,"--msa-seqid-avg")==0){
+                        analysis=prgMAPI;
+                        if(argc<2)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-thr")==0){
+                        	if(argc<3)printCommandLineError();
+				argc--;argv++;
+				Id_threshold=atof(argv[0]);
+				argc--;argv++;
+			}
+                        msaf=argv[0];
+			argc--;argv++;
+                        if(argc>0){
+				msafb=argv[0];
+				analysis=prgMMAI;
+			}
+                }
                 else if (strcmp(*argv,"--msa-extract-positions")==0){
                         analysis=prgMSXP;
                         if(argc<3)printCommandLineError();
@@ -556,19 +574,6 @@ int main(int argc, char* argv[]) {
                         if(argc<1)printCommandLineError("Missing MSA file");
                         msaf=argv[0];
 		}
-                else if (strcmp(*argv,"--msa-seqid-avg")==0){
-                        analysis=prgMAPI;
-                        if(argc<2)printCommandLineError();
-			argc--;argv++;
-			if(strcmp(*argv,"-thr")==0){
-                        	if(argc<3)printCommandLineError();
-				argc--;argv++;
-				Id_threshold=atof(argv[0]);
-				argc--;argv++;
-			}
-                        msaf=argv[0];
-			argc--;argv++;
-                }
 		else if (strcmp(*argv,"--msa-redundant")==0){
 			analysis=prgMRED;
 			if(argc<2)printCommandLineError();
@@ -896,6 +901,14 @@ int main(int argc, char* argv[]) {
                         MultipleSeqAlign msa(msaf);
                         cout<<"#avgSeqId "<<msa.averageId()<<endl;
                         msa.printAveragePairwiseIds(Id_threshold);
+			break;
+			}
+		case prgMMAI:{
+                        MultipleSeqAlign msa1(msaf);
+                        MultipleSeqAlign msa2(msafb);
+                        cout<<"#avgSeqId-MSA1 "<<msa1.averageId()<<endl;
+                        cout<<"#avgSeqId-MSA2 "<<msa2.averageId()<<endl;
+                        msa1.printAveragePairwiseIds(msa2,Id_threshold);
 			break;
 			}
 		case prgMRED:{

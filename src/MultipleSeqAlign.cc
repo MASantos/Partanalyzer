@@ -164,7 +164,40 @@ void MultipleSeqAlign::printPairwiseIds(vector<int>* positions)
                 }
 }
 
-void MultipleSeqAlign::printAveragePairwiseIds(double thr=50.0, vector<int>* positions)
+void MultipleSeqAlign::printAveragePairwiseIds(MultipleSeqAlign& msa, double thr, vector<int>* positions)
+{
+	cout<<"#Id_threshold= "<<thr<<endl;
+        int onn=0;
+        //double thr=50.0;
+        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end();ita++){
+                string na=(*ita).name();
+                if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
+                double id,id2,v,mdid;
+                id=id2=v=mdid=0.0;
+                double idmin=101;
+                double idmax=-1;
+                int nn=0;
+                int nthr=0;
+                for(MSA::iterator itb=msa.beginSeq();itb!=msa.endSeq();itb++){
+                        if(ita==itb)continue;
+                        v=SeqId(*ita,*itb,positions);
+                        v=v<=1?v*100:v;
+                        if(v>thr)nthr++;
+                        id+=v;
+                        id2+=v*v;
+                        idmin=v<idmin?v:idmin;
+                        idmax=v>idmax?v:idmax;
+                        nn++;
+                }
+                ///Print AverageID  StdDev. Variance Min Max #edges>50%Id %edges>50 total#edges
+                cout<<na<<"\t"<<id/(double)nn<<"\t"<<sqrt(id2/nn-(id/nn)*(id/nn))<<"\t"<<(id2/nn-(id/nn)*(id/nn))<<"\t"<<idmin<<"\t"<<idmax<<"\t"<<nthr<<"\t"<<(double)nthr/nn*100.0<<"\t"<<nn<<endl;
+                if(VERBOSE&&!onn==0&&!onn==nn)
+                        cout<<"#WARNING: nodes with different number of edges"<<endl;
+                onn=nn;
+        }
+}
+
+void MultipleSeqAlign::printAveragePairwiseIds(double thr, vector<int>* positions)
 {
 	cout<<"#Id_threshold= "<<thr<<endl;
         int onn=0;
