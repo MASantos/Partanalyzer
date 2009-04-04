@@ -78,7 +78,9 @@ public:
 	///Instantiate partition from file using format iformat and specified offset (applies only to partanalyzer's own format partFmtPART)
 	Partition(char* file, partFileFormat iformat=partFmtPART, int ofs=2);
 	///Create a partition out of a set of clusters
-	Partition(smat* clustersl, int ofs, char* partf=NULL , char* tabf=NULL);
+	Partition(smat* clustersl, int ofs, bool dosort=true, char* partf=NULL , char* tabf=NULL);
+	///Extract selected elements
+	Partition xtractElements(svect* elements);
 	///Create a consensus partition 
 	void xtrConsPart(multimap<int,string,greaterThan> consPart, int ofs=1);
 	///Get (and reset) the underlying set of elements sorted by alphanumerically

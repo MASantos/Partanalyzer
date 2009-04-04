@@ -48,12 +48,30 @@ g++ -o partanalyzer partanalyzer.cc
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.5.0.6";
+const char* VERSION="alpha 0.5.0.7";
 
 bool 	VERBOSE=false;
 
 bool    QUIET=false;
 #endif
+
+template<class T> void readListFromFile(char* argv0, T& container){
+        if(!QUIET)cout<<"#Reading items list from "<<argv0<<endl;
+        ifstream is(argv0);
+        if(!is){
+                cout<<"ERROR: Cannot open file "<<argv0<<endl;
+                exit(1);
+        }
+        string fn;
+        while(is>>fn){
+                if(fn.compare(0,1,"#")==0){ // It's a comment line...
+                        getline(is,fn);
+                        continue;               // ignore the whole line and get to the next one.
+                }
+		container.push_back(fn);
+        }
+        if(!QUIET)cout<<"#List file contains "<<container.size()<<" entries.\n#First entry seen "<<container[0]<<"\n#Last ("<<container.size()<<") entry seen "<<container[container.size()-1]<<endl;
+}
 
 //void readListInputFiles(ifstream is, vector<Charr> infilenames){
 inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){

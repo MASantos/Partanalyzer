@@ -28,6 +28,37 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 Partition::Partition(){
 }
 
+Partition Partition::xtractElements(svect* elements){
+	smat nclustersl;	
+	int ofs=_items_offset;
+	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
+		svect found;
+		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++){
+			for(svect::iterator el=elements->begin();el!=elements->end();el++){
+				if(it->compare(*el)==0||it->compare((*el).substr(1,(*el).length()))==0)//ignore starting '>' character
+					found.push_back(*it);
+			}
+		}
+		if(!found.empty()){
+			//sort(found.begin(),found.end());
+			stringstream ss;
+			string sz;
+			if(_items_offset==2){
+				found.insert(found.begin(),*(cl->begin()+1));
+				ss<<found.size()-1;
+			}else{
+				ss<<found.size();
+			}
+			ss>>sz;
+			found.insert(found.begin(),sz);
+			nclustersl.push_back(found);
+		}
+	}
+	containerLargerThan<svect> svectComparator;
+	//sort(nclustersl.begin(),nclustersl.end(),svectComparator);
+	return Partition(&nclustersl,ofs);
+}
+
 graph Partition::setAdjacencyMatrix(){
 	_Ad.clear();
 	if(sitems.empty()) getItems();
@@ -120,7 +151,7 @@ Partition::Partition(char* file, partFileFormat iformat, int ofs){//Defaults: if
 //		if(!VERBOSE)cout<<"#WARNING: Partition::Partition : out_of_range index _largest_cluster "<<endl;
 }
 
-Partition::Partition(smat* clustersl, int ofs, char* partf, char* tabf){//Defaults: partf=NULL, tabf=NULL
+Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* tabf){//Defaults: partf=NULL, tabf=NULL
 	//_partitionf=NULL;
 	//_mcltabf=NULL;
 	_partitionf=partf;
@@ -128,6 +159,13 @@ Partition::Partition(smat* clustersl, int ofs, char* partf, char* tabf){//Defaul
 	_piformat=partFmtPART;
 	clusters=*clustersl;
 	_items_offset=ofs;
+	if(dosort){
+		containerLargerThan<svect> svectComparator;
+		for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
+			sort(cl->begin()+_items_offset,cl->end());
+		}
+		sort(clusters.begin(),clusters.end(),svectComparator);
+	}
 	_resetMembers();
 	/*
 	_nclusters=clusters.size();

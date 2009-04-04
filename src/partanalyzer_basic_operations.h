@@ -214,30 +214,24 @@ inline ostream& operator<<(ostream& os, sset& cl){
 	return os;
 }
 ///Comparison operator for allowing reverse sorting of maps
-/*
-template<class T> bool greatherThan(T& i, T&j){
-	return i>j;
-}
-*/
 struct greaterThan {
 	template<class T> bool operator() (T& i, T& j){
 		return i>j;	
 	}
 };
-/*
-struct greaterThan {
-	bool operator() (const int& i, const int& j) const {
-		return i>j;	
-	}
-};
-*/
 
-//struct setLargerThan {
 template <class C>
 struct containerLargerThan {
         bool operator () (C ca, C cb) {
-        //bool operator () (sset sa, sset sb) {
-                return (ca.size())>(cb.size());
+                //return ( (ca.size()>cb.size()) || (*(ca.begin()) < *(cb.begin())) );
+                //return ( (ca.size()>cb.size())  || ( *(ca.begin()) < *(cb.begin()) ) );
+                //return ( ( *(ca.begin()) < *(cb.begin()) ) || (ca.size()>cb.size()) );
+                return ( (ca.size()>cb.size()) );
+		/*
+		bool sz=ca.size()>cb.size();
+		bool cn=*(ca.begin()) < *(cb.begin());
+		return (sz||cn);
+		*/
         }
 };
 

@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
 	char* mxofval;
 	char* mxofvalb;
 	vector<int> positions;
-	svect seqnames;
+	svect namelist;
 	pmetricv metric=shannon;
 	double extensivity=EXTENSIVITY_DEFAULT;
         double threshold=-1; //Default threshold
@@ -149,6 +149,24 @@ int main(int argc, char* argv[]) {
 			mu=atof(argv[0]);
 			argc--;
 			argv++;
+		}
+		else if (strcmp(*argv,"--part-extract-elements")==0||strcmp(*argv,"--extract-elements")==0){
+			analysis=prgPAXE;
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(!QUIET)cout<<"#Extracting elements from partition"<<endl;
+			readListFromFile(argv[0],namelist);
+			argc--;argv++;
+			partitionf1=argv[0];
+			argc--;argv++;
+			if(argc>0&&strcmp(*argv,"-tab")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				MCLTABF=true;
+				argc--;argv++;
+			}
+        		if(argc>0) cluster1_offset=atoi(argv[0]);
 		}
 		///Calculate intra-cluster and inter-cluster distribution of weights
 		else if(strcmp(*argv,"-d")==0||strcmp(*argv,"--intra-inter-edge-dist")==0){
@@ -592,9 +610,9 @@ int main(int argc, char* argv[]) {
                         argc--;argv++;
 			string st,stb;
 			while(is>>st){ //Sequence names expected in a file
-				seqnames.push_back(st);
+				namelist.push_back(st);
 			}
-			if(!QUIET)cout<<"#Extracting Sequences from multiple sequence alignment\n#Number of sequences to extract "<<seqnames.size()<<"\n#Last name found : "<<seqnames[seqnames.size()-1]<<endl;
+			if(!QUIET)cout<<"#Extracting Sequences from multiple sequence alignment\n#Number of sequences to extract "<<namelist.size()<<"\n#Last name found : "<<namelist[namelist.size()-1]<<endl;
 			msaf=argv[0];
 		}
 		else if (strcmp(*argv,"--msa-redundant")==0){
@@ -675,6 +693,12 @@ int main(int argc, char* argv[]) {
 #endif
 	switch(analysis){
 ///(For analyzing partitions)
+		case prgPAXE:{
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+			Partition npart=partition.xtractElements(&namelist);
+			npart.printPartition(poformat);
+			break;
+			}
 		case prgCDIS:
 		case prgCCOP:{
         		MatrixOfValues MX(mxofval);
@@ -922,7 +946,7 @@ int main(int argc, char* argv[]) {
 			}
 		case prgMSXS:{
                         MultipleSeqAlign msa(msaf);
-                        MultipleSeqAlign nmsa=msa.xtractSequences(&seqnames);
+                        MultipleSeqAlign nmsa=msa.xtractSequences(&namelist);
 			nmsa.print();
 			break;
 			}

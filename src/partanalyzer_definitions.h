@@ -88,7 +88,7 @@ enum flagheader {BEGIN,END};
 ///Enummerates the possible ways of generating duplicates for a given MSA
 enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
 ///Enummerates possible main program command lines options
-enum prganalysis { prgCCOP=1,prgCDIS,
+enum prganalysis { prgCCOP=1,prgCDIS,prgPAXE,
 	prgPSPP,prgPSST,prgPSSR,
 	prgVIPP,prgVIST,prgVISR,
 	prgEDSC,prgEDST,prgEDSR,
