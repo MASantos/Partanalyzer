@@ -427,7 +427,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-I")==0||strcmp(*argv,"-info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
+		else if (strcmp(*argv,"-I")==0||strcmp(*argv,"--info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
 			analysis=prgIPAR;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
