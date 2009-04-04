@@ -13,7 +13,6 @@ string getSubstr(string a){
 	return a;
 }
 
-/*
 template<class T> class kk {
 public:
 	map<int, T> k;
@@ -30,6 +29,7 @@ public:
 	iterator(const map<int, T>& mup):mymap(mup){}
 	
 };
+/*
 */
 int main(){
 	/*
