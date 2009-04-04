@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
 	char* mxofval;
 	char* mxofvalb;
 	vector<int> positions;
+	svect seqnames;
 	pmetricv metric=shannon;
 	double extensivity=EXTENSIVITY_DEFAULT;
         double threshold=-1; //Default threshold
@@ -579,6 +580,23 @@ int main(int argc, char* argv[]) {
                         if(argc<1)printCommandLineError("Missing MSA file");
                         msaf=argv[0];
 		}
+                else if (strcmp(*argv,"--msa-extract-sequences")==0){
+                        analysis=prgMSXS;
+                        if(argc<3)printCommandLineError();
+                        argc--;argv++;
+                        ifstream is(argv[0]);
+                        if(!is){
+                                cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
+                                exit(1);
+                        }
+                        argc--;argv++;
+			string st,stb;
+			while(is>>st){ //Sequence names expected in a file
+				seqnames.push_back(st);
+			}
+			if(!QUIET)cout<<"#Extracting Sequences from multiple sequence alignment\n#Number of sequences to extract "<<seqnames.size()<<"\n#Last name found : "<<seqnames[seqnames.size()-1]<<endl;
+			msaf=argv[0];
+		}
 		else if (strcmp(*argv,"--msa-redundant")==0){
 			analysis=prgMRED;
 			if(argc<2)printCommandLineError();
@@ -899,6 +917,12 @@ int main(int argc, char* argv[]) {
 		case prgMSXP:{
                         MultipleSeqAlign msa(msaf);
                         MultipleSeqAlign nmsa=msa.xtractPositions(&positions);
+			nmsa.print();
+			break;
+			}
+		case prgMSXS:{
+                        MultipleSeqAlign msa(msaf);
+                        MultipleSeqAlign nmsa=msa.xtractSequences(&seqnames);
 			nmsa.print();
 			break;
 			}

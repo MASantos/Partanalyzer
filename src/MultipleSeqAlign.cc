@@ -83,6 +83,10 @@ MultipleSeqAlign::MultipleSeqAlign(MSA& msa){
 	_nseq=_Seqlist.size();
 }
 
+void MultipleSeqAlign::addSeq(Sequence Seq){
+	addSeq(&Seq);
+}
+
 void MultipleSeqAlign::addSeq(Sequence* Seq){
         if(_len>0)
 		if(_len!=Seq->length()){
@@ -110,6 +114,22 @@ MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){
 		nmsa.addSeq(&seq);
 	}
 	if(!nmsa.empty())nmsa.setName(getName());
+	return nmsa;
+}
+
+MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames){
+	MultipleSeqAlign nmsa;
+	string name;
+	nmsa.setName("Extracted sequences");
+	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+		name=st->name();
+		for(svect::iterator nit=seqnames->begin();nit!=seqnames->end();nit++){
+			if(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0){ //Name may start by >
+				nmsa.addSeq(*st);
+			}
+		}
+	}
+	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
 	return nmsa;
 }
 

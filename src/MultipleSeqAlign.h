@@ -53,12 +53,15 @@ public:
 	MultipleSeqAlign(MSA& msa);
 	///Subsample MSA at given positions
 	MultipleSeqAlign xtractPositions(vector<int>* positions=NULL);
+	///Extract sequences specified by name
+	MultipleSeqAlign xtractSequences(svect* seqnames);
 	///Get begin iterator to _Seqlist
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist
 	MSA::iterator endSeq(){ return _Seqlist.end();}
 	///Allows adding a single Sequence object to the multiple sequence alignment 
 	void addSeq(Sequence*);
+	void addSeq(Sequence);
 	///Is MSA empty?
 	bool empty(){ return _Seqlist.empty(); }
 	///Sets its name
