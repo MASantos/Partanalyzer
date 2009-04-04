@@ -68,6 +68,7 @@ void printHelp(){
 	cout<<"Usage:"<<endl;
 	cout<<"       "<<_programb_<<" [-h|--help] (Use --help for more details)"<<endl;
 	cout<<"       "<<_programb_<<" --version "<<endl;
+	cout<<endl;
 	cout<<"   For analyzing partitions                                          "<<endl;
         cout<<"       "<<_programb_<<" [--verbose][-q] [-t] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] -c [-tab tab_file] matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]"<<endl;
@@ -77,10 +78,15 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] [-t] --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] [-t] (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] [-t] (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
+	cout<<endl;
+	cout<<"   For editing partitions                                             "<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
+	cout<<endl;
 	cout<<"   For converting between different partition formats                 "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --toFREE partition [partition1_offset (=2) ]" <<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
+	cout<<endl;
 	cout<<"   For analyzing Multiple Sequence Alignments                        "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta"<<endl;
@@ -88,6 +94,7 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-extract-sequences sequences_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --print-msa multiple_seq_alignment.fasta "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
+	cout<<endl;
 	cout<<"   For dealing with -interaction- matrices                           "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --edge-dist matrix-of-values [partition [partition_offset (=2)] ] "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] -m matrix-of-values1 matrix-of-values2 "<<endl;
@@ -238,6 +245,11 @@ void printHelpLong(){
 	cout<<"       -H, --hasse-diagram                                             "<<endl;
 	cout<<"           prints the local Hasse Diagram (graph) spanned by the       "<<endl;
 	cout<<"           given partitions.                                           "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"For editing partitions                                                 "<<endl;
+	cout<<"       --part-extract-elements {--extract-elements} elements_file      " <<endl;
+	cout<<"           elements_file lists the names of the elements to cull from  "<<endl;
+	cout<<"           the given partition                                         "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"For converting between different partition formats                     "<<endl;
 	cout<<"                                                                       "<<endl;

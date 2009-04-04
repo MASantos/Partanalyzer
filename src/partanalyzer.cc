@@ -157,8 +157,6 @@ int main(int argc, char* argv[]) {
 			if(!QUIET)cout<<"#Extracting elements from partition"<<endl;
 			readListFromFile(argv[0],namelist);
 			argc--;argv++;
-			partitionf1=argv[0];
-			argc--;argv++;
 			if(argc>0&&strcmp(*argv,"-tab")==0){
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
@@ -166,6 +164,8 @@ int main(int argc, char* argv[]) {
 				MCLTABF=true;
 				argc--;argv++;
 			}
+			partitionf1=argv[0];
+			argc--;argv++;
         		if(argc>0) cluster1_offset=atoi(argv[0]);
 		}
 		///Calculate intra-cluster and inter-cluster distribution of weights
