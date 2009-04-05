@@ -601,12 +601,15 @@ int main(int argc, char* argv[]) {
                         msaf=argv[0];
 		}
 		else if(strcmp(*argv,"--msa-extract-sequences-by-topid")==0||strcmp(*argv,"--msa-drop-sequences-by-topid")==0){
-        	MultipleSeqAlign xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize=0, vector<int>* positions=NULL);
                         analysis=prgMSXT;
 			string Upp="Extract";
+			// DROP not implemented yet
 			if(strcmp(*argv,"--msa-drop-sequences-by-topid")==0){
-				analysis=prgMSDI;
+				if(!QUIET)cout<<"#WARNING: Not implemented yet : --msa-drop-sequences-by-topid. Proceeding with --msa-extract-sequences-by-topid"<<endl;
+				/*
+				analysis=prgMSDT;
 				Upp="Drop";
+				*/
 			}
                         if(argc<3)printCommandLineError("--msa(extract/drop)-sequences-by-topid");
                         argc--;argv++;
@@ -618,6 +621,22 @@ int main(int argc, char* argv[]) {
 			if(argc>0){
 				Nsamples=atoi(argv[0]);
                         	argc--;argv++;
+				if(argc>0){ 
+                        		ifstream is(argv[0]);
+                        		if(!is){
+                        		        cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
+                        		        exit(1);
+                        		}
+                        		argc--;argv++;
+                        		int pos;
+                        		if(!QUIET)cout<<"#Using only specific MSA columns (positions):\n#";
+                        		while(is>>pos){
+                        		        if(!QUIET)cout<<"\t"<<pos;
+						//User gives positions starting at 1; Sequence starts them at 0
+                        		        positions.push_back(--pos);
+                        		}
+                        		if(!QUIET)cout<<endl;
+				}
 			}
 		}
                 else if (strcmp(*argv,"--msa-extract-sequences-by-id")==0||strcmp(*argv,"--msa-drop-sequences-by-id")==0){

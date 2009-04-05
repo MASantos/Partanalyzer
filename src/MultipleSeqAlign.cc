@@ -144,29 +144,35 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* m
 	nmsa.setName("Extracted sequences");
 	bool cond;
 	double sid;
-	double minId=0.0;
+	double minId;
 	double thrId=0.0;
 	int oldsz=0;
-	int seq_oldsz=0;
+	int seq_oldsz;
 	int TOPLISTSIZE=10;
+	if(VERBOSE)cout<<"#EXtracting top sequences for..."<<endl;
 	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
 	multimap<double,Sequence,greaterThan> topid; //Same as non_redundant_list but ordered by sequence ID starting from highest.
 	for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
+		minId=0.0;
+		seq_oldsz=0;
 		map<string,Sequence> seq_non_redundant_list;
 		multimap<double,Sequence,greaterThan> st_topid;
+		if(VERBOSE)cout<<"# "<<stb->name()<<" : "<<endl;
 		for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
 			seqstr=st->sequence();
 			sid=st->id(*stb,positions);
+			if(VERBOSE)cout<<"#\t"<<st->name()<<"\t"<<sid<<"\t"<<minId<<endl;
 			cond=(sid>minId);
 			if(cond||oldsz<TOPLISTSIZE){ //Cull top TOPLISTSIZE sequences from MSA-A
 				if(seq_oldsz==TOPLISTSIZE){
-					seq_non_redundant_list.erase(seq_non_redundant_list.rend()->first); //remove last item
+					seq_non_redundant_list.erase((seq_non_redundant_list.rbegin())->first); //remove last item
 				}
 				seq_non_redundant_list[seqstr]=*st;
 				if(seq_oldsz<seq_non_redundant_list.size()){ //Update lists if sequence hasn't been added before
 					seq_oldsz=seq_non_redundant_list.size(); //update number of top-id sequences found so far. 
 					st_topid.insert(pair<double,Sequence>(sid,*st)); //update top id list . We could use this map as well for updating oldsz
-					minId=st_topid.rend()->first; //Update lowest top id value
+					minId=st_topid.rbegin()->first; //Update lowest top id value
+					if(VERBOSE)cout<<"#Got : "<<st->name()<<" ("<<seq_oldsz<<") "<<"\t"<<sid<<"\t\t"<<minId<<endl;
 				}
 			}
 		}
