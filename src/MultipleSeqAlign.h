@@ -20,11 +20,11 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
-#include "partanalyzer_includes.h"
-#include "partanalyzer_definitions.h"
-
 #ifndef _CLASS_MULTIPLESEQALIGN_H
 #define _CLASS_MULTIPLESEQALIGN_H 1
+
+#include "partanalyzer_includes.h"
+#include "partanalyzer_definitions.h"
 
 #include "Sequence.h"
 #include "Roulette.h"
@@ -55,6 +55,10 @@ public:
 	MultipleSeqAlign xtractPositions(vector<int>* positions=NULL);
 	///Extract sequences specified by name. IF bool equal=false, drop them instead.
 	MultipleSeqAlign xtractSequences(svect* seqnames, bool equal=true);
+	///Extract non-redundant set of sequences with Id between minId and maxId against Multiple sequence alignment msab. IF bool equal=false, drop them instead.
+	MultipleSeqAlign xtractSequencesById(MultipleSeqAlign* msab, double minId=30, double maxId=100, bool equal=true, vector<int>* positions=NULL);
+	///Extract max. cullsize nonredundant sequences most similar to those of MSA msab. If cullsize=0, cull as many as possible
+	MultipleSeqAlign xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize=0, vector<int>* positions=NULL);
 	///Get begin iterator to _Seqlist
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist

@@ -137,6 +137,92 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
 	return nmsa;
 }
+///For each sequence of MSA-B, choose among top 10 highest ID hits against MSA-A, the top one that hasn't been chosen yet.
+MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize, vector<int>* positions){
+	MultipleSeqAlign nmsa;
+	string seqstr;
+	nmsa.setName("Extracted sequences");
+	bool cond;
+	double sid;
+	double minId=0.0;
+	double thrId=0.0;
+	int oldsz=0;
+	int seq_oldsz=0;
+	int TOPLISTSIZE=10;
+	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
+	multimap<double,Sequence,greaterThan> topid; //Same as non_redundant_list but ordered by sequence ID starting from highest.
+	for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
+		map<string,Sequence> seq_non_redundant_list;
+		multimap<double,Sequence,greaterThan> st_topid;
+		for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+			seqstr=st->sequence();
+			sid=st->id(*stb,positions);
+			cond=(sid>minId);
+			if(cond||oldsz<TOPLISTSIZE){ //Cull top TOPLISTSIZE sequences from MSA-A
+				if(seq_oldsz==TOPLISTSIZE){
+					seq_non_redundant_list.erase(seq_non_redundant_list.rend()->first); //remove last item
+				}
+				seq_non_redundant_list[seqstr]=*st;
+				if(seq_oldsz<seq_non_redundant_list.size()){ //Update lists if sequence hasn't been added before
+					seq_oldsz=seq_non_redundant_list.size(); //update number of top-id sequences found so far. 
+					st_topid.insert(pair<double,Sequence>(sid,*st)); //update top id list . We could use this map as well for updating oldsz
+					minId=st_topid.rend()->first; //Update lowest top id value
+				}
+			}
+		}
+		for(multimap<double,Sequence,greaterThan>::iterator it=st_topid.begin();it!=st_topid.end();it++){
+			non_redundant_list[(it->second).sequence()]=it->second; //Try to add sequence to non-redundant list
+			if(oldsz<non_redundant_list.size()){ //... and if it hasn't been added before
+				oldsz=non_redundant_list.size();
+				topid.insert(pair<double,Sequence>(it->first,it->second));
+				break; //One sequence is enough
+			}
+		}
+	}
+	int i=1;
+	for(multimap<double,Sequence,greaterThan>::iterator it=topid.begin();it!=topid.end();it++,i++){
+		nmsa.addSeq(it->second);  //... add sequence to new MSA.
+		if(cullsize>0&&i==cullsize) break; //Stop searching for sequences if we found already cullsize
+	}
+	if(nmsa.empty()&&!QUIET)cout<<"#WARNING : NO sequence extracted"<<endl;
+	return nmsa;
+}
+
+MultipleSeqAlign  MultipleSeqAlign::xtractSequencesById(MultipleSeqAlign* msab, double minId, double maxId, bool equal,vector<int>* positions){
+	MultipleSeqAlign nmsa;
+	string seqstr;
+	nmsa.setName("Extracted sequences");
+	bool found,cond;
+	double sid;
+	int oldsz;
+	map<string,Sequence> non_redundant_list;
+	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+		oldsz=non_redundant_list.size();
+		seqstr=st->sequence();
+		found=false;
+		for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
+			sid=st->id(*stb,positions);
+			cond=(sid>minId&&sid<=maxId);
+			if(cond){
+				found=true;
+				if(equal){
+					non_redundant_list[seqstr]=*st; //If equal, add sequences found in list; else
+					break; //One hit is enough
+				}
+			}
+		}
+		if(!(equal||found)){
+			non_redundant_list[seqstr]=*st; //... add sequences NOT in list
+				//One hit is enough NOT ENOUGH to be chosen
+		}
+		if(oldsz<non_redundant_list.size()){ //Add sequence if it hasn't been added before
+			nmsa.addSeq(*st);
+			oldsz=non_redundant_list.size();
+		}
+	}
+	if(nmsa.empty()&&!QUIET)cout<<"#WARNING : NO sequence extracted"<<endl;
+	return nmsa;
+}
 
 double MultipleSeqAlign::SeqId(int Seqn, int Seqm, vector<int>* positions)
 {

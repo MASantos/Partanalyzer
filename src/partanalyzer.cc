@@ -51,24 +51,26 @@ int main(int argc, char* argv[]) {
 	char* partitionf2;
 	char* mxofval;
 	char* mxofvalb;
-	vector<int> positions;
-	svect namelist;
-	pmetricv metric=shannon;
+	double doublea;
+	double doubleb;
 	double extensivity=EXTENSIVITY_DEFAULT;
         double threshold=-1; //Default threshold
         double Id_threshold=50.0; //Default Seq. Id threshold
 	int cluster1_offset=2; //Default cluster offset
 	int cluster2_offset=cluster1_offset;
 	int clstat_normalization_ofs=0;
+	int Nsamples=1;
+	int Nseq=1;
+	int seed=-1;
+	vector<int> positions;
+	svect namelist;
+	pmetricv metric=shannon;
 	//int analysis=2;
 	prganalysis analysis=prgVIPP;
 	///Default partition input format: partanalyzer's own format.
 	partFileFormat piformat=partFmtPART;
 	///Default partition output format: partanalyzer's own format.
 	partFileFormat poformat=partFmtPART;
-	int Nsamples=1;
-	int Nseq=1;
-	int seed=-1;
 	/* TESTING CUSTOM GRAPH CLASS
 	graph_base<string, double> mygraph;
 	string a,b;
@@ -598,6 +600,63 @@ int main(int argc, char* argv[]) {
                         if(argc<1)printCommandLineError("Missing MSA file");
                         msaf=argv[0];
 		}
+		else if(strcmp(*argv,"--msa-extract-sequences-by-topid")==0||strcmp(*argv,"--msa-drop-sequences-by-topid")==0){
+        	MultipleSeqAlign xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize=0, vector<int>* positions=NULL);
+                        analysis=prgMSXT;
+			string Upp="Extract";
+			if(strcmp(*argv,"--msa-drop-sequences-by-topid")==0){
+				analysis=prgMSDI;
+				Upp="Drop";
+			}
+                        if(argc<3)printCommandLineError("--msa(extract/drop)-sequences-by-topid");
+                        argc--;argv++;
+			msaf=argv[0];
+                        argc--;argv++;
+			msafb=argv[0];	//We want to extract/drop sequences such that their Id's against msafb
+                        argc--;argv++;
+                        Nsamples=0;
+			if(argc>0){
+				Nsamples=atoi(argv[0]);
+                        	argc--;argv++;
+			}
+		}
+                else if (strcmp(*argv,"--msa-extract-sequences-by-id")==0||strcmp(*argv,"--msa-drop-sequences-by-id")==0){
+                        analysis=prgMSXI;
+			string Upp="Extract";
+			if(strcmp(*argv,"--msa-drop-sequences-by-id")==0){
+				analysis=prgMSDI;
+				Upp="Drop";
+			}
+                        if(argc<5)printCommandLineError("--msa(extract/drop)-sequences-by-id");
+                        argc--;argv++;
+			msaf=argv[0];
+                        argc--;argv++;
+			msafb=argv[0];	//We want to extract/drop sequences such that their Id's against msafb
+                        argc--;argv++;
+			doublea=30; //B
+			doubleb=100;
+			if(argc>0&&argc<2)printCommandLineError("--msa(extract/drop)-sequences-by-id");
+			doublea=atof(argv[0]); // is doublea < Id <= doubleb
+                        argc--;argv++;
+			doublea=atof(argv[0]);
+                        argc--;argv++;
+			if(argc>0){
+                        	ifstream is(argv[0]);
+                        	if(!is){
+                        	        cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
+                        	        exit(1);
+                        	}
+                        	argc--;argv++;
+                        	int pos;
+                        	if(!QUIET)cout<<"#Using only specific MSA columns (positions):\n#";
+                        	while(is>>pos){
+                        	        if(!QUIET)cout<<"\t"<<pos;
+					//User gives positions starting at 1; Sequence starts them at 0
+                        	        positions.push_back(--pos);
+                        	}
+                        	if(!QUIET)cout<<endl;
+			}
+		}
                 else if (strcmp(*argv,"--msa-extract-sequences")==0||strcmp(*argv,"--msa-drop-sequences")==0){
                         analysis=prgMSXS;
 			string Upp="Extract";
@@ -619,6 +678,14 @@ int main(int argc, char* argv[]) {
 			}
 			if(!QUIET)cout<<"#"<<Upp<<"ing Sequences from multiple sequence alignment\n#Number of sequences to "<<Upp<<" "<<namelist.size()<<"\n#Last name found : "<<namelist[namelist.size()-1]<<endl;
 			msaf=argv[0];
+                        argc--;argv++;
+			if(argc>0&&argc!=3)printCommandLineError("--msa(extract/drop)-sequences");
+			msafb=argv[0];	//We want to extract/drop sequences such that their Id's against msafb
+                        argc--;argv++;
+			doublea=atof(argv[0]); // is doublea < Id <= doubleb
+                        argc--;argv++;
+			doublea=atof(argv[0]);
+                        argc--;argv++;
 		}
 		else if (strcmp(*argv,"--msa-redundant")==0){
 			analysis=prgMRED;
@@ -949,18 +1016,38 @@ int main(int argc, char* argv[]) {
 			nmsa.print();
 			break;
 			}
+		case prgMSDT:
+		case prgMSXT:{
+                        MultipleSeqAlign msa(msaf);
+                        MultipleSeqAlign msab(msafb);
+			MultipleSeqAlign nmsa=msa.xtractSequencesHighestId(&msab,Nsamples,&positions);
+			nmsa.print();
+			break;
+			}
+		case prgMSDI:
+		case prgMSXI:{
+                        MultipleSeqAlign msa(msaf);
+                        MultipleSeqAlign msab(msafb);
+			bool cull=true;
+			switch(analysis){
+				case prgMSDI:
+                        		cull=false;
+					break;
+			}
+			MultipleSeqAlign nmsa=msa.xtractSequencesById(&msab,doublea,doubleb,cull,&positions);;
+			nmsa.print();
+			break;
+			}
 		case prgMSDS:
 		case prgMSXS:{
                         MultipleSeqAlign msa(msaf);
-			MultipleSeqAlign nmsa;
+			bool cull=true;
 			switch(analysis){
-				case prgMSXS:
-                        		nmsa=msa.xtractSequences(&namelist);
-					break;
 				case prgMSDS:
-                        		nmsa=msa.xtractSequences(&namelist,false);
+                        		cull=false;
 					break;
 			}
+			MultipleSeqAlign nmsa=msa.xtractSequences(&namelist,cull);;
 			nmsa.print();
 			break;
 			}

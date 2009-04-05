@@ -99,7 +99,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,prgPAXE,
 	prgINTE,
 	prgMGMX,prgMMXC, 
 	prgCLST,
-	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,
+	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,
 	prgHASS,
 	prgIPAR,
 	prg2MCL,prg2FRE,prgM2PA,
@@ -118,5 +118,31 @@ class Charr{
 public: char* car;
 };
 
+///Comparison operator for allowing reverse sorting of maps
+struct greaterThan {
+	template<class T> bool operator() (T& i, T& j){
+		return i>j;	
+	}
+};
+
+template <class C>
+struct containerLargerThan {
+        bool operator () (C ca, C cb) {
+                //return ( (ca.size()>cb.size()) || (*(ca.begin()) < *(cb.begin())) );
+                //return ( (ca.size()>cb.size())  || ( *(ca.begin()) < *(cb.begin()) ) );
+                //return ( ( *(ca.begin()) < *(cb.begin()) ) || (ca.size()>cb.size()) );
+                return ( (ca.size()>cb.size()) );
+		/*
+		bool sz=ca.size()>cb.size();
+		bool cn=*(ca.begin()) < *(cb.begin());
+		return (sz||cn);
+		*/
+        }
+};
+
+/* TESTING CUSTOM GRAPH CLASS */
+///Definition of sdGraph as a type of graph_base<string, double>
+//typedef base_graph<string, double> sd_bGraph;
+//
 #endif //END OF _PARTANALYZER_DEFINITIONS_HEADER
 
