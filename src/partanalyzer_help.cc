@@ -88,8 +88,8 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
 	cout<<endl;
 	cout<<"   For analyzing Multiple Sequence Alignments                        "<<endl;
-	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta"<<endl;
-	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta"<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-extract-sequences sequences_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --print-msa multiple_seq_alignment.fasta "<<endl;
@@ -275,6 +275,8 @@ void printHelpLong(){
 	cout<<"          we want to consider in comparing sequences. These should be  "<<endl;
 	cout<<"          specified in a file, each separated by space,tabs, new lines,"<<endl;
 	cout<<"          etc. The positions are understood as columns of the MSA.     "<<endl;
+	cout<<"          If two MSA are provided, it prints the sequence Id of the    "<<endl;
+	cout<<"          first set against the second.                                "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-seqid-avg [-thr threshold ]                               "<<endl;
 	cout<<"          Similar as option --msa-seqid-avg, but prints for each sequence"<<endl;
@@ -286,6 +288,8 @@ void printHelpLong(){
 	cout<<"          Option -thr allows to provide a specific threshold to use.   "<<endl;
 	cout<<"                      default value is 50%. Values are floating numbers"<<endl;
 	cout<<"                      within [0,100].                                  "<<endl;
+	cout<<"          If two MSA are provided, it prints the sequence Id of the    "<<endl;
+	cout<<"          first set against the second.                                "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-extract-positions positions_file msa_file                 "<<endl;
 	cout<<"          From the given MSA, extract only columns specified in file   "<<endl;
