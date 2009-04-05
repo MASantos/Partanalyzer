@@ -53,8 +53,8 @@ public:
 	MultipleSeqAlign(MSA& msa);
 	///Subsample MSA at given positions
 	MultipleSeqAlign xtractPositions(vector<int>* positions=NULL);
-	///Extract sequences specified by name
-	MultipleSeqAlign xtractSequences(svect* seqnames);
+	///Extract sequences specified by name. IF bool equal=false, drop them instead.
+	MultipleSeqAlign xtractSequences(svect* seqnames, bool equal=true);
 	///Get begin iterator to _Seqlist
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist

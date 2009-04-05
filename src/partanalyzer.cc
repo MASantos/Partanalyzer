@@ -598,8 +598,13 @@ int main(int argc, char* argv[]) {
                         if(argc<1)printCommandLineError("Missing MSA file");
                         msaf=argv[0];
 		}
-                else if (strcmp(*argv,"--msa-extract-sequences")==0){
+                else if (strcmp(*argv,"--msa-extract-sequences")==0||strcmp(*argv,"--msa-drop-sequences")==0){
                         analysis=prgMSXS;
+			string Upp="Extract";
+			if(strcmp(*argv,"--msa-drop-sequences")==0){
+				analysis=prgMSDS;
+				Upp="Drop";
+			}
                         if(argc<3)printCommandLineError();
                         argc--;argv++;
                         ifstream is(argv[0]);
@@ -612,7 +617,7 @@ int main(int argc, char* argv[]) {
 			while(is>>st){ //Sequence names expected in a file
 				namelist.push_back(st);
 			}
-			if(!QUIET)cout<<"#Extracting Sequences from multiple sequence alignment\n#Number of sequences to extract "<<namelist.size()<<"\n#Last name found : "<<namelist[namelist.size()-1]<<endl;
+			if(!QUIET)cout<<"#"<<Upp<<"ing Sequences from multiple sequence alignment\n#Number of sequences to "<<Upp<<" "<<namelist.size()<<"\n#Last name found : "<<namelist[namelist.size()-1]<<endl;
 			msaf=argv[0];
 		}
 		else if (strcmp(*argv,"--msa-redundant")==0){
@@ -944,9 +949,18 @@ int main(int argc, char* argv[]) {
 			nmsa.print();
 			break;
 			}
+		case prgMSDS:
 		case prgMSXS:{
                         MultipleSeqAlign msa(msaf);
-                        MultipleSeqAlign nmsa=msa.xtractSequences(&namelist);
+			MultipleSeqAlign nmsa;
+			switch(analysis){
+				case prgMSXS:
+                        		nmsa=msa.xtractSequences(&namelist);
+					break;
+				case prgMSDS:
+                        		nmsa=msa.xtractSequences(&namelist,false);
+					break;
+			}
 			nmsa.print();
 			break;
 			}

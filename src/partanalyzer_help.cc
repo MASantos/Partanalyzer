@@ -92,6 +92,7 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-extract-sequences sequences_file multiple_seq_alignment.fasta"<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-drop-sequences sequences_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --print-msa multiple_seq_alignment.fasta "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
 	cout<<endl;
@@ -297,6 +298,10 @@ void printHelpLong(){
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-extract-sequences sequences_file msa_file                 "<<endl;
 	cout<<"          From the given MSA, extract only sequences specified in file "<<endl;
+	cout<<"          sequences_file. The latter contains a list of sequences names"<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --msa-drop-sequences sequences_file msa_file                    "<<endl;
+	cout<<"          From the given MSA, drop sequences specified in file         "<<endl;
 	cout<<"          sequences_file. The latter contains a list of sequences names"<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed]          "<<endl;

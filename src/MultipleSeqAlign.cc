@@ -117,17 +117,22 @@ MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){
 	return nmsa;
 }
 
-MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames){
+MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){
 	MultipleSeqAlign nmsa;
 	string name;
 	nmsa.setName("Extracted sequences");
+	bool found,cond;
 	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
 		name=st->name();
+		found=false;
 		for(svect::iterator nit=seqnames->begin();nit!=seqnames->end();nit++){
-			if(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0){ //Name may start by >
-				nmsa.addSeq(*st);
+			cond=(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0); //Name may start by >
+			if(cond){
+				found=true;
+				if(equal)nmsa.addSeq(*st); //If equal, add sequences found in list; else
 			}
 		}
+		if(!(equal||found))nmsa.addSeq(*st); //... add sequences NOT in list
 	}
 	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
 	return nmsa;
