@@ -60,6 +60,7 @@ Full help (as of version alpha 0.5.0.7)
 Usage:
        partanalyzer [-h|--help] (Use --help for more details)
        partanalyzer --version 
+
    For analyzing partitions                                          
        partanalyzer [--verbose][-q] [-t] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
        partanalyzer [--verbose][-q] -c [-tab tab_file] matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
@@ -69,19 +70,23 @@ Usage:
        partanalyzer [--verbose][-q] [-t] --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        partanalyzer [--verbose][-q] [-t] (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
        partanalyzer [--verbose][-q] [-t] (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
-   For converting editing partitions                                  
+
+   For editing partitions                                             
        partanalyzer [--verbose][-q] --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+
    For converting between different partition formats                 
        partanalyzer [--verbose][-q] --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]
        partanalyzer [--verbose][-q] --toFREE partition [partition1_offset (=2) ]
        partanalyzer [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+
    For analyzing Multiple Sequence Alignments                        
-       partanalyzer [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta
-       partanalyzer [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta
+       partanalyzer [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
+       partanalyzer [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
        partanalyzer [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta
        partanalyzer [--verbose][-q] --msa-extract-sequences sequences_file multiple_seq_alignment.fasta
        partanalyzer [--verbose][-q] --print-msa multiple_seq_alignment.fasta 
        partanalyzer [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta 
+
    For dealing with -interaction- matrices                           
        partanalyzer [--verbose][-q] --edge-dist matrix-of-values [partition [partition_offset (=2)] ] 
        partanalyzer [--verbose][-q] -m matrix-of-values1 matrix-of-values2 
@@ -231,7 +236,7 @@ For analyzing partitions
            prints the local Hasse Diagram (graph) spanned by the       
            given partitions.                                           
                                                                        
-For converting editing partitions                                      
+For editing partitions                                                 
        --part-extract-elements {--extract-elements} elements_file      
            elements_file lists the names of the elements to cull from  
            the given partition                                         
@@ -260,6 +265,8 @@ For analyzing Multiple Sequence Alignments
           we want to consider in comparing sequences. These should be  
           specified in a file, each separated by space,tabs, new lines,
           etc. The positions are understood as columns of the MSA.     
+          If two MSA are provided, it prints the sequence Id of the    
+          first set against the second.                                
                                                                        
        --msa-seqid-avg [-thr threshold ]                               
           Similar as option --msa-seqid-avg, but prints for each sequence
@@ -271,6 +278,8 @@ For analyzing Multiple Sequence Alignments
           Option -thr allows to provide a specific threshold to use.   
                       default value is 50%. Values are floating numbers
                       within [0,100].                                  
+          If two MSA are provided, it prints the sequence Id of the    
+          first set against the second.                                
                                                                        
        --msa-extract-positions positions_file msa_file                 
           From the given MSA, extract only columns specified in file   
