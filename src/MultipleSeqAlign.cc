@@ -142,13 +142,14 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* m
 	MultipleSeqAlign nmsa;
 	string seqstr;
 	nmsa.setName("Extracted sequences");
-	bool cond;
+	bool cond,identical;
+	double identicalPID=_Seqlist.begin()->id(*_Seqlist.begin()); //PID for exactly identical secuences
 	double sid;
 	double minId;
 	double thrId=0.0;
 	int oldsz=0;
 	int seq_oldsz;
-	int TOPLISTSIZE=10;
+	int TOPLISTSIZE=100;
 	if(VERBOSE)cout<<"#EXtracting top sequences for..."<<endl;
 	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
 	multimap<double,Sequence,greaterThan> topid; //Same as non_redundant_list but ordered by sequence ID starting from highest.
@@ -159,6 +160,14 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* m
 		multimap<double,Sequence,greaterThan> st_topid;
 		if(VERBOSE)cout<<"# "<<stb->name()<<" : "<<endl;
 		for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+			identical=false;
+			for(map<string,Sequence>::iterator id=non_redundant_list.begin();id!=non_redundant_list.end();id++){
+				if(st->id(id->second,positions)==identicalPID){; //Is contained in one of the already found sequences? If so
+					identical=true;
+					break;
+				}
+			}
+			if(identical)continue;//... skip it as we want only NON-redundant
 			seqstr=st->sequence();
 			sid=st->id(*stb,positions);
 			if(VERBOSE)cout<<"#\t"<<st->name()<<"\t"<<sid<<"\t"<<minId<<endl;
