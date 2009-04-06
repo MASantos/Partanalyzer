@@ -135,6 +135,7 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 		if(!(equal||found))nmsa.addSeq(*st); //... add sequences NOT in list
 	}
 	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
+	if(!QUIET)cout<<"#Extracted "<<nmsa.getNumberOfSeq()<<" sequences"<<endl;
 	return nmsa;
 }
 ///For each sequence of MSA-B, choose among top 10 highest ID hits against MSA-A, the top one that hasn't been chosen yet.

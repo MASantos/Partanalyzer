@@ -63,6 +63,8 @@ public:
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist
 	MSA::iterator endSeq(){ return _Seqlist.end();}
+	///Get the number of sequences in MSA
+	int getNumberOfSeq(){ return _Seqlist.size();}
 	///Allows adding a single Sequence object to the multiple sequence alignment 
 	void addSeq(Sequence*);
 	void addSeq(Sequence);
