@@ -40,6 +40,8 @@ extern const char* VERSION;
 extern bool 	VERBOSE;
 ///If true, program does not print any comment lines (those starting with #). No warnings will be printed either.
 extern bool    QUIET;
+///If true, we want to print some info that usually appears as a comment without the leading # comment sign
+extern bool INFO;
 ///Current name (full path) of partanalyzer
 extern char* program;
 ///Beta parameter for thermodynamic averages done in Ccop

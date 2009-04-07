@@ -53,6 +53,8 @@ const char* VERSION="alpha 0.5.0.9";
 bool 	VERBOSE=false;
 
 bool    QUIET=false;
+
+bool	INFO=false; 
 #endif
 
 template<class T> void readListFromFile(char* argv0, T& container){

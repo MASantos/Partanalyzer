@@ -431,6 +431,7 @@ int main(int argc, char* argv[]) {
 		}
 		else if (strcmp(*argv,"-I")==0||strcmp(*argv,"--info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
 			analysis=prgIPAR;
+			INFO=true;
 			if(argc<2)printCommandLineError();
 			argc--;argv++;
 			if(strcmp(*argv,"-ofs")==0){
