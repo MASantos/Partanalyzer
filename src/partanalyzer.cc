@@ -335,7 +335,7 @@ int main(int argc, char* argv[]) {
 				}
 		}
 		else if (strcmp(*argv,"-S")==0||strcmp(*argv,"--split-merge-analysis")==0||strcmp(*argv,"--splitstat")==0){
-			analysis=prgSPST;
+			analysis=prgSPSO;
 			if(argc<3)printCommandLineError("--splitstat");
 			argc--;argv++;
 			if(strcmp(*argv,"-sim")==0){
