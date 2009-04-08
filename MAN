@@ -80,7 +80,8 @@ Usage:
        partanalyzer [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
 
    For dealing with (fasta) sequence files                           
-       partanalyzer [--verbose][-q] --seq-noclone-sequences multiple_seq_alignment.fasta 
+       partanalyzer [--verbose][-q] --seq-noclone-sequences fasta_sequence_file [reference_sequence_file]
+
    For analyzing Multiple Sequence Alignments                        
        partanalyzer [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
        partanalyzer [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
@@ -258,12 +259,15 @@ For converting between different partition formats
            items' labels, instead of simply their MCL index number.    
                                                                        
 For dealing with (fasta) sequence files                                
+       --drop-clone-sequences                                          
        --msa-noclone-sequences                                         
        --seq-noclone-sequences sequence_file (fasta)                   
           Given a (fasta) sequence file or a fasta MSA file, remove all
           duplicate sequences. Here duplicate means literally that,    
           namely, exactly the same string of characters. Therefore, it 
           is not the same as having a pid=100%, but more stringent.    
+          If a second sequence file is provided, drop also sequences   
+          that are clones of any sequence in the second file.          
                                                                        
 For analyzing Multiple Sequence Alignments                             
                                                                        

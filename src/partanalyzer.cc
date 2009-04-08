@@ -530,7 +530,7 @@ int main(int argc, char* argv[]) {
 			partitionf1=argv[0];
 		}
 ///(For dealing with (fasta) sequence files
-                else if (strcmp(*argv,"--seq-noclone-sequences")==0||strcmp(*argv,"--msa-noclone-sequences")==0){
+                else if (strcmp(*argv,"--drop-clone-sequences")==0||strcmp(*argv,"--seq-noclone-sequences")==0||strcmp(*argv,"--msa-noclone-sequences")==0){
                         analysis=prgSNOC;
                         if(argc<2)printCommandLineError();
                         argc--;argv++;

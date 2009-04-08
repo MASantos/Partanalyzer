@@ -145,14 +145,19 @@ MultipleSeqAlign  MultipleSeqAlign::dropClones(MultipleSeqAlign* msab){
 	nmsa.setName(msaname);
 	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
 	int oldsz=0;
+	bool keep;
 	for(MSA::iterator st=beginSeq();st!=endSeq();st++){
+		keep=true;
 		for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
-			if(st->sequence().compare(stb->sequence())!=0){
-				non_redundant_list[st->sequence()]=*st;
-				if(oldsz<non_redundant_list.size()){
-					oldsz=non_redundant_list.size();
-					nmsa.addSeq(*st);
-				}
+			if(st->sequence().compare(stb->sequence())!=0)continue;//If st is not a clone of stb, check against next stb
+			keep=false; //If st is a clone of stb ...
+			break;
+		}
+		if(keep){ //... do not keep st and check the next st
+			non_redundant_list[st->sequence()]=*st;
+			if(oldsz<non_redundant_list.size()){ //If we didn't cull st before, ...
+				nmsa.addSeq(*st); //... add this sequence.
+				oldsz=non_redundant_list.size();
 			}
 		}
 	}
