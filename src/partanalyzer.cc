@@ -1031,12 +1031,12 @@ int main(int argc, char* argv[]) {
 ///(For dealing with (fasta) sequence files
 		case prgSNOC:{
                         MultipleSeqAlign msa(msaf);
-                        if(!QUIET)cout<<"Dropping cloned sequences ...";
+                        if(!QUIET)cout<<"#Dropping cloned sequences ...";
                         if(msafb==NULL){
-				cout<<endl;
+				if(!QUIET)cout<<endl;
 				msa.dropClones().print();
 			}else{
-				cout<<"against "<<msafb<<endl;
+				if(!QUIET)cout<<"#against "<<msafb<<endl;
                         	MultipleSeqAlign msab(msafb);
 				msa.dropClones(&msab).print();
 			}
