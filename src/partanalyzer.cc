@@ -45,8 +45,8 @@ int main(int argc, char* argv[]) {
 	bool SETUPCONSENSUSP=false;
 	bool MCLTABF=false;
 	bool DIST_SUBSPROJECT=false;
-	char* msaf;
-	char* msafb;
+	char* msaf=NULL;
+	char* msafb=NULL;
 	char* partitionf1;
 	char* partitionf2;
 	char* mxofval;
@@ -529,6 +529,17 @@ int main(int argc, char* argv[]) {
 			}
 			partitionf1=argv[0];
 		}
+///(For dealing with (fasta) sequence files
+                else if (strcmp(*argv,"--seq-noclone-sequences")==0||strcmp(*argv,"--msa-noclone-sequences")==0){
+                        analysis=prgSNOC;
+                        if(argc<2)printCommandLineError();
+                        argc--;argv++;
+                        msaf=argv[0];
+                        argc--;argv++;
+			if(argc>0){
+				msafb=argv[0];
+			}
+                }
 ///(For analyzing Multiple Sequence Alignments)
                 else if (strcmp(*argv,"--msa-print")==0||strcmp(*argv,"--print-msa")==0){
                         analysis=prgPMSA;
@@ -1015,6 +1026,20 @@ int main(int argc, char* argv[]) {
 		        Partition partition(partitionf1,piformat);
 			if(MCLTABF)partition.mclTabFile(partitionf2);
 			partition.printPartition(poformat);
+			break;
+			}
+///(For dealing with (fasta) sequence files
+		case prgSNOC:{
+                        MultipleSeqAlign msa(msaf);
+                        if(!QUIET)cout<<"Dropping cloned sequences ...";
+                        if(msafb==NULL){
+				cout<<endl;
+				msa.dropClones().print();
+			}else{
+				cout<<"against "<<msafb<<endl;
+                        	MultipleSeqAlign msab(msafb);
+				msa.dropClones(&msab).print();
+			}
 			break;
 			}
 ///(For analyzing Multiple Sequence Alignments)

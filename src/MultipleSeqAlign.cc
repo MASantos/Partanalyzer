@@ -138,6 +138,45 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 	if(!QUIET)cout<<"#Extracted "<<nmsa.getNumberOfSeq()<<" sequences"<<endl;
 	return nmsa;
 }
+
+MultipleSeqAlign  MultipleSeqAlign::dropClones(MultipleSeqAlign* msab){
+	MultipleSeqAlign nmsa;
+	string msaname="Noclone"+msab->getName();
+	nmsa.setName(msaname);
+	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
+	int oldsz=0;
+	for(MSA::iterator st=beginSeq();st!=endSeq();st++){
+		for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
+			if(st->sequence().compare(stb->sequence())!=0){
+				non_redundant_list[st->sequence()]=*st;
+				if(oldsz<non_redundant_list.size()){
+					oldsz=non_redundant_list.size();
+					nmsa.addSeq(*st);
+				}
+			}
+		}
+	}
+	if(nmsa.empty()&&!QUIET)cout<<"#WARNING : NO sequence extracted"<<endl;
+	return nmsa;
+}
+
+MultipleSeqAlign  MultipleSeqAlign::dropClones(){
+	MultipleSeqAlign nmsa;
+	string msaname="Noclone"+getName();
+	nmsa.setName(msaname);
+	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
+	int oldsz=0;
+	for(MSA::iterator st=beginSeq();st!=endSeq();st++){
+		non_redundant_list[st->sequence()]=*st;
+		if(oldsz<non_redundant_list.size()){
+			oldsz=non_redundant_list.size();
+			nmsa.addSeq(*st);
+		}
+	}
+	if(nmsa.empty()&&!QUIET)cout<<"#WARNING : NO sequence extracted"<<endl;
+	return nmsa;
+}
+
 ///For each sequence of MSA-B, choose among top 10 highest ID hits against MSA-A, the top one that hasn't been chosen yet.
 MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize, vector<int>* positions){
 	MultipleSeqAlign nmsa;

@@ -87,6 +87,8 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] --toFREE partition [partition1_offset (=2) ]" <<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
 	cout<<endl;
+	cout<<"   For dealing with (fasta) sequence files                           "<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --seq-noclone-sequences multiple_seq_alignment.fasta "<<endl;
 	cout<<"   For analyzing Multiple Sequence Alignments                        "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
@@ -264,6 +266,14 @@ void printHelpLong(){
 	cout<<"           converts partition from MCL format to PART format.          "<<endl;
 	cout<<"           If additional tab file is provided, output will contain     "<<endl;
 	cout<<"           items' labels, instead of simply their MCL index number.    "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"For dealing with (fasta) sequence files                                "<<endl;
+	cout<<"       --msa-noclone-sequences                                         "<<endl;
+	cout<<"       --seq-noclone-sequences sequence_file (fasta)                   "<<endl;
+	cout<<"          Given a (fasta) sequence file or a fasta MSA file, remove all"<<endl;
+	cout<<"          duplicate sequences. Here duplicate means literally that,    "<<endl;
+	cout<<"          namely, exactly the same string of characters. Therefore, it "<<endl;
+	cout<<"          is not the same as having a pid=100%, but more stringent.    "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"For analyzing Multiple Sequence Alignments                             "<<endl;
 	cout<<"                                                                       "<<endl;

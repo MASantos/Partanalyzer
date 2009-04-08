@@ -59,6 +59,9 @@ public:
 	MultipleSeqAlign xtractSequencesById(MultipleSeqAlign* msab, double minId=30, double maxId=100, bool equal=true, vector<int>* positions=NULL);
 	///Extract max. cullsize nonredundant sequences most similar to those of MSA msab. If cullsize=0, cull as many as possible
 	MultipleSeqAlign xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize=0, vector<int>* positions=NULL);
+	///Extract the NO-CLONE (non-redundant) subset of sequences. Requires fasta file, but sequences may not be aligned.
+	MultipleSeqAlign dropClones();
+	MultipleSeqAlign dropClones(MultipleSeqAlign* msab);
 	///Get begin iterator to _Seqlist
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist
