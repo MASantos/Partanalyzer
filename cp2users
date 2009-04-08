@@ -2,14 +2,14 @@
 
 #Find file containing the VERSION label
 #SRC=partanalyzer.cc
-SRC=`grep VERSION= *| grep -v "^[c]*tags"| head -1 | awk -F ":" '{print $1}'`
+SRC=`grep VERSION= *.cc *.h| grep -v "^[c]*tags"| head -1 | awk -F ":" '{print $1}'`
 test "x$SRC" == "x" && echo "$0 : ERROR : No version tag found!" && exit
 
 EXE=partanalyzer
 DEST=/usr2/software/users/CCOP
 LATESTV=partanalyze-latest
 ##############################################
-VERSION="`grep VERSION= $SRC *.cc *.h| sed 's@.*\s\([()-.0-9a-zA-Z]*\)";@\1@g' | sed 's@\.@@g' | awk '{print "A"$1}'`"
+VERSION="`grep VERSION= $SRC | sed 's@.*\s\([()-.0-9a-zA-Z]*\)";@\1@g' | sed 's@\.@@g' | awk '{print "A"$1}'`"
 
 test "x$VERSION" == "x" && echo "$0 : ERROR : No version found : Check source file $SRC" && exit
 

@@ -88,7 +88,8 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
 	cout<<endl;
 	cout<<"   For dealing with (fasta) sequence files                           "<<endl;
-	cout<<"       "<<_programb_<<" [--verbose][-q] --seq-noclone-sequences multiple_seq_alignment.fasta "<<endl;
+	cout<<"       "<<_programb_<<" [--verbose][-q] --seq-noclone-sequences fasta_sequence_file "<<endl;
+	cout<<endl;
 	cout<<"   For analyzing Multiple Sequence Alignments                        "<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
 	cout<<"       "<<_programb_<<" [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]"<<endl;
