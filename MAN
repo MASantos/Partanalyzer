@@ -54,7 +54,7 @@ For debugging: print the interaction matrix read by the program
 ./partanalyze --print-matrix test-blast_pairwise_id
 
 
-Full help (as of version alpha 0.5.0.7)
+Full help (as of version alpha 0.5.1)
 			partanalyzer (Partition Analyzer)
 
 Usage:
@@ -62,14 +62,14 @@ Usage:
        partanalyzer --version 
 
    For analyzing partitions                                          
-       partanalyzer [--verbose][-q] [-t] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
+       partanalyzer [--verbose][-q] [-t pfmt] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
        partanalyzer [--verbose][-q] -c [-tab tab_file] matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
        partanalyzer [--verbose][-q] -d matrix-of-values partition1 [partition_offset (=2)]
-       partanalyzer [--verbose][-q] [-t] (-J|-R|-T) [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t] (-V|-E|-P) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t] --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t] (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t] (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       partanalyzer [--verbose][-q] [-t pfmt] (-J|-R|-T) [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [--verbose][-q] [-t pfmt] (-V|-E|-P) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [--verbose][-q] [-t pfmt] --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       partanalyzer [--verbose][-q] [-t pfmt] (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       partanalyzer [--verbose][-q] [-t pfmt] (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
 
    For editing partitions                                             
        partanalyzer [--verbose][-q] --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]
@@ -79,11 +79,14 @@ Usage:
        partanalyzer [--verbose][-q] --toFREE partition [partition1_offset (=2) ]
        partanalyzer [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
 
+   For dealing with (fasta) sequence files                           
+       partanalyzer [--verbose][-q] --seq-noclone-sequences multiple_seq_alignment.fasta 
    For analyzing Multiple Sequence Alignments                        
        partanalyzer [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
        partanalyzer [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
        partanalyzer [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta
        partanalyzer [--verbose][-q] --msa-extract-sequences sequences_file multiple_seq_alignment.fasta
+       partanalyzer [--verbose][-q] --msa-drop-sequences sequences_file multiple_seq_alignment.fasta
        partanalyzer [--verbose][-q] --print-msa multiple_seq_alignment.fasta 
        partanalyzer [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta 
 
@@ -254,6 +257,14 @@ For converting between different partition formats
            If additional tab file is provided, output will contain     
            items' labels, instead of simply their MCL index number.    
                                                                        
+For dealing with (fasta) sequence files                                
+       --msa-noclone-sequences                                         
+       --seq-noclone-sequences sequence_file (fasta)                   
+          Given a (fasta) sequence file or a fasta MSA file, remove all
+          duplicate sequences. Here duplicate means literally that,    
+          namely, exactly the same string of characters. Therefore, it 
+          is not the same as having a pid=100%, but more stringent.    
+                                                                       
 For analyzing Multiple Sequence Alignments                             
                                                                        
        --msa-seqid-stat                                                
@@ -286,8 +297,31 @@ For analyzing Multiple Sequence Alignments
           positions_file.                                              
                                                                        
        --msa-extract-sequences sequences_file msa_file                 
+       --msa-drop-sequences sequences_file msa_file                    
           From the given MSA, extract only sequences specified in file 
-          sequences_file. The latter contains a list of sequences names
+          sequences_file. This file contains a list of sequences names 
+          The second form drops those sequences instead.               
+          If a positions file is given, sequence Id's are calculated   
+          considering only those columns of the MSA.                   
+                                                                       
+       --msa-extract-sequences-by-id msa_file1 msa_file2 [minId maxId] 
+       --msa-drop-sequences-by-id sequences_file msa_file [minId maxId]
+          From MSA msa_file1, extract sequences with an ID above minId 
+          and at most maxId against any sequence of MSA msa_file2.     
+          The second form drops those sequences instead. Default values
+          values are minId=30 and maxId=100, i.e., homologous sequences.
+          If a positions file is given, sequence Id's are calculated   
+          considering only those columns of the MSA. In this case minId
+          and maxId are mandatory and must come before positions_file. 
+                                                                       
+       --msa-extract-sequences-by-topid msa_file1 msa_file2 [count]    
+       --msa-drop-sequences-by-topid sequences_file msa_file [count]   
+          From MSA msa_file1, extract at most count most similar sequences 
+          (seq.ID) to any sequence of MSA msa_file2.                   
+          The second form drops those sequences instead.               
+          If a positions file is given, sequence Id's are calculated   
+          considering only those columns of the MSA. In this case count
+          is mandatory and must come before positions_file.            
                                                                        
        --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed]          
           Duplicates sequences chosen at random in the given multiple  
@@ -349,7 +383,7 @@ General options
           quiet mode. Do not print out comment lines (that start with  
           `#').                                                        
                                                                        
-       -t , --format {--fmt} [input_file_format]                       
+       -t , --format {--fmt} [pfmt=input_partition_file_format]        
           Possible format values are: PART,MCL and FREE. See below.    
                                                                        
 File formats:                                                          
@@ -379,8 +413,8 @@ File formats:
          MCL : MCL's own matrix format for partitions. See MCL manual. 
 
 License
-# partanalyzer Version alpha 0.5.0.7
-# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Apr  4 2009
+# partanalyzer Version alpha 0.5.1
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Apr  8 2009
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #

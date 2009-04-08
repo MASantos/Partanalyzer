@@ -85,7 +85,7 @@ DOC_CONF=$(WDIR)/Doxyfile
 DOC_DIR=$(WDIR)/Docs
 
 CPTOUSERS = $(WDIR)/cp2users
-
+MANSH=$(WDIR
 TESTSDIR=$(WDIR)/Tests
 TCONSENS=$(TESTSDIR)/Consensus
 TCONFAIL=$(TCONSENS)/Fail
@@ -97,6 +97,9 @@ LINKBIN = [ -L $(WDIR)/$(BIN) ] || ln -s $(SRCD)/$(BIN) $(WDIR)/$(BIN)
 #############################################   B U I L D    #####################################
 
 default: $(TAGS) $(BIN)
+
+man:	man.h man.sh
+	./man.sh
 
 copy:	default $(CPTOUSERS)
 	$(CPTOUSERS)
