@@ -28,6 +28,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "Sequence.h"
 #include "Roulette.h"
+#include "Partition.h"
 
 ///Type definition of a MSA as a vector of Sequences
 typedef vector< Sequence > MSA;
@@ -62,6 +63,8 @@ public:
 	///Extract the NO-CLONE (non-redundant) subset of sequences. Requires fasta file, but sequences may not be aligned.
 	MultipleSeqAlign dropClones();
 	MultipleSeqAlign dropClones(MultipleSeqAlign* msab);
+	///Map partition clusters onto MSA
+	void printWithClusterLabels(Partition* part);
 	///Get begin iterator to _Seqlist
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist

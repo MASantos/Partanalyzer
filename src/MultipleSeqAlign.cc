@@ -101,22 +101,6 @@ void MultipleSeqAlign::addSeq(Sequence* Seq){
         _nseq++;
 }
 
-MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){
-	MultipleSeqAlign nmsa;
-	nmsa.setName("NAA");
-	if(positions->empty())return nmsa;
-	string sq;
-	string name;
-	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
-		name=st->name();
-		sq=st->xtractPositions(positions);
-		Sequence seq(name,sq);
-		nmsa.addSeq(&seq);
-	}
-	if(!nmsa.empty())nmsa.setName(getName());
-	return nmsa;
-}
-
 MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){
 	MultipleSeqAlign nmsa;
 	string name;
@@ -136,6 +120,35 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 	}
 	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
 	if(!QUIET)cout<<"#Extracted "<<nmsa.getNumberOfSeq()<<" sequences"<<endl;
+	return nmsa;
+}
+
+void MultipleSeqAlign::printWithClusterLabels(Partition* part){
+	if(!QUIET)cout<<"#BeginMSAwClusters"<<endl;
+	for(smat::iterator cl=part->clusters.begin();cl!=part->clusters.end();cl++){
+		cout<<"==cluster "<<part->getClusterName(*cl)<<endl;
+		for(svect::iterator it=cl->begin()+part->cluster_offset();it!=cl->end();it++){
+			for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+				if(it->compare(st->name())==0)st->print();
+			}	
+		}
+	}
+	if(!QUIET)cout<<"#EndMSAwClusters"<<endl;
+}
+
+MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){
+	MultipleSeqAlign nmsa;
+	nmsa.setName("NAA");
+	if(positions->empty())return nmsa;
+	string sq;
+	string name;
+	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+		name=st->name();
+		sq=st->xtractPositions(positions);
+		Sequence seq(name,sq);
+		nmsa.addSeq(&seq);
+	}
+	if(!nmsa.empty())nmsa.setName(getName());
 	return nmsa;
 }
 

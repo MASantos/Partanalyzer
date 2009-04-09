@@ -49,6 +49,7 @@ int main(int argc, char* argv[]) {
 	char* msafb=NULL;
 	char* partitionf1;
 	char* partitionf2;
+	char* mcltabfile;
 	char* mxofval;
 	char* mxofvalb;
 	double doublea;
@@ -130,13 +131,19 @@ int main(int argc, char* argv[]) {
 			argc--;
 			argv++;
 		}
+		if(strcmp(*argv,"--tab")==0){
+			argc--;argv++;
+			mcltabfile=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+			MCLTABF=true;
+			argc--;argv++;
+		}
 ///(For analyzing partitions)
 		if(strcmp(*argv,"--DIST_SUBSPROJECT")==0){
 			argc--;
 			argv++;
 			DIST_SUBSPROJECT=true;
 		}
-		if(strcmp(*argv,"-beta")==0){
+		if(strcmp(*argv,"--beta")==0){
 			if(argc<5)printCommandLineError();
 			argc--;
 			argv++;
@@ -144,7 +151,7 @@ int main(int argc, char* argv[]) {
 			argc--;
 			argv++;
 		}
-		if(strcmp(*argv,"-mu")==0){
+		if(strcmp(*argv,"--mu")==0){
 			if(argc<5)printCommandLineError();
 			argc--;
 			argv++;
@@ -162,7 +169,8 @@ int main(int argc, char* argv[]) {
 			if(argc>0&&strcmp(*argv,"-tab")==0){
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
-				partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				//partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				mcltabfile=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
 				MCLTABF=true;
 				argc--;argv++;
 			}
@@ -187,7 +195,8 @@ int main(int argc, char* argv[]) {
 			if(strcmp(*argv,"-tab")==0){
 				if(argc<4)printCommandLineError();
 				argc--;argv++;
-				partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				//partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				mcltabfile=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
 				MCLTABF=true;
 				argc--;argv++;
 			}
@@ -523,7 +532,8 @@ int main(int argc, char* argv[]) {
 			if( (analysis==prgM2PA || analysis==prg2MCL )&& strcmp(*argv,"-tab")==0){
 				argc--;argv++;
 				if(argc<2)printCommandLineError();
-				partitionf2=argv[0]; //Its a MCL tab file, but we use the available char* variable partitionf2.
+				//partitionf2=argv[0]; //Its a MCL tab file, but we use the available char* variable partitionf2.
+				mcltabfile=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
 				MCLTABF=true;
 				argc--;argv++;
 			}
@@ -538,13 +548,25 @@ int main(int argc, char* argv[]) {
                         argc--;argv++;
 			if(argc>0){
 				msafb=argv[0];
+                        	argc--;argv++;
 			}
                 }
 ///(For analyzing Multiple Sequence Alignments)
                 else if (strcmp(*argv,"--msa-print")==0||strcmp(*argv,"--print-msa")==0){
                         analysis=prgPMSA;
                         if(argc<2)printCommandLineError();
-                        msaf=argv[1];
+                        argc--;argv++;
+                        msaf=argv[0];
+                        argc--;argv++;
+                }
+                else if (strcmp(*argv,"--msa-map-partition")==0){
+                        analysis=prgMSMP;
+                        if(argc<3)printCommandLineError();
+                        argc--;argv++;
+			partitionf1=argv[0];
+                        argc--;argv++;
+                        msaf=argv[0];
+                        argc--;argv++;
                 }
                 else if (strcmp(*argv,"--msa-seqid-stat")==0){
                         analysis=prgMSPI;
@@ -808,7 +830,7 @@ int main(int argc, char* argv[]) {
 		        if(!QUIET) systemDate();
 		        Partition partition(partitionf1,piformat,cluster1_offset);
 			//if(MCLTABF)partition.mclTabFile(partitionf2);
-			if(MCLTABF)partition.swapLabels(partitionf2);
+			if(MCLTABF)partition.swapLabels(mcltabfile);
 			ccop do_ccop(&MX,&partition,threshold);
 			switch(analysis){
 				case prgCCOP:	
@@ -1024,7 +1046,7 @@ int main(int argc, char* argv[]) {
 		case prg2FRE:
 		case prgM2PA:{
 		        Partition partition(partitionf1,piformat);
-			if(MCLTABF)partition.mclTabFile(partitionf2);
+			if(MCLTABF)partition.mclTabFile(mcltabfile);
 			partition.printPartition(poformat);
 			break;
 			}
@@ -1048,6 +1070,11 @@ int main(int argc, char* argv[]) {
                         if(!QUIET)cout<<"#avgSeqId "<<msa.averageId()<<endl;
                         msa.print();
 			break;
+			}
+		case prgMSMP:{
+                        MultipleSeqAlign msa(msaf);
+			Partition partition1(partitionf1,piformat,cluster1_offset);
+			msa.printWithClusterLabels(&partition1);
 			}
 		case prgMSPI:{
                         MultipleSeqAlign msa(msaf);
