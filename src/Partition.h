@@ -151,6 +151,8 @@ public:
 	string getClusterName(string& item);
 	///Given an index from clusters, get the name of that cluster
 	string getClusterName(int& clidx);
+	///Given the cluster, get its name
+	string getClusterName(svect& cluster);
 	///Given an element, get the index of the cluster that contains it.
 	int getClusterIdx(string& item);
 	///Two elements are equivalent if they belong to the same cluster

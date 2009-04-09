@@ -286,17 +286,12 @@ string Partition::getClusterName(string& item){
 	return clname;
 }
 
-int Partition::getClusterIdx(string& item){
-	int idx=-1;
-	for(int i=0;i<clusters.size();i++)
-		for(svect::iterator it=clusters[i].begin();it!=clusters[i].end();it++)
-			if(strcmp(item.c_str(),it->c_str())==0)return i;
-	return idx;
-}
-
-bool Partition::areEquiv(string a, string b){
-	if(getClusterIdx(a)==getClusterIdx(b)) return true;
-	return false;
+string Partition::getClusterName(svect& cluster){
+	if(_items_offset!=2){
+		cout<<"Error: partitions were defined with no name label : _items_offset="<<_items_offset<<endl;
+		exit(1);
+	}
+	return cluster[1];
 }
 
 string Partition::getClusterName(int& clidx){
@@ -309,6 +304,19 @@ string Partition::getClusterName(int& clidx){
 		exit(1);
 	}
 	return clusters[clidx][1];
+}
+
+int Partition::getClusterIdx(string& item){
+	int idx=-1;
+	for(int i=0;i<clusters.size();i++)
+		for(svect::iterator it=clusters[i].begin();it!=clusters[i].end();it++)
+			if(strcmp(item.c_str(),it->c_str())==0)return i;
+	return idx;
+}
+
+bool Partition::areEquiv(string a, string b){
+	if(getClusterIdx(a)==getClusterIdx(b)) return true;
+	return false;
 }
 
 string Partition::areWithinSameCluster(string ita, string itb){
