@@ -52,6 +52,7 @@ int main(int argc, char* argv[]) {
 	char* mcltabfile;
 	char* mxofval;
 	char* mxofvalb;
+	string ClusterPrefix="C";
 	double doublea;
 	double doubleb;
 	double extensivity=EXTENSIVITY_DEFAULT;
@@ -137,7 +138,6 @@ int main(int argc, char* argv[]) {
 			MCLTABF=true;
 			argc--;argv++;
 		}
-///(For analyzing partitions)
 		if(strcmp(*argv,"--DIST_SUBSPROJECT")==0){
 			argc--;
 			argv++;
@@ -159,6 +159,19 @@ int main(int argc, char* argv[]) {
 			argc--;
 			argv++;
 		}
+///(For editing partitions)
+		else if (strcmp(*argv,"--part-sort")==0||strcmp(*argv,"--part-sort-rename")==0){
+			analysis=prgPASO;
+			if(strcmp(*argv,"--part-sort-rename")==0) analysis=prgPASR;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			partitionf1=argv[0];
+			argc--;argv++;
+			if(argc>0 && analysis==prgPASR){
+				ClusterPrefix=argv[0];
+				argc--;argv++;
+			}
+		}
 		else if (strcmp(*argv,"--part-extract-elements")==0||strcmp(*argv,"--extract-elements")==0){
 			analysis=prgPAXE;
 			if(argc<3)printCommandLineError();
@@ -178,6 +191,7 @@ int main(int argc, char* argv[]) {
 			argc--;argv++;
         		if(argc>0) cluster1_offset=atoi(argv[0]);
 		}
+///(For analyzing partitions)
 		///Calculate intra-cluster and inter-cluster distribution of weights
 		else if(strcmp(*argv,"-d")==0||strcmp(*argv,"--intra-inter-edge-dist")==0){
 			analysis=prgCDIS;
@@ -817,13 +831,28 @@ int main(int argc, char* argv[]) {
 	cout<<"#DEBUG MODE: program task : analysis="<<analysis<<endl;
 #endif
 	switch(analysis){
-///(For analyzing partitions)
+///(For editing partitions)
+		case prgPASR:
+		case prgPASO:{
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+		        Partition npart(&partition.clusters,cluster1_offset);
+			bool SequentialClusterNames=false;
+			switch(analysis){
+				case prgPASR:
+					if(!QUIET)cout<<"#Using sequential cluster names"<<endl;
+					SequentialClusterNames=true;
+					break;
+			}
+			npart.printPartition(poformat,SequentialClusterNames,ClusterPrefix);
+			break;
+			}
 		case prgPAXE:{
 		        Partition partition(partitionf1,piformat,cluster1_offset);
 			Partition npart=partition.xtractElements(&namelist);
 			npart.printPartition(poformat);
 			break;
 			}
+///(For analyzing partitions)
 		case prgCDIS:
 		case prgCCOP:{
         		MatrixOfValues MX(mxofval);

@@ -90,7 +90,8 @@ enum flagheader {BEGIN,END};
 ///Enummerates the possible ways of generating duplicates for a given MSA
 enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
 ///Enummerates possible main program command lines options
-enum prganalysis { prgCCOP=1,prgCDIS,prgPAXE,
+enum prganalysis { prgCCOP=1,prgCDIS,
+	prgPAXE,prgPASO,prgPASR,
 	prgPSPP,prgPSST,prgPSSR,
 	prgVIPP,prgVIST,prgVISR,
 	prgEDSC,prgEDST,prgEDSR,
@@ -128,18 +129,26 @@ struct greaterThan {
 	}
 };
 
-template <class C>
+template <class C >
 struct containerLargerThan {
         bool operator () (C ca, C cb) {
-                //return ( (ca.size()>cb.size()) || (*(ca.begin()) < *(cb.begin())) );
-                //return ( (ca.size()>cb.size())  || ( *(ca.begin()) < *(cb.begin()) ) );
-                //return ( ( *(ca.begin()) < *(cb.begin()) ) || (ca.size()>cb.size()) );
-                return ( (ca.size()>cb.size()) );
-		/*
-		bool sz=ca.size()>cb.size();
-		bool cn=*(ca.begin()) < *(cb.begin());
-		return (sz||cn);
-		*/
+		int offset=1;
+		bool condition= ( ca.size()>cb.size() );
+		bool equalSize= ( ca.size()==cb.size() );
+		if(equalSize)condition=*(ca.begin()+offset) < *(cb.begin()+offset);
+		return condition;
+        }
+};
+
+template <class C>
+struct containerLargerThan_Offset {
+	int offset;
+	//if(offset<0||offset>2)offset=2;
+        bool operator () (C ca, C cb) {
+		bool condition= ( ca.size()>cb.size() );
+		bool equalSize= ( ca.size()==cb.size() );
+		if(equalSize)condition=*(ca.begin()+offset) < *(cb.begin()+offset);
+		return condition;
         }
 };
 

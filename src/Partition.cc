@@ -160,7 +160,8 @@ Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* t
 	clusters=*clustersl;
 	_items_offset=ofs;
 	if(dosort){
-		containerLargerThan<svect> svectComparator;
+		containerLargerThan_Offset<svect> svectComparator;
+		svectComparator.offset=_items_offset;
 		for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
 			sort(cl->begin()+_items_offset,cl->end());
 		}
@@ -806,12 +807,12 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 	}
 }
 
-void Partition::printPartition(){
+void Partition::printPartition(bool SequentialClusterNames, string ClusterPrefix){
 	partFileFormat format=_piformat;
 	printPartition(format);
 }
 
-void Partition::printPartition(partFileFormat format){
+void Partition::printPartition(partFileFormat format, bool SequentialClusterNames, string ClusterPrefix){
 	int ofs=0;
 	switch(format){
 		case partFmtMCL:
@@ -850,12 +851,17 @@ void Partition::printPartition(partFileFormat format){
 		default:
 			if(!QUIET)cout<<"#Clusters: "<<clusters.size()<<endl;
 			for(int i=0;i<clusters.size();i++){
-				for(int j=0+ofs;j<clusters[i].size();j++)
+				for(int j=0+ofs;j<clusters[i].size();j++){
+					if(SequentialClusterNames && _items_offset==2){
+						clusters[i][1]=(ClusterPrefix+ToString(i+1));
+					}
 					//cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
-					if(_mcltabf!=NULL && j>=_items_offset)
+					if(_mcltabf!=NULL && j>=_items_offset){
 						cout<<_mcltab[ atoi( clusters[i][j].c_str() ) ]<<"\t";
-					else
+					}else{
 						cout<<clusters[i][j]<<"\t";
+					}
+				}
 				cout<<endl;
 			}
 			break;

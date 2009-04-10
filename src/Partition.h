@@ -92,9 +92,9 @@ public:
 	///Check it is a sound Partition of the default set of elements
 	bool isaPartition();
 	///Print partition using the default partanalyzer format
-	void printPartition();
+	void printPartition(bool SequentialClusterNames=false, string ClusterPrefix="C");
 	///Print partition in the specified format 
-	void printPartition(partFileFormat iformat);
+	void printPartition(partFileFormat iformat, bool SequentialClusterNames=false, string ClusterPrefix="C");
 	///Get number of clusters (including singletons)
 	long int n_clusters(){ return _nclusters;}
 	///Get number of singletons
