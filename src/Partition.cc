@@ -554,8 +554,11 @@ void Partition::mclTabFile(char* mcltabf){
 		}
 	}
 	if(n_items()>0 && c!=n_items()){
+		/*	
 		cout<<"ERROR: Partition::mclTabFile : number of keys-items pairs doesn't match number of items read for partition."<<endl;
 		exit(1);
+		*/	
+		if(!QUIET)cout<<"#WARNING: Partition::mclTabFile : number of keys-items pairs doesn't match number of items read for partition. Recommended to use --part-sort and check against tab file"<<endl;
 	}
 	if(!QUIET)cout<<"#MCL tab file: found "<<c<<" key-label pairs. Last label is "<<_mcltab[c-1]<<endl;
 }
