@@ -808,7 +808,7 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 	}
 	if(VERBOSE) cout<<"#Finish Reading partition: "<<endl;
 	//if(!QUIET||INFO) cout<<"#items= "<<_nitems<<" clusters= "<<clusters.size()<<" #singletons= "<<_nsingletons<<" #pairs= "<<_npairs<<" \%non-trivial= "<<(_nsingletons+_npairs)*1.0/clusters.size()<<" largest-cluster-size= "<<maxitems-_items_offset<<" largest-cluster-index= "<<_largest_cluster<<" last-cluster-size= "<<_items.size()-_items_offset<<" Last-item-read= "<<_items[_items.size()-1]<<endl;
-	if(!QUIET||INFO) cout<<"#items= "<<_nitems<<" clusters= "<<clusters.size()<<" #singletons= "<<_nsingletons<<" #pairs= "<<_npairs<<" \%trivial/non-trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size()<<" largest-cluster-size= "<<maxitems-_items_offset<<" largest-cluster-index= "<<_largest_cluster<<" last-cluster-size= "<<_items.size()-_items_offset<<" Last-item-read= "<<_items[_items.size()-1]<<endl;
+	if(!QUIET||INFO) cout<<"#items= "<<_nitems<<" clusters= "<<clusters.size()<<" #singletons= "<<_nsingletons<<" #pairs= "<<_npairs<<" \%non-trivial/trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size()<<" largest-cluster-size= "<<maxitems-_items_offset<<" largest-cluster-index= "<<_largest_cluster<<" last-cluster-size= "<<_items.size()-_items_offset<<" Last-item-read= "<<_items[_items.size()-1]<<endl;
 	_nclusters=clusters.size();
 	if(_nsingletons!=ssingletons.size()){
 		cout<<"ERROR: _readClusters : Not a sound Partition : non mutually disjoint singleton clusters"<<endl;
