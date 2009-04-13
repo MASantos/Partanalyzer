@@ -41,6 +41,13 @@ class Partition
 	long int _nsingletons;
 	///Number of clusters with only 2 elements
 	long int _npairs;
+	/**Number of non-trivial clusters (Defined here as those with 4 or more elements. 
+	///This assumes that the majority of the pairs can be retrieved using any reasonable tree-building algorithm by
+	///cutting just above the first level nodes. Maybe even some of the triples, by judicious selection of isolated branch leafs 
+	///from next level nodes. However, is seems much less likely to recover all (many) clusters with 4+ elements unless the
+	///algorithm is really fine tuned.
+	*/
+	long int _nnontrivial;
 	///Number of elements (of underlying space) 
 	long int _nitems;
 	///Index of largest cluster in member smat clusters
