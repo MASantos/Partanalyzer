@@ -93,6 +93,8 @@ void printHelp(){
 	cout<<endl;
 	cout<<"   For editing partitions                                             "<<endl;
 	cout<<"       --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
+	cout<<"       --part-sort partition " <<endl;
+	cout<<"       --part-sort-rename [prefix] partition " <<endl;
 	cout<<endl;
 	cout<<"   For converting between different partition formats                 "<<endl;
 	cout<<"       --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
@@ -267,6 +269,16 @@ void printHelpLong(){
 	cout<<"       --part-extract-elements {--extract-elements} elements_file      " <<endl;
 	cout<<"           elements_file lists the names of the elements to cull from  "<<endl;
 	cout<<"           the given partition                                         "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --part-sort                                                     "<<endl;
+	cout<<"           Sorts the clusters by size, the larger on top. Ties are     "<<endl;
+	cout<<"           sorted alphabetically by their first item. Within each      "<<endl;
+	cout<<"           cluster, items are sorted alphabetically.                   "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --part-sort-rename [prefix]                                     "<<endl;
+	cout<<"           As --part-sort, but also rename each clusters consecutively "<<endl;
+	cout<<"           as C1, C2,etc. If a prefix string is supplied use that      "<<endl;
+	cout<<"           instead of C.                                               "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"For converting between different partition formats                     "<<endl;
 	cout<<"                                                                       "<<endl;
