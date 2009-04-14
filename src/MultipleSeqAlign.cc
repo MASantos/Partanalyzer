@@ -47,26 +47,28 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
         while(_is>>str){
                 string fchr=str.substr(0,1);
                 if(fchr.compare("#")==0)continue;
-                if(VERBOSE)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
+                //Found beginning of new sequence: push old one to the MSA and set name of the current new one
                 if(strcmp(fchr.c_str(),">")==0){
-                        if(VERBOSE)Seq.print();
-                        if(VERBOSE)cout<<"#New string: "<<str<<endl;
-                        if(!seq.compare("")==0){
-                                Seq.setSeq(seq);
-                                if(_len==0)_len=Seq.length();
+                        if(!seq.compare("")==0){ //If we have the actual sequence...
+                                Seq.setSeq(seq); //set it...
+                                if(_len==0)_len=Seq.length();///and check whether it may belong or not to the same MSA
                                 if(!Seq.length()==_len){
                                         cout<<"ERROR: Sequence length doesn't fit MSA length ("<<_len<<") : "<<Seq.name()<<" ("<<Seq.length()<<")"<<endl;
                                         exit(1);
                                 }
-                                _Seqlist.push_back(Seq);
+                                _Seqlist.push_back(Seq); ///If the length fits, add the previous sequence Seq to the MSA _Seqlist
+                        	if(VERBOSE)Seq.print();
                         }
-                        Seq.setName(str);
+                        if(VERBOSE)cout<<"#New string: "<<str<<endl;
+                        Seq.setName(str);//Set name of the current new sequence found
                         seq="";
                         continue;
                 }
+                if(VERBOSE)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
                 seq+=str;
         }
         Seq.setSeq(seq);        ///The last sequence isn't followed by a line starting with ">"
+	if(VERBOSE)Seq.print();
         _Seqlist.push_back(Seq);
         _nseq=_Seqlist.size();
         if(!QUIET) cout<<"#Found "<<_nseq<<" sequences of length "<<_len<<". Last read: "<<(_Seqlist.end()-1)->name()<<endl;
@@ -113,7 +115,7 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 			cond=(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0); //Name may start by >
 			if(cond){
 				found=true;
-				if(equal)nmsa.addSeq(*st); //If equal, add sequences found in list; else
+				if(equal)nmsa.addSeq(*st); //If equal, add sequences found to list; else
 			}
 		}
 		if(!(equal||found))nmsa.addSeq(*st); //... add sequences NOT in list
