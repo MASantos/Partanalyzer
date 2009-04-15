@@ -1,0 +1,109 @@
+# partanalyzer Version alpha 0.5.1.4
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Apr 14 2009
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#
+#Wed Apr 15 11:46:30 EDT 2009
+#VERBOSITY on
+#Reading MSA msa1
+#Found 11 sequences of length 10. Last read: >1
+#Reading MSA msa2
+#Found 5 sequences of length 10. Last read: >J10
+#EXtracting top sequences for...
+# >J2 : 
+#	>0	20
+#Got : >0 (seq_oldz=1) 	20		(minID=20)
+#	>10	20
+#	>9	30
+#Got : >9 (seq_oldz=2) 	30		(minID=20)
+#	>8	40
+#Got : >8 (seq_oldz=3) 	40		(minID=20)
+#	>7	50
+#Got : >7 (seq_oldz=4) 	50		(minID=20)
+#	>6	60
+#Got : >6 (seq_oldz=5) 	60		(minID=20)
+#	>5	70
+#Got : >5 (seq_oldz=6) 	70		(minID=20)
+#	>4	80
+#Got : >4 (seq_oldz=7) 	80		(minID=20)
+#	>3	90
+#Got : >3 (seq_oldz=8) 	90		(minID=20)
+#	>2	100
+#Got : >2 (seq_oldz=9) 	100		(minID=20)
+#	>1	90
+#Got : >1 (seq_oldz=10) 	90		(minID=20)
+# >J4 : 
+#	>0	40
+#Got : >0 (seq_oldz=1) 	40		(minID=40)
+#	>10	40
+#	>9	50
+#Got : >9 (seq_oldz=2) 	50		(minID=40)
+#	>8	60
+#Got : >8 (seq_oldz=3) 	60		(minID=40)
+#	>7	70
+#Got : >7 (seq_oldz=4) 	70		(minID=40)
+#	>6	80
+#Got : >6 (seq_oldz=5) 	80		(minID=40)
+#	>5	90
+#Got : >5 (seq_oldz=6) 	90		(minID=40)
+#	>4	100
+#Got : >4 (seq_oldz=7) 	100		(minID=40)
+#	>3	90
+#Got : >3 (seq_oldz=8) 	90		(minID=40)
+#	>1	70
+#Got : >1 (seq_oldz=9) 	70		(minID=40)
+# >J6 : 
+#	>0	60
+#Got : >0 (seq_oldz=1) 	60		(minID=60)
+#	>10	60
+#	>9	70
+#Got : >9 (seq_oldz=2) 	70		(minID=60)
+#	>8	80
+#Got : >8 (seq_oldz=3) 	80		(minID=60)
+#	>7	90
+#Got : >7 (seq_oldz=4) 	90		(minID=60)
+#	>6	100
+#Got : >6 (seq_oldz=5) 	100		(minID=60)
+#	>5	90
+#Got : >5 (seq_oldz=6) 	90		(minID=60)
+#	>3	70
+#Got : >3 (seq_oldz=7) 	70		(minID=60)
+#	>1	50
+#Got : >1 (seq_oldz=8) 	50		(minID=50)
+# >J8 : 
+#	>0	80
+#Got : >0 (seq_oldz=1) 	80		(minID=80)
+#	>10	80
+#	>9	90
+#Got : >9 (seq_oldz=2) 	90		(minID=80)
+#	>8	100
+#Got : >8 (seq_oldz=3) 	100		(minID=80)
+#	>7	90
+#Got : >7 (seq_oldz=4) 	90		(minID=80)
+#	>5	70
+#Got : >5 (seq_oldz=5) 	70		(minID=70)
+#	>3	50
+#Got : >3 (seq_oldz=6) 	50		(minID=50)
+#	>1	30
+#Got : >1 (seq_oldz=7) 	30		(minID=30)
+# >J10 : 
+#	>0	100
+#Got : >0 (seq_oldz=1) 	100		(minID=100)
+#	>10	100
+#	>9	90
+#Got : >9 (seq_oldz=2) 	90		(minID=90)
+#	>7	70
+#Got : >7 (seq_oldz=3) 	70		(minID=70)
+#	>5	50
+#Got : >5 (seq_oldz=4) 	50		(minID=50)
+#	>3	30
+#Got : >3 (seq_oldz=5) 	30		(minID=30)
+#	>1	10
+#Got : >1 (seq_oldz=6) 	10		(minID=10)
+>2
+12xxxxxxxx
+>4
+1234xxxxxx
+>6
+123456xxxx
+#Wed Apr 15 11:46:30 EDT 2009
