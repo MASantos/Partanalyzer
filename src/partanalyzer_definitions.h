@@ -38,6 +38,8 @@ g++ -o partanalyzer partanalyzer.cc
 extern const char* VERSION;
 ///If true program outputs additional information regarding its calculations. This can be already quite a lot.
 extern bool 	VERBOSE;
+///If true program outputs even more detailed information
+extern bool 	DEBUG;
 ///If true, program does not print any comment lines (those starting with #). No warnings will be printed either.
 extern bool    QUIET;
 ///If true, we want to print some info that usually appears as a comment without the leading # comment sign

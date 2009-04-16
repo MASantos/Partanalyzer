@@ -106,16 +106,24 @@ int main(int argc, char* argv[]) {
 			printCopyright();
 			exit(0);
 		}
+		if(strcmp(*argv,"-q")==0||strcmp(*argv,"--quiet")==0){
+			argc--;
+			argv++;
+			QUIET=true;
+		}
 		if(strcmp(*argv,"--verbose")==0){
 			argc--;
 			argv++;
 			VERBOSE=true;
 			cout<<"#VERBOSITY on"<<endl;
 		}
-		if(strcmp(*argv,"-q")==0||strcmp(*argv,"--quiet")==0){
+		if(strcmp(*argv,"--debug")==0){
 			argc--;
 			argv++;
-			QUIET=true;
+			DEBUG=true;
+			VERBOSE=true;
+			QUIET=false;
+			cout<<"#EXTENSIVE VERBOSITY mode on"<<endl;
 		}
 		if(strcmp(*argv,"-t")==0||strcmp(*argv,"--format")==0||strcmp(*argv,"--fmt")==0){
 			argc--;

@@ -96,10 +96,12 @@ double Sequence::id(Sequence* Seq,vector<int>* positions)
 
         }
         double norm=0;
-        if(VERBOSE)cout<<"#Sequence comparison starting at position "<<starts+1<<" up to position "<<ends<<endl;
+        if(DEBUG)cout<<"#Sequence comparison starting at position "<<starts+1<<" up to position "<<ends<<endl;
         int selected_pos=-9999;
         for(int i=starts;i<ends;i++){
+#ifdef DEBUG
 		if(VERBOSE)cout<<" starts="<<starts<<" ends="<<ends<<" : i="<<i<<endl;
+#endif
                 //if(!(positions==NULL)&&positions->empty()>0){
                 if(!(positions==NULL || positions->empty() ) ){
                         all_positions=false;
@@ -110,7 +112,7 @@ double Sequence::id(Sequence* Seq,vector<int>* positions)
                                 }
                         }
                         if(selected_pos!=i)continue;
-                        if(VERBOSE)cout<<"#Position: "<<i<<endl;
+                        if(DEBUG)cout<<"#Position: "<<i<<endl;
                 }
                 if(chrAt(i).compare("-")==0&&Seq->chrAt(i).compare("-")==0)continue;
                 norm++;

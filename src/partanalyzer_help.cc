@@ -71,6 +71,7 @@ void printHelp(){
 	cout<<"       "<<_programb_<<" [OPTIONS] COMMAND ARGS "<<endl;
 	cout<<endl;
 	cout<<"        OPTIONS                                "<<endl;
+	cout<<"                --debug                        "<<endl;
 	cout<<"                --verbose                      "<<endl;
 	cout<<"                -q , --quiet                   "<<endl;
 	cout<<"                -t , --format partition_format "<<endl;
@@ -110,6 +111,10 @@ void printHelp(){
 	cout<<"       --msa-extract-positions positions_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       --msa-extract-sequences sequences_file multiple_seq_alignment.fasta"<<endl;
 	cout<<"       --msa-drop-sequences sequences_file multiple_seq_alignment.fasta"<<endl;
+	cout<<"       --msa-extract-sequences-by-id  msa_file1 msa_file2 [minId maxId]"<<endl;
+	cout<<"       --msa-drop-sequences-by-id sequences_file msa_file [minId maxId]"<<endl;
+	cout<<"       --msa-extract-sequences-by-topid msa_file1 msa_file2 [count]"<<endl;
+	cout<<"       --msa-drop-sequences-by-topid msa_file1 msa_file [count]"<<endl;
 	cout<<"       --msa-map-partition partition multiple_seq_alignment.fasta "<<endl;
 	cout<<"       --print-msa multiple_seq_alignment.fasta "<<endl;
 	cout<<"       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
