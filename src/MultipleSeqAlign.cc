@@ -29,12 +29,15 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 MultipleSeqAlign::MultipleSeqAlign(){
         _msaf=NULL;
         _len=_nseq=0;
+	if(!QUIET)printPIDNormalization();
+	
 }
 
 MultipleSeqAlign::MultipleSeqAlign(char* msaf)
 {
         _msaf=msaf;
         _len=_nseq=0;
+	if(!QUIET)printPIDNormalization();
         ifstream _is(_msaf);
         if(!_is){
                 cout<<"ERROR: MultipleSeqAlign : File not found: "<<_msaf<<endl;
@@ -47,20 +50,20 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
         while(_is>>str){
                 string fchr=str.substr(0,1);
                 if(fchr.compare("#")==0){
-				getline(_is,fchr);
+				getline(_is,str);
 				continue;
 		}
                 //Found beginning of new sequence: push old one to the MSA and set name of the current new one
                 if(strcmp(fchr.c_str(),">")==0){
                         if(!seq.compare("")==0){ //If we have the actual sequence...
-                                Seq.setSeq(seq); //set it...
-                                if(_len==0)_len=Seq.length();///and check whether it may belong or not to the same MSA
-                                if(!Seq.length()==_len){
-                                        cout<<"ERROR: Sequence length doesn't fit MSA length ("<<_len<<") : "<<Seq.name()<<" ("<<Seq.length()<<")"<<endl;
+                                Seq.setAlignedSeq(seq); //set it...
+                                if(_len==0)_len=Seq.alignmentLength();///and check whether it may belong or not to the same MSA
+                                if(!Seq.alignmentLength()==_len){
+                                        cout<<"ERROR: Sequence length doesn't fit MSA length ("<<_len<<") : "<<Seq.name()<<" ("<<Seq.alignmentLength()<<")"<<endl;
                                         exit(1);
                                 }
                                 _Seqlist.push_back(Seq); ///If the length fits, add the previous sequence Seq to the MSA _Seqlist
-                        	if(DEBUG)Seq.print();
+                        	if(DEBUG)Seq.printAlignment();
                         }
                         if(DEBUG)cout<<"#New string: "<<str<<endl;
                         Seq.setName(str);//Set name of the current new sequence found
@@ -70,8 +73,8 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
                 if(DEBUG)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
                 seq+=str;
         }
-        Seq.setSeq(seq);        ///The last sequence isn't followed by a line starting with ">"
-	if(DEBUG)Seq.print();
+        Seq.setAlignedSeq(seq);        ///The last sequence isn't followed by a line starting with ">"
+	if(DEBUG)Seq.printAlignment();
         _Seqlist.push_back(Seq);
         _nseq=_Seqlist.size();
         if(!QUIET) cout<<"#Found "<<_nseq<<" sequences of length "<<_len<<". Last read: "<<(_Seqlist.end()-1)->name()<<endl;
@@ -84,7 +87,7 @@ MultipleSeqAlign::MultipleSeqAlign(MSA& msa){
 	}
 	_msaf=NULL;
 	_Seqlist=msa;
-	_len=_Seqlist[0].length();
+	_len=_Seqlist[0].alignmentLength();
 	_nseq=_Seqlist.size();
 }
 
@@ -94,12 +97,12 @@ void MultipleSeqAlign::addSeq(Sequence Seq){
 
 void MultipleSeqAlign::addSeq(Sequence* Seq){
         if(_len>0)
-		if(_len!=Seq->length()){
-                	cout<<"Sequence length "<<Seq->name()<<" ("<<Seq->length()<<") doesn't fit MSA's length ("<<_len<<")"<<endl;
+		if(_len!=Seq->alignmentLength()){
+                	cout<<"Sequence length "<<Seq->name()<<" ("<<Seq->alignmentLength()<<") doesn't fit MSA's length ("<<_len<<")"<<endl;
                 	exit(1);
         	}
         else {
-                _len=Seq->length();
+                _len=Seq->alignmentLength();
                 _nseq=0;
         }
         _Seqlist.push_back(*Seq);
@@ -143,7 +146,7 @@ void MultipleSeqAlign::printWithClusterLabels(Partition* part){
 		cout<<"==cluster "<<part->getClusterName(*cl)<<endl;
 		for(svect::iterator it=cl->begin()+part->cluster_offset();it!=cl->end();it++){
 			for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
-				if(it->compare(st->name())==0)st->print();
+				if(it->compare(st->name())==0)st->printAlignment();
 			}	
 		}
 	}
@@ -176,12 +179,12 @@ MultipleSeqAlign  MultipleSeqAlign::dropClones(MultipleSeqAlign* msab){
 	for(MSA::iterator st=beginSeq();st!=endSeq();st++){
 		keep=true;
 		for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
-			if(st->sequence().compare(stb->sequence())!=0)continue;//If st is not a clone of stb, check against next stb
+			if(st->alignedSequence().compare(stb->alignedSequence())!=0)continue;//If st is not a clone of stb, check against next stb
 			keep=false; //If st is a clone of stb ...
 			break;
 		}
 		if(keep){ //... do not keep st and check the next st
-			non_redundant_list[st->sequence()]=*st;
+			non_redundant_list[st->alignedSequence()]=*st;
 			if(oldsz<non_redundant_list.size()){ //If we didn't cull st before, ...
 				nmsa.addSeq(*st); //... add this sequence.
 				oldsz=non_redundant_list.size();
@@ -199,7 +202,7 @@ MultipleSeqAlign  MultipleSeqAlign::dropClones(){
 	map<string,Sequence> non_redundant_list; //Non-redundant list of top-id sequences found so far
 	int oldsz=0;
 	for(MSA::iterator st=beginSeq();st!=endSeq();st++){
-		non_redundant_list[st->sequence()]=*st;
+		non_redundant_list[st->alignedSequence()]=*st;
 		if(oldsz<non_redundant_list.size()){
 			oldsz=non_redundant_list.size();
 			nmsa.addSeq(*st);
@@ -240,14 +243,14 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* m
 				}
 			}
 			if(identical)continue;//... skip it as we want only NON-redundant
-			seqstr=st->sequence();
+			seqstr=st->alignedSequence();
 			sid=st->id(*stb,positions);
 			if(VERBOSE)cout<<"#\t"<<st->name()<<"\t"<<sid<<endl;
 			cond=(sid>minId);
 			if(cond||seq_oldsz<TOPLISTSIZE){ //Cull top TOPLISTSIZE sequences from MSA-A
 				if(seq_oldsz==TOPLISTSIZE){
 					//seq_non_redundant_list.erase((seq_non_redundant_list.rbegin())->first); //remove last item
-					seq_non_redundant_list.erase(st_topid.rbegin()->second.sequence()); //remove last item
+					seq_non_redundant_list.erase(st_topid.rbegin()->second.alignedSequence()); //remove last item
 					seq_oldsz--;
 					st_topid.erase((st_topid.rbegin())->first); //remove last item
 				}
@@ -261,7 +264,7 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* m
 			}
 		}
 		for(multimap<double,Sequence,greaterThan>::iterator it=st_topid.begin();it!=st_topid.end();it++){
-			non_redundant_list[(it->second).sequence()]=it->second; //Try to add sequence to non-redundant list
+			non_redundant_list[(it->second).alignedSequence()]=it->second; //Try to add sequence to non-redundant list
 			if(oldsz<non_redundant_list.size()){ //... and if it hasn't been added before
 				oldsz=non_redundant_list.size();
 				topid.insert(pair<double,Sequence>(it->first,it->second));
@@ -288,7 +291,7 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesById(MultipleSeqAlign* msab, 
 	map<string,Sequence> non_redundant_list;
 	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
 		oldsz=non_redundant_list.size();
-		seqstr=st->sequence();
+		seqstr=st->alignedSequence();
 		found=false;
 		for(MSA::iterator stb=msab->beginSeq();stb!=msab->endSeq();stb++){
 			sid=st->id(*stb,positions);
@@ -338,8 +341,8 @@ double MultipleSeqAlign::averageId(vector<int>* positions)
                         avid+=(*ita).id(*itb,positions);
                         if(VERBOSE){
                                 cout<<"# "<<(*ita).name()<<" - "<<(*itb).name()<<" id="<<(*ita).id(*itb,positions)<<endl;
-                                (*ita).print();
-                                (*itb).print();
+                                (*ita).printAlignment();
+                                (*itb).printAlignment();
                                 for(int i=0;i<_len;i++)
                                         if((i+1)%10>0)
                                                 cout<<(i+1)%10;
@@ -361,7 +364,7 @@ void MultipleSeqAlign::printPairwiseIds(MultipleSeqAlign& msa, vector<int>* posi
                         if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
                         string nb=(*itb).name();
                         if(nb.substr(0,1).compare(">")==0)nb=nb.substr(1,nb.length()-1);
-			sameseq=ita->sequence().compare(itb->sequence())==0?true:false;
+			sameseq=ita->alignedSequence().compare(itb->alignedSequence())==0?true:false;
                         cout<<na<<"\t"<<nb<<"\t"<<SeqId(*ita,*itb,positions)<<"\t"<<sameseq<<endl;
                 }
 }
@@ -375,7 +378,7 @@ void MultipleSeqAlign::printPairwiseIds(vector<int>* positions)
                         if(na.substr(0,1).compare(">")==0)na=na.substr(1,na.length()-1);
                         string nb=(*itb).name();
                         if(nb.substr(0,1).compare(">")==0)nb=nb.substr(1,nb.length()-1);
-			sameseq=ita->sequence().compare(itb->sequence())==0?true:false;
+			sameseq=ita->alignedSequence().compare(itb->alignedSequence())==0?true:false;
                         cout<<na<<"\t"<<nb<<"\t"<<SeqId(*ita,*itb,positions)<<"\t"<<sameseq<<endl;
                         //cout<<(*ita).name()<<"\t"<<(*itb).name()<<"\t"<<SeqId(*ita,*itb)<<endl;
                 }
@@ -450,7 +453,7 @@ void MultipleSeqAlign::printAveragePairwiseIds(double thr, vector<int>* position
 void MultipleSeqAlign::print()
 {
         for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-0;ita++)
-                (*ita).print();
+                (*ita).printAlignment();
 }
 
 MultipleSeqAlign MultipleSeqAlign::genRedundantMSA(int n){
