@@ -74,7 +74,7 @@ void printHelp(){
 	cout<<"                --debug                        "<<endl;
 	cout<<"                --verbose                      "<<endl;
 	cout<<"                -q , --quiet                   "<<endl;
-	cout<<"                -z, --pid-normalization norm   "<<endl;
+	cout<<"                -z, --pid-normalization [s|p|r|l]"<<endl;
 	cout<<"                -t , --format partition_format "<<endl;
 	cout<<"                --tab tab_file                 "<<endl;
 	cout<<"                --DIST_SUBSPROJECT             "<<endl;
@@ -146,10 +146,10 @@ void printHelpLong(){
 	cout<<"       -z , --pid-normalization norm                                   "<<endl;
 	cout<<"          Determines the normalization used for calculating percent    "<<endl;
 	cout<<"          sequence identities. The possible string values for norm are:"<<endl;
-	cout<<"                 shorter-sequence                                      "<<endl;
-	cout<<"                 aligned-positions                                     "<<endl;
-	cout<<"                 aligned-residues                                      "<<endl;
-	cout<<"                 average-length                                        "<<endl;
+	cout<<"                 s , shorter-sequence                                  "<<endl;
+	cout<<"                 p , aligned-positions                                 "<<endl;
+	cout<<"                 r , aligned-residues                                  "<<endl;
+	cout<<"                 l , average-length                                    "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<" COMMANDS:                                                             "<<endl;
 	cout<<"For analyzing partitions                                               "<<endl;

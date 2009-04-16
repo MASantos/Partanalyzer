@@ -128,16 +128,16 @@ int main(int argc, char* argv[]) {
 		if(strcmp(*argv,"-z")==0||strcmp(*argv,"--pid-normalization")==0){
 			argc--;argv++;
 			if(argc<2)printCommandLineError();
-			if(strcmp(*argv,"shorter-sequence")==0){
+			if(strcmp(*argv,"shorter-sequence")==0||strcmp(*argv,"s")==0){
 				PIDNORMALIZATION=shorterSequence;
 			}
-			else if(strcmp(*argv,"aligned-positions")==0){
+			else if(strcmp(*argv,"aligned-positions")==0||strcmp(*argv,"p")==0){
 				PIDNORMALIZATION=numberOfAlignedPositions;
 			}
-			else if(strcmp(*argv,"aligned-residues")==0){
+			else if(strcmp(*argv,"aligned-residues")==0||strcmp(*argv,"r")==0){
 				PIDNORMALIZATION=numberOfAlignedResiduePairs;
 			}
-			else if(strcmp(*argv,"average-length")==0){
+			else if(strcmp(*argv,"average-length")==0||strcmp(*argv,"l")==0){
 				PIDNORMALIZATION=arithmeticMeanSequenceLenth;
 			}
 			argc--;argv++;
