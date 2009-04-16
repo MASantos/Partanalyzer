@@ -54,49 +54,70 @@ For debugging: print the interaction matrix read by the program
 ./partanalyze --print-matrix test-blast_pairwise_id
 
 
-Full help (as of version alpha 0.5.1)
+Full help (as of version alpha 0.5.1.6)
 			partanalyzer (Partition Analyzer)
 
 Usage:
        partanalyzer [-h|--help] (Use --help for more details)
        partanalyzer --version 
+       partanalyzer [OPTIONS] COMMAND ARGS 
+
+        OPTIONS                                
+                --debug                        
+                --verbose                      
+                -q , --quiet                   
+                -z, --pid-normalization [s|p|r|l]
+                -t , --format partition_format 
+                --tab tab_file                 
+                --DIST_SUBSPROJECT             
+                --beta beta_value              
+                --mu mu_value                  
+
+        COMMANDS                               
 
    For analyzing partitions                                          
-       partanalyzer [--verbose][-q] [-t pfmt] (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
-       partanalyzer [--verbose][-q] -c [-tab tab_file] matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
-       partanalyzer [--verbose][-q] -d matrix-of-values partition1 [partition_offset (=2)]
-       partanalyzer [--verbose][-q] [-t pfmt] (-J|-R|-T) [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t pfmt] (-V|-E|-P) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t pfmt] --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t pfmt] (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
-       partanalyzer [--verbose][-q] [-t pfmt] (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
+       -c matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
+       -d matrix-of-values partition1 [partition_offset (=2)]
+       (-J|-R|-T) [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       (-V|-E|-P) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       --ipot entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
 
    For editing partitions                                             
-       partanalyzer [--verbose][-q] --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+       --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+       --part-sort partition 
+       --part-sort-rename [prefix] partition 
 
    For converting between different partition formats                 
-       partanalyzer [--verbose][-q] --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]
-       partanalyzer [--verbose][-q] --toFREE partition [partition1_offset (=2) ]
-       partanalyzer [--verbose][-q] --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+       --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]
+       --toFREE partition [partition1_offset (=2) ]
+       --MCLtoPART [-tab mcl_tab_file] partition [partition1_offset (=2) ]
 
    For dealing with (fasta) sequence files                           
-       partanalyzer [--verbose][-q] --seq-noclone-sequences fasta_sequence_file [reference_sequence_file]
+       --seq-noclone-sequences fasta_sequence_file [reference_sequence_file]
 
    For analyzing Multiple Sequence Alignments                        
-       partanalyzer [--verbose][-q] --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
-       partanalyzer [--verbose][-q] --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
-       partanalyzer [--verbose][-q] --msa-extract-positions positions_file multiple_seq_alignment.fasta
-       partanalyzer [--verbose][-q] --msa-extract-sequences sequences_file multiple_seq_alignment.fasta
-       partanalyzer [--verbose][-q] --msa-drop-sequences sequences_file multiple_seq_alignment.fasta
-       partanalyzer [--verbose][-q] --print-msa multiple_seq_alignment.fasta 
-       partanalyzer [--verbose][-q] --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta 
+       --msa-seqid-stat [--positions positions_file] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
+       --msa-seqid-avg [-thr threshold=50] multiple_seq_alignment.fasta [multiple_seq_alignment.fasta2]
+       --msa-extract-positions positions_file multiple_seq_alignment.fasta
+       --msa-extract-sequences sequences_file multiple_seq_alignment.fasta
+       --msa-drop-sequences sequences_file multiple_seq_alignment.fasta
+       --msa-extract-sequences-by-id  msa_file1 msa_file2 [minId maxId]
+       --msa-drop-sequences-by-id sequences_file msa_file [minId maxId]
+       --msa-extract-sequences-by-topid msa_file1 msa_file2 [count]
+       --msa-drop-sequences-by-topid msa_file1 msa_file [count]
+       --msa-map-partition partition multiple_seq_alignment.fasta 
+       --print-msa multiple_seq_alignment.fasta 
+       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta 
 
    For dealing with -interaction- matrices                           
-       partanalyzer [--verbose][-q] --edge-dist matrix-of-values [partition [partition_offset (=2)] ] 
-       partanalyzer [--verbose][-q] -m matrix-of-values1 matrix-of-values2 
-       partanalyzer [--verbose][-q] -r matrix-of-values1 matrix-of-values2 partition [partition_offset (=2)]
-       partanalyzer [--verbose][-q] -l matrix-of-values1 matrix-of-values2 
-       partanalyzer [--verbose][-q] --print-matrix matrix-of-values 
+       --edge-dist matrix-of-values [partition [partition_offset (=2)] ] 
+       -m matrix-of-values1 matrix-of-values2 
+       -r matrix-of-values1 matrix-of-values2 partition [partition_offset (=2)]
+       -l matrix-of-values1 matrix-of-values2 
+       --print-matrix matrix-of-values 
                                                                        
 partanalyzer aims at being a general program for analyzing (sets of) partitions.
  Here a partition is defined as in set theory of mathematics (see      
@@ -112,6 +133,16 @@ partanalyzer aims at being a general program for analyzing (sets of) partitions.
  Works only with a *stat distance command, i.e., not  purity scores.   
                                                                        
  OPTIONS:                                                              
+       -z , --pid-normalization norm                                   
+          Determines the normalization used for calculating percent    
+          sequence identities. The possible string values for norm are:
+                 s , shorter-sequence                                  
+                 p , aligned-positions                                 
+                 r , aligned-residues                                  
+                 l , average-length                                    
+          Default normalization is the average sequence length, l.     
+                                                                       
+ COMMANDS:                                                             
 For analyzing partitions                                               
                                                                        
        -v , --vi-distance                                              
@@ -245,6 +276,16 @@ For editing partitions
            elements_file lists the names of the elements to cull from  
            the given partition                                         
                                                                        
+       --part-sort                                                     
+           Sorts the clusters by size, the larger on top. Ties are     
+           sorted alphabetically by their first item. Within each      
+           cluster, items are sorted alphabetically.                   
+                                                                       
+       --part-sort-rename [prefix]                                     
+           As --part-sort, but also rename each clusters consecutively 
+           as C1, C2,etc. If a prefix string is supplied use that      
+           instead of C.                                               
+                                                                       
 For converting between different partition formats                     
                                                                        
        --toMCL [-tab mcl_tab_file] converts partition from PART format  
@@ -339,6 +380,10 @@ For analyzing Multiple Sequence Alignments
           the seed is written within .seed_used allowing for repeated  
           experiments.                                                 
                                                                        
+       --msa-map-partition                                             
+          Given a Partition and the original MSA, output the MSA       
+          with the cluster annotation of the SDPpred server            
+                                                                       
        --print-msa                                                     
           Prints the given multiple sequence alignment. Useful for     
           debugging.                                                   
@@ -417,8 +462,8 @@ File formats:
          MCL : MCL's own matrix format for partitions. See MCL manual. 
 
 License
-# partanalyzer Version alpha 0.5.1
-# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Apr  8 2009
+# partanalyzer Version alpha 0.5.1.5
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Apr 16 2009
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #
