@@ -46,7 +46,10 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
         Sequence Seq; //Actual sequence structure
         while(_is>>str){
                 string fchr=str.substr(0,1);
-                if(fchr.compare("#")==0)continue;
+                if(fchr.compare("#")==0){
+				getline(_is,fchr);
+				continue;
+		}
                 //Found beginning of new sequence: push old one to the MSA and set name of the current new one
                 if(strcmp(fchr.c_str(),">")==0){
                         if(!seq.compare("")==0){ //If we have the actual sequence...
@@ -57,18 +60,18 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
                                         exit(1);
                                 }
                                 _Seqlist.push_back(Seq); ///If the length fits, add the previous sequence Seq to the MSA _Seqlist
-                        	if(VERBOSE)Seq.print();
+                        	if(DEBUG)Seq.print();
                         }
-                        if(VERBOSE)cout<<"#New string: "<<str<<endl;
+                        if(DEBUG)cout<<"#New string: "<<str<<endl;
                         Seq.setName(str);//Set name of the current new sequence found
                         seq="";
                         continue;
                 }
-                if(VERBOSE)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
+                if(DEBUG)cout<<"#read: "<<str<<" First character="<<fchr<<endl;
                 seq+=str;
         }
         Seq.setSeq(seq);        ///The last sequence isn't followed by a line starting with ">"
-	if(VERBOSE)Seq.print();
+	if(DEBUG)Seq.print();
         _Seqlist.push_back(Seq);
         _nseq=_Seqlist.size();
         if(!QUIET) cout<<"#Found "<<_nseq<<" sequences of length "<<_len<<". Last read: "<<(_Seqlist.end()-1)->name()<<endl;
@@ -103,6 +106,7 @@ void MultipleSeqAlign::addSeq(Sequence* Seq){
         _nseq++;
 }
 
+//Extract sequences specified by name. IF bool equal=false, drop them instead.
 MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){
 	MultipleSeqAlign nmsa;
 	string name;
@@ -111,14 +115,22 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
 		name=st->name();
 		found=false;
+		if(VERBOSE)cout<<name<<"? :";
 		for(svect::iterator nit=seqnames->begin();nit!=seqnames->end();nit++){
 			cond=(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0); //Name may start by >
 			if(cond){
 				found=true;
-				if(equal)nmsa.addSeq(*st); //If equal, add sequences found to list; else
+				if(equal){
+					nmsa.addSeq(*st); //If equal, add sequences found to list; else
+					if(VERBOSE)cout<<" (Equal="<<equal<<"/found="<<found<<") Cull :"<<*nit;
+				}else if(VERBOSE)cout<<" (Equal="<<equal<<"/found="<<found<<")  Drop :"<<*nit;
 			}
 		}
-		if(!(equal||found))nmsa.addSeq(*st); //... add sequences NOT in list
+		if(!(equal||found)){
+			nmsa.addSeq(*st); //... add sequences NOT yet in list
+			if(VERBOSE)cout<<" Keeping ";
+		}else if(VERBOSE)cout<<" Ignoring :";
+		if(VERBOSE)cout<<endl;
 	}
 	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
 	if(!QUIET)cout<<"#Extracted "<<nmsa.getNumberOfSeq()<<" sequences"<<endl;
@@ -230,18 +242,21 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* m
 			if(identical)continue;//... skip it as we want only NON-redundant
 			seqstr=st->sequence();
 			sid=st->id(*stb,positions);
-			if(VERBOSE)cout<<"#\t"<<st->name()<<"\t"<<sid<<"\t"<<minId<<endl;
+			if(VERBOSE)cout<<"#\t"<<st->name()<<"\t"<<sid<<endl;
 			cond=(sid>minId);
-			if(cond||oldsz<TOPLISTSIZE){ //Cull top TOPLISTSIZE sequences from MSA-A
+			if(cond||seq_oldsz<TOPLISTSIZE){ //Cull top TOPLISTSIZE sequences from MSA-A
 				if(seq_oldsz==TOPLISTSIZE){
-					seq_non_redundant_list.erase((seq_non_redundant_list.rbegin())->first); //remove last item
+					//seq_non_redundant_list.erase((seq_non_redundant_list.rbegin())->first); //remove last item
+					seq_non_redundant_list.erase(st_topid.rbegin()->second.sequence()); //remove last item
+					seq_oldsz--;
+					st_topid.erase((st_topid.rbegin())->first); //remove last item
 				}
 				seq_non_redundant_list[seqstr]=*st;
 				if(seq_oldsz<seq_non_redundant_list.size()){ //Update lists if sequence hasn't been added before
 					seq_oldsz=seq_non_redundant_list.size(); //update number of top-id sequences found so far. 
 					st_topid.insert(pair<double,Sequence>(sid,*st)); //update top id list . We could use this map as well for updating oldsz
 					minId=st_topid.rbegin()->first; //Update lowest top id value
-					if(VERBOSE)cout<<"#Got : "<<st->name()<<" ("<<seq_oldsz<<") "<<"\t"<<sid<<"\t\t"<<minId<<endl;
+					if(VERBOSE)cout<<"#Got : "<<st->name()<<" (seq_oldz="<<seq_oldsz<<") "<<"\t"<<sid<<"\t\t(minID="<<minId<<")"<<endl;
 				}
 			}
 		}
