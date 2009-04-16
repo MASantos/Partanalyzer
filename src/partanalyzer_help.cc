@@ -150,6 +150,7 @@ void printHelpLong(){
 	cout<<"                 p , aligned-positions                                 "<<endl;
 	cout<<"                 r , aligned-residues                                  "<<endl;
 	cout<<"                 l , average-length                                    "<<endl;
+	cout<<"          Default normalization is the average sequence length, l.     "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<" COMMANDS:                                                             "<<endl;
 	cout<<"For analyzing partitions                                               "<<endl;

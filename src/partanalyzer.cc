@@ -140,6 +140,10 @@ int main(int argc, char* argv[]) {
 			else if(strcmp(*argv,"average-length")==0||strcmp(*argv,"l")==0){
 				PIDNORMALIZATION=arithmeticMeanSequenceLenth;
 			}
+			else{
+				cout<<"ERROR: Invalid PIDNORMALIZATION value : "<<*argv<<endl;
+				exit(1);
+			}
 			argc--;argv++;
 		}
 		if(strcmp(*argv,"-t")==0||strcmp(*argv,"--format")==0||strcmp(*argv,"--fmt")==0){

@@ -25,7 +25,8 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "Sequence.h"
 
-pid_normalization PIDNORMALIZATION=shorterSequence;
+///Default PID normalization is the arithmetic average sequence length
+pid_normalization PIDNORMALIZATION=arithmeticMeanSequenceLenth;
 
 void printPIDNormalization(){
 	cout<<"#PIDNORMALIZATION= ";
