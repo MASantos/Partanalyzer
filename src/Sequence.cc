@@ -25,6 +25,8 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "Sequence.h"
 
+pid_normalization PIDNORMALIZATION=shorterSequence;
+
 void printPIDNormalization(){
 	cout<<"#PIDNORMALIZATION= ";
 	switch(PIDNORMALIZATION){

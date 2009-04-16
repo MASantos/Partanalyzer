@@ -125,6 +125,23 @@ int main(int argc, char* argv[]) {
 			QUIET=false;
 			cout<<"#EXTENSIVE VERBOSITY mode on"<<endl;
 		}
+		if(strcmp(*argv,"-z")==0||strcmp(*argv,"--pid-normalization")==0){
+			argc--;argv++;
+			if(argc<2)printCommandLineError();
+			if(strcmp(*argv,"shorter-sequence")==0){
+				PIDNORMALIZATION=shorterSequence;
+			}
+			else if(strcmp(*argv,"aligned-positions")==0){
+				PIDNORMALIZATION=numberOfAlignedPositions;
+			}
+			else if(strcmp(*argv,"aligned-residues")==0){
+				PIDNORMALIZATION=numberOfAlignedResiduePairs;
+			}
+			else if(strcmp(*argv,"average-length")==0){
+				PIDNORMALIZATION=arithmeticMeanSequenceLenth;
+			}
+			argc--;argv++;
+		}
 		if(strcmp(*argv,"-t")==0||strcmp(*argv,"--format")==0||strcmp(*argv,"--fmt")==0){
 			argc--;
 			argv++;

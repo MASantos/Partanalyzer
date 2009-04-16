@@ -74,6 +74,7 @@ void printHelp(){
 	cout<<"                --debug                        "<<endl;
 	cout<<"                --verbose                      "<<endl;
 	cout<<"                -q , --quiet                   "<<endl;
+	cout<<"                -z, --pid-normalization norm   "<<endl;
 	cout<<"                -t , --format partition_format "<<endl;
 	cout<<"                --tab tab_file                 "<<endl;
 	cout<<"                --DIST_SUBSPROJECT             "<<endl;
@@ -142,6 +143,15 @@ void printHelpLong(){
 	cout<<" Works only with a *stat distance command, i.e., not  purity scores.   "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<" OPTIONS:                                                              "<<endl;
+	cout<<"       -z , --pid-normalization norm                                   "<<endl;
+	cout<<"          Determines the normalization used for calculating percent    "<<endl;
+	cout<<"          sequence identities. The possible string values for norm are:"<<endl;
+	cout<<"                 shorter-sequence                                      "<<endl;
+	cout<<"                 aligned-positions                                     "<<endl;
+	cout<<"                 aligned-residues                                      "<<endl;
+	cout<<"                 average-length                                        "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<" COMMANDS:                                                             "<<endl;
 	cout<<"For analyzing partitions                                               "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       -v , --vi-distance                                              "<<endl;
