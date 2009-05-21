@@ -93,7 +93,7 @@ enum flagheader {BEGIN,END};
 enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
 ///Enummerates possible main program command lines options
 enum prganalysis { prgCCOP=1,prgCDIS,
-	prgPAXE,prgPASO,prgPASR,
+	prgPAXE,prgPASO,prgPASR,prgPACN,
 	prgPSPP,prgPSST,prgPSSR,
 	prgVIPP,prgVIST,prgVISR,
 	prgEDSC,prgEDST,prgEDSR,

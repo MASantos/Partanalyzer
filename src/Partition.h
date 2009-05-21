@@ -67,8 +67,11 @@ class Partition
 	partFileFormat _piformat;
 	///Specific for MCL format: the partition tab file maps element labels to integers
 	char* _mcltabf;	
-	///The MCL tab file
+	///The MCL tab file. It may be redundant with the implementation of the general tab map. To be changed in the future.
 	map<int, string> _mcltab;
+	///The general tab maps: forward & reverse
+	map<string, string> _ftab; ///Key is first column of tabfile and value is second column
+	map<string, string> _rtab; ///Key is second column of tabfile and value is first column
 	///Unordered list of items
 	vector<string > _vitems;
 public:
@@ -124,8 +127,10 @@ public:
 	partFileFormat getPartInputFormat(partFileFormat iformat){ return _piformat;}
 	///Load MCL tab file
 	void mclTabFile(char* mcltabf);
+	///Load a general tab file for changing name of elements
+	void tabFile(char* tabf);
 	///Swap labels according to the provided tab file
-	void swapLabels(char* mcltabf);
+	void swapLabels(char* mcltabf=NULL);
 	///Entropy of a partition
 	double H();
 	///Cardinality of a partition

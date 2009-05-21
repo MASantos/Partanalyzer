@@ -163,7 +163,7 @@ int main(int argc, char* argv[]) {
 		}
 		if(strcmp(*argv,"--tab")==0){
 			argc--;argv++;
-			mcltabfile=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+			mcltabfile=argv[0]; //Its a tab file
 			MCLTABF=true;
 			argc--;argv++;
 		}
@@ -189,6 +189,14 @@ int main(int argc, char* argv[]) {
 			argv++;
 		}
 ///(For editing partitions)
+		else if (strcmp(*argv,"--part-swap-names")==0||strcmp(*argv,"--part-swap-labels")==0){
+			analysis=prgPACN;
+			if(!MCLTABF)printCommandLineError("Use option --tab tabfile before command to specify mapping for new names");
+			if(argc<2)printCommandLineError("Missing partition");
+			argc--;argv++;
+			partitionf1=argv[0];
+			argc--;argv++;
+		}
 		else if (strcmp(*argv,"--part-sort")==0||strcmp(*argv,"--part-sort-rename")==0){
 			analysis=prgPASO;
 			if(strcmp(*argv,"--part-sort-rename")==0) analysis=prgPASR;
@@ -861,6 +869,17 @@ int main(int argc, char* argv[]) {
 #endif
 	switch(analysis){
 ///(For editing partitions)
+		case prgPACN:{
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+			if(!MCLTABF){
+				cout<<"Tab file not defined! Did you use option --tab??"<<endl;
+				exit(1);
+			}
+			partition.tabFile(mcltabfile);
+			partition.swapLabels();
+			partition.printPartition(poformat);
+			break;
+			}
 		case prgPASR:
 		case prgPASO:{
 		        Partition partition(partitionf1,piformat,cluster1_offset);

@@ -530,6 +530,29 @@ bool isInteger(string& str){
 	return true;
 }
 
+void Partition::tabFile(char* tabf){
+	_mcltabf=tabf; //we use the same private variable for storing the file name
+	if(!QUIET)cout<<"#Reading tab file "<<string(_mcltabf)<<endl;
+	ifstream is(_mcltabf);
+	if(!is){
+		cout<<"ERROR: Partition::tabFile : Cannot open file "<<string(_mcltabf)<<endl;	
+		exit(1);
+	}
+	string it,key;
+	int c=0;
+	while(is>>it){
+		key=it;
+		is>>it;
+		_ftab[key]=it;
+		_rtab[it]=key;
+		c++;
+	}
+	if(n_items()>0 && c!=n_items()){
+		if(!QUIET)cout<<"#WARNING: Partition::tabFile : number of keys-items pairs doesn't match number of items read for partition. Recommended to use --part-sort and check against tab file"<<endl;
+	}
+	if(!QUIET)cout<<"#Tab file: found "<<c<<" key-label pairs. Last pair is "<<_ftab.rbegin()->first<<" - "<<_ftab.rbegin()->second<<endl;
+}
+
 void Partition::mclTabFile(char* mcltabf){
 	_mcltabf=mcltabf;
 	if(!QUIET)cout<<"#Reading MCL tab file "<<string(_mcltabf)<<endl;
@@ -562,9 +585,10 @@ void Partition::mclTabFile(char* mcltabf){
 	}
 	if(!QUIET)cout<<"#MCL tab file: found "<<c<<" key-label pairs. Last label is "<<_mcltab[c-1]<<endl;
 }
-void Partition::swapLabels(char* mcltabf=NULL){
+
+void Partition::swapLabels(char* mcltabf){
 	if(mcltabf)mclTabFile(mcltabf);
-	if(_mcltabf==NULL){
+	if(_mcltabf==NULL && _ftab.size()==0&&_mcltab.size()==0){
 		cout<<"#WARNING: Couldn't translate items labels. NO tab file defined."<<endl;
 		return ;
 	}
@@ -573,8 +597,23 @@ void Partition::swapLabels(char* mcltabf=NULL){
 	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
 		svect nits;
 		for(svect::iterator it=cl->begin();it!=cl->end();it++){
-			if(it>=cl->begin()+_items_offset) 
-				nits.push_back( _mcltab[ atoi( (*it).c_str() ) ]  );
+			if(it>=cl->begin()+_items_offset){ 
+				if(_mcltab.size()>0) nits.push_back( _mcltab[ atoi( (*it).c_str() ) ]  );
+				if(_ftab.size()>0){
+					if(DEBUG)cout<<"(general tafile) change "<<*it<<" ? ";
+					if(_ftab.find(*it)!=_ftab.end()){
+						 nits.push_back( _ftab[ *it ]  );
+						if(DEBUG)cout<<"yes, to "<<_ftab[ *it ]<<endl;
+					}
+					else if(_rtab.find(*it)!=_rtab.end()) {
+						nits.push_back( _rtab[ *it ]  );
+						if(DEBUG)cout<<"yes, to "<<_rtab[ *it ]<<endl;
+					}
+					else {
+						nits.push_back(  *it   );
+					}
+				}
+			}
 			else nits.push_back(*it);
 		}
 		nclusters.push_back(nits);
@@ -582,7 +621,7 @@ void Partition::swapLabels(char* mcltabf=NULL){
 	//if(!QUIET)cout<<"#Items translated according to tabfile. Previous Last item= "<<*((clusters.rbegin())->rbegin())<<endl;
 	clusters=nclusters;
 	_resetMembers();
-	if(!QUIET)cout<<"#Items translated according to tabfile. New Last item= "<<*((nclusters.rbegin())->rbegin())<<endl;
+	if(!QUIET)cout<<"#Items translated according to tabfile. New Last item= "<<*((clusters.rbegin())->rbegin())<<endl;
 }
 
 void Partition::partitionInputFormat(partFileFormat iformat=partFmtPART){
@@ -866,10 +905,16 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 						clusters[i][1]=(ClusterPrefix+ToString(i+1));
 					}
 					//cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
-					if(_mcltabf!=NULL && j>=_items_offset){
-						cout<<_mcltab[ atoi( clusters[i][j].c_str() ) ]<<"\t";
-					}else{
+					if(_piformat==format){
+						//if(VERBOSE)cout<<"Element "<<j<<" ("<<*((clusters.rbegin())->rbegin())<<") "<<endl;
 						cout<<clusters[i][j]<<"\t";
+					}
+					else if(_mcltabf!=NULL && j>=_items_offset){
+						cout<<_mcltab[ atoi( clusters[i][j].c_str() ) ]<<"\t";
+					}
+					else{
+						cout<<"Partition::printPartition : partFmtPART : ERROR : ambiguous condition : _piformat<>format && _mcltabf==NULL : What are trying to do?"<<endl;
+						exit(1);
 					}
 				}
 				cout<<endl;
