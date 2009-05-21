@@ -54,7 +54,7 @@ For debugging: print the interaction matrix read by the program
 ./partanalyze --print-matrix test-blast_pairwise_id
 
 
-Full help (as of version alpha 0.5.1.6)
+Full help (as of version alpha 0.5.1.7)
 			partanalyzer (Partition Analyzer)
 
 Usage:
@@ -88,7 +88,8 @@ Usage:
    For editing partitions                                             
        --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]
        --part-sort partition 
-       --part-sort-rename [prefix] partition 
+       --part-sort-rename partition [prefix] 
+       --part-swap-names partition (requires use of --tab)
 
    For converting between different partition formats                 
        --toMCL [-tab mcl_tab_file] partition [partition1_offset (=2) ]
@@ -281,10 +282,21 @@ For editing partitions
            sorted alphabetically by their first item. Within each      
            cluster, items are sorted alphabetically.                   
                                                                        
-       --part-sort-rename [prefix]                                     
+       --part-sort-rename partition [prefix]                           
            As --part-sort, but also rename each clusters consecutively 
            as C1, C2,etc. If a prefix string is supplied use that      
            instead of C.                                               
+                                                                       
+       --part-swap-names partition                                     
+       --part-swap-labels partition                                    
+           Swaps elements' names present in partition by their new     
+           names as found in the provided tab file. An element's name in 
+           the partition will be changed iif there is a translation for
+           it found in the tab file; otherwise it will be left as it is.
+           Thus, it is not mandatory to provide a translation for all  
+           elements. Requires the use of --tab to specify a tab file   
+           providing the mapping between new and old names. See general
+           options.                                                    
                                                                        
 For converting between different partition formats                     
                                                                        
@@ -462,8 +474,8 @@ File formats:
          MCL : MCL's own matrix format for partitions. See MCL manual. 
 
 License
-# partanalyzer Version alpha 0.5.1.5
-# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Apr 16 2009
+# partanalyzer Version alpha 0.5.1.7
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build May 21 2009
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #
