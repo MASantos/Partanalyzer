@@ -78,6 +78,11 @@ inline string ToString(const T& x){
         os << x;
         return os.str();
 }
+///Beta/mu unset/default value allows cheking if user has already set its value or not.
+#define BETA_UNSET -666.0
+#define MU_UNSET -666.0
+#define BETA_DEFAULT 0.01
+#define MU_DEFAULT 0.0
 ///Entensivity degree is precisely that parameter of Tsallis and Renyi entropies. This value means using the default.
 #define EXTENSIVITY_DEFAULT -6666.0
 #define EXTENSIVITY_DEFAULT_TSALLIS 2.0
@@ -85,6 +90,9 @@ inline string ToString(const T& x){
 #define EXTENSIVITY_MAX 100.0
 #define _PGM_P2_GRAYSCALE_ 256
 
+///Available types of symmetric and non-symmetric pair-wise measures. 
+//enum pmeasure { conditionalEntropy=conditionalPotential , jointEntropy=jointPotential , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
+enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
 ///Available types of pmetric functions (functions inducing a metric on partitions)
 enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;
 ///Available types of pmetric header comments (#BeginViDistances or #EndEditDistances)
@@ -109,7 +117,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgHASS,
 	prgIPAR,
 	prg2MCL,prg2FRE,prgM2PA,
-	prgIPOT,
+	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,
 	prgADST,prgASFP,
 	prgSPST,prgSPSS,prgSPSO,
 	prgCEMX,

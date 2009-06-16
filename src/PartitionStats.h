@@ -69,7 +69,7 @@ class PartitionStats
 	double _pmetric(Partition& p1, Partition& p2, const double f);
 	double _pmetric(Partition& p1, Partition& p2, pmetricv metric);
 	double _f(Partition& p, pmetricv metric);
-	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF);
+	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false);
 public:
 	BellNumber BellN;
 	PartitionStats();
@@ -136,16 +136,18 @@ public:
 	///Calculates Tarantola distance between part1 and part2 using Jeffrey's Qnorm.
 	double TD(Partition& p1, Partition& p2){ return _pmetric(p1,p2, jeffreyQnorm);}
 	///Calculates all distances againts the specified reference partition. Argument pmetricv specifies which metric to use (VI, Edit score,...)
-	void distances(Partition& p, pmetricv pm);
+	void distances(Partition& p, pmetricv pm=shannon);
 	///Calculates all distances againts the reference partition. This is the first partition read. Argument pmetricv specifies which metric to use (VI, Edit score,...)
-	void distancesRef(pmetricv pm);
+	void distancesRef(pmetricv pm=shannon);
 	///Calculates all pair-wise distances. Argument pmetricv specifies which metric to use (VI, Edit score,...)
-	void distances(pmetricv pm);
+	void distances(pmetricv pm=shannon);
 	///Aproximate calculation of pair-wise distance between paritions with different number of elements
 	/// It stripps of all elements that aren't share and calculates the distance using simply the rest.
-	void distances_Subsprojection(pmetricv pm); 
+	void distances_Subsprojection(pmetricv pm=shannon); 
 	///Equivalent one for distances againts a common reference partition.
-	void distancesRef_Subsprojection(pmetricv pm); 
+	void distancesRef_Subsprojection(pmetricv pm=shannon);
+	///Calculates different symmetric and non-symmetric pair-wise measures
+	void pmeasures(pmeasure measure, pmetricv pm=shannon); 
 	///Prints the Hasse diagram corresponding to the given list of partitions.
 	void printHasseDiagram();
 	///Print 

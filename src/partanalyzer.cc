@@ -34,8 +34,8 @@ double mu;
 
 int main(int argc, char* argv[]) {
 	program=argv[0];
-	beta=0.01;
-	mu=0.0;
+	beta=BETA_UNSET;
+	mu=MU_UNSET;
         if(argc<2) exitWithHelp();
 	if(!QUIET&& !( strcmp(argv[1],"-q")==0 || strcmp(argv[1],"--help")==0 || strcmp(argv[1],"-help")==0 || strcmp(argv[1],"-h")==0 )){
 		printCopyright();
@@ -281,8 +281,34 @@ int main(int argc, char* argv[]) {
 			if(argc>3) cluster1_offset=atoi(argv[3]);
 			if(argc>4) cluster2_offset=atoi(argv[4]);
 		}
-		else if (strcmp(*argv,"-n")==0||strcmp(*argv,"--ipot")==0||strcmp(*argv,"--iPot")==0){
-			analysis=prgIPOT;
+		else if (strcmp(*argv,"-n")==0||strcmp(*argv,"--ipot")==0||strcmp(*argv,"--iPot")==0\
+			||strcmp(*argv,"--cpot")==0||strcmp(*argv,"--conditional-potential")==0\
+			||strcmp(*argv,"--jpot")==0||strcmp(*argv,"--joint-potential")==0\
+			||strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0\
+			||strcmp(*argv,"--v-measure-a")==0||strcmp(*argv,"--v-measure-arithmetic")==0\
+			||strcmp(*argv,"--v-measure-g")==0||strcmp(*argv,"--v-measure-geometric")==0\
+			||strcmp(*argv,"--v-measure-h")==0||strcmp(*argv,"--v-measure-harmonic")==0){
+			if(strcmp(*argv,"-n")==0||strcmp(*argv,"--ipot")==0||strcmp(*argv,"--iPot")==0)
+				analysis=prgIPOT;
+			else if(strcmp(*argv,"--cpot")==0||strcmp(*argv,"--conditional-potential")==0)
+				analysis=prgCPOT;
+			else if(strcmp(*argv,"--jpot")==0||strcmp(*argv,"--joint-potential")==0)
+				analysis=prgJPOT;
+			else if(strcmp(*argv,"--v-measure-a")==0||strcmp(*argv,"--v-measure-arithmetic")==0)
+				analysis=prgVMAM;
+			else if(strcmp(*argv,"--v-measure-g")==0||strcmp(*argv,"--v-measure-geometric")==0)
+				analysis=prgVMGM;
+			else if(strcmp(*argv,"--v-measure-h")==0||strcmp(*argv,"--v-measure-harmonic")==0){
+				analysis=prgVMHM;
+				if(beta==BETA_UNSET)beta=1.0;
+				if(!QUIET)cout<<"#beta= "<<beta<<endl;
+			}
+			else if(strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0)
+				analysis=prgPSYM;
+			else {
+				cout<<"ERROR: main : Sorry, I forgot what you said."<<endl;
+				exit(1);
+			}
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
 			if(strcmp(*argv,"v")==0|strcmp(*argv,"shannon")==0)
@@ -298,7 +324,7 @@ int main(int argc, char* argv[]) {
 				extensivity=1.0;//DEFAULT VALUE FOR TARANTOLA QNORM
 			}
 			else {
-				cout<<"ERROR: main : -iPot : unknown metric"<<endl;
+				cout<<"ERROR: main : -xPot : unknown metric. Did you specified it?"<<endl;
 				exit(1);
 			}
 			argc--;argv++;
@@ -904,6 +930,8 @@ int main(int argc, char* argv[]) {
 		case prgCDIS:
 		case prgCCOP:{
         		MatrixOfValues MX(mxofval);
+			if(beta==BETA_UNSET)beta=0.01;
+			if(mu==MU_UNSET)mu=0.0;
 		        if(!QUIET) systemDate();
 		        Partition partition(partitionf1,piformat,cluster1_offset);
 			//if(MCLTABF)partition.mclTabFile(partitionf2);
@@ -960,9 +988,44 @@ int main(int argc, char* argv[]) {
 			cout<<" purityStrict= "<<pscores[0]<<"\tpurityLax= "<<pscores[1]<<endl;
 			break;
 			}
-		case prgIPOT:{
+		case prgIPOT:
+		case prgCPOT:
+		case prgJPOT:
+		case prgPSYM:
+		case prgVMAM:
+		case prgVMGM:
+		case prgVMHM:{
 			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
-			partstats.iPotential(metric);
+			pmeasure measure;
+			switch(analysis){
+				case prgIPOT:
+					partstats.iPotential(metric);
+					break;
+				case prgCPOT:
+					measure=conditionalEntropy;
+					partstats.pmeasures(measure,metric);
+					break;
+				case prgJPOT:
+					measure=jointEntropy;
+					partstats.pmeasures(measure,metric);
+					break;
+				case prgVMAM:
+					measure=vmeasureArithmetic;
+					partstats.pmeasures(measure,metric);
+					break;
+				case prgVMGM:
+					measure=vmeasureGeometric;
+					partstats.pmeasures(measure,metric);
+					break;
+				case prgVMHM:
+					measure=vmeasureHarmonic;
+					partstats.pmeasures(measure,metric);
+					break;
+				case prgPSYM:
+					measure=symmetricPurity;
+					partstats.pmeasures(measure);
+					break;
+			}
 			break;
 			}
 		case prgVIST:

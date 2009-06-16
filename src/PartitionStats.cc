@@ -114,6 +114,63 @@ void PartitionStats::iPotential(pmetricv metric=renyi){
 	if(!QUIET)cout<<"#EndIPotential"<<endl;
 }
 
+void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){
+	distancesPrintHeadComment(metric,(flagheader) BEGIN);
+	for(int i=0;i<_partitionl.size()-1;i++){
+		Partition pa=_partitionl[i];
+		for(int j=i+1;j<_partitionl.size();j++){
+			if(_DIST_SUBSPROJECT) pa=_partitionl[i];
+			Partition pb=_partitionl[j];
+			Partition pi=pa*pb;
+			if(_DIST_SUBSPROJECT){
+				if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;
+				pa.SubsProject(pi.sitems);
+				pb.SubsProject(pi.sitems);
+			}
+			double jointH=_f(pi,metric);
+			double ipota=_f(pa,metric);
+			double ipotb=_f(pb,metric);
+			double vmeasure_h=ipotb<1.0E-12?1.0:1-(jointH-ipota)/ipotb;
+			double vmeasure_c=ipota<1.0E-12?1.0:1-(jointH-ipotb)/ipota;
+			switch(measure){
+				case conditionalEntropy:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<jointH-_f(pb,metric)<<"\t"<<jointH-_f(pa,metric)<<endl;
+					break;
+				case jointEntropy:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<jointH<<endl;
+					break;
+				case vmeasureArithmetic:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<0.5*(vmeasure_h+vmeasure_c)<<endl;
+					break;
+				case vmeasureGeometric:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<sqrt(vmeasure_h*vmeasure_c)<<endl;
+					break;
+				case vmeasureHarmonic:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<(1.0+beta)*vmeasure_h*vmeasure_c/(beta*vmeasure_h+vmeasure_c)<<endl;
+					break;
+				case symmetricPurity:{
+					double pl=0.0;
+					double ps=0.0;
+					vector<double> pscores;
+					pscores=pa.purityScore(&pb);
+					ps+=pscores[0];
+					pl+=pscores[1];
+					pscores=pb.purityScore(&pa);
+					ps+=pscores[0];
+					pl+=pscores[1];
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<0.5*ps<<"\t"<<0.5*pl<<endl;
+					}
+					break;
+				default:
+					cout<<"ERROR: PartitionStat::measure() : unknown measure case"<<endl;
+					exit(1);
+			}
+		}
+	}	
+	distancesPrintHeadComment(metric,(flagheader) END);
+	_DIST_SUBSPROJECT=false;
+}
+
 int PartitionStats::arePartitions(){
 	int nopart=0;
 	int np=1;
@@ -365,66 +422,48 @@ void  PartitionStats::get_FuzzyConsensusPartition(){
 
 }
 
-void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false){
+void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF){
 	if(QUIET)return;
+	string prefix="";
 	switch(hd){
 		case BEGIN:
-			switch(metric){
-				//case entropy:
-				case shannon:
-					cout<<"#BeginVIScores"<<endl;
-					break;
-				case cardinality:
-					cout<<"#BeginEditScores"<<endl;
-					break;
-				case boltzmann:
-					cout<<"#BeginBoltzmannDistances"<<endl;
-					break;
-				case tsallis:
-					cout<<"#BeginTsallisDistances q= "<<_entensivity_degree<<endl;
-					break;
-				case renyi:
-					cout<<"#BeginRenyiDistances q= "<<_entensivity_degree<<endl;
-					break;
-				case jeffreyQnorm:
-					cout<<"#BeginTarantolaJQNDistances q= "<<_entensivity_degree<<endl;
-					break;
-			}
-			if(!usingREF)cout<<"#Partition(target)\tPartition(ref)\tDist. target-intersection\tDist. ref-intersection\tDist. target-ref"<<endl;
+			prefix="Begin";
 			break;
 		case END:
-			switch(metric){
-				//case entropy:
-				case shannon:
-					cout<<"#EndVIScores"<<endl;
-					break;
-				case cardinality:
-					cout<<"#EndEditScores"<<endl;
-					break;
-				case boltzmann:
-					cout<<"#EndBoltzmannDistances"<<endl;
-					break;
-				case tsallis:
-					cout<<"#EndTsallisDistances"<<endl;
-					break;
-				case renyi:
-					cout<<"#EndRenyiDistances"<<endl;
-					break;
-				case jeffreyQnorm:
-					cout<<"#EndTarantolaJQNDistances q= "<<_entensivity_degree<<endl;
-					break;
-			}
+			prefix="End";
 			break;
 	}
+	switch(metric){
+		//case entropy:
+		case shannon:
+			cout<<"#"<<prefix<<"VIScores"<<endl;
+			break;
+		case cardinality:
+			cout<<"#"<<prefix<<"EditScores"<<endl;
+			break;
+		case boltzmann:
+			cout<<"#"<<prefix<<"BoltzmannDistances"<<endl;
+			break;
+		case tsallis:
+			cout<<"#"<<prefix<<"TsallisDistances q= "<<_entensivity_degree<<endl;
+			break;
+		case renyi:
+			cout<<"#"<<prefix<<"RenyiDistances q= "<<_entensivity_degree<<endl;
+			break;
+		case jeffreyQnorm:
+			cout<<"#"<<prefix<<"TarantolaJQNDistances q= "<<_entensivity_degree<<endl;
+			break;
+	}
+	if(hd==BEGIN&&!usingREF)cout<<"#Partition(target)\tPartition(ref)\tDist. target-intersection\tDist. ref-intersection\tDist. target-ref"<<endl;
 }
 
-void PartitionStats::distancesRef_Subsprojection(pmetricv metric=shannon){
+void PartitionStats::distancesRef_Subsprojection(pmetricv metric){
 	_DIST_SUBSPROJECT=true;
 	if(!QUIET)cout<<"#Using DIST_SUBSPROJECT"<<endl;
 	distancesRef(metric);
 	_DIST_SUBSPROJECT=false;
 }
-void PartitionStats::distancesRef(pmetricv pm=shannon){
+void PartitionStats::distancesRef(pmetricv pm){
 	Partition p=_partitionl[0];
 	bool usingREF=true;
 	distancesPrintHeadComment(pm,(flagheader) BEGIN, usingREF);
@@ -477,14 +516,14 @@ void PartitionStats::distancesRef(pmetricv pm=shannon){
 	distancesPrintHeadComment(pm,(flagheader) END, usingREF);
 }
 
-void PartitionStats::distances_Subsprojection(pmetricv metric=shannon){
+void PartitionStats::distances_Subsprojection(pmetricv metric){
 	_DIST_SUBSPROJECT=true;
 	if(!QUIET)cout<<"#Using DIST_SUBSPROJECT"<<endl;
 	distances(metric);
 	_DIST_SUBSPROJECT=false;
 }
 
-void PartitionStats::distances(pmetricv pm=shannon){
+void PartitionStats::distances(pmetricv pm){
 	distancesPrintHeadComment(pm,(flagheader) BEGIN);
 	for(int i=0;i<_partitionl.size()-1;i++){
 		Partition pa=_partitionl[i];
