@@ -115,7 +115,7 @@ void PartitionStats::iPotential(pmetricv metric=renyi){
 }
 
 void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){
-	distancesPrintHeadComment(metric,(flagheader) BEGIN);
+	distancesPrintHeadComment(measure, metric,(flagheader) BEGIN);
 	for(int i=0;i<_partitionl.size()-1;i++){
 		Partition pa=_partitionl[i];
 		for(int j=i+1;j<_partitionl.size();j++){
@@ -134,7 +134,7 @@ void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){
 			double vmeasure_c=ipota<1.0E-12?1.0:1-(jointH-ipotb)/ipota;
 			switch(measure){
 				case conditionalEntropy:
-					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<jointH-_f(pb,metric)<<"\t"<<jointH-_f(pa,metric)<<endl;
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<jointH-_f(pb,metric)<<"\t"<<jointH-_f(pa,metric)<<"\t"<<2*jointH-_f(pb,metric)-_f(pa,metric)<<endl;
 					break;
 				case jointEntropy:
 					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<jointH<<endl;
@@ -167,7 +167,65 @@ void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){
 			}
 		}
 	}	
-	distancesPrintHeadComment(metric,(flagheader) END);
+	distancesPrintHeadComment(measure, metric,(flagheader) END);
+	_DIST_SUBSPROJECT=false;
+}
+
+void PartitionStats::pmeasuresRef(pmeasure measure , pmetricv metric){
+	Partition p=_partitionl[0];
+	bool usingREF=true;
+	distancesPrintHeadComment(measure, metric,(flagheader) BEGIN);
+	for(int i=1;i<_partitionl.size()-1;i++){
+		for(int j=i+1;j<_partitionl.size();j++){
+			if(_DIST_SUBSPROJECT) p=_partitionl[i];
+			Partition pb=_partitionl[j];
+			Partition pi=p*pb;
+			if(_DIST_SUBSPROJECT){
+				if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;
+				p.SubsProject(pi.sitems);
+				pb.SubsProject(pi.sitems);
+			}
+			double jointH=_f(pi,metric);
+			double ipota=_f(p,metric);
+			double ipotb=_f(pb,metric);
+			double vmeasure_h=ipotb<1.0E-12?1.0:1-(jointH-ipota)/ipotb;
+			double vmeasure_c=ipota<1.0E-12?1.0:1-(jointH-ipotb)/ipota;
+			switch(measure){
+				case conditionalEntropy:
+					cout<<pb.FileName()<<"\t"<<jointH-_f(p,metric)<<"\t"<<2.0*jointH-_f(p,metric)-_f(pb,metric)<<endl;
+					break;
+				case jointEntropy:
+					cout<<pb.FileName()<<"\t"<<jointH<<endl;
+					break;
+				case vmeasureArithmetic:
+					cout<<pb.FileName()<<"\t"<<0.5*(vmeasure_h+vmeasure_c)<<endl;
+					break;
+				case vmeasureGeometric:
+					cout<<pb.FileName()<<"\t"<<sqrt(vmeasure_h*vmeasure_c)<<endl;
+					break;
+				case vmeasureHarmonic:
+					cout<<pb.FileName()<<"\t"<<(1.0+beta)*vmeasure_h*vmeasure_c/(beta*vmeasure_h+vmeasure_c)<<endl;
+					break;
+				case symmetricPurity:{
+					double pl=0.0;
+					double ps=0.0;
+					vector<double> pscores;
+					pscores=p.purityScore(&pb);
+					ps+=pscores[0];
+					pl+=pscores[1];
+					pscores=pb.purityScore(&p);
+					ps+=pscores[0];
+					pl+=pscores[1];
+					cout<<pb.FileName()<<"\t"<<0.5*ps<<"\t"<<0.5*pl<<endl;
+					}
+					break;
+				default:
+					cout<<"ERROR: PartitionStat::measureRef() : unknown measure case"<<endl;
+					exit(1);
+			}
+		}
+	}	
+	distancesPrintHeadComment(measure, metric,(flagheader) END);
 	_DIST_SUBSPROJECT=false;
 }
 
@@ -420,6 +478,110 @@ void  PartitionStats::get_FuzzyConsensusPartition(){
 	
 	cout<<"#EndFuzzyClusterMembership"<<endl;
 
+}
+
+void PartitionStats::distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF){
+	if(QUIET)return;
+	string prefix="";
+	switch(hd){
+		case BEGIN:
+			prefix="Begin";
+			break;
+		case END:
+			prefix="End";
+			break;
+	}
+	string entropy="";
+	stringstream ss;
+	switch(metric){
+		//case entropy:
+		case shannon:
+			ss<<"Shannon";
+			break;
+		case cardinality:
+			ss<<"Cardinality";
+			break;
+		case boltzmann:
+			ss<<"Boltzman";
+			break;
+		case tsallis:
+			ss<<"Tsallis extensivity= "<<_entensivity_degree;
+			break;
+		case renyi:
+			ss<<"RenyiDistances extensivity= "<<_entensivity_degree;
+			break;
+		case jeffreyQnorm:
+			ss<<"TarantolaJQNDistances extensivity= "<<_entensivity_degree;
+			break;
+	}
+	entropy=ss.str();
+	switch(measure){
+		case conditionalEntropy:
+			cout<<"#"<<prefix<<"ConditionalEntropy"<<": "<<entropy<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)cout<<"#PartitionA\tPartitionB\tH(A|B)\tH(B|A)\tVI-distance"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tH(B|Ref)\tVI-distance"<<endl;
+				}
+			}
+			break;
+		case jointEntropy:
+			cout<<"#"<<prefix<<"JointEntropy"<<": "<<entropy<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tH(A,B)"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tH(B,Ref)"<<endl;
+				}
+			}
+			break;
+		case vmeasureArithmetic:
+			cout<<"#"<<prefix<<"VmeasureArithmetic"<<": "<<entropy<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tVmeasure-Arithmetic"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tVmeasure-Arithmetic"<<endl;
+				}
+			}
+			break;
+		case vmeasureGeometric: 
+			cout<<"#"<<prefix<<"VmeasureGeometric"<<": "<<entropy<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tVmeasure-Geometric"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tVmeasure-Geometric"<<endl;
+				}
+			}
+			break;
+		case vmeasureHarmonic:
+			cout<<"#"<<prefix<<"VmeasureHarmonic"<<": "<<entropy<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tVmeasure-Harmonic"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tVmeasure-Harmonic"<<endl;
+				}
+			}
+			break;
+		case symmetricPurity:
+			cout<<"#"<<prefix<<"SymmetricPurityScores"<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tSymmetricPurityStrict\tSymmetricPurityLax"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tSymmetricPurityStrict\tSymmetricPurityLax"<<endl;
+				}
+			}
+			break;
+	}
 }
 
 void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF){

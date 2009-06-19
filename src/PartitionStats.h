@@ -70,6 +70,7 @@ class PartitionStats
 	double _pmetric(Partition& p1, Partition& p2, pmetricv metric);
 	double _f(Partition& p, pmetricv metric);
 	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false);
+	void distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF=false);
 public:
 	BellNumber BellN;
 	PartitionStats();
@@ -148,6 +149,8 @@ public:
 	void distancesRef_Subsprojection(pmetricv pm=shannon);
 	///Calculates different symmetric and non-symmetric pair-wise measures
 	void pmeasures(pmeasure measure, pmetricv pm=shannon); 
+	///Calculates different symmetric and non-symmetric pair-wise measures against a common reference partition
+	void pmeasuresRef(pmeasure measure, pmetricv pm=shannon); 
 	///Prints the Hasse diagram corresponding to the given list of partitions.
 	void printHasseDiagram();
 	///Print 
