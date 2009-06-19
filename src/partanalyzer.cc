@@ -90,106 +90,117 @@ int main(int argc, char* argv[]) {
 		argc--;
 		argv++;
 ///General Options
-		if (strcmp(*argv,"--help")==0 || strcmp(*argv,"-help")==0){
-			cout<<"\t\t\t"<<_programb_<<" (Partition Analyzer)\n"<<endl;
-			printHelp();
-			printHelpLong();
-			cout<<"\nLicense"<<endl;
-			printCopyright();
-			exit(0);
-		}
-		if (strcmp(*argv,"-h")==0){
-			printHelp();
-			exit(0);
-		}
-		if(strcmp(*argv,"--version")==0){
-			printCopyright();
-			exit(0);
-		}
-		if(strcmp(*argv,"-q")==0||strcmp(*argv,"--quiet")==0){
-			argc--;
-			argv++;
-			QUIET=true;
-		}
-		if(strcmp(*argv,"--verbose")==0){
-			argc--;
-			argv++;
-			VERBOSE=true;
-			cout<<"#VERBOSITY on"<<endl;
-		}
-		if(strcmp(*argv,"--debug")==0){
-			argc--;
-			argv++;
-			DEBUG=true;
-			VERBOSE=true;
-			QUIET=false;
-			cout<<"#EXTENSIVE VERBOSITY mode on"<<endl;
-		}
-		if(strcmp(*argv,"-z")==0||strcmp(*argv,"--pid-normalization")==0){
-			argc--;argv++;
-			if(argc<2)printCommandLineError();
-			if(strcmp(*argv,"shorter-sequence")==0||strcmp(*argv,"s")==0){
-				PIDNORMALIZATION=shorterSequence;
+//We want these to be specified in any order
+		int argcold=argc+1;
+		while(argcold>argc){
+			argcold=argc;
+			if (strcmp(*argv,"--help")==0 || strcmp(*argv,"-help")==0){
+				cout<<"\t\t\t"<<_programb_<<" (Partition Analyzer)\n"<<endl;
+				printHelp();
+				printHelpLong();
+				cout<<"\nLicense"<<endl;
+				printCopyright();
+				exit(0);
 			}
-			else if(strcmp(*argv,"aligned-positions")==0||strcmp(*argv,"p")==0){
-				PIDNORMALIZATION=numberOfAlignedPositions;
+			if (strcmp(*argv,"-h")==0){
+				printHelp();
+				exit(0);
 			}
-			else if(strcmp(*argv,"aligned-residues")==0||strcmp(*argv,"r")==0){
-				PIDNORMALIZATION=numberOfAlignedResiduePairs;
+			if(strcmp(*argv,"--version")==0){
+				printCopyright();
+				exit(0);
 			}
-			else if(strcmp(*argv,"average-length")==0||strcmp(*argv,"l")==0){
-				PIDNORMALIZATION=arithmeticMeanSequenceLenth;
+			if(strcmp(*argv,"-q")==0||strcmp(*argv,"--quiet")==0){
+				argc--;
+				argv++;
+				QUIET=true;
 			}
-			else{
-				cout<<"ERROR: Invalid PIDNORMALIZATION value : "<<*argv<<endl;
-				exit(1);
+			if(strcmp(*argv,"--verbose")==0){
+				argc--;
+				argv++;
+				VERBOSE=true;
+				cout<<"#VERBOSITY on"<<endl;
 			}
-			argc--;argv++;
-		}
-		if(strcmp(*argv,"-t")==0||strcmp(*argv,"--format")==0||strcmp(*argv,"--fmt")==0){
-			argc--;
-			argv++;
-			if(argc<2)printCommandLineError();
-			if(strcmp(*argv,"MCL")==0||strcmp(*argv,"mcl")==0)
-				piformat=partFmtMCL;
-			else if(strcmp(*argv,"FREE")==0||strcmp(*argv,"free")==0)
-				piformat=partFmtFREE;
-			else if(strcmp(*argv,"PART")==0||strcmp(*argv,"part")==0)
-				piformat=partFmtPART;
-			else
-				piformat=partFmtPART;
-			argc--;
-			argv++;
-		}
-		if(strcmp(*argv,"--tab")==0){
-			argc--;argv++;
-			mcltabfile=argv[0]; //Its a tab file
-			MCLTABF=true;
-			argc--;argv++;
-		}
-		if(strcmp(*argv,"--DIST_SUBSPROJECT")==0){
-			argc--;
-			argv++;
-			DIST_SUBSPROJECT=true;
-		}
-		if(strcmp(*argv,"--beta")==0){
-			if(argc<5)printCommandLineError();
-			argc--;
-			argv++;
-			beta=atof(argv[0]);
-			argc--;
-			argv++;
-		}
-		if(strcmp(*argv,"--mu")==0){
-			if(argc<5)printCommandLineError();
-			argc--;
-			argv++;
-			mu=atof(argv[0]);
-			argc--;
-			argv++;
+			if(strcmp(*argv,"--debug")==0){
+				argc--;
+				argv++;
+				DEBUG=true;
+				VERBOSE=true;
+				QUIET=false;
+				cout<<"#EXTENSIVE VERBOSITY mode on"<<endl;
+			}
+			if(strcmp(*argv,"-z")==0||strcmp(*argv,"--pid-normalization")==0){
+				argc--;argv++;
+				if(argc<2)printCommandLineError();
+				if(strcmp(*argv,"shorter-sequence")==0||strcmp(*argv,"s")==0){
+					PIDNORMALIZATION=shorterSequence;
+				}
+				else if(strcmp(*argv,"aligned-positions")==0||strcmp(*argv,"p")==0){
+					PIDNORMALIZATION=numberOfAlignedPositions;
+				}
+				else if(strcmp(*argv,"aligned-residues")==0||strcmp(*argv,"r")==0){
+					PIDNORMALIZATION=numberOfAlignedResiduePairs;
+				}
+				else if(strcmp(*argv,"average-length")==0||strcmp(*argv,"l")==0){
+					PIDNORMALIZATION=arithmeticMeanSequenceLenth;
+				}
+				else{
+					cout<<"ERROR: Invalid PIDNORMALIZATION value : "<<*argv<<endl;
+					exit(1);
+				}
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"-t")==0||strcmp(*argv,"--format")==0||strcmp(*argv,"--fmt")==0){
+				argc--;
+				argv++;
+				if(argc<2)printCommandLineError();
+				if(strcmp(*argv,"MCL")==0||strcmp(*argv,"mcl")==0)
+					piformat=partFmtMCL;
+				else if(strcmp(*argv,"FREE")==0||strcmp(*argv,"free")==0)
+					piformat=partFmtFREE;
+				else if(strcmp(*argv,"PART")==0||strcmp(*argv,"part")==0)
+					piformat=partFmtPART;
+				else
+					piformat=partFmtPART;
+				argc--;
+				argv++;
+			}
+			if(strcmp(*argv,"--tab")==0){
+				argc--;argv++;
+				mcltabfile=argv[0]; //Its a tab file
+				MCLTABF=true;
+				argc--;argv++;
+			}
+			if(strcmp(*argv,"--DIST_SUBSPROJECT")==0){
+				argc--;
+				argv++;
+				DIST_SUBSPROJECT=true;
+			}
+			if(strcmp(*argv,"--beta")==0){
+				if(argc<5)printCommandLineError();
+				argc--;
+				argv++;
+				beta=atof(argv[0]);
+				argc--;
+				argv++;
+			}
+			if(strcmp(*argv,"--mu")==0){
+				if(argc<5)printCommandLineError();
+				argc--;
+				argv++;
+				mu=atof(argv[0]);
+				argc--;
+				argv++;
+			}
+			if(strcmp(*argv,"--fuzzy")==0){
+				argc--;
+				argv++;
+				FUZZYPARTITION=true;
+				if(!QUIET)cout<<"#Partition type: Fuzzy"<<endl;
+			}
 		}
 ///(For editing partitions)
-		else if (strcmp(*argv,"--part-swap-names")==0||strcmp(*argv,"--part-swap-labels")==0){
+		if (strcmp(*argv,"--part-swap-names")==0||strcmp(*argv,"--part-swap-labels")==0){
 			analysis=prgPACN;
 			if(!MCLTABF)printCommandLineError("Use option --tab tabfile before command to specify mapping for new names");
 			if(argc<2)printCommandLineError("Missing partition");
@@ -284,7 +295,6 @@ int main(int argc, char* argv[]) {
 		else if (strcmp(*argv,"-n")==0||strcmp(*argv,"--ipot")==0||strcmp(*argv,"--iPot")==0\
 			||strcmp(*argv,"--cpot")==0||strcmp(*argv,"--conditional-potential")==0\
 			||strcmp(*argv,"--jpot")==0||strcmp(*argv,"--joint-potential")==0\
-			||strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0\
 			||strcmp(*argv,"--v-measure-a")==0||strcmp(*argv,"--v-measure-arithmetic")==0\
 			||strcmp(*argv,"--v-measure-g")==0||strcmp(*argv,"--v-measure-geometric")==0\
 			||strcmp(*argv,"--v-measure-h")==0||strcmp(*argv,"--v-measure-harmonic")==0){
@@ -303,8 +313,6 @@ int main(int argc, char* argv[]) {
 				if(beta==BETA_UNSET)beta=1.0;
 				if(!QUIET)cout<<"#beta= "<<beta<<endl;
 			}
-			else if(strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0)
-				analysis=prgPSYM;
 			else {
 				cout<<"ERROR: main : Sorry, I forgot what you said."<<endl;
 				exit(1);
@@ -394,12 +402,16 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-P")==0||strcmp(*argv,"--pstat")==0){
+		else if (strcmp(*argv,"-P")==0||strcmp(*argv,"--pstat")==0\
+			||strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0){
 			analysis=prgPSST;
+			if(strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0)
+				analysis=prgPSYM;
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
 			if(strcmp(*argv,"-ref")==0){
-				analysis=prgPSSR;
+				if(analysis=prgPSYM) analysis=prgPSYR;
+				else analysis=prgPSSR;
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
 			}
@@ -992,6 +1004,7 @@ int main(int argc, char* argv[]) {
 		case prgCPOT:
 		case prgJPOT:
 		case prgPSYM:
+		case prgPSYR:
 		case prgVMAM:
 		case prgVMGM:
 		case prgVMHM:{

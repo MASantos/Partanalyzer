@@ -48,7 +48,7 @@ g++ -o partanalyzer partanalyzer.cc
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.5.2";
+const char* VERSION="alpha 0.5.2.1";
 
 bool 	DEBUG=false;
 
@@ -56,7 +56,9 @@ bool 	VERBOSE=false;
 
 bool    QUIET=false;
 
-bool	INFO=false; 
+bool	INFO=false;
+
+bool	FUZZYPARTITION=false; 
 #endif
 
 template<class T> void readListFromFile(char* argv0, T& container){

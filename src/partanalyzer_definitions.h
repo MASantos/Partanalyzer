@@ -44,6 +44,8 @@ extern bool 	DEBUG;
 extern bool    QUIET;
 ///If true, we want to print some info that usually appears as a comment without the leading # comment sign
 extern bool INFO;
+///If true, we don't need to check whether any two clusters are mutually disjoint.
+extern bool FUZZYPARTITION;
 ///Current name (full path) of partanalyzer
 extern char* program;
 ///Beta parameter for thermodynamic averages done in Ccop
@@ -117,7 +119,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgHASS,
 	prgIPAR,
 	prg2MCL,prg2FRE,prgM2PA,
-	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,
+	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,
 	prgADST,prgASFP,
 	prgSPST,prgSPSS,prgSPSO,
 	prgCEMX,
