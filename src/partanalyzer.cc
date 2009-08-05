@@ -1228,6 +1228,7 @@ int main(int argc, char* argv[]) {
                         MultipleSeqAlign msa(msaf);
 			Partition partition1(partitionf1,piformat,cluster1_offset);
 			msa.printWithClusterLabels(&partition1);
+			break;
 			}
 		case prgMSPI:{
                         MultipleSeqAlign msa(msaf);
