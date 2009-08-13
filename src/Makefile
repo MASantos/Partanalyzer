@@ -109,7 +109,8 @@ touch:
 
 debug: $(TAGS) touch 
 	CPPFLAGS="$(CPPFLAGS) -DDEBUG" make 
-$(TAGS):
+$(TAGS): $(OBJ) $(HEADERS)
+	rm $(TAGS)
 	$(CTAGS) $(SRCS)
 
 $(BIN): $(OBJ) $(HEADERS)
