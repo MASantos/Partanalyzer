@@ -97,12 +97,12 @@ public:
 	///Set its name
         void setName(string name){ _name=name;}
 	///Stream out its name in the given MSA format. Does not actually change the sequence's format
-	string formatName(MSAformat msafmt=MSADEFAULTFMT);
+	string formatName(MSAformat msafmt=MSADEFAULTFMT, string suffix="");
 	///Set MSA format. This does change the sequence's format
-	void setFormat(MSAformat msafmt);
+	void setFormat(MSAformat msafmt, string sufix="");
 	///Print a sequence with its name adding a newline at the end. If bare=true, print its actual sequence, i.e., without gaps
         void printAlignment(bool withoutgaps=false);
-        void printAlignment(MSAformat msafmt, bool withoutgaps=false);
+        void printAlignment(MSAformat msafmt, string suffix="", bool withoutgaps=false);
 	///Print the actual sequence with its name adding a newline at the end
         void print(){ return printAlignment(true);}
 	///Remove gaps 

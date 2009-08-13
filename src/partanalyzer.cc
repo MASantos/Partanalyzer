@@ -658,7 +658,7 @@ int main(int argc, char* argv[]) {
                         argc--;argv++;
                         msaf=argv[0];
                         argc--;argv++;
-			if(argc>0){
+			while(argc>0){
 				if(strcmp(*argv,"FASTA")==0||strcmp(*argv,"fasta")==0){
 					if(!QUIET)cout<<"#MSA output format: FASTA"<<endl;
 					msafmt=FASTA;
@@ -667,10 +667,23 @@ int main(int argc, char* argv[]) {
 					if(!QUIET)cout<<"#MSA output format: GDE"<<endl;
 					msafmt=GDE;
 				}
+				else if(strcmp(*argv,"FASTA3")==0||strcmp(*argv,"gde")==0){
+					if(!QUIET)cout<<"#MSA output format: FASTA3"<<endl;
+					msafmt=FASTA3;
+				}
+				else if(strcmp(*argv,"GDE3")==0||strcmp(*argv,"gde")==0){
+					if(!QUIET)cout<<"#MSA output format: GDE3"<<endl;
+					msafmt=GDE3;
+				}
+				else if(strcmp(*argv,"GSIM")==0||strcmp(*argv,"gde")==0){
+					if(!QUIET)cout<<"#MSA output format: GSIM"<<endl;
+					msafmt=GSIM;
+				}
 				else{
 					if(!QUIET)cout<<"#WARNING : Main : --msa-map-partition : Unknown MSA format : Ignoring option"<<endl;
 					msafmt=msaFmtNULL;
 				}
+                        	argc--;argv++;
 			}
                 }
                 else if (strcmp(*argv,"--msa-seqid-stat")==0){

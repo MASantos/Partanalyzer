@@ -141,9 +141,26 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 }
 
 void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
+	string seqn_suffix="";
+	int skipped=0;
 	if(!QUIET)cout<<"#BeginMSAwClusters"<<endl;
 	for(smat::iterator cl=part->clusters.begin();cl!=part->clusters.end();cl++){
-		cout<<"==cluster_"<<part->getClusterName(*cl)<<" =="<<endl;
+		switch(fmt){
+			case FASTA3:
+			case GDE3:
+				if(cl->size()-part->cluster_offset()<3){
+					//if(!QUIET)cout<<"#Skipping cluster with <3 elements: "<<part->getClusterName(*cl)<<endl;
+					skipped++;
+					continue;
+				}
+			case FASTA:
+			case GDE:
+				cout<<"==cluster_"<<part->getClusterName(*cl)<<" =="<<endl;
+				break;
+			case GSIM:
+				seqn_suffix=part->getClusterName(*cl);
+				break;
+		}
 		for(svect::iterator it=cl->begin()+part->cluster_offset();it!=cl->end();it++){
 			for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
 				string clit,seqn;
@@ -152,10 +169,11 @@ void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
 				if(clit.compare(seqn)==0||clit.compare(seqn.substr(1,seqn.length()-1))==0\
 				   ||clit.substr(1,clit.length()-1).compare(seqn)==0\
 				   ||clit.substr(1,clit.length()-1).compare(seqn.substr(1,seqn.length()-1))==0\
-					)st->printAlignment(fmt);
+					)st->printAlignment(fmt,seqn_suffix);
 			}	
 		}
 	}
+	if(!QUIET&&(fmt==FASTA3||fmt==GDE3))cout<<"#Clusters shown: "<<part->clusters.size()-skipped<<endl;
 	if(!QUIET)cout<<"#EndMSAwClusters"<<endl;
 }
 

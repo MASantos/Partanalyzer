@@ -255,16 +255,21 @@ double Sequence::id(Sequence* Seq)
         return id/norm*100.0;
 }
 */
-string Sequence::formatName(MSAformat msafmt){
+string Sequence::formatName(MSAformat msafmt, string suffix){
 	stringstream fn;
 	switch(msafmt){
+		case FASTA3:
 		case FASTA:
-			if(_msafmt!=FASTA) fn<<">"<<_name.substr(1,_name.length()-1);
+			if(_msafmt!=FASTA||_msafmt!=FASTA3) fn<<">"<<_name.substr(1,_name.length()-1);
 			else return _name;
 			break;
+		case GDE3:
 		case GDE:
-			if(_msafmt!=GDE) fn<<"%"<<_name.substr(1,_name.length()-1);
+			if(_msafmt!=GDE||_msafmt!=GDE3) fn<<"%"<<_name.substr(1,_name.length()-1);
 			else return _name;
+			break;
+		case GSIM://GroupSim format: nadd should contain the cluster name where Sequence belong to
+			fn<<_name<<"|"<<suffix;
 			break;
 		case msaFmtNULL:
 			return _name;
@@ -277,22 +282,22 @@ string Sequence::formatName(MSAformat msafmt){
 	return fn.str();
 }
 
-void Sequence::setFormat(MSAformat msafmt){
-	_name=formatName(msafmt);
+void Sequence::setFormat(MSAformat msafmt, string suffix){
+	_name=formatName(msafmt, suffix);
 	_setFormat();
 }
 
-void Sequence::printAlignment(MSAformat msafmt, bool withoutgaps){
+void Sequence::printAlignment(MSAformat msafmt, string suffix, bool withoutgaps){
 	if(_name.compare("")==0||_alignedsequence.compare("")==0)return;
 	if(withoutgaps){
-		cout<<formatName(msafmt)<<"\n"<<_sequence<<endl;
+		cout<<formatName(msafmt, suffix)<<"\n"<<_sequence<<endl;
 	}else{
-		cout<<formatName(msafmt)<<"\n"<<_alignedsequence<<endl;
+		cout<<formatName(msafmt, suffix)<<"\n"<<_alignedsequence<<endl;
 	}
 }
 
 void Sequence::printAlignment(bool withoutgaps){
-	printAlignment(_msafmt, withoutgaps);
+	printAlignment(_msafmt, "", withoutgaps);
 	/*
 	if(_name.compare("")==0||_alignedsequence.compare("")==0)return;
 	if(withoutgaps){

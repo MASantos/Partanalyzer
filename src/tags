@@ -24,11 +24,14 @@ EXTENSIVITY_DEFAULT	partanalyzer_definitions.h	89;"	d
 EXTENSIVITY_DEFAULT_RENYI	partanalyzer_definitions.h	91;"	d
 EXTENSIVITY_DEFAULT_TSALLIS	partanalyzer_definitions.h	90;"	d
 EXTENSIVITY_MAX	partanalyzer_definitions.h	92;"	d
-FASTA	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE } ;$/;"	e	enum:MSAformat
+FASTA	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
+FASTA3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
 FUZZYPARTITION	partanalyzer.h	/^bool	FUZZYPARTITION=false; $/;"	v
 FileName	MatrixOfValues.h	/^	char* FileName(){return _mxofvf ;}$/;"	f	class:MatrixOfValues
 FileName	Partition.h	/^	char* FileName(){ return _partitionf;}$/;"	f	class:Partition
-GDE	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE } ;$/;"	e	enum:MSAformat
+GDE	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
+GDE3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
+GSIM	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
 H	Partition.cc	/^double Partition::H(){$/;"	f	class:Partition
 H	PartitionStats.h	/^	double H(Partition p){ return p.H();}$/;"	f	class:PartitionStats
 INFO	partanalyzer.h	/^bool	INFO=false;$/;"	v
@@ -36,7 +39,7 @@ JQnorm	Partition.cc	/^double Partition::JQnorm(double q=1.0){$/;"	f	class:Partit
 JQnorm	PartitionStats.h	/^	double JQnorm(Partition p, double q){ return p.JQnorm(q);}$/;"	f	class:PartitionStats
 MSA	MultipleSeqAlign.h	/^typedef vector< Sequence > MSA;$/;"	t
 MSADEFAULTFMT	partanalyzer_definitions.h	95;"	d
-MSAformat	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE } ;$/;"	g
+MSAformat	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	g
 MU_DEFAULT	partanalyzer_definitions.h	87;"	d
 MU_UNSET	partanalyzer_definitions.h	85;"	d
 MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(char* file){$/;"	f	class:MatrixOfValues
@@ -75,7 +78,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.5.2.4";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.5.2.5";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -231,7 +234,7 @@ existEdge	MatrixOfValues.cc	/^bool MatrixOfValues::existEdge(string a, string b)
 exitWithHelp	partanalyzer_help.cc	/^void exitWithHelp()$/;"	f
 firstResidueNumber	Sequence.cc	/^int Sequence::firstResidueNumber(int nb){$/;"	f	class:Sequence
 flagheader	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	g
-formatName	Sequence.cc	/^string Sequence::formatName(MSAformat msafmt){$/;"	f	class:Sequence
+formatName	Sequence.cc	/^string Sequence::formatName(MSAformat msafmt, string suffix){$/;"	f	class:Sequence
 fraction	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fraction=overlap} ;$/;"	e	enum:splitmethod
 gNeighborsList	sNeighborhood.cc	/^void sNeighborhood::gNeighborsList(){$/;"	f	class:sNeighborhood
 genRedundantMSA	MultipleSeqAlign.cc	/^MultipleSeqAlign MultipleSeqAlign::genRedundantMSA(int n){$/;"	f	class:MultipleSeqAlign
@@ -280,7 +283,7 @@ merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2){$/;"	f
 merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2, Partition* pt){$/;"	f	class:MatrixOfValues
 missing	Partition.cc	/^void Partition::missing(){$/;"	f	class:Partition
 missing	Partition.cc	/^void Partition::missing(svect* it_found){$/;"	f	class:Partition
-msaFmtNULL	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE } ;$/;"	e	enum:MSAformat
+msaFmtNULL	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
 mu	partanalyzer.cc	/^double mu;$/;"	v
 multimode	sNeighborhood.h	/^	long int multimode;		$/;"	m	class:sNeighborhood
 n	BellNumber.h	/^	long int n(){ return _n;}$/;"	f	class:BellNumber
@@ -411,7 +414,7 @@ prgVMHM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,pr
 prganalysis	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	g
 print	MultipleSeqAlign.cc	/^void MultipleSeqAlign::print()$/;"	f	class:MultipleSeqAlign
 print	Sequence.h	/^        void print(){ return printAlignment(true);}$/;"	f	class:Sequence
-printAlignment	Sequence.cc	/^void Sequence::printAlignment(MSAformat msafmt, bool withoutgaps){$/;"	f	class:Sequence
+printAlignment	Sequence.cc	/^void Sequence::printAlignment(MSAformat msafmt, string suffix, bool withoutgaps){$/;"	f	class:Sequence
 printAlignment	Sequence.cc	/^void Sequence::printAlignment(bool withoutgaps){$/;"	f	class:Sequence
 printAveragePairwiseIds	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printAveragePairwiseIds(MultipleSeqAlign& msa, double thr, vector<int>* positions)$/;"	f	class:MultipleSeqAlign
 printAveragePairwiseIds	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printAveragePairwiseIds(double thr, vector<int>* positions)$/;"	f	class:MultipleSeqAlign
@@ -459,7 +462,7 @@ setAdjacencyMatrix_os	Partition.cc	/^graph Partition::setAdjacencyMatrix_os(){$/
 setAlignedSeq	Sequence.cc	/^void Sequence::setAlignedSeq(string seq){$/;"	f	class:Sequence
 setConsensus_Ad	PartitionStats.cc	/^void PartitionStats::setConsensus_Ad(){$/;"	f	class:PartitionStats
 setFileName	MultipleSeqAlign.h	/^	void setFileName(char* fname){ _msaf=fname;}$/;"	f	class:MultipleSeqAlign
-setFormat	Sequence.cc	/^void Sequence::setFormat(MSAformat msafmt){$/;"	f	class:Sequence
+setFormat	Sequence.cc	/^void Sequence::setFormat(MSAformat msafmt, string suffix){$/;"	f	class:Sequence
 setMostFrequentNeighborhood	sNeighborhood.cc	/^void sNeighborhood::setMostFrequentNeighborhood(){$/;"	f	class:sNeighborhood
 setName	MultipleSeqAlign.h	/^	void setName(string name){ _name=name;}$/;"	f	class:MultipleSeqAlign
 setName	Sequence.h	/^        void setName(string name){ _name=name;}$/;"	f	class:Sequence
