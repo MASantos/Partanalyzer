@@ -73,6 +73,8 @@ int main(int argc, char* argv[]) {
 	partFileFormat piformat=partFmtPART;
 	///Default partition output format: partanalyzer's own format.
 	partFileFormat poformat=partFmtPART;
+	///Null MSA format
+	MSAformat msafmt=msaFmtNULL;
 	/* TESTING CUSTOM GRAPH CLASS
 	graph_base<string, double> mygraph;
 	string a,b;
@@ -656,6 +658,20 @@ int main(int argc, char* argv[]) {
                         argc--;argv++;
                         msaf=argv[0];
                         argc--;argv++;
+			if(argc>0){
+				if(strcmp(*argv,"FASTA")==0||strcmp(*argv,"fasta")==0){
+					if(!QUIET)cout<<"#MSA output format: FASTA"<<endl;
+					msafmt=FASTA;
+				}
+				else if(strcmp(*argv,"GDE")==0||strcmp(*argv,"gde")==0){
+					if(!QUIET)cout<<"#MSA output format: GDE"<<endl;
+					msafmt=GDE;
+				}
+				else{
+					if(!QUIET)cout<<"#WARNING : Main : --msa-map-partition : Unknown MSA format : Ignoring option"<<endl;
+					msafmt=msaFmtNULL;
+				}
+			}
                 }
                 else if (strcmp(*argv,"--msa-seqid-stat")==0){
                         analysis=prgMSPI;
@@ -1227,7 +1243,7 @@ int main(int argc, char* argv[]) {
 		case prgMSMP:{
                         MultipleSeqAlign msa(msaf);
 			Partition partition1(partitionf1,piformat,cluster1_offset);
-			msa.printWithClusterLabels(&partition1);
+			msa.printWithClusterLabels(&partition1, msafmt);
 			break;
 			}
 		case prgMSPI:{

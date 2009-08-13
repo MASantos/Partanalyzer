@@ -118,7 +118,7 @@ void printHelp(){
 	cout<<"       --msa-drop-sequences-by-id sequences_file msa_file [minId maxId]"<<endl;
 	cout<<"       --msa-extract-sequences-by-topid msa_file1 msa_file2 [count]"<<endl;
 	cout<<"       --msa-drop-sequences-by-topid msa_file1 msa_file [count]"<<endl;
-	cout<<"       --msa-map-partition partition multiple_seq_alignment.fasta "<<endl;
+	cout<<"       --msa-map-partition partition multiple_seq_alignment.fasta [MSAformat]"<<endl;
 	cout<<"       --print-msa multiple_seq_alignment.fasta "<<endl;
 	cout<<"       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
 	cout<<endl;
@@ -437,7 +437,9 @@ void printHelpLong(){
 	cout<<"                                                                       "<<endl;
 	cout<<"       --msa-map-partition                                             "<<endl;
 	cout<<"          Given a Partition and the original MSA, output the MSA       "<<endl;
-	cout<<"          with the cluster annotation of the SDPpred server            "<<endl;
+	cout<<"          with the cluster annotation format of the SDPpred server.    "<<endl;
+	cout<<"          MSAformat (FASTA|GDE) allows to specify the format of the    "<<endl;
+	cout<<"          output alignment.                                            "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --print-msa                                                     "<<endl;
 	cout<<"          Prints the given multiple sequence alignment. Useful for     "<<endl;

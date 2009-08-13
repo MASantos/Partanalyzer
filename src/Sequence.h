@@ -49,6 +49,8 @@ class Sequence
         string _name;
 	///String of characters, including gaps. Corresponds the string as in a MSA.
         string _alignedsequence;
+	///Format of aligned sequence (MSA format)
+	MSAformat _msafmt;
 	///Number of characters, including gaps.  Corresponds the length of a MSA.
         int _alignment_length;
 	///Actual string of characters, without gaps
@@ -61,6 +63,8 @@ class Sequence
 	int _first_residue_number_gauge;
 	///Get the PID normalization for the given two sequences
 	double _getPIDNormalization(Sequence* Seq, int& starts, int& ends);
+	///Set sequence's _msafmt variable depending on the format of its _name
+	void _setFormat();
 public:
 	///Default constructor
         Sequence();
@@ -92,8 +96,13 @@ public:
         void setAlignedSeq(string seq);
 	///Set its name
         void setName(string name){ _name=name;}
+	///Stream out its name in the given MSA format. Does not actually change the sequence's format
+	string formatName(MSAformat msafmt=MSADEFAULTFMT);
+	///Set MSA format. This does change the sequence's format
+	void setFormat(MSAformat msafmt);
 	///Print a sequence with its name adding a newline at the end. If bare=true, print its actual sequence, i.e., without gaps
         void printAlignment(bool withoutgaps=false);
+        void printAlignment(MSAformat msafmt, bool withoutgaps=false);
 	///Print the actual sequence with its name adding a newline at the end
         void print(){ return printAlignment(true);}
 	///Remove gaps 

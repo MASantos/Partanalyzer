@@ -55,6 +55,7 @@ Sequence::Sequence()
         _alignedsequence=_sequence="";
         _alignment_length=_number_of_residues=0;
 	_first_residue_number_gauge=0;
+	_msafmt=FASTA;
 }
 
 Sequence::Sequence(string name, string seq){
@@ -62,6 +63,13 @@ Sequence::Sequence(string name, string seq){
         _name=name;
         _alignment_length=_alignedsequence.length();
 	_setActualSeq();
+	_setFormat();
+}
+
+void Sequence::_setFormat(){
+	if(_name.substr(0,1).compare(">")==0) _msafmt=FASTA;
+	else if(_name.substr(0,1).compare("%")==0) _msafmt=GDE;
+	else if(!QUIET)cout<<"#WARNING: Sequence::Sequence : Format doesn't seem neither FASTA nor GDE"<<endl;
 }
 
 void Sequence::_setActualSeq(){
@@ -247,14 +255,52 @@ double Sequence::id(Sequence* Seq)
         return id/norm*100.0;
 }
 */
+string Sequence::formatName(MSAformat msafmt){
+	stringstream fn;
+	switch(msafmt){
+		case FASTA:
+			if(_msafmt!=FASTA) fn<<">"<<_name.substr(1,_name.length()-1);
+			else return _name;
+			break;
+		case GDE:
+			if(_msafmt!=GDE) fn<<"%"<<_name.substr(1,_name.length()-1);
+			else return _name;
+			break;
+		case msaFmtNULL:
+			return _name;
+			break;
+		default:
+			cout<<"ERROR : Sequence::format(MSAformat fmt) : Unknown MSA format"<<endl;
+			exit(1);
+			break;
+	}
+	return fn.str();
+}
+
+void Sequence::setFormat(MSAformat msafmt){
+	_name=formatName(msafmt);
+	_setFormat();
+}
+
+void Sequence::printAlignment(MSAformat msafmt, bool withoutgaps){
+	if(_name.compare("")==0||_alignedsequence.compare("")==0)return;
+	if(withoutgaps){
+		cout<<formatName(msafmt)<<"\n"<<_sequence<<endl;
+	}else{
+		cout<<formatName(msafmt)<<"\n"<<_alignedsequence<<endl;
+	}
+}
 
 void Sequence::printAlignment(bool withoutgaps){
+	printAlignment(_msafmt, withoutgaps);
+	/*
 	if(_name.compare("")==0||_alignedsequence.compare("")==0)return;
 	if(withoutgaps){
 		cout<<_name<<"\n"<<_sequence<<endl;
 	}else{
 		cout<<_name<<"\n"<<_alignedsequence<<endl;
 	}
+	*/
 }
 
 #endif //END _CLASS_SEQUENCE

@@ -91,7 +91,8 @@ inline string ToString(const T& x){
 #define EXTENSIVITY_DEFAULT_RENYI 2.0
 #define EXTENSIVITY_MAX 100.0
 #define _PGM_P2_GRAYSCALE_ 256
-
+///MSA default format 
+#define MSADEFAULTFMT FASTA
 ///Available types of symmetric and non-symmetric pair-wise measures. 
 //enum pmeasure { conditionalEntropy=conditionalPotential , jointEntropy=jointPotential , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
 enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
@@ -125,6 +126,8 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgCEMX,
 	prgEDMX,prgEDMP
 } ;
+///MSA formats
+enum MSAformat { msaFmtNULL=-1, FASTA, GDE } ;
 ///Enummerates the possible input format for a partition file
 enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;
 ///Available types of Splitstat methods

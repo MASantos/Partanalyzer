@@ -64,7 +64,7 @@ public:
 	MultipleSeqAlign dropClones();
 	MultipleSeqAlign dropClones(MultipleSeqAlign* msab);
 	///Map partition clusters onto MSA
-	void printWithClusterLabels(Partition* part);
+	void printWithClusterLabels(Partition* part, MSAformat fmt=msaFmtNULL);
 	///Get begin iterator to _Seqlist
 	MSA::iterator beginSeq(){ return _Seqlist.begin();}
 	///Get end iterator to _Seqlist

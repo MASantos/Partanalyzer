@@ -140,10 +140,10 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 	return nmsa;
 }
 
-void MultipleSeqAlign::printWithClusterLabels(Partition* part){
+void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
 	if(!QUIET)cout<<"#BeginMSAwClusters"<<endl;
 	for(smat::iterator cl=part->clusters.begin();cl!=part->clusters.end();cl++){
-		cout<<"==cluster "<<part->getClusterName(*cl)<<" =="<<endl;
+		cout<<"==cluster_"<<part->getClusterName(*cl)<<" =="<<endl;
 		for(svect::iterator it=cl->begin()+part->cluster_offset();it!=cl->end();it++){
 			for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
 				string clit,seqn;
@@ -152,7 +152,7 @@ void MultipleSeqAlign::printWithClusterLabels(Partition* part){
 				if(clit.compare(seqn)==0||clit.compare(seqn.substr(1,seqn.length()-1))==0\
 				   ||clit.substr(1,clit.length()-1).compare(seqn)==0\
 				   ||clit.substr(1,clit.length()-1).compare(seqn.substr(1,seqn.length()-1))==0\
-					)st->printAlignment();
+					)st->printAlignment(fmt);
 			}	
 		}
 	}
