@@ -259,16 +259,25 @@ string Sequence::formatName(MSAformat msafmt, string suffix){
 	stringstream fn;
 	switch(msafmt){
 		case FASTA3:
+		case FASTA2:
 		case FASTA:
-			if(_msafmt!=FASTA||_msafmt!=FASTA3) fn<<">"<<_name.substr(1,_name.length()-1);
-			else return _name;
+		case SPEER3:
+		case SPEER2:
+		case SPEER:
+			//if((_msafmt!=FASTA||_msafmt!=FASTA3)&&_msafmt!=SPEER) fn<<">"<<_name.substr(1,_name.length()-1);
+			//else return _name;
+			return _name;
 			break;
 		case GDE3:
+		case GDE2:
 		case GDE:
-			if(_msafmt!=GDE||_msafmt!=GDE3) fn<<"%"<<_name.substr(1,_name.length()-1);
-			else return _name;
+			//if(_msafmt!=GDE||_msafmt!=GDE3) fn<<"%"<<_name.substr(1,_name.length()-1);
+			//else return _name;
+			fn<<"%"<<_name.substr(1,_name.length()-1);
 			break;
-		case GSIM://GroupSim format: nadd should contain the cluster name where Sequence belong to
+		case GSIM3:
+		case GSIM2:
+		case GSIM://GroupSim format: name should contain the cluster name where Sequence belong to
 			fn<<_name<<"|"<<suffix;
 			break;
 		case msaFmtNULL:

@@ -438,8 +438,16 @@ void printHelpLong(){
 	cout<<"       --msa-map-partition                                             "<<endl;
 	cout<<"          Given a Partition and the original MSA, output the MSA       "<<endl;
 	cout<<"          with the cluster annotation format of the SDPpred server.    "<<endl;
-	cout<<"          MSAformat (FASTA|GDE) allows to specify the format of the    "<<endl;
-	cout<<"          output alignment.                                            "<<endl;
+	cout<<"          MSAformat allows to specify the format of the output alignment"<<endl;
+	cout<<"          Possible formats are: FASTA[23]*, SPEER[23]*, GDE[23]* and   "<<endl;
+	cout<<"          GSIM[23]*. Example: FASTA prints cluster information as a    "<<endl;
+	cout<<"          line heading the sequence label line starting with `%'; using"<<endl;
+	cout<<"          FASTA2 prints the same but only clusters with 2 or more      "<<endl;
+	cout<<"          elements are printed (3 or more if format is FASTA3). Idem   "<<endl;
+	cout<<"          for the additional formats. SPEER prints the MSA appending the"<<endl;
+	cout<<"          clusters' sizes as a last line; GDE is analogous to FASTA but"<<endl;
+	cout<<"          but uses `==' instead of `%'. Finally, GSIM adds cluster name"<<endl;
+	cout<<"          as the last string of the fasta label separated from it by `|'"<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --print-msa                                                     "<<endl;
 	cout<<"          Prints the given multiple sequence alignment. Useful for     "<<endl;

@@ -127,7 +127,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgEDMX,prgEDMP
 } ;
 ///MSA formats: When using --msa-map-partition, both FASTA3 and GDE3 will only output subfamilies with 3 or more sequences.
-enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;
+enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;
 ///Enummerates the possible input format for a partition file
 enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;
 ///Available types of Splitstat methods

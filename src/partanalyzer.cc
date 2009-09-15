@@ -663,21 +663,49 @@ int main(int argc, char* argv[]) {
 					if(!QUIET)cout<<"#MSA output format: FASTA"<<endl;
 					msafmt=FASTA;
 				}
+				else if(strcmp(*argv,"FASTA2")==0||strcmp(*argv,"fasta2")==0){
+					if(!QUIET)cout<<"#MSA output format: FASTA2"<<endl;
+					msafmt=FASTA2;
+				}
+				else if(strcmp(*argv,"FASTA3")==0||strcmp(*argv,"fasta3")==0){
+					if(!QUIET)cout<<"#MSA output format: FASTA3"<<endl;
+					msafmt=FASTA3;
+				}
 				else if(strcmp(*argv,"GDE")==0||strcmp(*argv,"gde")==0){
 					if(!QUIET)cout<<"#MSA output format: GDE"<<endl;
 					msafmt=GDE;
 				}
-				else if(strcmp(*argv,"FASTA3")==0||strcmp(*argv,"gde")==0){
-					if(!QUIET)cout<<"#MSA output format: FASTA3"<<endl;
-					msafmt=FASTA3;
+				else if(strcmp(*argv,"GDE2")==0||strcmp(*argv,"gde2")==0){
+					if(!QUIET)cout<<"#MSA output format: GDE2"<<endl;
+					msafmt=GDE2;
 				}
-				else if(strcmp(*argv,"GDE3")==0||strcmp(*argv,"gde")==0){
+				else if(strcmp(*argv,"GDE3")==0||strcmp(*argv,"gde3")==0){
 					if(!QUIET)cout<<"#MSA output format: GDE3"<<endl;
 					msafmt=GDE3;
 				}
-				else if(strcmp(*argv,"GSIM")==0||strcmp(*argv,"gde")==0){
+				else if(strcmp(*argv,"SPEER")==0||strcmp(*argv,"speer")==0){
+					if(!QUIET)cout<<"#MSA output format: SPEER"<<endl;
+					msafmt=SPEER;
+				}
+				else if(strcmp(*argv,"SPEER2")==0||strcmp(*argv,"speer2")==0){
+					if(!QUIET)cout<<"#MSA output format: SPEER2"<<endl;
+					msafmt=SPEER2;
+				}
+				else if(strcmp(*argv,"SPEER3")==0||strcmp(*argv,"speer3")==0){
+					if(!QUIET)cout<<"#MSA output format: SPEER3"<<endl;
+					msafmt=SPEER3;
+				}
+				else if(strcmp(*argv,"GSIM")==0||strcmp(*argv,"gsim")==0){
 					if(!QUIET)cout<<"#MSA output format: GSIM"<<endl;
 					msafmt=GSIM;
+				}
+				else if(strcmp(*argv,"GSIM2")==0||strcmp(*argv,"gsim2")==0){
+					if(!QUIET)cout<<"#MSA output format: GSIM2"<<endl;
+					msafmt=GSIM2;
+				}
+				else if(strcmp(*argv,"GSIM3")==0||strcmp(*argv,"gsim3")==0){
+					if(!QUIET)cout<<"#MSA output format: GSIM3"<<endl;
+					msafmt=GSIM3;
 				}
 				else{
 					if(!QUIET)cout<<"#WARNING : Main : --msa-map-partition : Unknown MSA format : Ignoring option"<<endl;

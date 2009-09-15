@@ -24,14 +24,18 @@ EXTENSIVITY_DEFAULT	partanalyzer_definitions.h	89;"	d
 EXTENSIVITY_DEFAULT_RENYI	partanalyzer_definitions.h	91;"	d
 EXTENSIVITY_DEFAULT_TSALLIS	partanalyzer_definitions.h	90;"	d
 EXTENSIVITY_MAX	partanalyzer_definitions.h	92;"	d
-FASTA	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
-FASTA3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
+FASTA	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+FASTA2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+FASTA3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 FUZZYPARTITION	partanalyzer.h	/^bool	FUZZYPARTITION=false; $/;"	v
 FileName	MatrixOfValues.h	/^	char* FileName(){return _mxofvf ;}$/;"	f	class:MatrixOfValues
 FileName	Partition.h	/^	char* FileName(){ return _partitionf;}$/;"	f	class:Partition
-GDE	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
-GDE3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
-GSIM	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
+GDE	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+GDE2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+GDE3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+GSIM	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+GSIM2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+GSIM3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 H	Partition.cc	/^double Partition::H(){$/;"	f	class:Partition
 H	PartitionStats.h	/^	double H(Partition p){ return p.H();}$/;"	f	class:PartitionStats
 INFO	partanalyzer.h	/^bool	INFO=false;$/;"	v
@@ -39,7 +43,7 @@ JQnorm	Partition.cc	/^double Partition::JQnorm(double q=1.0){$/;"	f	class:Partit
 JQnorm	PartitionStats.h	/^	double JQnorm(Partition p, double q){ return p.JQnorm(q);}$/;"	f	class:PartitionStats
 MSA	MultipleSeqAlign.h	/^typedef vector< Sequence > MSA;$/;"	t
 MSADEFAULTFMT	partanalyzer_definitions.h	95;"	d
-MSAformat	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	g
+MSAformat	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	g
 MU_DEFAULT	partanalyzer_definitions.h	87;"	d
 MU_UNSET	partanalyzer_definitions.h	85;"	d
 MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(char* file){$/;"	f	class:MatrixOfValues
@@ -64,6 +68,9 @@ RS	PartitionStats.h	/^	double RS(Partition p){ return p.RS();}$/;"	f	class:Parti
 RS	PartitionStats.h	/^	double RS(Partition p, double q){ return p.RS(q);}$/;"	f	class:PartitionStats
 RS	PartitionStats.h	/^	double RS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, renyi);}$/;"	f	class:PartitionStats
 SETUPCONSENSUSP	PartitionStats.h	/^	bool SETUPCONSENSUSP;$/;"	m	class:PartitionStats
+SPEER	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+SPEER2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+SPEER3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 SeqId	MultipleSeqAlign.cc	/^double MultipleSeqAlign::SeqId(int Seqn, int Seqm, vector<int>* positions)$/;"	f	class:MultipleSeqAlign
 SeqId	MultipleSeqAlign.h	/^        double SeqId(Sequence Seqa, Sequence Seqb, vector<int>* positions=NULL){return Seqa.id(Seqb,positions);}$/;"	f	class:MultipleSeqAlign
 Sequence	Sequence.cc	/^Sequence::Sequence()$/;"	f	class:Sequence
@@ -283,7 +290,7 @@ merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2){$/;"	f
 merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2, Partition* pt){$/;"	f	class:MatrixOfValues
 missing	Partition.cc	/^void Partition::missing(){$/;"	f	class:Partition
 missing	Partition.cc	/^void Partition::missing(svect* it_found){$/;"	f	class:Partition
-msaFmtNULL	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , FASTA3, GDE3, GSIM } ;$/;"	e	enum:MSAformat
+msaFmtNULL	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 mu	partanalyzer.cc	/^double mu;$/;"	v
 multimode	sNeighborhood.h	/^	long int multimode;		$/;"	m	class:sNeighborhood
 n	BellNumber.h	/^	long int n(){ return _n;}$/;"	f	class:BellNumber

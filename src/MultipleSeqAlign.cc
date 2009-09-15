@@ -143,6 +143,8 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
 	string seqn_suffix="";
 	int skipped=0;
+	if(fmt==msaFmtNULL)fmt=GSIM;
+	stringstream clsizes;
 	if(!QUIET)cout<<"#BeginMSAwClusters"<<endl;
 	for(smat::iterator cl=part->clusters.begin();cl!=part->clusters.end();cl++){
 		switch(fmt){
@@ -153,13 +155,45 @@ void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
 					skipped++;
 					continue;
 				}
+			case FASTA2:
+			case GDE2:
+				if(cl->size()-part->cluster_offset()<2){
+					skipped++;
+					continue;
+				}
 			case FASTA:
 			case GDE:
 				cout<<"==cluster_"<<part->getClusterName(*cl)<<" =="<<endl;
 				break;
+			//#####################
+			case GSIM3:
+				if(cl->size()-part->cluster_offset()<3){
+					skipped++;
+					continue;
+				}
+			case GSIM2:
+				if(cl->size()-part->cluster_offset()<2){
+					skipped++;
+					continue;
+				}
 			case GSIM:
 				seqn_suffix=part->getClusterName(*cl);
 				break;
+			//#####################
+			case SPEER3:
+				if(cl->size()-part->cluster_offset()<3){
+					skipped++;
+					continue;
+				}
+			case SPEER2:
+				if(cl->size()-part->cluster_offset()<2){
+					skipped++;
+					continue;
+				}
+			case SPEER:
+				clsizes<<cl->size()-part->cluster_offset()<<" ";
+				break;
+			//#####################
 		}
 		for(svect::iterator it=cl->begin()+part->cluster_offset();it!=cl->end();it++){
 			for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
@@ -173,7 +207,11 @@ void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
 			}	
 		}
 	}
-	if(!QUIET&&(fmt==FASTA3||fmt==GDE3))cout<<"#Clusters shown: "<<part->clusters.size()-skipped<<endl;
+	if(fmt==SPEER||fmt==SPEER3||fmt==SPEER2){
+		if(!QUIET)cout<<"#ClusterSizes"<<endl;
+		cout<<clsizes.str()<<endl;
+	}
+	if(!QUIET&&(fmt==FASTA2||fmt==FASTA3||fmt==GDE2||fmt==GDE3||fmt==SPEER2||fmt==SPEER3))cout<<"#Clusters shown: "<<part->clusters.size()-skipped<<endl;
 	if(!QUIET)cout<<"#EndMSAwClusters"<<endl;
 }
 
