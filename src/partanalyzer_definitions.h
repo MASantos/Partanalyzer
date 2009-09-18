@@ -119,7 +119,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,
 	prgHASS,
 	prgIPAR,
-	prg2MCL,prg2FRE,prgM2PA,
+	prg2MCL,prg2FRE,prgM2PA, prgA2PA,
 	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,
 	prgADST,prgASFP,
 	prgSPST,prgSPSS,prgSPSO,
@@ -129,7 +129,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 ///MSA formats: When using --msa-map-partition, both FASTA3 and GDE3 will only output subfamilies with 3 or more sequences.
 enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;
 ///Enummerates the possible input format for a partition file
-enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;
+enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;
 ///Available types of Splitstat methods
 enum splitmethod {split,cosine,overlap,fraction=overlap} ;
 ///Wrapper of a char* in order to store char* in STL containers. Otherwise, weird memory likages happen, if not simply a segfault.

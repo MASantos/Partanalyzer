@@ -591,6 +591,8 @@ int main(int argc, char* argv[]) {
 		}
 ///(For converting between different partition formats)
 		else if (strcmp(*argv,"--toMCL")==0||strcmp(*argv,"--toFREE")==0||strcmp(*argv,"--MCLtoPART")==0 ||\
+			strcmp(*argv,"--MCL2PART")==0||\
+			strcmp(*argv,"--MSAtoPART")==0 ||strcmp(*argv,"--MSA2PART")==0 ||\
 			 strcmp(*argv,"--toPART")==0||strcmp(*argv,"--FREEtoPART")==0){
 			if(strcmp(*argv,"--toMCL")==0){
 				analysis=prg2MCL;
@@ -604,7 +606,7 @@ int main(int argc, char* argv[]) {
 				analysis=prg2FRE;
 				poformat=partFmtPART;
 			}
-			else if(strcmp(*argv,"--MCLtoPART")==0){
+			else if(strcmp(*argv,"--MCLtoPART")==0||strcmp(*argv,"--MCL2PART")==0){
 				analysis=prgM2PA;
 				piformat=partFmtMCL;
 				poformat=partFmtPART;
@@ -612,6 +614,11 @@ int main(int argc, char* argv[]) {
 			else if(strcmp(*argv,"--FREEtoPART")==0){
 				analysis=prgM2PA;
 				piformat=partFmtFREE;
+				poformat=partFmtPART;
+			}
+			else if(strcmp(*argv,"--MSAtoPART")==0||strcmp(*argv,"--MSA2PART")==0){
+				analysis=prgA2PA;
+				piformat=partFmtMSA;
 				poformat=partFmtPART;
 			}
 			else {
@@ -1258,6 +1265,12 @@ int main(int argc, char* argv[]) {
 		        Partition partition(partitionf1,piformat);
 			if(MCLTABF)partition.mclTabFile(mcltabfile);
 			partition.printPartition(poformat);
+			break;
+			}
+		case prgA2PA:{
+                        MultipleSeqAlign msa;
+			Partition part=msa.getPartition(partitionf1);
+                        part.printPartition();
 			break;
 			}
 ///(For dealing with (fasta) sequence files

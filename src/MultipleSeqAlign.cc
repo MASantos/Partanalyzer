@@ -140,6 +140,69 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 	return nmsa;
 }
 
+Partition MultipleSeqAlign::getPartition(char* msaf,MSAformat fmt){
+	int offset=2;
+	bool dosort=true;
+	//char* partf;
+	//sprintf(partf,"%s lst",msaf);
+	smat pclustersl;
+	svect cluster;
+        ifstream _is(msaf);
+        if(!_is){
+                cout<<"ERROR: MultipleSeqAlign::getPartition : File not found: "<<msaf<<endl;
+                exit(1);
+        }
+        if(!QUIET) cout<<"#Reading MSA "<<msaf<<endl;
+        string str; //String read from file
+	string cln="";
+	long int nelements=0;
+        while(_is>>str){
+                string fchr=str.substr(0,1);
+                if(fchr.compare("#")==0){
+				getline(_is,str);
+				continue;
+		}
+                if(fchr.compare("%")==0||\
+		   fchr.compare("=")==0\
+		  ){
+			if(DEBUG)cout<<"#FOUND GROUP: "<<str<<" with name ";
+			if(cluster.size()>0){
+				stringstream ss;
+				ss<<nelements;
+				cluster[0]=ss.str();
+				pclustersl.push_back(cluster);
+				cluster.clear();
+				nelements=0;
+			}
+			cln=str.substr(1,str.length()-1);
+			while(cln.substr(0,1).compare("=")==0||cln.substr(0,1).compare(" ")==0){
+				cln=cln.substr(1,str.length()-1);
+			}
+			cluster.push_back("0"); //Number of elements
+			cluster.push_back(cln); //Name of cluster
+			if(DEBUG){
+				cout<<cln<<"\n#Current number of clusters= "<<pclustersl.size()<<endl;
+			}
+			getline(_is,str);
+			continue;
+		}
+                //Found beginning of new sequence: push old one to the MSA and set name of the current new one
+                if(strcmp(fchr.c_str(),">")==0){
+                        if(DEBUG)cout<<"#New element: "<<str<<endl;
+			nelements++;
+                        cluster.push_back(str.substr(1,str.length()-1));
+                        continue;
+                }
+        }
+	stringstream ss;
+	ss<<nelements;
+	cluster[0]=ss.str();
+	pclustersl.push_back(cluster);
+	cluster.clear();
+	//return Partition(&pclustersl,offset,dosort,partf);
+	return Partition(&pclustersl,offset,dosort,msaf);
+}
+
 void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){
 	string seqn_suffix="";
 	int skipped=0;

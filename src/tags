@@ -85,7 +85,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.5.2.5";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.6.0";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -259,6 +259,7 @@ getItems	Partition.cc	/^sset Partition::getItems(cluster* cl)$/;"	f	class:Partit
 getName	MultipleSeqAlign.h	/^	string getName(){ return _name;}$/;"	f	class:MultipleSeqAlign
 getNumberOfSeq	MultipleSeqAlign.h	/^	int getNumberOfSeq(){ return _Seqlist.size();}$/;"	f	class:MultipleSeqAlign
 getPartInputFormat	Partition.h	/^	partFileFormat getPartInputFormat(partFileFormat iformat){ return _piformat;}$/;"	f	class:Partition
+getPartition	MultipleSeqAlign.cc	/^Partition MultipleSeqAlign::getPartition(char* msaf,MSAformat fmt){$/;"	f	class:MultipleSeqAlign
 getPurity	PartitionStats.cc	/^void PartitionStats::getPurity(){$/;"	f	class:PartitionStats
 getPurityRef	PartitionStats.cc	/^void PartitionStats::getPurityRef(){$/;"	f	class:PartitionStats
 getSeed	Roulette.h	/^	unsigned int getSeed(){return _seed;}$/;"	f	class:roulette
@@ -341,11 +342,12 @@ operator >	partanalyzer_basic_operations.h	/^inline bool operator>(svect& cla, s
 operator >=	partanalyzer_basic_operations.h	/^inline bool operator>=(svect& cla, svect& clb){$/;"	f
 operator []	BellNumber.cc	/^double& BellNumber::operator[](long int n){$/;"	f	class:BellNumber
 overlap	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fraction=overlap} ;$/;"	e	enum:splitmethod
-partFileFormat	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;$/;"	g
-partFmtFREE	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;$/;"	e	enum:partFileFormat
-partFmtMCL	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;$/;"	e	enum:partFileFormat
-partFmtNULL	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;$/;"	e	enum:partFileFormat
-partFmtPART	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE } ;$/;"	e	enum:partFileFormat
+partFileFormat	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	g
+partFmtFREE	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
+partFmtMCL	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
+partFmtMSA	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
+partFmtNULL	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
+partFmtPART	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
 partitionInputFormat	Partition.cc	/^void Partition::partitionInputFormat(partFileFormat iformat=partFmtPART){$/;"	f	class:Partition
 pgm_Ad	PartitionStats.h	/^	void pgm_Ad(){cout<<"#BeginConsensusAdjacencyMatrixPGMImage\\n"<<_Ad<<"#EndConsensusAdjacencyMatrixPGMImage"<<endl;}$/;"	f	class:PartitionStats
 pid_normalization	Sequence.h	/^enum pid_normalization { $/;"	g
@@ -355,8 +357,9 @@ pmeasuresRef	PartitionStats.cc	/^void PartitionStats::pmeasuresRef(pmeasure meas
 pmetricv	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	g
 point	sNeighborhood.h	/^	string point;$/;"	m	class:sNeighborhood
 ppvect	PartitionStats.h	/^typedef vector<Partition > ppvect;$/;"	t
-prg2FRE	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA,$/;"	e	enum:prganalysis
-prg2MCL	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA,$/;"	e	enum:prganalysis
+prg2FRE	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
+prg2MCL	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
+prgA2PA	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
 prgADST	partanalyzer_definitions.h	/^	prgADST,prgASFP,$/;"	e	enum:prganalysis
 prgASFP	partanalyzer_definitions.h	/^	prgADST,prgASFP,$/;"	e	enum:prganalysis
 prgBDSR	partanalyzer_definitions.h	/^	prgBDST,prgBDSR,$/;"	e	enum:prganalysis
@@ -378,7 +381,7 @@ prgIPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,pr
 prgJDSR	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
 prgJDST	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
 prgJPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgM2PA	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA,$/;"	e	enum:prganalysis
+prgM2PA	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
 prgMAPI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMGMX	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
 prgMMAI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
