@@ -944,7 +944,7 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 						clusters[i][1]=(ClusterPrefix+ToString(i+1));
 					}
 					//cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
-					if(_piformat==format){
+					if(_piformat==format || j<_items_offset){
 						//if(VERBOSE)cout<<"Element "<<j<<" ("<<*((clusters.rbegin())->rbegin())<<") "<<endl;
 						cout<<clusters[i][j]<<"\t";
 					}
@@ -952,7 +952,7 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 						cout<<_mcltab[ atoi( clusters[i][j].c_str() ) ]<<"\t";
 					}
 					else{
-						cout<<"Partition::printPartition : partFmtPART : ERROR : ambiguous condition : _piformat<>format && _mcltabf==NULL : What are trying to do?"<<endl;
+						cout<<"Partition::printPartition : partFmtPART : ERROR : ambiguous condition : _piformat<>format && _mcltabf==NULL : What are you trying to do? : piformat/format/_mcltabf/j/_items_offset: "<<_piformat<<"/"<<format<<"/"<<_mcltabf<<"/"<<j<<"/"<<_items_offset<<endl;
 						exit(1);
 					}
 				}
