@@ -85,7 +85,7 @@ DOC_CONF=$(WDIR)/Doxyfile
 DOC_DIR=$(WDIR)/Docs
 
 CPTOUSERS = $(WDIR)/cp2users
-MANSH=$(WDIR
+MANSH=$(WDIR)
 TESTSDIR=$(WDIR)/Tests
 TCONSENS=$(TESTSDIR)/Consensus
 TCONFAIL=$(TCONSENS)/Fail
@@ -107,8 +107,9 @@ copy:	default $(CPTOUSERS)
 touch:	
 	touch $(SRCS)
 
-debug: $(TAGS) touch 
-	CPPFLAGS="$(CPPFLAGS) -DDEBUG" make 
+debug: touch 
+	make CPPFLAGS="$(CPPFLAGS) -DDEBUGDETAILS"
+
 $(TAGS): $(OBJ) $(HEADERS)
 	rm $(TAGS)
 	$(CTAGS) $(SRCS)
@@ -117,13 +118,12 @@ $(BIN): $(OBJ) $(HEADERS)
 	$(CC) -o $@ $(LDFLAGS) $(OBJ)
 	$(LINKBIN)
 
-$(BIN).DEBUG: $(OBJ) $(HEADERS)
-	$(CC) -o $(BIN) $(CPPFLAGS) -DDEBUG $(OBJ)
-	$(LINKBIN)
+$(BIN).DEBUG:
+	make CPPFLAGS='$(CPPFLAGS) -DDEBUGDETAILS'
 
 compile: $(OBJ)
 	
-%.cc%.o%.h:  
+%.cc%.o%.h: $(TAGS) 
 	$(CC) -g $(CPPFLAGS) $<
 
 clean: 
