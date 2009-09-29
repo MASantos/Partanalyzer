@@ -662,6 +662,9 @@ void Partition::partitionInputFormat(partFileFormat iformat=partFmtPART){
 const char* reol_="$\0";
 //bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1){ //Default input format is partanalyzer's own format
 bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1, const char* eol=reol_){ //Default input format is partanalyzer's own format
+#ifdef DEBUGDETAILS
+	cout<<"Reading string: iformat="<<iformat<<" nit="<<nit<<" eol="<<eol<<endl; 
+#endif
 	if(!(_is>>it)) return false;
 	if(it.compare("(mclheader")==0){
 		iformat=partFmtMCL;
@@ -670,7 +673,7 @@ bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1,
 	switch(iformat){
 		case partFmtMCL:
 			if( !isdigit(it.at(0)) ){
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"#DEBUG: not a digit seen {"<<it<<"}: nit="<<nit<<endl;
 #endif
 				string line;
@@ -682,7 +685,7 @@ bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1,
 			//if( isdigit(it.at(0)) ){
 			else if(nit>0) return true;
 			else{
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"#DEBUG: digit seen {"<<it<<"}: nit="<<nit<<endl;
 #endif
 				string line;
@@ -693,24 +696,24 @@ bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1,
 				_is.seekg(cispos);
 				stringstream ss;
 				ss<<line;
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"#DEBUG: line seen : {"<<line<<"}"<<endl;
 				cout<<"#DEBUG: stream seen : {"<<ss.str()<<"}"<<endl;
 #endif
 				line.clear();
 				long int nitems=0;
-#ifdef DEBUG			
+#ifdef DEBUGDETAILS
 				cout<<"#DEBUG: counting clusters elements... ";
 #endif
 				//while(ss>>line && line.compare("$")!=0) ///In MCL, the first number reefers to clusters name; line ends with $
 				while(ss>>line && line.compare(eol)!=0) ///In MCL, the first number reefers to clusters name; line ends with $
 				{
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 					cout<<line<<" ";
 #endif
 					nitems++;	
 				}
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"\n#DEBUG: nitems count : "<<nitems<<endl;
 #endif
 				stringstream iss;
@@ -735,12 +738,12 @@ bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1,
 				//while(oss<<it)
 				//	if(VERBOSE)cout<<oss.str()<<" ";
 				if(VERBOSE)cout<<endl;
-				if(_readStringf(_is,it,iformat) ) 
+				if(_readStringf(_is,it,iformat,nit) ) 
 					return true;
 				else return false;
 			}
 			else if(iformat==partFmtFREE){
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"#DEBUG: element seen {"<<it<<"}: nit="<<nit<<endl;
 #endif
 				string line;
@@ -748,22 +751,22 @@ bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1,
 				cispos-=it.length();
 				getline(_is,line);
 				_is.seekg(cispos);
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"#DEBUG: line seen : {"<<line<<"}"<<endl;
 #endif
-#ifdef DEBUG			
+#ifdef DEBUGDETAILS			
 				cout<<"#DEBUG: counting clusters elements... ";
 #endif
 				long int nitems=1;
 				int i=-1;
 				while(line.at(++i)) ///In FREE, simply elements are listed.
 				{
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 					cout<<line.at(i);
 #endif
 					if(isspace(line.at(i))) nitems++;	
 				}
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<"\n#DEBUG: nitems count : "<<nitems<<endl;
 #endif
 				stringstream iss;
@@ -809,17 +812,19 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 	_nitems=0;
 	if(!QUIET||INFO) cout<<"#Reading clusters from partition "<<_partitionf<<endl;
 	partitionInputFormat(_piformat);
-
+#ifdef DEBUGDETAILS
+	cout<<"Start reading file: nit="<<nit<<endl;
+#endif
 	//while(_is>>it && strcmp(it.substr(0,1).c_str(),"#")!=0){ //Comments only at the end of file and starting with #
 	while(_readStringf(_is,it,_piformat,nit) ){ //Comment anywhere starting with #
-#ifdef DEBUG
-			cout<<"Seen: ("<<it.substr(0,1)<<")";
+#ifdef DEBUGDETAILS
+			cout<<"Seen: ("<<it.substr(0,1)<<"/nit="<<nit<<")";
 #endif
 			if(nit==0){
 				nitems=atoi(it.c_str());	///Number of items to be read.
 				_items.assign(nitems + _items_offset,""); ///create items list accordingly, leaving space for the additional (_items_offset) indexes.
 				_items[nit]=it;				///save the first item
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<" (_items.size="<<_items.size()<<")"<<"n="<<it<<"\t";
 #endif
 			}
@@ -830,11 +835,11 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 				if(nit>_items_offset-1){
 					sitems.insert(it);///Update set ot items with new element.
 					_vitems.push_back(it);
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 					cout<<"[nit="<<nit<<"/sitems<<"<<it<<"]";
 #endif
 				}
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 				cout<<it<<"\t";
 #endif
 			}
@@ -842,7 +847,7 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 				cout<<"#"<<program<<": Reading cluster: last item read: "<<_items[nit]<<". Skipping this line and rest of input file."<<endl;
 				break;
 			}
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 			cout<<" length="<<_items.size();
 			cout<<endl;
 #endif
@@ -944,7 +949,8 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 						clusters[i][1]=(ClusterPrefix+ToString(i+1));
 					}
 					//cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
-					if(_piformat==format || j<_items_offset){
+					//if(j<_items_offset||_mcltabf==NULL||_piformat==format){
+					if(j<_items_offset||_mcltabf==NULL){
 						//if(VERBOSE)cout<<"Element "<<j<<" ("<<*((clusters.rbegin())->rbegin())<<") "<<endl;
 						cout<<clusters[i][j]<<"\t";
 					}

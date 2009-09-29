@@ -48,7 +48,7 @@ g++ -o partanalyzer partanalyzer.cc
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.6.0";
+const char* VERSION="alpha 0.6.0.2";
 
 bool 	DEBUG=false;
 
