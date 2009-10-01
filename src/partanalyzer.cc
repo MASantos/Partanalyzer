@@ -42,6 +42,7 @@ int main(int argc, char* argv[]) {
 		systemDate();
 	}
 	vector<Charr > infilenames;
+	vector<Charr > infilenames2; //2nd list of input files for evaluating distances only between those in infilenames and infilenames2
 	bool SETUPCONSENSUSP=false;
 	bool MCLTABF=false;
 	bool DIST_SUBSPROJECT=false;
@@ -164,6 +165,21 @@ int main(int argc, char* argv[]) {
 					piformat=partFmtPART;
 				else
 					piformat=partFmtPART;
+				argc--;
+				argv++;
+			}
+			if(strcmp(*argv,"--oformat")==0||strcmp(*argv,"--ofmt")==0){
+				argc--;
+				argv++;
+				if(argc<2)printCommandLineError();
+				if(strcmp(*argv,"MCL")==0||strcmp(*argv,"mcl")==0)
+					poformat=partFmtMCL;
+				else if(strcmp(*argv,"FREE")==0||strcmp(*argv,"free")==0)
+					poformat=partFmtFREE;
+				else if(strcmp(*argv,"PART")==0||strcmp(*argv,"part")==0)
+					poformat=partFmtPART;
+				else
+					poformat=partFmtPART;
 				argc--;
 				argv++;
 			}
@@ -397,6 +413,11 @@ int main(int argc, char* argv[]) {
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
 				readListInputFiles(argv[0],infilenames);
+				if(argc>0&&strcmp(*argv,"-f2")==0){
+					if(argc!=2)printCommandLineError();
+					argc--;argv++;
+					readListInputFiles(argv[0],infilenames2);
+				}
 			}
 			else
 				for(int i=0;i<argc;i++){
@@ -427,6 +448,11 @@ int main(int argc, char* argv[]) {
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
 				readListInputFiles(argv[0],infilenames);
+				if(argc>0&&strcmp(*argv,"-f2")==0){
+					if(argc!=2)printCommandLineError();
+					argc--;argv++;
+					readListInputFiles(argv[0],infilenames2);
+				}
 			}
 			else
 				for(int i=0;i<argc;i++){
@@ -1124,8 +1150,15 @@ int main(int argc, char* argv[]) {
 				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
 					cout<<fn->car<<"\t";
 				cout<<endl;
+				if(infilenames2.size()>0){
+					cout<<"#Reading 2nd list of "<<infilenames2.size()<<" partitions: ";
+					for(vector<Charr>::iterator fn=infilenames2.begin();fn!=infilenames2.end();fn++)
+						cout<<fn->car<<"\t";
+					cout<<endl;
+				}
 			}
-			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
+			PartitionStats partstats(infilenames,mcltabfile , extensivity);
+			//PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs,mcltabfile);
 			//pmetricv metric=shannon;
 			switch(analysis){
 				case prgPSSR:

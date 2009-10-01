@@ -85,7 +85,7 @@ inline string ToString(const T& x){
 #define MU_UNSET -666.0
 #define BETA_DEFAULT 0.01
 #define MU_DEFAULT 0.0
-///Entensivity degree is precisely that parameter of Tsallis and Renyi entropies. This value means using the default.
+///Extensivity degree is precisely that parameter of Tsallis and Renyi entropies. This value means using the default.
 #define EXTENSIVITY_DEFAULT -6666.0
 #define EXTENSIVITY_DEFAULT_TSALLIS 2.0
 #define EXTENSIVITY_DEFAULT_RENYI 2.0
@@ -93,6 +93,8 @@ inline string ToString(const T& x){
 #define _PGM_P2_GRAYSCALE_ 256
 ///MSA default format 
 #define MSADEFAULTFMT FASTA
+///Default Cluster offset
+#define CLUSTEROFFSET_DEFAULT 2
 ///Available types of symmetric and non-symmetric pair-wise measures. 
 //enum pmeasure { conditionalEntropy=conditionalPotential , jointEntropy=jointPotential , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
 enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};

@@ -26,26 +26,48 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "PartitionStats.h"
 
-PartitionStats::PartitionStats(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=2,int clstat_normalization_ofs=0){
+PartitionStats::PartitionStats(vector<Charr > fnames, char* mcltabf, double extensivity){
+	cout<<"#Using tabfile "<<mcltabf<<endl;
+	partFileFormat iformat=partFmtPART;
+	int ofs=CLUSTEROFFSET_DEFAULT;
+	int clstat_normalization_ofs=0;
+	_fullConstructor(fnames, iformat, extensivity, ofs,clstat_normalization_ofs,mcltabf);
+}
+
+PartitionStats::PartitionStats(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs,int clstat_normalization_ofs, char* mcltabfile){
+	_fullConstructor(fnames, iformat, extensivity, ofs, clstat_normalization_ofs, mcltabfile);
+}
+
+void PartitionStats::_fullConstructor(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs,int clstat_normalization_ofs, char* mcltabfile){
 	_clsnofs=clstat_normalization_ofs;
 	_fnamel=fnames;
 	_npart=0;
 	_DIST_SUBSPROJECT=false;
 	_entensivity_degree=extensivity;
 	if(VERBOSE){
-		cout<<"#Instantiating each partition ("<<fnames.size()<<"/"<<_fnamel.size()<<") ..."<<endl;
+		cout<<"#Instantiating each partition ("<<_fnamel.size()<<") ..."<<endl;
 		cout<<"#First partition... "<<fnames[0].car<<"/"<<_fnamel[0].car<<endl;
-		cout<<"#Last partition... "<<fnames[fnames.size()-1].car<<"/"<<_fnamel[_fnamel.size()-1].car<<endl;
+		cout<<"#Last partition... "<<_fnamel[_fnamel.size()-1].car<<endl;
+		//cout<<"#Last partition... "<<fnames[fnames.size()-1].car<<"/"<<_fnamel[_fnamel.size()-1].car<<endl;
 	}
 	
 	for(vector<Charr >::iterator f=_fnamel.begin();f!=_fnamel.end();f++){
 		_npart++;
 		if(!QUIET)cout<<"#Partition "<<_npart<<endl;
 		Partition q=Partition(f->car,iformat,ofs);
+		if(mcltabfile!=NULL){
+			if(q.getPartInputFormat()==partFmtMCL){
+				if(!QUIET)cout<<"#Swapping names according to tabfile "<<mcltabfile<<endl;
+				q.swapLabels(mcltabfile);
+				q.setPartInputFormat(partFmtPART);
+				if(VERBOSE)cout<<"#New First/Last item= "<<*((q.clusters.begin())->begin()+ofs)<<"/"<<*((q.clusters.rbegin())->rbegin())<<endl;
+				if(DEBUG)q.printPartition();
+			}
+		}
 		_partitionl.push_back(q);
 		_hasseNodes[q.n_clusters()].push_back(q);
 	}
-	if(_npart<1){
+	if(_npart<1||_partitionl.size()<1){
 		cout<<"ERROR: invalid number of partitions "<<_npart<<"<1 : Check value provided for option norm"<<endl;
 		exit(1);
 	}
@@ -687,11 +709,20 @@ void PartitionStats::distances_Subsprojection(pmetricv metric){
 
 void PartitionStats::distances(pmetricv pm){
 	distancesPrintHeadComment(pm,(flagheader) BEGIN);
+	if(DEBUG)cout<<"#Starting distance calculation among "<<_partitionl.size()<<" partitions"<<endl;
+	if(_partitionl.size()<2){
+		cout<<"ERROR: PartitionStat::distances(pmetricv pm) : _partitionl.size()=0"<<endl;
+		exit(1);
+	}
 	for(int i=0;i<_partitionl.size()-1;i++){
 		Partition pa=_partitionl[i];
 		for(int j=i+1;j<_partitionl.size();j++){
 			if(_DIST_SUBSPROJECT) pa=_partitionl[i];
 			Partition pb=_partitionl[j];
+			if(DEBUG){
+				cout<<"#Calculating distances betweem pa="<<pa.FileName()<<" and pb="<<pb.FileName()<<endl;
+				cout<<"#Calculating intersection pa^pb... "<<endl;
+			}
 			Partition pi=pa*pb;
 			if(_DIST_SUBSPROJECT){
 				if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;

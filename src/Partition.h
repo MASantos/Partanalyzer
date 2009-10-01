@@ -124,7 +124,7 @@ public:
 	///Set partition input file format
 	void setPartInputFormat(partFileFormat iformat){ _piformat=iformat;}
 	///Retrieve partition input file format
-	partFileFormat getPartInputFormat(partFileFormat iformat){ return _piformat;}
+	partFileFormat getPartInputFormat(){ return _piformat;}
 	///Load MCL tab file
 	void mclTabFile(char* mcltabf);
 	///Load a general tab file for changing name of elements

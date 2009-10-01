@@ -16,6 +16,7 @@ BK	PartitionStats.h	/^	double BK(Partition& p1, Partition& p2){ return _pmetric(
 BellN	PartitionStats.h	/^	BellNumber BellN;$/;"	m	class:PartitionStats
 BellNumber	BellNumber.cc	/^BellNumber::BellNumber(){$/;"	f	class:BellNumber
 BellNumber	BellNumber.h	/^class BellNumber$/;"	c
+CLUSTEROFFSET_DEFAULT	partanalyzer_definitions.h	97;"	d
 Charr	partanalyzer_definitions.h	/^class Charr{$/;"	c
 DEBUG	partanalyzer.h	/^bool 	DEBUG=false;$/;"	v
 END	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	e	enum:flagheader
@@ -59,7 +60,8 @@ Partition	Partition.cc	/^Partition::Partition(){$/;"	f	class:Partition
 Partition	Partition.cc	/^Partition::Partition(char* file, partFileFormat iformat, int ofs){\/\/Defaults: iformat=partFmtPART, ofs=2$/;"	f	class:Partition
 Partition	Partition.cc	/^Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* tabf){\/\/Defaults: partf=NULL, tabf=NULL$/;"	f	class:Partition
 Partition	Partition.h	/^class Partition$/;"	c
-PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=2,int clstat_normalization_ofs=0){$/;"	f	class:PartitionStats
+PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Charr > fnames, char* mcltabf, double extensivity){$/;"	f	class:PartitionStats
+PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs,int clstat_normalization_ofs, char* mcltabfile){$/;"	f	class:PartitionStats
 PartitionStats	PartitionStats.h	/^class PartitionStats$/;"	c
 QUIET	partanalyzer.h	/^bool    QUIET=false;$/;"	v
 REDMxVal	partanalyzer_definitions.h	/^enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;$/;"	g
@@ -85,7 +87,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.6.0.2";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.6.1.0";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -133,6 +135,7 @@ _f_intra_thr	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_thres
 _first_residue_number_gauge	Sequence.h	/^	int _first_residue_number_gauge;$/;"	m	class:Sequence
 _fnamel	PartitionStats.h	/^	vector<Charr > _fnamel;$/;"	m	class:PartitionStats
 _ftab	Partition.h	/^	map<string, string> _ftab; \/\/\/Key is first column of tabfile and value is second column$/;"	m	class:Partition
+_fullConstructor	PartitionStats.cc	/^void PartitionStats::_fullConstructor(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs,int clstat_normalization_ofs, char* mcltabfile){$/;"	f	class:PartitionStats
 _getIndexOfItem	MatrixOfValues.cc	/^int MatrixOfValues::_getIndexOfItem(string str){$/;"	f	class:MatrixOfValues
 _getPIDNormalization	Sequence.cc	/^double Sequence::_getPIDNormalization(Sequence* Seq, int& starts, int& ends){$/;"	f	class:Sequence
 _graph	MatrixOfValues.h	/^	graph  _graph;$/;"	m	class:MatrixOfValues
@@ -258,7 +261,7 @@ getItems	Partition.cc	/^sset Partition::getItems()$/;"	f	class:Partition
 getItems	Partition.cc	/^sset Partition::getItems(cluster* cl)$/;"	f	class:Partition
 getName	MultipleSeqAlign.h	/^	string getName(){ return _name;}$/;"	f	class:MultipleSeqAlign
 getNumberOfSeq	MultipleSeqAlign.h	/^	int getNumberOfSeq(){ return _Seqlist.size();}$/;"	f	class:MultipleSeqAlign
-getPartInputFormat	Partition.h	/^	partFileFormat getPartInputFormat(partFileFormat iformat){ return _piformat;}$/;"	f	class:Partition
+getPartInputFormat	Partition.h	/^	partFileFormat getPartInputFormat(){ return _piformat;}$/;"	f	class:Partition
 getPartition	MultipleSeqAlign.cc	/^Partition MultipleSeqAlign::getPartition(char* msaf,MSAformat fmt){$/;"	f	class:MultipleSeqAlign
 getPurity	PartitionStats.cc	/^void PartitionStats::getPurity(){$/;"	f	class:PartitionStats
 getPurityRef	PartitionStats.cc	/^void PartitionStats::getPurityRef(){$/;"	f	class:PartitionStats

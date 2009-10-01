@@ -69,13 +69,16 @@ class PartitionStats
 	double _pmetric(Partition& p1, Partition& p2, const double f);
 	double _pmetric(Partition& p1, Partition& p2, pmetricv metric);
 	double _f(Partition& p, pmetricv metric);
+	void _fullConstructor(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=CLUSTEROFFSET_DEFAULT, int clstat_normalization_ofs=0, char* mcltabfile=NULL);
 	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false);
 	void distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF=false);
 public:
 	BellNumber BellN;
 	PartitionStats();
-	///Instantiates a PartitionStats out of a list of filenames, a common file input format, a common cluster-offset value and a common normalization factor gauge (default=0).
-	PartitionStats(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs, int clstat_normalization_ofs);
+	///Instantiates a PartitionStats out of a list of filenames, a common file input format, a float parameter, a common cluster-offset value and a common normalization factor gauge (default=0).
+	PartitionStats(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=CLUSTEROFFSET_DEFAULT, int clstat_normalization_ofs=0, char* mcltabfile=NULL);
+	///Instantiates a PartitionStats out of a list of filenames, a common file tabfile, and a float parameter used for non-standard entropies
+	PartitionStats(vector<Charr > fnames, char* mcltabfile=NULL, double extensivity=EXTENSIVITY_DEFAULT);
 	///Checks if each of the provided partitions is a sound partition, i.e., if all clusters are pair-wise disjoint.
 	int arePartitions();
 	///Builds the cover _cover of the underlying set of elements out of the list of partitions.

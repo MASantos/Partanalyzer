@@ -612,6 +612,7 @@ void Partition::swapLabels(char* mcltabf){
 		cout<<"#WARNING: Couldn't translate items labels. NO tab file defined."<<endl;
 		return ;
 	}
+	if(DEBUG)cout<<"#Performing labels swapping..."<<endl;
 	smat nclusters;
 	smat* cls=&clusters;
 	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
@@ -639,7 +640,8 @@ void Partition::swapLabels(char* mcltabf){
 		nclusters.push_back(nits);
 	}
 	//if(!QUIET)cout<<"#Items translated according to tabfile. Previous Last item= "<<*((clusters.rbegin())->rbegin())<<endl;
-	clusters=nclusters;
+	clusters.clear();
+	clusters.assign(nclusters.begin(),nclusters.end());
 	_resetMembers();
 	if(!QUIET)cout<<"#Items translated according to tabfile. New Last item= "<<*((clusters.rbegin())->rbegin())<<endl;
 }
@@ -910,6 +912,7 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 	switch(format){
 		case partFmtMCL:
 			{
+				if(!QUIET)cout<<"#Partition output format: MCL"<<endl;
 				if(!QUIET)cout<<"#BeginMCLPartitionMatrix"<<endl;
 				ostringstream oss;
 				cout<<"(mclheader\nmcltype matrix\ndimensions "<<n_items()<<"x"<<n_clusters()<<"\n)"<<endl;
@@ -922,25 +925,33 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 							for(map<int,string>::iterator iter=_mcltab.begin();iter!=_mcltab.end();iter++)
 								if((*iter).second.compare(clusters[i][j])==0)cout<<(*iter).first<<" ";
 						}else{
-							cout<<it<<" ";
-							oss<<it<<"\t"<<clusters[i][j]<<endl; //If mcltab file was not declared, built one ad-hoc
+							if(_piformat==format){ //No need for translation: Output format==native one
+								cout<<clusters[i][j]<<" ";
+							}else{
+								cout<<it<<" ";
+								oss<<it<<"\t"<<clusters[i][j]<<endl; //If mcltab file was not declared, built one ad-hoc
+							}
 						}
 					cout<<"$"<<endl;
 				}
 				cout<<")"<<endl;
 				if(!QUIET)cout<<"#EndMCLPartitionMatrix"<<endl;
 				//if(_mcltabf!=NULL ){
+				if(_piformat!=format){ //Otherwise, we don't need it, as no translationg took place.
 					if(!QUIET)cout<<"#BeginMCLTabfile"<<endl;
 					cout<<"#Tab file of partition "<<(FileName()==NULL?"":FileName())<<endl;
 					cout<<oss.str();
 					oss.flush();
 					if(!QUIET)cout<<"#EndMCLTabfile"<<endl;
+				}
 				//}
 				break;
 			}
 		case partFmtFREE:
+			if(!QUIET)cout<<"#Partition output format: FREE"<<endl;
 			ofs=_items_offset;
 		case partFmtPART:
+			if(!QUIET&&format==partFmtPART)cout<<"#Partition output format: PART"<<endl;
 		default:
 			if(!QUIET)cout<<"#Clusters: "<<clusters.size()<<endl;
 			for(int i=0;i<clusters.size();i++){
@@ -948,10 +959,8 @@ void Partition::printPartition(partFileFormat format, bool SequentialClusterName
 					if(SequentialClusterNames && _items_offset==2){
 						clusters[i][1]=(ClusterPrefix+ToString(i+1));
 					}
-					//cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
-					//if(j<_items_offset||_mcltabf==NULL||_piformat==format){
-					if(j<_items_offset||_mcltabf==NULL){
-						//if(VERBOSE)cout<<"Element "<<j<<" ("<<*((clusters.rbegin())->rbegin())<<") "<<endl;
+					//if(DEBUG)cout<<"("<<i<<","<<j<<")="<<clusters[i][j]<<"\t";
+					if(j<_items_offset||_mcltabf==NULL||_piformat==format){
 						cout<<clusters[i][j]<<"\t";
 					}
 					else if(_mcltabf!=NULL && j>=_items_offset){
