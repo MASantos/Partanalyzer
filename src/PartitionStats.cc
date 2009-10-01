@@ -27,7 +27,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "PartitionStats.h"
 
 PartitionStats::PartitionStats(vector<Charr > fnames, char* mcltabf, double extensivity){
-	cout<<"#Using tabfile "<<mcltabf<<endl;
+	if(!QUIET)cout<<"#Using tabfile "<<mcltabf<<endl;
 	partFileFormat iformat=partFmtPART;
 	int ofs=CLUSTEROFFSET_DEFAULT;
 	int clstat_normalization_ofs=0;
