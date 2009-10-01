@@ -27,7 +27,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "PartitionStats.h"
 
 PartitionStats::PartitionStats(vector<Charr > fnames, char* mcltabf, double extensivity){
-	if(!QUIET)cout<<"#Using tabfile "<<mcltabf<<endl;
+	if(!QUIET)if(mcltabf!=NULL)cout<<"#Using tabfile "<<mcltabf<<endl;
 	partFileFormat iformat=partFmtPART;
 	int ofs=CLUSTEROFFSET_DEFAULT;
 	int clstat_normalization_ofs=0;
@@ -44,14 +44,22 @@ void PartitionStats::_fullConstructor(vector<Charr > fnames, partFileFormat ifor
 	_npart=0;
 	_DIST_SUBSPROJECT=false;
 	_entensivity_degree=extensivity;
+	_fillPartitionList(_fnamel, _partitionl, mcltabfile, iformat, ofs);
+	if(_partitionl.size()<1){
+		cout<<"ERROR: PartitionStats::_fullConstructor : Empty list of parititions : _partitionl.size()="<<_partitionl.size()<<endl;
+		exit(1);
+	}
+}
+
+void PartitionStats::_fillPartitionList(vector<Charr > fnamel, vector<Partition >& partlist, char* mcltabfile, partFileFormat iformat, int ofs){
 	if(VERBOSE){
-		cout<<"#Instantiating each partition ("<<_fnamel.size()<<") ..."<<endl;
-		cout<<"#First partition... "<<fnames[0].car<<"/"<<_fnamel[0].car<<endl;
-		cout<<"#Last partition... "<<_fnamel[_fnamel.size()-1].car<<endl;
+		cout<<"#Instantiating each partition ("<<fnamel.size()<<") ..."<<endl;
+		cout<<"#First partition... "<<fnamel[0].car<<endl;
+		cout<<"#Last partition... "<<fnamel[fnamel.size()-1].car<<endl;
 		//cout<<"#Last partition... "<<fnames[fnames.size()-1].car<<"/"<<_fnamel[_fnamel.size()-1].car<<endl;
 	}
 	
-	for(vector<Charr >::iterator f=_fnamel.begin();f!=_fnamel.end();f++){
+	for(vector<Charr >::iterator f=fnamel.begin();f!=fnamel.end();f++){
 		_npart++;
 		if(!QUIET)cout<<"#Partition "<<_npart<<endl;
 		Partition q=Partition(f->car,iformat,ofs);
@@ -64,16 +72,46 @@ void PartitionStats::_fullConstructor(vector<Charr > fnames, partFileFormat ifor
 				if(DEBUG)q.printPartition();
 			}
 		}
-		_partitionl.push_back(q);
+		//_partitionl.push_back(q);
+		partlist.push_back(q);
 		_hasseNodes[q.n_clusters()].push_back(q);
 	}
-	if(_npart<1||_partitionl.size()<1){
-		cout<<"ERROR: invalid number of partitions "<<_npart<<"<1 : Check value provided for option norm"<<endl;
+	if(_npart<1||partlist.size()<1){
+		cout<<"ERROR: invalid number of partitions "<<_npart<<"||"<<partlist.size()<<"<1 : Check value provided for option norm"<<endl;
 		exit(1);
 	}
 	if(_npart>300&&!QUIET){
 		cout<<"#Finished instantiating all partitions."<<endl;
 		systemDate();
+	}
+}
+
+bool PartitionStats::clear2ndListOfPartitions(){
+	if(has2ndListOfPartitions()){
+		_partitionl2.clear();
+		_fnamel2.clear();
+		return true;
+	}
+	else return false;
+}
+void PartitionStats::defineListOfPartitions(vector<Charr > fnames, char* mcltabfile, partFileFormat iformat, int ofs){
+	vector<Partition > alpartlist=_partitionl2;
+	_fnamel2=fnames;
+	bool secondlist=true;
+	if(_partitionl.size()<1){
+		if(!QUIET)cout<<"#WARNING: Redefining list of input partitions"<<endl;
+		alpartlist=_partitionl;
+		_fnamel2.clear();
+		_fnamel=fnames;
+		secondlist=false;
+		_fillPartitionList(fnames, _partitionl, mcltabfile, iformat, ofs);
+	}else{
+		if(!QUIET)cout<<"#Declaring 2nd list of input partitions"<<endl;
+		_fillPartitionList(fnames, _partitionl2, mcltabfile, iformat, ofs);
+	}
+	if(secondlist&&!has2ndListOfPartitions()){
+		cout<<"ERROR: PartitionStats::defineListOfPartitions : Failed to define 2nd list of partitions : _partitionl2.size()"<<_partitionl2.size()<<endl;
+		exit(1);
 	}
 }
 
@@ -709,16 +747,28 @@ void PartitionStats::distances_Subsprojection(pmetricv metric){
 
 void PartitionStats::distances(pmetricv pm){
 	distancesPrintHeadComment(pm,(flagheader) BEGIN);
-	if(DEBUG)cout<<"#Starting distance calculation among "<<_partitionl.size()<<" partitions"<<endl;
 	if(_partitionl.size()<2){
 		cout<<"ERROR: PartitionStat::distances(pmetricv pm) : _partitionl.size()=0"<<endl;
 		exit(1);
 	}
+	int needtoskipself=1;
+	vector<Partition >* alpartlist;
+	alpartlist=&_partitionl;
+	if(has2ndListOfPartitions()){
+		needtoskipself=0;
+		alpartlist=&_partitionl2;
+		if(!QUIET)cout<<"#Starting distance calculation between "<<_partitionl.size()<<"x"<<alpartlist->size()<<" partitions"<<endl;
+	}
+	else{
+		if(DEBUG)cout<<"#Starting distance calculation among "<<_partitionl.size()<<" partitions"<<endl;
+	}
 	for(int i=0;i<_partitionl.size()-1;i++){
 		Partition pa=_partitionl[i];
-		for(int j=i+1;j<_partitionl.size();j++){
+		//for(int j=i+1;j<_partitionl.size();j++){
+		for(int j=i+needtoskipself;j<alpartlist->size();j++){
 			if(_DIST_SUBSPROJECT) pa=_partitionl[i];
-			Partition pb=_partitionl[j];
+			//Partition pb=_partitionl[j];
+			Partition pb=(*alpartlist)[j];
 			if(DEBUG){
 				cout<<"#Calculating distances betweem pa="<<pa.FileName()<<" and pb="<<pb.FileName()<<endl;
 				cout<<"#Calculating intersection pa^pb... "<<endl;

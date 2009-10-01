@@ -87,7 +87,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.6.1.0";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.6.5";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -132,8 +132,10 @@ _cover	PartitionStats.h	/^	map<string,sNeighborhood> _cover;$/;"	m	class:Partiti
 _entensivity_degree	PartitionStats.h	/^	double _entensivity_degree;$/;"	m	class:PartitionStats
 _f	PartitionStats.cc	/^double PartitionStats::_f(Partition& p, pmetricv metric){ \/\/POTENTIAL ASSOCIATED WITH A PARTITION.$/;"	f	class:PartitionStats
 _f_intra_thr	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
+_fillPartitionList	PartitionStats.cc	/^void PartitionStats::_fillPartitionList(vector<Charr > fnamel, vector<Partition >& partlist, char* mcltabfile, partFileFormat iformat, int ofs){$/;"	f	class:PartitionStats
 _first_residue_number_gauge	Sequence.h	/^	int _first_residue_number_gauge;$/;"	m	class:Sequence
 _fnamel	PartitionStats.h	/^	vector<Charr > _fnamel;$/;"	m	class:PartitionStats
+_fnamel2	PartitionStats.h	/^	vector<Charr > _fnamel2;$/;"	m	class:PartitionStats
 _ftab	Partition.h	/^	map<string, string> _ftab; \/\/\/Key is first column of tabfile and value is second column$/;"	m	class:Partition
 _fullConstructor	PartitionStats.cc	/^void PartitionStats::_fullConstructor(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs,int clstat_normalization_ofs, char* mcltabfile){$/;"	f	class:PartitionStats
 _getIndexOfItem	MatrixOfValues.cc	/^int MatrixOfValues::_getIndexOfItem(string str){$/;"	f	class:MatrixOfValues
@@ -173,6 +175,7 @@ _pairs	MatrixOfValues.h	/^	smap	_pairs;$/;"	m	class:MatrixOfValues
 _part	Ccop.h	/^	Partition* _part;$/;"	m	class:ccop
 _partitionf	Partition.h	/^	char* _partitionf;$/;"	m	class:Partition
 _partitionl	PartitionStats.h	/^	vector<Partition > _partitionl;$/;"	m	class:PartitionStats
+_partitionl2	PartitionStats.h	/^	vector<Partition > _partitionl2;$/;"	m	class:PartitionStats
 _piformat	Partition.h	/^	partFileFormat _piformat;$/;"	m	class:Partition
 _pmetric	PartitionStats.cc	/^double PartitionStats::_pmetric(Partition& p1, Partition& p2, pmetricv metric){$/;"	f	class:PartitionStats
 _pmetric	PartitionStats.cc	/^long int PartitionStats::_pmetric(Partition& p1, Partition& p2, const int f){$/;"	f	class:PartitionStats
@@ -213,6 +216,7 @@ ccop	Ccop.cc	/^ccop::ccop(MatrixOfValues* MX, Partition* part, double thr){$/;"	
 ccop	Ccop.h	/^class ccop$/;"	c
 checkConsistency	Ccop.cc	/^void ccop::checkConsistency(){$/;"	f	class:ccop
 chrAt	Sequence.cc	/^string Sequence::chrAt(int pos){$/;"	f	class:Sequence
+clear2ndListOfPartitions	PartitionStats.cc	/^bool PartitionStats::clear2ndListOfPartitions(){$/;"	f	class:PartitionStats
 cluster	partanalyzer_definitions.h	/^typedef svect cluster;$/;"	t
 cluster_offset	Partition.h	/^	int cluster_offset(){return _items_offset;}$/;"	f	class:Partition
 clusters	Partition.h	/^	smat clusters;$/;"	m	class:Partition
@@ -223,6 +227,7 @@ containerLargerThan_Offset	partanalyzer_definitions.h	/^struct containerLargerTh
 cosine	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fraction=overlap} ;$/;"	e	enum:splitmethod
 cull	MatrixOfValues.cc	/^void MatrixOfValues::cull(MatrixOfValues* mx2){$/;"	f	class:MatrixOfValues
 cullEdge	MatrixOfValues.cc	/^strpair MatrixOfValues::cullEdge(string a, string b){$/;"	f	class:MatrixOfValues
+defineListOfPartitions	PartitionStats.cc	/^void PartitionStats::defineListOfPartitions(vector<Charr > fnames, char* mcltabfile, partFileFormat iformat, int ofs){$/;"	f	class:PartitionStats
 distances	PartitionStats.cc	/^void PartitionStats::distances(pmetricv pm){$/;"	f	class:PartitionStats
 distancesPrintHeadComment	PartitionStats.cc	/^void PartitionStats::distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF){$/;"	f	class:PartitionStats
 distancesPrintHeadComment	PartitionStats.cc	/^void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF){$/;"	f	class:PartitionStats
@@ -271,6 +276,7 @@ get_Ad	PartitionStats.cc	/^void PartitionStats::get_Ad(){$/;"	f	class:PartitionS
 get_FuzzyConsensusPartition	PartitionStats.cc	/^void  PartitionStats::get_FuzzyConsensusPartition(){$/;"	f	class:PartitionStats
 graph	partanalyzer_definitions.h	/^typedef map<pair<string,string>,edge > graph ;$/;"	t
 greaterThan	partanalyzer_definitions.h	/^struct greaterThan {$/;"	s
+has2ndListOfPartitions	PartitionStats.h	/^	bool has2ndListOfPartitions(){ return (_partitionl2.size()>0);}$/;"	f	class:PartitionStats
 hasaCover	PartitionStats.h	/^	bool hasaCover(){ if(_cover.size()>1)return true; return false ;}$/;"	f	class:PartitionStats
 iPotential	PartitionStats.cc	/^void PartitionStats::iPotential(pmetricv metric=renyi){$/;"	f	class:PartitionStats
 id	Sequence.cc	/^double Sequence::id(Sequence Seq, vector<int >* positions){$/;"	f	class:Sequence

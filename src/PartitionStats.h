@@ -49,6 +49,10 @@ class PartitionStats
 	vector<Charr > _fnamel;
 	///Main member: Vector of (instantiated) Partitions
 	vector<Partition > _partitionl;
+	///2nd List of file that contain paritions: used for comparing two sets of partitions
+	vector<Charr > _fnamel2;
+	///2nd Vector of (instantiated) Partitions: used for comparing two sets of partitions
+	vector<Partition > _partitionl2;
 	///Cover of underlying set: Maps a sNeighborhood to each element
 	map<string,sNeighborhood> _cover;
 	///The consensus partition in raw format (offset=1) order by cluster size from largest to smallest.
@@ -70,6 +74,7 @@ class PartitionStats
 	double _pmetric(Partition& p1, Partition& p2, pmetricv metric);
 	double _f(Partition& p, pmetricv metric);
 	void _fullConstructor(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=CLUSTEROFFSET_DEFAULT, int clstat_normalization_ofs=0, char* mcltabfile=NULL);
+	void _fillPartitionList(vector<Charr > fnames, vector<Partition >& partlist, char* mcltabfile=NULL, partFileFormat iformat=partFmtPART, int ofs=CLUSTEROFFSET_DEFAULT);
 	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false);
 	void distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF=false);
 public:
@@ -79,6 +84,12 @@ public:
 	PartitionStats(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=CLUSTEROFFSET_DEFAULT, int clstat_normalization_ofs=0, char* mcltabfile=NULL);
 	///Instantiates a PartitionStats out of a list of filenames, a common file tabfile, and a float parameter used for non-standard entropies
 	PartitionStats(vector<Charr > fnames, char* mcltabfile=NULL, double extensivity=EXTENSIVITY_DEFAULT);
+	///Declares a second list of input partition files, or the initial one, if it hasn't been declared before
+	void defineListOfPartitions(vector<Charr > fnames, char* mcltabfile=NULL, partFileFormat iformat=partFmtPART, int ofs=CLUSTEROFFSET_DEFAULT);
+	///Erases second list of input partition files
+	bool clear2ndListOfPartitions();
+	///Checks whether a second list of input partitions file has been defined
+	bool has2ndListOfPartitions(){ return (_partitionl2.size()>0);}
 	///Checks if each of the provided partitions is a sound partition, i.e., if all clusters are pair-wise disjoint.
 	int arePartitions();
 	///Builds the cover _cover of the underlying set of elements out of the list of partitions.

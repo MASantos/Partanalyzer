@@ -412,11 +412,15 @@ int main(int argc, char* argv[]) {
 			if(strcmp(*argv,"-f")==0){
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
+				if(!QUIET)cout<<"#Detected input file list"<<endl;
 				readListInputFiles(argv[0],infilenames);
+				argc--;argv++;
 				if(argc>0&&strcmp(*argv,"-f2")==0){
 					if(argc!=2)printCommandLineError();
 					argc--;argv++;
+					if(!QUIET)cout<<"#Detected second input file list"<<endl;
 					readListInputFiles(argv[0],infilenames2);
+					argc--;argv++;
 				}
 			}
 			else
@@ -1146,12 +1150,12 @@ int main(int argc, char* argv[]) {
 		case prgPSSR:
 		case prgPSST:{
 			if(VERBOSE){
-				cout<<"#Reading "<<infilenames.size()<<" partitions: ";
+				cout<<"#Read "<<infilenames.size()<<" partitions: ";
 				for(vector<Charr>::iterator fn=infilenames.begin();fn!=infilenames.end();fn++)
 					cout<<fn->car<<"\t";
 				cout<<endl;
 				if(infilenames2.size()>0){
-					cout<<"#Reading 2nd list of "<<infilenames2.size()<<" partitions: ";
+					cout<<"#Read 2nd list of "<<infilenames2.size()<<" partitions: ";
 					for(vector<Charr>::iterator fn=infilenames2.begin();fn!=infilenames2.end();fn++)
 						cout<<fn->car<<"\t";
 					cout<<endl;
@@ -1159,6 +1163,9 @@ int main(int argc, char* argv[]) {
 			}
 			PartitionStats partstats(infilenames,mcltabfile , extensivity);
 			//PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs,mcltabfile);
+			if(infilenames2.size()>0){
+				partstats.defineListOfPartitions(infilenames2,mcltabfile,piformat);
+			}
 			//pmetricv metric=shannon;
 			switch(analysis){
 				case prgPSSR:

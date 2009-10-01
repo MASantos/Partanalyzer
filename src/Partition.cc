@@ -807,7 +807,7 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 	svect _items;
 	ifstream _is(_partitionf);
         if(!_is){
-                cout<<"Cannot open file "<<string(_partitionf)<<endl;
+                cout<<"ERROR: Partition::_readClusters : Cannot open file "<<string(_partitionf)<<endl;
                 exit(1);
         }
 	nit=0; ///Item-read number
