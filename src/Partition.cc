@@ -119,7 +119,9 @@ void Partition::_resetMembers(){
 	_nclusters=clusters.size();
 	_nitems=_nsingletons=0;
 	_largest_cluster=-1;
-	_it_largest_cluster=clusters.end();
+	_largest_cluster_size=0;
+	_nnontrivial=0;
+	//_it_largest_cluster=clusters.end();
 	sitems.clear();
 	ssingletons.clear();
 	long int mxcls=0;
@@ -127,9 +129,11 @@ void Partition::_resetMembers(){
 	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++ ,mxclidx++){
 		if(cl->size()-_items_offset>mxcls){
 			mxcls=cl->size();
+			_largest_cluster_size=cl->size()-_items_offset;
 			_largest_cluster=mxclidx;
 			_it_largest_cluster=cl;
 		}
+		if(cl->size()-_items_offset>3)_nnontrivial++;
 		if(cl->size()-_items_offset==1) {
 			_nsingletons++; 		//We might assign its value at the end to ssingletons.size(), but this way allows for checking of duplicate singleton clusters, i.e., non-sound partition.
 			ssingletons.insert( (*cl)[_items_offset] );
@@ -151,9 +155,66 @@ Partition::Partition(char* file, partFileFormat iformat, int ofs){//Defaults: if
 //		if(!VERBOSE)cout<<"#WARNING: Partition::Partition : out_of_range index _largest_cluster "<<endl;
 }
 
+Partition::Partition(set<sset* > sclassp, int ofs, char* partf, char* tabf){
+	_partitionf=partf;
+	_mcltabf=tabf;
+	_piformat=partFmtPART;
+	_items_offset=ofs;
+	clusters.clear();
+	long int clnum=0;
+	for(set<sset* >::iterator ps=sclassp.begin();ps!=sclassp.end();ps++){
+		svect cluster;
+		
+		if(_items_offset>0)cluster.push_back(ToString((*ps)->size()) );
+		if(_items_offset>1){
+			clnum++;
+			stringstream ss;
+			ss<<"C"<<clnum;
+			cluster.push_back(ss.str());
+		}
+		for(sset::iterator e=(*ps)->begin();e!=(*ps)->end();e++){
+			cluster.push_back(*e);
+		}
+		clusters.push_back(cluster);
+	}
+	containerLargerThan_Offset<svect> svectComparator;
+	svectComparator.offset=_items_offset;
+	sort(clusters.begin(),clusters.end(),svectComparator);
+	_resetMembers();
+	//TO_DO: These code duplicate that from Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* tabf)
+	//It would be better to avoid that. 
+	if(_nsingletons!=ssingletons.size()){
+		string msgt="ERROR";
+		string msgm=": Partition::Partition(set<sset*>...) : Not a sound Partition : non mutually disjoint singleton clusters";
+		if(FUZZYPARTITION&&!QUIET){
+			msgt="#WARNING";
+			cout<<msgt<<msgm<<endl;
+			cout<<"#"<<ssingletons<<endl;
+		}
+		else{
+			cout<<msgt<<msgm<<endl;
+			cout<<ssingletons<<endl;
+			exit(1);
+		}
+	}
+	getItems(); //Update sitems
+	if(_nitems!=sitems.size() || ! sitems.size()>0){
+		string msgt="ERROR";
+		stringstream ss;
+		ss<<": Partition::Partition(set<sset*>...) : _nitems("<<_nitems<<")!=sitems.size("<<sitems.size()<<")";
+		string msgm=ss.str();
+		if(FUZZYPARTITION&&!QUIET){
+			msgt="#WARNING";
+			cout<<msgt<<msgm<<endl;
+		}
+		else{
+			cout<<msgt<<msgm<<endl;
+			exit(1);
+		}
+	}
+}
+
 Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* tabf){//Defaults: partf=NULL, tabf=NULL
-	//_partitionf=NULL;
-	//_mcltabf=NULL;
 	_partitionf=partf;
 	_mcltabf=tabf;
 	_piformat=partFmtPART;
@@ -797,6 +858,18 @@ bool _isComment(ifstream& _is, string& it, partFileFormat& iformat, int nit, cha
 	}
 }
 
+void Partition::summary(){
+	if(!QUIET||INFO) cout<<"#items= "<<_nitems<<\
+		" clusters= "<<clusters.size()<<\
+		" #singletons= "<<_nsingletons<<\
+		" #pairs= "<<_npairs<<\
+		" \%non-trivial/trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size()<<\
+		" largest-cluster-size= "<<_largest_cluster_size<<\
+		" largest-cluster-index= "<<_largest_cluster<<\
+		endl;
+}
+/*
+*/
 void Partition::_readClusters(){ ///For the time being, we'll assume each cluster has its number of items as the first string, its name as the second and then the items we'll follow:
 	string it;		///That is, e.g, "95 N245 Alx3 Alx4 Cart1 ..." This would require an offset _items_offset=2. However, the lowest offset we expect is 
 	int nit,nitems;	/// _items_offset=1, as at least the first item must be the cluster size. Including the name is optional.
@@ -872,13 +945,17 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 				_it_largest_cluster=clusters.begin(); ///pointer refering to largest cluster
 			}
 	}
+	_largest_cluster_size=maxitems-_items_offset;
 	if(VERBOSE) cout<<"#Finish Reading partition: "<<endl;
+	/*
+	summary();
+	*/
 	if(!QUIET||INFO) cout<<"#items= "<<_nitems<<\
 		" clusters= "<<clusters.size()<<\
 		" #singletons= "<<_nsingletons<<\
 		" #pairs= "<<_npairs<<\
 		" \%non-trivial/trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size()<<\
-		" largest-cluster-size= "<<maxitems-_items_offset<<\
+		" largest-cluster-size= "<<_largest_cluster_size<<\
 		" largest-cluster-index= "<<_largest_cluster<<\
 		" last-cluster-size= "<<_items.size()-_items_offset<<\
 		" Last-item-read= "<<_items[_items.size()-1]<<\
@@ -1018,7 +1095,7 @@ sset Partition::getItems()
 	for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++)
 		for(svect::iterator it=cl->begin()+_items_offset;it!=cl->end();it++)
 			sitems.insert(*it);
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 	cout<<"Partition::getItems : Items partition ";
 	if(FileName()!=NULL)cout<<FileName();
 	cout<<" : "<<endl;

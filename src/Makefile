@@ -35,6 +35,7 @@ LDFLAGS =
 #CPPFLAGS="-DDEBUG"
 BIN = partanalyzer
 SRC = \
+	Statistics.cc \
 	Roulette.cc \
 	BellNumber.cc \
 	Sequence.cc \
@@ -44,10 +45,12 @@ SRC = \
 	PartitionStats.cc \
 	MatrixOfValues.cc \
 	Ccop.cc \
+	RobustDivisiveClustering.cc \
 	partanalyzer_help.cc \
 	partanalyzer.cc 
 
 OBJ = \
+	Statistics.o \
 	Roulette.o \
 	BellNumber.o \
 	Sequence.o \
@@ -57,10 +60,12 @@ OBJ = \
 	PartitionStats.o \
 	MatrixOfValues.o \
 	Ccop.o \
+	RobustDivisiveClustering.o \
 	partanalyzer_help.o \
 	partanalyzer.o 
 
 HEADERS = \
+	Statistics.h \
 	Roulette.h \
  	BellNumber.h \
 	Sequence.h \
@@ -70,6 +75,7 @@ HEADERS = \
 	PartitionStats.h \
 	MatrixOfValues.h \
 	Ccop.h \
+	RobustDivisiveClustering.h \
 	partanalyzer_help.h \
 	partanalyzer_includes.h \
 	partanalyzer_definitions.h \

@@ -26,6 +26,37 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "PartitionStats.h"
 
+PartitionStats::PartitionStats(){
+	_resetPartitionMembers();
+}
+
+void PartitionStats::_resetPartitionMembers(){
+	_partitionl.clear();
+	_partitionl2.clear();
+	_fnamel.clear();
+	_fnamel2.clear();
+	_cover.clear();
+	_consPart.clear();
+	_hasseNodes.clear();
+	_Ad.clear();
+	_npart=0;
+	_clsnofs=CLUSTEROFFSET_DEFAULT;
+	_extensivity_degree=EXTENSIVITY_DEFAULT;
+	SETUPCONSENSUSP=false;
+	_DIST_SUBSPROJECT=false;
+}
+
+PartitionStats::PartitionStats(vector<Partition >& vpart, double extensivity){
+	_resetPartitionMembers();
+	_extensivity_degree=extensivity;
+	_partitionl=vpart;
+	_npart=_partitionl.size();
+	if(_partitionl.size()<1){
+		cout<<"ERROR: PartitionStats:::PartitionStats(set<Partition*>...) : Empty list of partitions : _partitionl.size()="<<_partitionl.size()<<endl;
+		exit(1);
+	}
+	
+}
 PartitionStats::PartitionStats(vector<Charr > fnames, char* mcltabf, double extensivity){
 	if(!QUIET)if(mcltabf!=NULL)cout<<"#Using tabfile "<<mcltabf<<endl;
 	partFileFormat iformat=partFmtPART;
@@ -43,7 +74,7 @@ void PartitionStats::_fullConstructor(vector<Charr > fnames, partFileFormat ifor
 	_fnamel=fnames;
 	_npart=0;
 	_DIST_SUBSPROJECT=false;
-	_entensivity_degree=extensivity;
+	_extensivity_degree=extensivity;
 	_fillPartitionList(_fnamel, _partitionl, mcltabfile, iformat, ofs);
 	if(_partitionl.size()<1){
 		cout<<"ERROR: PartitionStats::_fullConstructor : Empty list of parititions : _partitionl.size()="<<_partitionl.size()<<endl;
@@ -145,19 +176,19 @@ double PartitionStats::_f(Partition& p, pmetricv metric){ //POTENTIAL ASSOCIATED
 				f=card(p);
 				break;
 		case tsallis:	
-				if(_entensivity_degree==EXTENSIVITY_DEFAULT)
+				if(_extensivity_degree==EXTENSIVITY_DEFAULT)
 					f=TS(p);
 				else
-					f=TS(p,_entensivity_degree);
+					f=TS(p,_extensivity_degree);
 				break;
 		case renyi:
-				if(_entensivity_degree==EXTENSIVITY_DEFAULT)
+				if(_extensivity_degree==EXTENSIVITY_DEFAULT)
 					f=RS(p);
 				else
-					f=RS(p,_entensivity_degree);
+					f=RS(p,_extensivity_degree);
 				break;
 		case jeffreyQnorm:
-				f=JQnorm(p,_entensivity_degree);
+				f=JQnorm(p,_extensivity_degree);
 				break;
 		default:
 				cout<<"ERROR: PartitionStats::_f : unknown metric."<<endl;
@@ -565,13 +596,13 @@ void PartitionStats::distancesPrintHeadComment(pmeasure measure, pmetricv metric
 			ss<<"Boltzman";
 			break;
 		case tsallis:
-			ss<<"Tsallis extensivity= "<<_entensivity_degree;
+			ss<<"Tsallis extensivity= "<<_extensivity_degree;
 			break;
 		case renyi:
-			ss<<"RenyiDistances extensivity= "<<_entensivity_degree;
+			ss<<"RenyiDistances extensivity= "<<_extensivity_degree;
 			break;
 		case jeffreyQnorm:
-			ss<<"TarantolaJQNDistances extensivity= "<<_entensivity_degree;
+			ss<<"TarantolaJQNDistances extensivity= "<<_extensivity_degree;
 			break;
 	}
 	entropy=ss.str();
@@ -667,13 +698,13 @@ void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, b
 			cout<<"#"<<prefix<<"BoltzmannDistances"<<endl;
 			break;
 		case tsallis:
-			cout<<"#"<<prefix<<"TsallisDistances q= "<<_entensivity_degree<<endl;
+			cout<<"#"<<prefix<<"TsallisDistances q= "<<_extensivity_degree<<endl;
 			break;
 		case renyi:
-			cout<<"#"<<prefix<<"RenyiDistances q= "<<_entensivity_degree<<endl;
+			cout<<"#"<<prefix<<"RenyiDistances q= "<<_extensivity_degree<<endl;
 			break;
 		case jeffreyQnorm:
-			cout<<"#"<<prefix<<"TarantolaJQNDistances q= "<<_entensivity_degree<<endl;
+			cout<<"#"<<prefix<<"TarantolaJQNDistances q= "<<_extensivity_degree<<endl;
 			break;
 	}
 	if(hd==BEGIN&&!usingREF)cout<<"#Partition(target)\tPartition(ref)\tDist. target-intersection\tDist. ref-intersection\tDist. target-ref"<<endl;
@@ -808,6 +839,61 @@ void PartitionStats::distances(pmetricv pm){
 	}	
 	distancesPrintHeadComment(pm,(flagheader) END);
 	_DIST_SUBSPROJECT=false;
+}
+
+//vector<double > PartitionStats::distancesDistribution(pmetricv pm){
+Sampling PartitionStats::distancesDistribution(pmetricv pm, int refpart){
+	if(_partitionl.size()<2){
+		cout<<"ERROR: PartitionStat::distancesDistribution(pmetricv pm) : _partitionl.size()=0"<<endl;
+		exit(1);
+	}
+	if(_partitionl.size()<=refpart){
+		cout<<"ERROR: PartitionStat::distancesDistribution(pmetricv pm) : Out of bound index for reference partition refpart="<<refpart<<endl;
+		exit(1);
+	}
+	if(!QUIET)if(refpart<0)cout<<"#PartitionStatsDistanceDistribution: All-against-All"<<endl;
+	double avg;
+	double std;
+	double stder;
+	double var;
+	double min=numeric_limits<double>::max(); //We'll store here the mininum value found. Thus, set it up initially at MAX possible value.
+	double max=numeric_limits<double>::min(); //We'll store here the maximum value found. Thus, set it up initially at MIN possible value.
+	double np=0.0; //Normalization: number of distances calculated
+	double v=0.0;
+	double vv=0.0;
+	double x;
+	int all=(refpart<0)?1:0;
+	for(int i=0;i<_partitionl.size()-all;i++){
+		if(refpart<0){
+			for(int j=i+1;j<_partitionl.size();j++){
+				x=_pmetric(_partitionl[i],_partitionl[j],pm);
+				min=(x<min)?x:min;
+				max=(x>max)?x:max;
+				v+=x; vv+=pow(x,2);
+				np++;
+			}
+		}else if(i!=refpart){
+				x=_pmetric(_partitionl[i],_partitionl[refpart],pm);
+				min=(x<min)?x:min;
+				max=(x>max)?x:max;
+				v+=x; vv+=pow(x,2);
+				np++;
+				if(VERBOSE)cout<<"#("<<i<<"<->"<<refpart<<"):  d="<<x<<" v="<<v<<" vv="<<vv<<" np="<<np<<endl;
+		}
+	}
+	avg=v/np; var=vv/np-pow(avg,2) ; std=sqrt(var) ; std*=sqrt(np/(np-1.0));
+	stder=std/sqrt(np);
+	//
+	//vector<double > vstats;
+	Sampling stats;
+	stats.mean(avg); //1 : Average
+	stats.standard_deviation(std); //2 : Standard deviation
+	stats.mean_error(stder);//3: Mean error
+	stats.variance(var); //4 : Variance
+	stats.minimum_value(min); //5 : Minimum
+	stats.maximum_value(max); //6 : Maximum
+	stats.sample_size(np);  //7 : Sample size
+	return stats;
 }
 
 void PartitionStats::getSplitsRef(splitmethod similarity=overlap){

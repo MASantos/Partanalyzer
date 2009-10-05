@@ -19,13 +19,14 @@
 Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
-#include "partanalyzer_includes.h"
-#include "partanalyzer_definitions.h"
 
 #ifndef _CLASS_MATRIXOFVALUES_H
 #define _CLASS_MATRIXOFVALUES_H 1
 
+#include "partanalyzer_includes.h"
+#include "partanalyzer_definitions.h"
 #include "Partition.h"
+#include "Statistics.h"
 
 
 /**Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .
@@ -38,7 +39,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 class MatrixOfValues
 {
 	char* _mxofvf;
-	ifstream _is;
+	//ifstream _is;
 	svect _items;
 	smap	_pairs;
 	graph  _graph;
@@ -48,10 +49,30 @@ class MatrixOfValues
 	edge _Tweight;
 	int _getIndexOfItem(string str);
 public:
+	///Default Constructor
 	MatrixOfValues();
+	///Constructor based on a file
 	MatrixOfValues(char* file);
+	///Constructor based on a graph
+	MatrixOfValues(graph Graph);
+	///Copy-constructor
+	MatrixOfValues(const MatrixOfValues& MOV);
+	///Prunes all edges with weight < threshold	
+	MatrixOfValues pruneEdgesBelow(float edgethreshold, bool terse=true);
+	///Prunes all edges with weight > threshold	
+	MatrixOfValues pruneEdgesAbove(float edgethreshold, bool terse=true);
+	///Prunes all edges with weight < threshold if flag is true; > threshold otherwise
+	MatrixOfValues pruneEdges(float edgethreshold, bool below=true, bool terse=true);
+	///Cluster graph
+	Partition cluster();
+	//Class assignment operator
+	//MatrixOfValues operator=(MatrixOfValues& MOV);
+	///Reset private members based on interal _graph
+	void reset();
+	///Get underlying graph
+	graph getGraph() const { return _graph;}
 	///Get File name
-	char* FileName(){return _mxofvf ;}
+	char* FileName() const {return _mxofvf ;}
 	///Read matrix of values from file
 	void readMxValues();
 	///Print matrix of values to standard output
@@ -84,6 +105,8 @@ public:
 	///For each node, print distribution of edge weights. Add information of cluster size and name
 	void edgeDistribution(const string& sa, int clusterSize=-1, string clusterName="NAN" );
 	void edgeDistribution(Partition* pt=NULL);
+	///Get Median, mean, std, var, min and max of all edges
+	Sampling edgeDistributionStats();
 };
 
 #endif //END _CLASS_MATRIXOFVALUES_H

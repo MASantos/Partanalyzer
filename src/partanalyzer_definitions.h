@@ -66,7 +66,8 @@ typedef vector< svect > smat;
 typedef multiset< string > smset;
 typedef set< string > sset;
 typedef multimap<string,string > smap;
-typedef map<pair<string,string>,edge > graph ;
+typedef string node;
+typedef map<pair<node,node>,edge > graph ;
 typedef pair<string,string> strpair;
 typedef pair<string, pair<sset,double> > neighborhood ;
 typedef map<string, pair<sset,double> > scover ;
@@ -90,6 +91,7 @@ inline string ToString(const T& x){
 #define EXTENSIVITY_DEFAULT_TSALLIS 2.0
 #define EXTENSIVITY_DEFAULT_RENYI 2.0
 #define EXTENSIVITY_MAX 100.0
+#define RDC_DEFAULT_TOP_BEST_PARTITIONS 10
 #define _PGM_P2_GRAYSCALE_ 256
 ///MSA default format 
 #define MSADEFAULTFMT FASTA
@@ -114,6 +116,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgTDST,prgTDSR,
 	prgRDST,prgRDSR,
 	prgJDST,prgJDSR,
+	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,
 	prgINTE,
 	prgMGMX,prgMMXC, 
 	prgCLST,
@@ -125,8 +128,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,
 	prgADST,prgASFP,
 	prgSPST,prgSPSS,prgSPSO,
-	prgCEMX,
-	prgEDMX,prgEDMP
+	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB
 } ;
 ///MSA formats: When using --msa-map-partition, both FASTA3 and GDE3 will only output subfamilies with 3 or more sequences.
 enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;
@@ -167,6 +169,40 @@ struct containerLargerThan_Offset {
 		if(equalSize)condition=*(ca.begin()+offset) < *(cb.begin()+offset);
 		return condition;
         }
+};
+
+/**Defines a general operator for beloging (\in) to a set: i.e., does an arbitary element e 
+belong to set S? It is assumed that S contains elements of type type(e)=E.
+We want to used it as
+e < S
+Here, we pass the set S by value. Thus we are using a local copy than we can
+modify without modifying the original one. We don't need, therefore, to 
+remove the element e in case in wasn't there before.
+*/
+template <class E>
+bool operator<(E& e, set<E > S){ 
+	long int osize=S.size();
+	S.insert(e);
+	return (S.size()==osize);
+};
+	
+/**Algebra of string sets
+*/
+///returns a new set containing the union of sa & sb
+template < class E>
+set<E > operator+(set<E>& sa, set<E>& sb){
+	set<E > suab;
+	for(typename set<E>::iterator e=sa.begin();e!=sa.end(); e++)
+		suab.insert(*e);
+	for(typename set<E>::iterator e=sb.begin();e!=sb.end(); e++)
+		suab.insert(*e);
+	return suab;
+};
+
+///sa+=sb, modifies sa by appending to it sb
+template <class E>
+set<E>& operator+=(set<E>& sa, set<E>& sb){
+	return (sa=(sa+sb));
 };
 
 /* TESTING CUSTOM GRAPH CLASS */

@@ -25,6 +25,232 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "MatrixOfValues.h"
 
+MatrixOfValues::MatrixOfValues(){
+	_mxofvf=NULL;
+	_items.clear();
+	_pairs.clear();
+	_graph.clear();
+	_mx.clear();
+	_nedges=0;
+	_nitems=0;
+	_Tweight=-696969;
+}
+
+MatrixOfValues::MatrixOfValues(char* file){
+	_mxofvf=file;
+	readMxValues();
+}
+
+MatrixOfValues::MatrixOfValues(graph Graph){
+	_graph=Graph;
+	reset();
+}
+
+MatrixOfValues::MatrixOfValues(const MatrixOfValues& MOV){
+	_graph=MOV.getGraph();
+	reset();
+	_mxofvf=MOV.FileName();
+	//_mxofvf=NULL;
+}
+
+/*
+MatrixOfValues MatrixOfValues::operator=(MatrixOfValues& MOV){
+	_graph=MOV.getGraph();
+	reset();
+	_mxofvf=MOV.FileName();
+}
+*/
+
+void MatrixOfValues::reset(){
+	_nedges=_graph.size();
+	sset items;
+	long int oitemssize=0;
+	_Tweight=0;
+	_pairs.clear();
+	_items.clear();
+	_mx.clear();
+	_nedges=0;
+	for(graph::iterator g=_graph.begin();g!=_graph.end();g++){
+		_nedges++;
+		edge e=g->second; 
+		_Tweight+=e;
+		_mx.push_back(e);
+		node pa=(g->first).first;
+		node pb=(g->first).second;
+		items.insert(pa);
+		if(items.size()>oitemssize){
+			_items.push_back(pa);
+			oitemssize=items.size();
+		}
+		items.insert(pb);
+		if(items.size()>oitemssize){
+			_items.push_back(pb);
+			oitemssize=items.size();
+		}
+		_pairs.insert(pair<string,string> (pa,pb) );
+	}
+	_nitems=items.size();
+	if(_nitems!=_items.size()){
+		cout<<"ERROR: MatrixOfValues::reset() : _nitems!=_items.size()"<<endl;
+		exit(1);
+	}
+}
+
+MatrixOfValues MatrixOfValues::pruneEdgesBelow(float edgethreshold, bool terse){
+	return pruneEdges(edgethreshold, true, terse);
+}
+MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, bool terse){
+	return pruneEdges(edgethreshold, false, terse);
+}
+MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, bool below, bool terse){
+	if(terse&&!QUIET){
+		string s=below?"below":"above";
+		cout<<"#Pruning edges "<<s<<" "<<edgethreshold<<endl;
+	}
+	long int ndeledges=0;
+	graph prunedGraph(_graph.begin(),_graph.end());
+	for(graph::iterator e=_graph.begin();e!=_graph.end();e++){
+		if(below){
+			if(e->second<edgethreshold){
+				prunedGraph.erase(e->first);
+				ndeledges++;
+			}
+		}
+		else if(e->second>=edgethreshold){
+				prunedGraph.erase(e->first);
+				ndeledges++;
+			}
+	}
+	if(DEBUG)cout<<"#Edges deleted= "<<ndeledges<<endl;
+	return MatrixOfValues(prunedGraph);
+}
+
+Partition MatrixOfValues::cluster(){
+	map<node, sset* > canonicalMapping;
+	set<node > coset;
+	if(DEBUG)cout<<"#Clustering graph\n#First generate the clusters as ssets (=set<node>)"<<endl;
+	///First generate the clusters as ssets (=set<node>)
+	for(graph::iterator e=_graph.begin();e!=_graph.end();e++){
+		///For each pairs of nodes A and
+		node A=(e->first).first;
+		///B
+		node B=(e->first).second;
+		if(DEBUG)cout<<"#Found edge (A="<<A<<" , B="<<B<<")= "<<(e->second)<<endl;
+		if(!(A<coset)){
+		/**If A hasn't been already assigned to a class, then
+			if B wasn't assigned either
+			*/
+			if(!(B<coset)){
+				///Allocate memory for a new class (A's)
+				sset* sptr = new sset ;
+				///Equivalence class of A gets its inaugural (& representative) member A
+				sptr->insert(A);
+				///and B is in the same class as A
+				sptr->insert(B);
+				if(DEBUG)cout<<"#First time seing A and B: Both assigned to the same cluster: "<<*sptr<<endl;
+				///Store each member's pointer, which point 
+				canonicalMapping.insert(pair<node, sset*> (A,sptr));
+				///to that same class
+				canonicalMapping.insert(pair<node, sset*> (B,sptr));
+				///Update the list of assigned clusters
+				coset.insert(A);
+				coset.insert(B);
+			}
+			///else, if B had already been assigned to a class
+			else{
+				///retrieve B's class pointer
+				set<node >* bptr=canonicalMapping[B];
+				///and insert A in the same class as B 
+				bptr->insert(A);
+				if(DEBUG)cout<<"#First time seing A : assigned to the same cluster as B: "<<*bptr<<endl;
+				///Store A's class pointer (pointing to A's class) as the same pointer B has
+				canonicalMapping.insert(pair<node, sset*> (A,bptr));
+				///Update the list of assigned clusters
+				coset.insert(A);
+			}
+		}else{
+		/**However, if A was already assigned to a class, then
+			if B was not,
+			*/
+			if(!(B<coset)){
+				///retrieve A's class pointer
+				set<node >* aptr=canonicalMapping[A];
+				///and insert B in the same class as A 
+				aptr->insert(B);
+				if(DEBUG)cout<<"#First time seing B : assigned to the same cluster as A: "<<*aptr<<endl;
+				///Store B's class pointer (pointing to B's class) as the same pointer A has
+				canonicalMapping.insert(pair<node, sset*> (B,aptr));
+				///Update the list of assigned clusters
+				coset.insert(B);
+			}
+			/**else, if B had also been already assigned to a class
+			we need to merge both clusters (A's and B's)
+			*/ 
+			else{
+				///retrieve A's class pointer
+				set<node >* aptr=canonicalMapping[A];
+				///retrieve B's class pointer
+				set<node >* bptr=canonicalMapping[B];
+				///There shouldn't be any duplicate edge, but just in case, let's not waste resources
+				if(aptr==bptr){
+					if(DEBUG)cout<<"#A and B belong to the same class. Nothing to do."<<endl;
+					continue;
+				}else{
+					if(DEBUG)cout<<"#A and B were already assigned to, respectively, "<<*aptr<<" and "<<*bptr<<endl;
+				}
+				///merge B into A
+				(*aptr)+=(*bptr);
+				if(DEBUG)cout<<"#Merging them now into A's cluster : "<<*aptr<<endl;
+				///Store B's class pointer (pointing to B's class) as the same pointer A has
+				canonicalMapping.insert(pair<node, sset*> (B,aptr));
+			}
+			
+		}
+	}
+	///Then generate a set of unique sset* pointers. Each point to one of the distinct classes (clusters) defined earlier.
+	set<sset* > sclassp;
+	for(map<node, sset*>::iterator cm=canonicalMapping.begin();cm!=canonicalMapping.end();cm++){
+		sclassp.insert(cm->second);
+	}
+	int offset=2;
+	char* partf=NULL;
+	char* tabf=NULL;
+	///Finally, generate the (fully-sorted) partition and return it as a value
+	return Partition(sclassp,offset,partf,tabf);
+}
+
+Sampling MatrixOfValues::edgeDistributionStats(){
+	double avg=0;
+	double var=0;
+	double std=0;
+	double stder=0;
+	double min=numeric_limits<double>::max();
+	double max=numeric_limits<double>::min();
+	double v=0;
+	double vv=0;
+	double x;
+	for(graph::iterator g=_graph.begin();g!=_graph.end();g++){
+		x=g->second;
+		v+=x;
+		vv+=(g->second)*(g->second);
+		min=(x<min)?x:min;
+		max=(x>max)?x:max;
+	}
+	avg=v/_nedges;
+	var=vv/_nedges-pow(avg,2); std=sqrt(var); std*=sqrt(_nedges*1.0/(_nedges-1.0)); //Sample standard deviation
+	//
+	Sampling stats;
+	stder=std/sqrt(1.0*_nedges);
+	stats.median(0.0); //0 : Will become the median later
+	stats.mean(avg); //1 : Average edge
+	stats.standard_deviation(std); //2 : Standard deviation
+	stats.mean_error(stder);//3: Mean error
+	stats.variance(var); //4 : Variance
+	stats.minimum_value(min); //5 : Minimum value
+	stats.maximum_value(max); //6 : Maximum value
+	stats.sample_size((double)_nedges); //sample size
+	return stats;
+}
 void MatrixOfValues::edgeDistribution(Partition* part){
 	sset nodes;
 	cout<<"#BeginEdgeDistribution"<<endl;
@@ -150,11 +376,6 @@ double MatrixOfValues::v(string a , string b, REDMxVal useRED){ //useRED Default
 	exit(1);
 }
 
-MatrixOfValues::MatrixOfValues(char* file){
-	_mxofvf=file;
-	readMxValues();
-}
-
 int MatrixOfValues::_getIndexOfItem(string str){
 	int i;
 	for(i=0;i<_items.size();i++)
@@ -185,7 +406,7 @@ void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a s
 			continue;
 		}
 		_is>>pb ; _is>>v;
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 		cout<<"Seen: "<<pa<<" "<<pb<<" "<<v<<endl;
 #endif
 		if(pa==pb) continue; 

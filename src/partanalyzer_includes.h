@@ -55,6 +55,7 @@ the C++ cstring header
 #include<set>
 #include<list>
 #include<math.h>
+#include<limits>
 #include<time.h>
 ///Creating , reading and removing directories
 #include<dirent.h> ///It's become more or less a standard, although not included in ANSI C(++)

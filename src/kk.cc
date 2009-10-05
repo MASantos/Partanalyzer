@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include <set>
 #include <string>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -13,6 +14,7 @@ string getSubstr(string a){
 	return a;
 }
 
+/*
 template<class T> class kk {
 public:
 	map<int, T> k;
@@ -29,9 +31,47 @@ public:
 	iterator(const map<int, T>& mup):mymap(mup){}
 	
 };
-/*
 */
+
+//bool belongsto(E& e, set<E > S){
+template <class E>
+bool operator<(E& e, set<E > S){
+        long int osize=S.size();
+	S.insert(e);
+        return (S.size()==osize);
+};
+
+///returns a new set containing the union of sa & sb
+template < class E>
+set<E> operator+(set<E>& sa, set<E>& sb){
+        set<E > suab;
+        for(typename set<E>::iterator e=sa.begin();e!=sa.end(); e++)
+                suab.insert(*e);
+        for(typename set<E>::iterator e=sb.begin();e!=sb.end(); e++)
+                suab.insert(*e);
+        return suab;
+};              
+
+///sa+=sb, modifies sa by appending to it sb
+template <class E>
+set<E>& operator+=(set<E>& sa, set<E>& sb){
+        return (sa=(sa+sb));
+};
+
 int main(){
+	int intarray[] = {1,2,3};
+	set<int > s(intarray,intarray+3);
+	int ia=4;
+	cout<<"set s has "<<s.size()<<" members"<<endl;
+	//if(!belongsto(ia,s))cout<<ia<<" does not belong to s"<<endl;
+	if(!(ia<s))cout<<ia<<" does not belong to s"<<endl;
+	else cout<<ia<<" belongs to s"<<endl;
+	cout<<"set s has "<<s.size()<<" members"<<endl;
+	int intarray2[] = {4,5};
+	set<int > s2(intarray2,intarray2+2);
+	cout<<"set s2 has "<<s2.size()<<" members"<<endl;
+	set<int > ss=s+s2;
+	cout<<"set s+s2 has "<<ss.size()<<" members"<<endl;
 	/*
 	map<string , double > mymap;
 	mymap.insert(pair<string,double> ("a",0.988));

@@ -45,10 +45,11 @@ g++ -o partanalyzer partanalyzer.cc
 #include "PartitionStats.h"
 #include "MatrixOfValues.h"
 #include "Ccop.h"
+#include "RobustDivisiveClustering.h"
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.6.5";
+const char* VERSION="alpha 0.7";
 
 bool 	DEBUG=false;
 

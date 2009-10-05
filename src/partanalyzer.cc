@@ -59,6 +59,7 @@ int main(int argc, char* argv[]) {
 	double extensivity=EXTENSIVITY_DEFAULT;
         double threshold=-1; //Default threshold
         double Id_threshold=50.0; //Default Seq. Id threshold
+        double graph_pruning_thr; //Threshold for pruning graph edges
 	int cluster1_offset=2; //Default cluster offset
 	int cluster2_offset=cluster1_offset;
 	int clstat_normalization_ofs=0;
@@ -217,49 +218,9 @@ int main(int argc, char* argv[]) {
 				if(!QUIET)cout<<"#Partition type: Fuzzy"<<endl;
 			}
 		}
-///(For editing partitions)
-		if (strcmp(*argv,"--part-swap-names")==0||strcmp(*argv,"--part-swap-labels")==0){
-			analysis=prgPACN;
-			if(!MCLTABF)printCommandLineError("Use option --tab tabfile before command to specify mapping for new names");
-			if(argc<2)printCommandLineError("Missing partition");
-			argc--;argv++;
-			partitionf1=argv[0];
-			argc--;argv++;
-		}
-		else if (strcmp(*argv,"--part-sort")==0||strcmp(*argv,"--part-sort-rename")==0){
-			analysis=prgPASO;
-			if(strcmp(*argv,"--part-sort-rename")==0) analysis=prgPASR;
-			if(argc<2)printCommandLineError();
-			argc--;argv++;
-			partitionf1=argv[0];
-			argc--;argv++;
-			if(argc>0 && analysis==prgPASR){
-				ClusterPrefix=argv[0];
-				argc--;argv++;
-			}
-		}
-		else if (strcmp(*argv,"--part-extract-elements")==0||strcmp(*argv,"--extract-elements")==0){
-			analysis=prgPAXE;
-			if(argc<3)printCommandLineError();
-			argc--;argv++;
-			if(!QUIET)cout<<"#Extracting elements from partition"<<endl;
-			readListFromFile(argv[0],namelist);
-			argc--;argv++;
-			if(argc>0&&strcmp(*argv,"-tab")==0){
-				if(argc<2)printCommandLineError();
-				argc--;argv++;
-				//partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
-				mcltabfile=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
-				MCLTABF=true;
-				argc--;argv++;
-			}
-			partitionf1=argv[0];
-			argc--;argv++;
-        		if(argc>0) cluster1_offset=atoi(argv[0]);
-		}
 ///(For analyzing partitions)
 		///Calculate intra-cluster and inter-cluster distribution of weights
-		else if(strcmp(*argv,"-d")==0||strcmp(*argv,"--intra-inter-edge-dist")==0){
+		if(strcmp(*argv,"-d")==0||strcmp(*argv,"--intra-inter-edge-dist")==0){
 			analysis=prgCDIS;
 			if(argc<3)printCommandLineError();
 			mxofval=argv[1];
@@ -596,28 +557,127 @@ int main(int argc, char* argv[]) {
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
 				readListInputFiles(argv[0],infilenames);
-				/*
-				ifstream is(argv[0]);
-				if(!is){
-					cout<<"ERROR: Cannot open file "<<argv[0]<<endl;
-					exit(1);
-				}
-				string fn;
-				Charr f;
-				if(!QUIET)cout<<"#Getting list of partitions from "<<argv[0]<<endl;
-				while(is>>fn){
-					f.car = new char[fn.size()+1];
-					strcpy(f.car,fn.c_str());
-					infilenames.push_back(f);
-				}
-				if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries. First seen "<<infilenames[0].car<<endl;
-				*/
 			}
 			else
 				for(int i=0;i<argc;i++){
 					Charr f={argv[i]};
 					infilenames.push_back( f );
 				}
+		}
+///(For creating partitions)
+		else if(strcmp(*argv,"--cluster-robust")==0||strcmp(*argv,"--robustcluster")==0||strcmp(*argv,"--rc")==0||strcmp(*argv,"--partition")==0){
+			analysis=prgRPAR;
+			if(argc<2)printCommandLineError("Missing graph");
+			argc--;argv++;
+			mxofval=argv[0];
+			argc--;argv++;
+			Nsamples=RDC_DEFAULT_TOP_BEST_PARTITIONS;
+			while(argc>0){
+				//if(strcmp(*argv,"below")==0||strcmp(*argv,"above")==0){
+				if(strcmp(*argv,"-below")==0){
+					analysis=prgRPAB;
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-above")==0){
+					analysis=prgRPAA;
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-s")==0){
+					if(argc<2)printCommandLineError("Missing NumberOfSample");
+					argc--;argv++;
+					Nsamples=atoi(argv[0]);
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-ext")==0){
+					if(argc<2)printCommandLineError("Missing NumberOfSample");
+					argc--;argv++;
+					extensivity=atof(argv[0]);
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-v")==0||strcmp(*argv,"-V")==0){
+					metric==shannon;
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-e")==0||strcmp(*argv,"-E")==0){
+					metric==cardinality;
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-r")==0||strcmp(*argv,"-R")==0){
+					metric==renyi;
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-t")==0||strcmp(*argv,"-T")==0){
+					metric==tsallis;
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-j")==0||strcmp(*argv,"-J")==0){
+					metric==jeffreyQnorm;
+					argc--;argv++;
+				}
+			}
+		}
+		else if(strcmp(*argv,"--cluster")==0){
+			analysis=prgPART;
+			if(argc<2)printCommandLineError("Missing graph");
+			argc--;argv++;
+			if(strcmp(*argv,"below")==0||strcmp(*argv,"bove")==0)printCommandLineError("File name must be first argument");
+			mxofval=argv[0];
+			argc--;argv++;
+			if(argc>0){
+				if(strcmp(*argv,"above")==0){
+					analysis=prgPARA;
+					if(argc<2)printCommandLineError("Missing threshold");
+					argc--;argv++;
+				}else{
+					analysis=prgPARB;
+					if(strcmp(*argv,"below")==0){
+						if(argc<2)printCommandLineError("Missing threshold");
+						argc--;argv++;
+					}
+				}
+				graph_pruning_thr=atof(argv[0]);
+				argc--;argv++;
+			}
+		}
+///(For editing partitions)
+		else if (strcmp(*argv,"--part-swap-names")==0||strcmp(*argv,"--part-swap-labels")==0){
+			analysis=prgPACN;
+			if(!MCLTABF)printCommandLineError("Use option --tab tabfile before command to specify mapping for new names");
+			if(argc<2)printCommandLineError("Missing partition");
+			argc--;argv++;
+			partitionf1=argv[0];
+			argc--;argv++;
+		}
+		else if (strcmp(*argv,"--part-sort")==0||strcmp(*argv,"--part-sort-rename")==0){
+			analysis=prgPASO;
+			if(strcmp(*argv,"--part-sort-rename")==0) analysis=prgPASR;
+			if(argc<2)printCommandLineError();
+			argc--;argv++;
+			partitionf1=argv[0];
+			argc--;argv++;
+			if(argc>0 && analysis==prgPASR){
+				ClusterPrefix=argv[0];
+				argc--;argv++;
+			}
+		}
+		else if (strcmp(*argv,"--part-extract-elements")==0||strcmp(*argv,"--extract-elements")==0){
+			analysis=prgPAXE;
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(!QUIET)cout<<"#Extracting elements from partition"<<endl;
+			readListFromFile(argv[0],namelist);
+			argc--;argv++;
+			if(argc>0&&strcmp(*argv,"-tab")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				//partitionf2=argv[0]; //Its a tab file, but we use the available char* variable partitionf2.
+				mcltabfile=argv[0]; 
+				MCLTABF=true;
+				argc--;argv++;
+			}
+			partitionf1=argv[0];
+			argc--;argv++;
+        		if(argc>0) cluster1_offset=atoi(argv[0]);
 		}
 ///(For converting between different partition formats)
 		else if (strcmp(*argv,"--toMCL")==0||strcmp(*argv,"--toFREE")==0||strcmp(*argv,"--MCLtoPART")==0 ||\
@@ -983,6 +1043,24 @@ int main(int argc, char* argv[]) {
 			mxofval=argv[1];
 			mxofvalb=argv[2];
 		}
+		else if(strcmp(*argv,"--prune-edges-above")==0){
+			analysis=prgGPRA;
+			if(argc<3)printCommandLineError("Missing arguments");
+			argc--;argv++;
+			graph_pruning_thr=atof(argv[0]);
+			argc--;argv++;
+			mxofval=argv[0];
+			argc--;argv++;
+		}
+		else if(strcmp(*argv,"--prune-edges-below")==0){
+			analysis=prgGPRB;
+			if(argc<3)printCommandLineError("Missing arguments");
+			argc--;argv++;
+			graph_pruning_thr=atof(argv[0]);
+			argc--;argv++;
+			mxofval=argv[0];
+			argc--;argv++;
+		}
 		else if(strcmp(*argv,"--print-matrix")==0||strcmp(*argv,"--print-graph")==0){
 			mxofval=argv[1];
         		MatrixOfValues MX(mxofval);
@@ -1000,38 +1078,6 @@ int main(int argc, char* argv[]) {
 	cout<<"#DEBUG MODE: program task : analysis="<<analysis<<endl;
 #endif
 	switch(analysis){
-///(For editing partitions)
-		case prgPACN:{
-		        Partition partition(partitionf1,piformat,cluster1_offset);
-			if(!MCLTABF){
-				cout<<"Tab file not defined! Did you use option --tab??"<<endl;
-				exit(1);
-			}
-			partition.tabFile(mcltabfile);
-			partition.swapLabels();
-			partition.printPartition(poformat);
-			break;
-			}
-		case prgPASR:
-		case prgPASO:{
-		        Partition partition(partitionf1,piformat,cluster1_offset);
-		        Partition npart(&partition.clusters,cluster1_offset);
-			bool SequentialClusterNames=false;
-			switch(analysis){
-				case prgPASR:
-					if(!QUIET)cout<<"#Using sequential cluster names"<<endl;
-					SequentialClusterNames=true;
-					break;
-			}
-			npart.printPartition(poformat,SequentialClusterNames,ClusterPrefix);
-			break;
-			}
-		case prgPAXE:{
-		        Partition partition(partitionf1,piformat,cluster1_offset);
-			Partition npart=partition.xtractElements(&namelist);
-			npart.printPartition(poformat);
-			break;
-			}
 ///(For analyzing partitions)
 		case prgCDIS:
 		case prgCCOP:{
@@ -1298,6 +1344,82 @@ int main(int argc, char* argv[]) {
 			partstats.printHasseDiagram();
 			break;
 			}
+///(For creating partitions)
+		case prgRPAR:
+		case prgRPAA:
+		case prgRPAB:{
+			bool pruneBelow=true;
+			switch(analysis){
+				case prgRPAA:{
+					pruneBelow=false;
+					break;
+					}
+			}
+			RobustDivisiveClustering pruneCluster(mxofval,pruneBelow,Nsamples,metric,extensivity);
+			pruneCluster.printPartition();
+			pruneCluster.printDistanceVsPruningThreshold();
+			break;
+			}
+		case prgPART:
+		case prgPARA:
+		case prgPARB:{
+			MatrixOfValues mxa(mxofval);
+			Partition p;
+			switch(analysis){
+				case prgPART:{
+					p=mxa.cluster();
+					break;
+					}
+				case prgPARA:{
+					//MatrixOfValues prunedmx=mxa.pruneEdgesAbove(graph_pruning_thr);
+					//p=prunedmx.cluster();
+					p=mxa.pruneEdgesAbove(graph_pruning_thr).cluster();
+					break;
+					}
+				case prgPARB:{
+					//MatrixOfValues prunedmx=mxa.pruneEdgesBelow(graph_pruning_thr);
+					//p=prunedmx.cluster();
+					p=mxa.pruneEdgesBelow(graph_pruning_thr).cluster();
+					break;
+					}
+			}
+			p.printPartition();
+			/*
+			*/
+			break;
+			}
+///(For editing partitions)
+		case prgPACN:{
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+			if(!MCLTABF){
+				cout<<"Tab file not defined! Did you use option --tab??"<<endl;
+				exit(1);
+			}
+			partition.tabFile(mcltabfile);
+			partition.swapLabels();
+			partition.printPartition(poformat);
+			break;
+			}
+		case prgPASR:
+		case prgPASO:{
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+		        Partition npart(&partition.clusters,cluster1_offset);
+			bool SequentialClusterNames=false;
+			switch(analysis){
+				case prgPASR:
+					if(!QUIET)cout<<"#Using sequential cluster names"<<endl;
+					SequentialClusterNames=true;
+					break;
+			}
+			npart.printPartition(poformat,SequentialClusterNames,ClusterPrefix);
+			break;
+			}
+		case prgPAXE:{
+		        Partition partition(partitionf1,piformat,cluster1_offset);
+			Partition npart=partition.xtractElements(&namelist);
+			npart.printPartition(poformat);
+			break;
+			}
 ///(For converting between different partition formats)
 		case prg2MCL:
 		case prg2FRE:
@@ -1444,6 +1566,25 @@ int main(int argc, char* argv[]) {
 			//MX.printMatrix();
 			break;
 			}
+		case prgGPRA:
+		case prgGPRB:{
+			MatrixOfValues mxa(mxofval);
+			//MatrixOfValues prunedmx;
+			switch(analysis){
+				case prgGPRA:{
+					//prunedmx=mxa.pruneEdgesAbove(graph_pruning_thr);
+					mxa.pruneEdgesAbove(graph_pruning_thr).printMatrix();
+					break;
+					}
+				case prgGPRB:{
+					//prunedmx=mxa.pruneEdgesBelow(graph_pruning_thr);
+					mxa.pruneEdgesBelow(graph_pruning_thr).printMatrix();
+					break;
+					}
+			}
+			//prunedmx.printMatrix();
+			break;
+			}
 		case prgEDMX:
 		case prgEDMP:{
 			MatrixOfValues mxa(mxofval);
@@ -1470,7 +1611,7 @@ int main(int argc, char* argv[]) {
 	//partition.printPartition();
 	//partition1.do_vipp(&partition2,threshold);
 	if(!QUIET) systemDate();
-#ifdef DEBUG
+#ifdef DEBUGDETAILS
 	cout<<"#DEBUG MODE\tRUNNING IN DEBUGGING MODE\tQUIET=false (ignoring -q option)"<<endl;
 #endif
 

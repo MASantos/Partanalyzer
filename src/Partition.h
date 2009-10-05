@@ -50,6 +50,8 @@ class Partition
 	long int _nnontrivial;
 	///Number of elements (of underlying space) 
 	long int _nitems;
+	///Size of largest cluster
+	int _largest_cluster_size;
 	///Index of largest cluster in member smat clusters
 	int _largest_cluster;
 	///Iterator pointing to largest cluster in member smat clusters
@@ -89,6 +91,12 @@ public:
 	Partition(char* file, partFileFormat iformat=partFmtPART, int ofs=2);
 	///Create a partition out of a set of clusters
 	Partition(smat* clustersl, int ofs, bool dosort=true, char* partf=NULL , char* tabf=NULL);
+	/**Create a partition out of a set of pointers to sets (let's call that classes: so a set of pointers to classes...) 
+	Partition _will_ be sorted by size of clusters and also within each cluster automatically.
+	*/
+	Partition(set<sset* > sclassp, int ofs=2, char* partf=NULL , char* tabf=NULL);
+	///Print summary of most import facts
+	void summary();
 	///Extract selected elements
 	Partition xtractElements(svect* elements);
 	///Create a consensus partition 

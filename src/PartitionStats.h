@@ -34,6 +34,8 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "sNeighborhood.h"
 #include "BellNumber.h"
 
+#include "Statistics.h"
+
 // Prints system date; is defined elsewhere : partanalyzer_help.*
 extern void systemDate();
 
@@ -45,7 +47,7 @@ typedef vector<Partition > ppvect;
 //*/
 class PartitionStats
 {
-	///List of file that contain our paritions
+	///List of file that contain our partitions
 	vector<Charr > _fnamel;
 	///Main member: Vector of (instantiated) Partitions
 	vector<Partition > _partitionl;
@@ -64,26 +66,39 @@ class PartitionStats
 	graph _Ad;
 	///Number of partitions. Equals _partitionl.size()
 	int _npart;
+	///General cluster offset
 	int _clsnofs;
 	///Tsallis/Renyi Extensivity degree
-	double _entensivity_degree;
+	double _extensivity_degree;
+	//
 	bool SETUPCONSENSUSP;
+	//
 	bool _DIST_SUBSPROJECT;
+	///Resets to defaults, erase all content
+	void _resetPartitionMembers();
+	//
 	long int _pmetric(Partition& p1, Partition& p2, const int f);
 	double _pmetric(Partition& p1, Partition& p2, const double f);
 	double _pmetric(Partition& p1, Partition& p2, pmetricv metric);
 	double _f(Partition& p, pmetricv metric);
+	//
 	void _fullConstructor(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=CLUSTEROFFSET_DEFAULT, int clstat_normalization_ofs=0, char* mcltabfile=NULL);
+	//
 	void _fillPartitionList(vector<Charr > fnames, vector<Partition >& partlist, char* mcltabfile=NULL, partFileFormat iformat=partFmtPART, int ofs=CLUSTEROFFSET_DEFAULT);
+	///Print header info lines before printing distance results
 	void distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF=false);
+	//
 	void distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF=false);
 public:
 	BellNumber BellN;
+	///Default constructor simply resets all members to "zero"
 	PartitionStats();
 	///Instantiates a PartitionStats out of a list of filenames, a common file input format, a float parameter, a common cluster-offset value and a common normalization factor gauge (default=0).
 	PartitionStats(vector<Charr > fnames, partFileFormat iformat=partFmtPART, double extensivity=EXTENSIVITY_DEFAULT, int ofs=CLUSTEROFFSET_DEFAULT, int clstat_normalization_ofs=0, char* mcltabfile=NULL);
 	///Instantiates a PartitionStats out of a list of filenames, a common file tabfile, and a float parameter used for non-standard entropies
 	PartitionStats(vector<Charr > fnames, char* mcltabfile=NULL, double extensivity=EXTENSIVITY_DEFAULT);
+	///Instantiates from a vector of partitions
+	PartitionStats(vector<Partition >& vpart, double extensivity=EXTENSIVITY_DEFAULT);
 	///Declares a second list of input partition files, or the initial one, if it hasn't been declared before
 	void defineListOfPartitions(vector<Charr > fnames, char* mcltabfile=NULL, partFileFormat iformat=partFmtPART, int ofs=CLUSTEROFFSET_DEFAULT);
 	///Erases second list of input partition files
@@ -156,6 +171,11 @@ public:
 	void distancesRef(pmetricv pm=shannon);
 	///Calculates all pair-wise distances. Argument pmetricv specifies which metric to use (VI, Edit score,...)
 	void distances(pmetricv pm=shannon);
+	/**Meadian, avg, std, std.err, var, min , max and sample sizeof the pair-wise distances among its partitions.
+	If a non negative index is provided, distances are calculated with respect to partition refindex
+	*/
+	Sampling distancesDistribution(pmetricv pm=shannon,int refindex=-1);
+
 	///Aproximate calculation of pair-wise distance between paritions with different number of elements
 	/// It stripps of all elements that aren't share and calculates the distance using simply the rest.
 	void distances_Subsprojection(pmetricv pm=shannon); 

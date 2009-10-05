@@ -8,28 +8,28 @@ Ad	Partition.h	/^	graph Ad(){ if(_Ad.empty()) return setAdjacencyMatrix(); retur
 Ad	PartitionStats.h	/^	graph Ad(){ if(_Ad.empty()) setConsensus_Ad(); return _Ad;}$/;"	f	class:PartitionStats
 Ad_os	Partition.h	/^	graph Ad_os(){ if(_Ad.empty()) return setAdjacencyMatrix_os(); return _Ad;}$/;"	f	class:Partition
 BEGIN	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	e	enum:flagheader
-BETA_DEFAULT	partanalyzer_definitions.h	86;"	d
-BETA_UNSET	partanalyzer_definitions.h	84;"	d
+BETA_DEFAULT	partanalyzer_definitions.h	87;"	d
+BETA_UNSET	partanalyzer_definitions.h	85;"	d
 BK	Partition.h	/^	double BK(){return log( (double)1.0*card() ) ;}$/;"	f	class:Partition
 BK	PartitionStats.h	/^	double BK(Partition p){ return p.BK();}$/;"	f	class:PartitionStats
 BK	PartitionStats.h	/^	double BK(Partition& p1, Partition& p2){ return _pmetric(p1,p2, boltzmann);}$/;"	f	class:PartitionStats
 BellN	PartitionStats.h	/^	BellNumber BellN;$/;"	m	class:PartitionStats
 BellNumber	BellNumber.cc	/^BellNumber::BellNumber(){$/;"	f	class:BellNumber
 BellNumber	BellNumber.h	/^class BellNumber$/;"	c
-CLUSTEROFFSET_DEFAULT	partanalyzer_definitions.h	97;"	d
+CLUSTEROFFSET_DEFAULT	partanalyzer_definitions.h	99;"	d
 Charr	partanalyzer_definitions.h	/^class Charr{$/;"	c
 DEBUG	partanalyzer.h	/^bool 	DEBUG=false;$/;"	v
 END	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	e	enum:flagheader
 ES	PartitionStats.h	/^	long int ES(Partition& p1, Partition& p2){ return _pmetric(p1,p2,0);}$/;"	f	class:PartitionStats
-EXTENSIVITY_DEFAULT	partanalyzer_definitions.h	89;"	d
-EXTENSIVITY_DEFAULT_RENYI	partanalyzer_definitions.h	91;"	d
-EXTENSIVITY_DEFAULT_TSALLIS	partanalyzer_definitions.h	90;"	d
-EXTENSIVITY_MAX	partanalyzer_definitions.h	92;"	d
+EXTENSIVITY_DEFAULT	partanalyzer_definitions.h	90;"	d
+EXTENSIVITY_DEFAULT_RENYI	partanalyzer_definitions.h	92;"	d
+EXTENSIVITY_DEFAULT_TSALLIS	partanalyzer_definitions.h	91;"	d
+EXTENSIVITY_MAX	partanalyzer_definitions.h	93;"	d
 FASTA	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 FASTA2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 FASTA3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 FUZZYPARTITION	partanalyzer.h	/^bool	FUZZYPARTITION=false; $/;"	v
-FileName	MatrixOfValues.h	/^	char* FileName(){return _mxofvf ;}$/;"	f	class:MatrixOfValues
+FileName	MatrixOfValues.h	/^	char* FileName() const {return _mxofvf ;}$/;"	f	class:MatrixOfValues
 FileName	Partition.h	/^	char* FileName(){ return _partitionf;}$/;"	f	class:Partition
 GDE	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 GDE2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
@@ -43,11 +43,14 @@ INFO	partanalyzer.h	/^bool	INFO=false;$/;"	v
 JQnorm	Partition.cc	/^double Partition::JQnorm(double q=1.0){$/;"	f	class:Partition
 JQnorm	PartitionStats.h	/^	double JQnorm(Partition p, double q){ return p.JQnorm(q);}$/;"	f	class:PartitionStats
 MSA	MultipleSeqAlign.h	/^typedef vector< Sequence > MSA;$/;"	t
-MSADEFAULTFMT	partanalyzer_definitions.h	95;"	d
+MSADEFAULTFMT	partanalyzer_definitions.h	97;"	d
 MSAformat	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	g
-MU_DEFAULT	partanalyzer_definitions.h	87;"	d
-MU_UNSET	partanalyzer_definitions.h	85;"	d
+MU_DEFAULT	partanalyzer_definitions.h	88;"	d
+MU_UNSET	partanalyzer_definitions.h	86;"	d
+MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(){$/;"	f	class:MatrixOfValues
 MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(char* file){$/;"	f	class:MatrixOfValues
+MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(const MatrixOfValues& MOV){$/;"	f	class:MatrixOfValues
+MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(graph Graph){$/;"	f	class:MatrixOfValues
 MatrixOfValues	MatrixOfValues.h	/^class MatrixOfValues$/;"	c
 MultipleSeqAlign	MultipleSeqAlign.cc	/^MultipleSeqAlign::MultipleSeqAlign(){$/;"	f	class:MultipleSeqAlign
 MultipleSeqAlign	MultipleSeqAlign.cc	/^MultipleSeqAlign::MultipleSeqAlign(MSA& msa){$/;"	f	class:MultipleSeqAlign
@@ -58,21 +61,34 @@ NsamplesRedMSA	MultipleSeqAlign.cc	/^void MultipleSeqAlign::NsamplesRedMSA(unsig
 PIDNORMALIZATION	Sequence.cc	/^pid_normalization PIDNORMALIZATION=arithmeticMeanSequenceLenth;$/;"	v
 Partition	Partition.cc	/^Partition::Partition(){$/;"	f	class:Partition
 Partition	Partition.cc	/^Partition::Partition(char* file, partFileFormat iformat, int ofs){\/\/Defaults: iformat=partFmtPART, ofs=2$/;"	f	class:Partition
+Partition	Partition.cc	/^Partition::Partition(set<sset* > sclassp, int ofs, char* partf, char* tabf){$/;"	f	class:Partition
 Partition	Partition.cc	/^Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* tabf){\/\/Defaults: partf=NULL, tabf=NULL$/;"	f	class:Partition
 Partition	Partition.h	/^class Partition$/;"	c
+PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(){$/;"	f	class:PartitionStats
 PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Charr > fnames, char* mcltabf, double extensivity){$/;"	f	class:PartitionStats
 PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Charr > fnames, partFileFormat iformat, double extensivity, int ofs,int clstat_normalization_ofs, char* mcltabfile){$/;"	f	class:PartitionStats
+PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Partition >& vpart, double extensivity){$/;"	f	class:PartitionStats
 PartitionStats	PartitionStats.h	/^class PartitionStats$/;"	c
 QUIET	partanalyzer.h	/^bool    QUIET=false;$/;"	v
+RDC_DEFAULT_NUMBER_NEIGHBORS	RobustDivisiveClustering.h	35;"	d
+RDC_DEFAULT_NUMBER_SAMPLES	RobustDivisiveClustering.h	34;"	d
+RDC_DEFAULT_TOP_BEST_PARTITIONS	RobustDivisiveClustering.h	36;"	d
+RDC_DEFAULT_TOP_BEST_PARTITIONS	partanalyzer_definitions.h	94;"	d
 REDMxVal	partanalyzer_definitions.h	/^enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;$/;"	g
 RS	Partition.cc	/^double Partition::RS(double q){$/;"	f	class:Partition
 RS	PartitionStats.h	/^	double RS(Partition p){ return p.RS();}$/;"	f	class:PartitionStats
 RS	PartitionStats.h	/^	double RS(Partition p, double q){ return p.RS(q);}$/;"	f	class:PartitionStats
 RS	PartitionStats.h	/^	double RS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, renyi);}$/;"	f	class:PartitionStats
+RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(MatrixOfValues* graph, bool below, int nsamples, pmetricv pm, double extensivity){$/;"	f	class:RobustDivisiveClustering
+RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, pmetricv pmetric, double extensivity){$/;"	f	class:RobustDivisiveClustering
+RobustDivisiveClustering	RobustDivisiveClustering.h	/^class RobustDivisiveClustering$/;"	c
 SETUPCONSENSUSP	PartitionStats.h	/^	bool SETUPCONSENSUSP;$/;"	m	class:PartitionStats
 SPEER	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 SPEER2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 SPEER3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+STATISTICS_DEFAULT_NUMBER_VARIABLES	Statistics.h	33;"	d
+Sampling	Statistics.cc	/^Sampling::Sampling(){$/;"	f	class:Sampling
+Sampling	Statistics.h	/^class Sampling$/;"	c
 SeqId	MultipleSeqAlign.cc	/^double MultipleSeqAlign::SeqId(int Seqn, int Seqm, vector<int>* positions)$/;"	f	class:MultipleSeqAlign
 SeqId	MultipleSeqAlign.h	/^        double SeqId(Sequence Seqa, Sequence Seqb, vector<int>* positions=NULL){return Seqa.id(Seqb,positions);}$/;"	f	class:MultipleSeqAlign
 Sequence	Sequence.cc	/^Sequence::Sequence()$/;"	f	class:Sequence
@@ -87,7 +103,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.6.5";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.7";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -98,38 +114,47 @@ _CLASS_BELLNUMBER_H	BellNumber.h	26;"	d
 _CLASS_CCOP	Ccop.cc	24;"	d	file:
 _CLASS_CCOP_H	Ccop.h	24;"	d
 _CLASS_MATRIXOFVALUES	MatrixOfValues.cc	24;"	d	file:
-_CLASS_MATRIXOFVALUES_H	MatrixOfValues.h	26;"	d
+_CLASS_MATRIXOFVALUES_H	MatrixOfValues.h	24;"	d
 _CLASS_MULTIPLESEQALIGN	MultipleSeqAlign.cc	25;"	d	file:
 _CLASS_MULTIPLESEQALIGN_H	MultipleSeqAlign.h	24;"	d
 _CLASS_PARTITION	Partition.cc	24;"	d	file:
 _CLASS_PARTITIONSTATS	PartitionStats.cc	25;"	d	file:
 _CLASS_PARTITIONSTATS_H	PartitionStats.h	27;"	d
 _CLASS_PARTITION_H	Partition.h	27;"	d
+_CLASS_ROBUSTDIVISIVECLUSTERING	RobustDivisiveClustering.cc	24;"	d	file:
+_CLASS_ROBUSTDIVISIVECLUSTERING_H	RobustDivisiveClustering.h	24;"	d
 _CLASS_ROULETTE	Roulette.cc	25;"	d	file:
 _CLASS_ROULETTE_H	Roulette.h	26;"	d
 _CLASS_SEQUENCE	Sequence.cc	24;"	d	file:
 _CLASS_SEQUENCE_H	Sequence.h	24;"	d
 _CLASS_SNEIGHBORHOOD	sNeighborhood.cc	24;"	d	file:
 _CLASS_SNEIGHBORHOOD_H	sNeighborhood.h	27;"	d
+_CLASS_STATISTICS	Statistics.cc	24;"	d	file:
+_CLASS_STATISTICS_H	Statistics.h	24;"	d
 _DIST_SUBSPROJECT	PartitionStats.h	/^	bool _DIST_SUBSPROJECT;$/;"	m	class:PartitionStats
 _HELPFUNCTIONS	partanalyzer_help.cc	30;"	d	file:
 _HELPFUNCTIONS_H	partanalyzer_help.h	24;"	d
+_MOVINGWINDOW	RobustDivisiveClustering.h	/^	int  _MOVINGWINDOW;$/;"	m	class:RobustDivisiveClustering
 _MX	Ccop.h	/^	MatrixOfValues* _MX;$/;"	m	class:ccop
+_N	Statistics.h	/^	int _N;$/;"	m	class:Sampling
 _PARTANALYZER_BASICOPERATIONS_HEADER	partanalyzer_basic_operations.h	33;"	d
 _PARTANALYZER_DEFINITIONS_HEADER	partanalyzer_definitions.h	33;"	d
 _PARTANALYZER_INCLUDES_HEADER	partanalyzer_includes.h	33;"	d
 _PARTANALYZER_MAIN	partanalyzer.cc	25;"	d	file:
 _PARTANALYZER_MAIN_HEADER	partanalyzer.h	33;"	d
-_PGM_P2_GRAYSCALE_	partanalyzer_definitions.h	93;"	d
+_PGM_P2_GRAYSCALE_	partanalyzer_definitions.h	95;"	d
 _Seqlist	MultipleSeqAlign.h	/^        MSA _Seqlist;$/;"	m	class:MultipleSeqAlign
 _Tweight	MatrixOfValues.h	/^	edge _Tweight;$/;"	m	class:MatrixOfValues
+_X	Statistics.h	/^	vector<double > _X;$/;"	m	class:Sampling
 _alignedsequence	Sequence.h	/^        string _alignedsequence;$/;"	m	class:Sequence
 _alignment_length	Sequence.h	/^        int _alignment_length;$/;"	m	class:Sequence
+_calculateVariation	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart, int& refpart , double& gauge, bool reducewin){$/;"	f	class:RobustDivisiveClustering
 _chi2	Ccop.h	/^	double _chi2;$/;"	m	class:ccop
 _clsnofs	PartitionStats.h	/^	int _clsnofs;$/;"	m	class:PartitionStats
 _consPart	PartitionStats.h	/^	multimap<int,string,greaterThan> _consPart;$/;"	m	class:PartitionStats
 _cover	PartitionStats.h	/^	map<string,sNeighborhood> _cover;$/;"	m	class:PartitionStats
-_entensivity_degree	PartitionStats.h	/^	double _entensivity_degree;$/;"	m	class:PartitionStats
+_delta	RobustDivisiveClustering.h	/^	double _delta;$/;"	m	class:RobustDivisiveClustering
+_extensivity_degree	PartitionStats.h	/^	double _extensivity_degree;$/;"	m	class:PartitionStats
 _f	PartitionStats.cc	/^double PartitionStats::_f(Partition& p, pmetricv metric){ \/\/POTENTIAL ASSOCIATED WITH A PARTITION.$/;"	f	class:PartitionStats
 _f_intra_thr	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
 _fillPartitionList	PartitionStats.cc	/^void PartitionStats::_fillPartitionList(vector<Charr > fnamel, vector<Partition >& partlist, char* mcltabfile, partFileFormat iformat, int ofs){$/;"	f	class:PartitionStats
@@ -141,17 +166,24 @@ _fullConstructor	PartitionStats.cc	/^void PartitionStats::_fullConstructor(vecto
 _getIndexOfItem	MatrixOfValues.cc	/^int MatrixOfValues::_getIndexOfItem(string str){$/;"	f	class:MatrixOfValues
 _getPIDNormalization	Sequence.cc	/^double Sequence::_getPIDNormalization(Sequence* Seq, int& starts, int& ends){$/;"	f	class:Sequence
 _graph	MatrixOfValues.h	/^	graph  _graph;$/;"	m	class:MatrixOfValues
+_graph_pruning_thr	RobustDivisiveClustering.h	/^	double _graph_pruning_thr;$/;"	m	class:RobustDivisiveClustering
+_graphptr	RobustDivisiveClustering.h	/^	MatrixOfValues* _graphptr;$/;"	m	class:RobustDivisiveClustering
 _hasseNodes	PartitionStats.h	/^	map<long int, ppvect > _hasseNodes;$/;"	m	class:PartitionStats
-_is	MatrixOfValues.h	/^	ifstream _is;$/;"	m	class:MatrixOfValues
+_inStack	RobustDivisiveClustering.h	/^	bool _inStack;$/;"	m	class:RobustDivisiveClustering
+_initialize	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::_initialize(MatrixOfValues* graph){$/;"	f	class:RobustDivisiveClustering
+_initialize	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::_initialize(char* graphfile){$/;"	f	class:RobustDivisiveClustering
 _isComment	Partition.cc	/^bool _isComment(ifstream& _is, string& it, partFileFormat& iformat, int nit, char* eol="$\\0"){$/;"	f
 _it_found	Partition.h	/^	svect _it_found;$/;"	m	class:Partition
 _it_largest_cluster	Partition.h	/^	smat::iterator _it_largest_cluster;$/;"	m	class:Partition
 _items	MatrixOfValues.h	/^	svect _items;$/;"	m	class:MatrixOfValues
 _items_offset	Partition.h	/^	int _items_offset;$/;"	m	class:Partition
 _largest_cluster	Partition.h	/^	int _largest_cluster;$/;"	m	class:Partition
+_largest_cluster_size	Partition.h	/^	int _largest_cluster_size;$/;"	m	class:Partition
 _len	MultipleSeqAlign.h	/^        int _len;$/;"	m	class:MultipleSeqAlign
+_max	RobustDivisiveClustering.h	/^	double _max;$/;"	m	class:RobustDivisiveClustering
 _mcltab	Partition.h	/^	map<int, string> _mcltab;$/;"	m	class:Partition
 _mcltabf	Partition.h	/^	char* _mcltabf;	$/;"	m	class:Partition
+_min	RobustDivisiveClustering.h	/^	double _min;$/;"	m	class:RobustDivisiveClustering
 _msaf	MultipleSeqAlign.h	/^        char* _msaf;$/;"	m	class:MultipleSeqAlign
 _msafmt	Sequence.h	/^	MSAformat _msafmt;$/;"	m	class:Sequence
 _mx	MatrixOfValues.h	/^	row _mx;$/;"	m	class:MatrixOfValues
@@ -183,11 +215,14 @@ _programb_	partanalyzer_definitions.h	56;"	d
 _readClusters	Partition.cc	/^void Partition::_readClusters(){ \/\/\/For the time being, we'll assume each cluster has its number of items as the first string, its name as the second and then the items we'll follow:$/;"	f	class:Partition
 _readStringf	Partition.cc	/^bool _readStringf(ifstream& _is, string& it, partFileFormat& iformat, int nit=1, const char* eol=reol_){ \/\/Default input format is partanalyzer's own format$/;"	f
 _resetMembers	Partition.cc	/^void Partition::_resetMembers(){$/;"	f	class:Partition
+_resetPartitionMembers	PartitionStats.cc	/^void PartitionStats::_resetPartitionMembers(){$/;"	f	class:PartitionStats
 _rtab	Partition.h	/^	map<string, string> _rtab; \/\/\/Key is second column of tabfile and value is first column$/;"	m	class:Partition
 _seed	Roulette.h	/^	unsigned int _seed;$/;"	m	class:roulette
 _sequence	Sequence.h	/^        string _sequence;$/;"	m	class:Sequence
 _setActualSeq	Sequence.cc	/^void Sequence::_setActualSeq(){$/;"	f	class:Sequence
 _setFormat	Sequence.cc	/^void Sequence::_setFormat(){$/;"	f	class:Sequence
+_setMainParameters	RobustDivisiveClustering.cc	/^void  RobustDivisiveClustering::_setMainParameters(bool prunebelow,int samples, pmetricv metric, double ext){$/;"	f	class:RobustDivisiveClustering
+_summaryParameters	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::_summaryParameters(){$/;"	f	class:RobustDivisiveClustering
 _threshold	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
 _vint	Roulette.h	/^	vector<int > _vint;$/;"	m	class:roulette
 _vitems	Partition.h	/^	vector<string > _vitems;$/;"	m	class:Partition
@@ -205,6 +240,7 @@ areWithinSameCluster	Partition.cc	/^string Partition::areWithinSameCluster(strin
 arithmeticMeanSequenceLenth	Sequence.h	/^	arithmeticMeanSequenceLenth$/;"	e	enum:pid_normalization
 averageId	MultipleSeqAlign.cc	/^double MultipleSeqAlign::averageId(vector<int>* positions)$/;"	f	class:MultipleSeqAlign
 beginSeq	MultipleSeqAlign.h	/^	MSA::iterator beginSeq(){ return _Seqlist.begin();}$/;"	f	class:MultipleSeqAlign
+below	RobustDivisiveClustering.h	/^	bool below;$/;"	m	class:RobustDivisiveClustering
 beta	partanalyzer.cc	/^double beta;$/;"	v
 boltzmann	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	e	enum:pmetricv
 car	partanalyzer_definitions.h	/^public: char* car;$/;"	m	class:Charr
@@ -217,6 +253,7 @@ ccop	Ccop.h	/^class ccop$/;"	c
 checkConsistency	Ccop.cc	/^void ccop::checkConsistency(){$/;"	f	class:ccop
 chrAt	Sequence.cc	/^string Sequence::chrAt(int pos){$/;"	f	class:Sequence
 clear2ndListOfPartitions	PartitionStats.cc	/^bool PartitionStats::clear2ndListOfPartitions(){$/;"	f	class:PartitionStats
+cluster	MatrixOfValues.cc	/^Partition MatrixOfValues::cluster(){$/;"	f	class:MatrixOfValues
 cluster	partanalyzer_definitions.h	/^typedef svect cluster;$/;"	t
 cluster_offset	Partition.h	/^	int cluster_offset(){return _items_offset;}$/;"	f	class:Partition
 clusters	Partition.h	/^	smat clusters;$/;"	m	class:Partition
@@ -229,6 +266,7 @@ cull	MatrixOfValues.cc	/^void MatrixOfValues::cull(MatrixOfValues* mx2){$/;"	f	c
 cullEdge	MatrixOfValues.cc	/^strpair MatrixOfValues::cullEdge(string a, string b){$/;"	f	class:MatrixOfValues
 defineListOfPartitions	PartitionStats.cc	/^void PartitionStats::defineListOfPartitions(vector<Charr > fnames, char* mcltabfile, partFileFormat iformat, int ofs){$/;"	f	class:PartitionStats
 distances	PartitionStats.cc	/^void PartitionStats::distances(pmetricv pm){$/;"	f	class:PartitionStats
+distancesDistribution	PartitionStats.cc	/^Sampling PartitionStats::distancesDistribution(pmetricv pm, int refpart){$/;"	f	class:PartitionStats
 distancesPrintHeadComment	PartitionStats.cc	/^void PartitionStats::distancesPrintHeadComment(pmeasure measure, pmetricv metric, flagheader hd, bool usingREF){$/;"	f	class:PartitionStats
 distancesPrintHeadComment	PartitionStats.cc	/^void PartitionStats::distancesPrintHeadComment(pmetricv metric, flagheader hd, bool usingREF){$/;"	f	class:PartitionStats
 distancesRef	PartitionStats.cc	/^void PartitionStats::distancesRef(pmetricv pm){$/;"	f	class:PartitionStats
@@ -240,6 +278,7 @@ dropClones	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::dropClones(
 edge	partanalyzer_definitions.h	/^typedef double edge;$/;"	t
 edgeDistribution	MatrixOfValues.cc	/^void MatrixOfValues::edgeDistribution(Partition* part){$/;"	f	class:MatrixOfValues
 edgeDistribution	MatrixOfValues.cc	/^void MatrixOfValues::edgeDistribution(const string& sa, int clusterSize, string clName){$/;"	f	class:MatrixOfValues
+edgeDistributionStats	MatrixOfValues.cc	/^Sampling MatrixOfValues::edgeDistributionStats(){$/;"	f	class:MatrixOfValues
 edsc	Partition.cc	/^void Partition::edsc(Partition* p2){$/;"	f	class:Partition
 empty	MultipleSeqAlign.h	/^	bool empty(){ return _Seqlist.empty(); }$/;"	f	class:MultipleSeqAlign
 endSeq	MultipleSeqAlign.h	/^	MSA::iterator endSeq(){ return _Seqlist.end();}$/;"	f	class:MultipleSeqAlign
@@ -247,6 +286,7 @@ entropy	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, ca
 eps	sNeighborhood.h	/^	double eps;$/;"	m	class:sNeighborhood
 existEdge	MatrixOfValues.cc	/^bool MatrixOfValues::existEdge(string a, string b){$/;"	f	class:MatrixOfValues
 exitWithHelp	partanalyzer_help.cc	/^void exitWithHelp()$/;"	f
+extensivity	RobustDivisiveClustering.h	/^	double extensivity;$/;"	m	class:RobustDivisiveClustering
 firstResidueNumber	Sequence.cc	/^int Sequence::firstResidueNumber(int nb){$/;"	f	class:Sequence
 flagheader	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	g
 formatName	Sequence.cc	/^string Sequence::formatName(MSAformat msafmt, string suffix){$/;"	f	class:Sequence
@@ -262,6 +302,7 @@ getClusterSize	Partition.cc	/^int Partition::getClusterSize(const string& item){
 getConsensusPartition	PartitionStats.cc	/^Partition PartitionStats::getConsensusPartition(){$/;"	f	class:PartitionStats
 getCover	PartitionStats.cc	/^void PartitionStats::getCover(){$/;"	f	class:PartitionStats
 getFileName	MultipleSeqAlign.h	/^	char* getFileName(){ return _msaf;}$/;"	f	class:MultipleSeqAlign
+getGraph	MatrixOfValues.h	/^	graph getGraph() const { return _graph;}$/;"	f	class:MatrixOfValues
 getItems	Partition.cc	/^sset Partition::getItems()$/;"	f	class:Partition
 getItems	Partition.cc	/^sset Partition::getItems(cluster* cl)$/;"	f	class:Partition
 getName	MultipleSeqAlign.h	/^	string getName(){ return _name;}$/;"	f	class:MultipleSeqAlign
@@ -274,7 +315,7 @@ getSeed	Roulette.h	/^	unsigned int getSeed(){return _seed;}$/;"	f	class:roulette
 getSplitsRef	PartitionStats.cc	/^void PartitionStats::getSplitsRef(splitmethod similarity=overlap){$/;"	f	class:PartitionStats
 get_Ad	PartitionStats.cc	/^void PartitionStats::get_Ad(){$/;"	f	class:PartitionStats
 get_FuzzyConsensusPartition	PartitionStats.cc	/^void  PartitionStats::get_FuzzyConsensusPartition(){$/;"	f	class:PartitionStats
-graph	partanalyzer_definitions.h	/^typedef map<pair<string,string>,edge > graph ;$/;"	t
+graph	partanalyzer_definitions.h	/^typedef map<pair<node,node>,edge > graph ;$/;"	t
 greaterThan	partanalyzer_definitions.h	/^struct greaterThan {$/;"	s
 has2ndListOfPartitions	PartitionStats.h	/^	bool has2ndListOfPartitions(){ return (_partitionl2.size()>0);}$/;"	f	class:PartitionStats
 hasaCover	PartitionStats.h	/^	bool hasaCover(){ if(_cover.size()>1)return true; return false ;}$/;"	f	class:PartitionStats
@@ -295,9 +336,19 @@ lbegin	sNeighborhood.h	/^	sset::iterator lbegin(){ return (neighbors.begin());}$
 lend	sNeighborhood.h	/^	sset::iterator lend(){ return (neighbors.end());}$/;"	f	class:sNeighborhood
 lessThan	Partition.h	/^	bool lessThan(Partition* part2){ return purityLax(part2)==1?true:false;}$/;"	f	class:Partition
 main	partanalyzer.cc	/^int main(int argc, char* argv[]) {$/;"	f
+maximum_value	Statistics.cc	/^double Sampling::maximum_value(){ return _X[6];}$/;"	f	class:Sampling
+maximum_value	Statistics.cc	/^double Sampling::maximum_value(double v){ double ov=_X[6] ; _X[6]=v ; return ov;}$/;"	f	class:Sampling
 mclTabFile	Partition.cc	/^void Partition::mclTabFile(char* mcltabf){$/;"	f	class:Partition
+mean	Statistics.cc	/^double Sampling::mean(){ return _X[1];}$/;"	f	class:Sampling
+mean	Statistics.cc	/^double Sampling::mean(double v){ double ov=_X[1] ; _X[1]=v ; return ov;}$/;"	f	class:Sampling
+mean_error	Statistics.cc	/^double Sampling::mean_error(){ return _X[3];}$/;"	f	class:Sampling
+mean_error	Statistics.cc	/^double Sampling::mean_error(double v){ double ov=_X[3] ; _X[3]=v ; return ov;}$/;"	f	class:Sampling
+median	Statistics.cc	/^double Sampling::median(){ return _X[0];}$/;"	f	class:Sampling
+median	Statistics.cc	/^double Sampling::median(double v){ double ov=_X[0] ; _X[0]=v ; return ov;}$/;"	f	class:Sampling
 merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2){$/;"	f	class:MatrixOfValues
 merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2, Partition* pt){$/;"	f	class:MatrixOfValues
+minimum_value	Statistics.cc	/^double Sampling::minimum_value(){ return _X[5];}$/;"	f	class:Sampling
+minimum_value	Statistics.cc	/^double Sampling::minimum_value(double v){ double ov=_X[5] ; _X[5]=v ; return ov;}$/;"	f	class:Sampling
 missing	Partition.cc	/^void Partition::missing(){$/;"	f	class:Partition
 missing	Partition.cc	/^void Partition::missing(svect* it_found){$/;"	f	class:Partition
 msaFmtNULL	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
@@ -315,11 +366,16 @@ name	Sequence.h	/^        string name(){return _name;}$/;"	f	class:Sequence
 neighborhood	partanalyzer_definitions.h	/^typedef pair<string, pair<sset,double> > neighborhood ;$/;"	t
 neighborhoods	sNeighborhood.h	/^	map<sset,double> neighborhoods;$/;"	m	class:sNeighborhood
 neighbors	sNeighborhood.h	/^	sset neighbors;$/;"	m	class:sNeighborhood
+node	partanalyzer_definitions.h	/^typedef map<pair<node,node>,edge > graph ;$/;"	t
+node	partanalyzer_definitions.h	/^typedef string node;$/;"	t
+nsamples	RobustDivisiveClustering.h	/^	int nsamples;$/;"	m	class:RobustDivisiveClustering
 nt	Partition.h	/^	map<int, string> _mcltab;$/;"	m	class:Partition
 nt	PartitionStats.h	/^	multimap<int,string,greaterThan> _consPart;$/;"	m	class:PartitionStats
 numberOfAlignedPositions	Sequence.h	/^	numberOfAlignedPositions=alignmentLenth,$/;"	e	enum:pid_normalization
 numberOfAlignedResiduePairs	Sequence.h	/^	numberOfAlignedResiduePairs,$/;"	e	enum:pid_normalization
+numberOfNeighbors	RobustDivisiveClustering.h	/^	int numberOfNeighbors;$/;"	m	class:RobustDivisiveClustering
 numberOfResidues	Sequence.h	/^        int numberOfResidues(){ return _number_of_residues;}$/;"	f	class:Sequence
+ode	partanalyzer_definitions.h	/^typedef map<pair<node,node>,edge > graph ;$/;"	t
 offset	partanalyzer_definitions.h	/^	int offset;$/;"	m	struct:containerLargerThan_Offset
 operator !=	partanalyzer_basic_operations.h	/^inline bool operator!=(svect& cla, svect& clb){$/;"	f
 operator ()	partanalyzer_definitions.h	/^	template<class T> bool operator() (T& i, T& j){$/;"	f	struct:greaterThan
@@ -333,13 +389,17 @@ operator *	partanalyzer_basic_operations.h	/^inline svect operator*(svect& cla, 
 operator +	Partition.cc	/^Partition Partition::operator+(Partition& part2){$/;"	f	class:Partition
 operator +	partanalyzer_basic_operations.h	/^inline graph operator+(graph& ga, graph& gb){$/;"	f
 operator +	partanalyzer_basic_operations.h	/^inline svect operator+(svect& cla, svect& clb){ $/;"	f
+operator +	partanalyzer_definitions.h	/^set<E > operator+(set<E>& sa, set<E>& sb){$/;"	f
 operator +=	partanalyzer_basic_operations.h	/^inline graph& operator+=(graph& ga, graph& gb){$/;"	f
 operator +=	partanalyzer_basic_operations.h	/^inline svect& operator+=(svect& cla, svect& clb){$/;"	f
+operator +=	partanalyzer_definitions.h	/^set<E>& operator+=(set<E>& sa, set<E>& sb){$/;"	f
 operator +=	sNeighborhood.cc	/^sNeighborhood& sNeighborhood::operator+=(sNeighborhood& snbh){$/;"	f	class:sNeighborhood
 operator <	Partition.h	/^	bool operator<(Partition& part2){ return (n_clusters()>part2.n_clusters()&& *this<=part2)?true:false;}$/;"	f	class:Partition
 operator <	partanalyzer_basic_operations.h	/^inline bool operator<(svect& cla, svect& clb){$/;"	f
+operator <	partanalyzer_definitions.h	/^bool operator<(E& e, set<E > S){ $/;"	f
 operator <<	MultipleSeqAlign.cc	/^ostream& operator<<(ostream& os, MultipleSeqAlign& msa){$/;"	f
 operator <<	Sequence.cc	/^ostream& operator<<(ostream& os , Sequence& s){ os<<s._name<<"\\n"<<s._alignedsequence; return os;}$/;"	f
+operator <<	Statistics.cc	/^ostream& operator<<(ostream& os, Sampling& S){$/;"	f
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, graph& g){$/;"	f
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, sset& cl){$/;"	f
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, svect& cl){$/;"	f
@@ -350,6 +410,9 @@ operator ==	partanalyzer_basic_operations.h	/^inline bool operator==(svect& cla,
 operator >	partanalyzer_basic_operations.h	/^inline bool operator>(svect& cla, svect& clb){$/;"	f
 operator >=	partanalyzer_basic_operations.h	/^inline bool operator>=(svect& cla, svect& clb){$/;"	f
 operator []	BellNumber.cc	/^double& BellNumber::operator[](long int n){$/;"	f	class:BellNumber
+optimal_partitions	RobustDivisiveClustering.h	/^	map<double, Partition> optimal_partitions;$/;"	m	class:RobustDivisiveClustering
+ouble	RobustDivisiveClustering.h	/^	map<double, Partition> optimal_partitions;$/;"	m	class:RobustDivisiveClustering
+ouble	RobustDivisiveClustering.h	/^	map<double, Sampling > pdistance_vs_pruningthr;$/;"	m	class:RobustDivisiveClustering
 overlap	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fraction=overlap} ;$/;"	e	enum:splitmethod
 partFileFormat	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	g
 partFmtFREE	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
@@ -358,11 +421,13 @@ partFmtMSA	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,par
 partFmtNULL	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
 partFmtPART	partanalyzer_definitions.h	/^enum partFileFormat { partFmtNULL=-1,partFmtPART, partFmtMCL, partFmtFREE , partFmtMSA} ;$/;"	e	enum:partFileFormat
 partitionInputFormat	Partition.cc	/^void Partition::partitionInputFormat(partFileFormat iformat=partFmtPART){$/;"	f	class:Partition
+pdistance_vs_pruningthr	RobustDivisiveClustering.h	/^	map<double, Sampling > pdistance_vs_pruningthr;$/;"	m	class:RobustDivisiveClustering
 pgm_Ad	PartitionStats.h	/^	void pgm_Ad(){cout<<"#BeginConsensusAdjacencyMatrixPGMImage\\n"<<_Ad<<"#EndConsensusAdjacencyMatrixPGMImage"<<endl;}$/;"	f	class:PartitionStats
 pid_normalization	Sequence.h	/^enum pid_normalization { $/;"	g
 pmeasure	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	g
 pmeasures	PartitionStats.cc	/^void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){$/;"	f	class:PartitionStats
 pmeasuresRef	PartitionStats.cc	/^void PartitionStats::pmeasuresRef(pmeasure measure , pmetricv metric){$/;"	f	class:PartitionStats
+pmetric	RobustDivisiveClustering.h	/^	pmetricv pmetric;$/;"	m	class:RobustDivisiveClustering
 pmetricv	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	g
 point	sNeighborhood.h	/^	string point;$/;"	m	class:sNeighborhood
 ppvect	PartitionStats.h	/^typedef vector<Partition > ppvect;$/;"	t
@@ -375,14 +440,16 @@ prgBDSR	partanalyzer_definitions.h	/^	prgBDST,prgBDSR,$/;"	e	enum:prganalysis
 prgBDST	partanalyzer_definitions.h	/^	prgBDST,prgBDSR,$/;"	e	enum:prganalysis
 prgCCOP	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	e	enum:prganalysis
 prgCDIS	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	e	enum:prganalysis
-prgCEMX	partanalyzer_definitions.h	/^	prgCEMX,$/;"	e	enum:prganalysis
+prgCEMX	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgCLST	partanalyzer_definitions.h	/^	prgCLST,$/;"	e	enum:prganalysis
 prgCPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgEDMP	partanalyzer_definitions.h	/^	prgEDMX,prgEDMP$/;"	e	enum:prganalysis
-prgEDMX	partanalyzer_definitions.h	/^	prgEDMX,prgEDMP$/;"	e	enum:prganalysis
+prgEDMP	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
+prgEDMX	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgEDSC	partanalyzer_definitions.h	/^	prgEDSC,prgEDST,prgEDSR,$/;"	e	enum:prganalysis
 prgEDSR	partanalyzer_definitions.h	/^	prgEDSC,prgEDST,prgEDSR,$/;"	e	enum:prganalysis
 prgEDST	partanalyzer_definitions.h	/^	prgEDSC,prgEDST,prgEDSR,$/;"	e	enum:prganalysis
+prgGPRA	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
+prgGPRB	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgHASS	partanalyzer_definitions.h	/^	prgHASS,$/;"	e	enum:prganalysis
 prgINTE	partanalyzer_definitions.h	/^	prgINTE,$/;"	e	enum:prganalysis
 prgIPAR	partanalyzer_definitions.h	/^	prgIPAR,$/;"	e	enum:prganalysis
@@ -407,6 +474,9 @@ prgMSXP	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,pr
 prgMSXS	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMSXT	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgPACN	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
+prgPARA	partanalyzer_definitions.h	/^	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
+prgPARB	partanalyzer_definitions.h	/^	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
+prgPART	partanalyzer_definitions.h	/^	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgPASO	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPASR	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPAXE	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
@@ -418,6 +488,9 @@ prgPSYM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,pr
 prgPSYR	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgRDSR	partanalyzer_definitions.h	/^	prgRDST,prgRDSR,$/;"	e	enum:prganalysis
 prgRDST	partanalyzer_definitions.h	/^	prgRDST,prgRDSR,$/;"	e	enum:prganalysis
+prgRPAA	partanalyzer_definitions.h	/^	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
+prgRPAB	partanalyzer_definitions.h	/^	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
+prgRPAR	partanalyzer_definitions.h	/^	prgRPAR,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgSNOC	partanalyzer_definitions.h	/^	prgSNOC,$/;"	e	enum:prganalysis
 prgSPSO	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
 prgSPSS	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
@@ -442,6 +515,7 @@ printCommandLineError	partanalyzer_help.cc	/^void printCommandLineError(const st
 printConsensusPart	PartitionStats.cc	/^void PartitionStats::printConsensusPart(){$/;"	f	class:PartitionStats
 printCopyright	partanalyzer_help.cc	/^void printCopyright(){$/;"	f
 printCover	PartitionStats.cc	/^void PartitionStats::printCover(bool PRINTCONSENSUP=false){$/;"	f	class:PartitionStats
+printDistanceVsPruningThreshold	RobustDivisiveClustering.cc	/^void  RobustDivisiveClustering::printDistanceVsPruningThreshold(){$/;"	f	class:RobustDivisiveClustering
 printHasseDiagram	PartitionStats.cc	/^void PartitionStats::printHasseDiagram(){$/;"	f	class:PartitionStats
 printHasseNodes	PartitionStats.cc	/^void PartitionStats::printHasseNodes(){$/;"	f	class:PartitionStats
 printHelp	partanalyzer_help.cc	/^void printHelp(){$/;"	f
@@ -452,9 +526,13 @@ printPairwiseIds	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printPairwiseIds(M
 printPairwiseIds	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printPairwiseIds(vector<int>* positions)$/;"	f	class:MultipleSeqAlign
 printPartition	Partition.cc	/^void Partition::printPartition(bool SequentialClusterNames, string ClusterPrefix){$/;"	f	class:Partition
 printPartition	Partition.cc	/^void Partition::printPartition(partFileFormat format, bool SequentialClusterNames, string ClusterPrefix){$/;"	f	class:Partition
+printPartition	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::printPartition(){$/;"	f	class:RobustDivisiveClustering
 printVersion	partanalyzer_help.cc	/^void printVersion(){$/;"	f
 printWithClusterLabels	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){$/;"	f	class:MultipleSeqAlign
 program	partanalyzer.cc	/^char* program;$/;"	v
+pruneEdges	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, bool below, bool terse){$/;"	f	class:MatrixOfValues
+pruneEdgesAbove	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, bool terse){$/;"	f	class:MatrixOfValues
+pruneEdgesBelow	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdgesBelow(float edgethreshold, bool terse){$/;"	f	class:MatrixOfValues
 purityLax	Partition.h	/^	double purityLax(Partition* part2){ return purityScore(part2)[1];}$/;"	f	class:Partition
 purityScore	Partition.cc	/^vector<double > Partition::purityScore(Partition* part2){$/;"	f	class:Partition
 purityStrict	Partition.h	/^	double purityStrict(Partition* part2){ return purityScore(part2)[0];}$/;"	f	class:Partition
@@ -464,13 +542,19 @@ readMxValues	MatrixOfValues.cc	/^void MatrixOfValues::readMxValues(){ \/\/\/Late
 removeGaps	Sequence.cc	/^string Sequence::removeGaps(){$/;"	f	class:Sequence
 renyi	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	e	enum:pmetricv
 reol_	Partition.cc	/^const char* reol_="$\\0";$/;"	v
+reset	MatrixOfValues.cc	/^void MatrixOfValues::reset(){$/;"	f	class:MatrixOfValues
+reset	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::reset(){$/;"	f	class:RobustDivisiveClustering
+reset	Statistics.cc	/^void Sampling::reset(){$/;"	f	class:Sampling
 roulette	Roulette.cc	/^roulette::roulette(){$/;"	f	class:roulette
 roulette	Roulette.h	/^class roulette$/;"	c
 row	partanalyzer_definitions.h	/^typedef vector<edge > row;$/;"	t
 ruleta	MultipleSeqAlign.h	/^	roulette ruleta;$/;"	m	class:MultipleSeqAlign
+runPruningClustering	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, pmetricv metric, double extensivity){$/;"	f	class:RobustDivisiveClustering
 sNeighborhood	sNeighborhood.cc	/^sNeighborhood::sNeighborhood(){$/;"	f	class:sNeighborhood
 sNeighborhood	sNeighborhood.cc	/^sNeighborhood::sNeighborhood(string p, svect* cl){$/;"	f	class:sNeighborhood
 sNeighborhood	sNeighborhood.h	/^class sNeighborhood$/;"	c
+sample_size	Statistics.cc	/^double Sampling::sample_size(){ return _X[7];}$/;"	f	class:Sampling
+sample_size	Statistics.cc	/^double Sampling::sample_size(double v){ double ov=_X[7] ; _X[7]=v ; return ov;}$/;"	f	class:Sampling
 scover	partanalyzer_definitions.h	/^typedef map<string, pair<sset,double> > scover ;$/;"	t
 sequence	Sequence.h	/^        string sequence(){return _sequence;}$/;"	f	class:Sequence
 set	partanalyzer_definitions.h	/^typedef map<string, pair<sset,double> > scover ;$/;"	t
@@ -499,9 +583,11 @@ split	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fracti
 splitmethod	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fraction=overlap} ;$/;"	g
 sset	partanalyzer_definitions.h	/^typedef set< string > sset;$/;"	t
 ssingletons	Partition.h	/^	sset ssingletons; \/\/\/Let's make sure we do not get any duplicated singleton. This is just a cheap patch for trying to speed up isaPartition().$/;"	m	class:Partition
+standard_deviation	Statistics.cc	/^double Sampling::standard_deviation(){ return _X[2];}$/;"	f	class:Sampling
+standard_deviation	Statistics.cc	/^double Sampling::standard_deviation(double v){ double ov=_X[2] ; _X[2]=v ; return ov;}$/;"	f	class:Sampling
 string	PartitionStats.h	/^	multimap<int,string,greaterThan> _consPart;$/;"	m	class:PartitionStats
-string	partanalyzer_definitions.h	/^typedef map<pair<string,string>,edge > graph ;$/;"	t
 strpair	partanalyzer_definitions.h	/^typedef pair<string,string> strpair;$/;"	t
+summary	Partition.cc	/^void Partition::summary(){$/;"	f	class:Partition
 svect	partanalyzer_definitions.h	/^typedef vector< string > svect;$/;"	t
 swapLabels	Partition.cc	/^void Partition::swapLabels(char* mcltabf){$/;"	f	class:Partition
 symmetricPurity	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
@@ -509,10 +595,10 @@ systemDate	partanalyzer_help.cc	/^void systemDate(){$/;"	f
 tabFile	Partition.cc	/^void Partition::tabFile(char* tabf){$/;"	f	class:Partition
 td	Partition.cc	/^void Partition::td(Partition* p2, double q=1.0){$/;"	f	class:Partition
 threshold	Ccop.h	/^	double threshold(){return _threshold;}$/;"	f	class:ccop
+topBestPartitions	RobustDivisiveClustering.h	/^	int topBestPartitions;$/;"	m	class:RobustDivisiveClustering
 tring	Partition.h	/^	map<string, string> _ftab; \/\/\/Key is first column of tabfile and value is second column$/;"	m	class:Partition
 tring	Partition.h	/^	map<string, string> _rtab; \/\/\/Key is second column of tabfile and value is first column$/;"	m	class:Partition
 tring	PartitionStats.h	/^	map<string,sNeighborhood> _cover;$/;"	m	class:PartitionStats
-tring	partanalyzer_definitions.h	/^typedef map<pair<string,string>,edge > graph ;$/;"	t
 tring	partanalyzer_definitions.h	/^typedef map<string, pair<sset,double> > scover ;$/;"	t
 tring	partanalyzer_definitions.h	/^typedef multimap<string,string > smap;$/;"	t
 tring	partanalyzer_definitions.h	/^typedef pair<string, pair<sset,double> > neighborhood ;$/;"	t
@@ -525,6 +611,8 @@ useZeroRED	partanalyzer_definitions.h	/^enum REDMxVal { useOrgRED, useOwnRED, us
 v	MatrixOfValues.cc	/^double MatrixOfValues::v(int i, int j) {$/;"	f	class:MatrixOfValues
 v	MatrixOfValues.cc	/^double MatrixOfValues::v(string a , string b, REDMxVal useRED){ \/\/useRED Defaults to useOrgRED$/;"	f	class:MatrixOfValues
 v	MatrixOfValues.h	/^	double v(int k) { return _mx[k]; }$/;"	f	class:MatrixOfValues
+variance	Statistics.cc	/^double Sampling::variance(){ return _X[4];}$/;"	f	class:Sampling
+variance	Statistics.cc	/^double Sampling::variance(double v){ double ov=_X[4] ; _X[4]=v ; return ov;}$/;"	f	class:Sampling
 vipp	Partition.cc	/^void Partition::vipp(Partition* part2){$/;"	f	class:Partition
 vmeasureArithmetic	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 vmeasureGeometric	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
@@ -538,3 +626,4 @@ xtractPositions	Sequence.cc	/^string Sequence::xtractPositions(vector<int>* posi
 xtractSequences	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){$/;"	f	class:MultipleSeqAlign
 xtractSequencesById	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequencesById(MultipleSeqAlign* msab, double minId, double maxId, bool equal,vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 xtractSequencesHighestId	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize, vector<int>* positions){$/;"	f	class:MultipleSeqAlign
+~RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::~RobustDivisiveClustering(){$/;"	f	class:RobustDivisiveClustering
