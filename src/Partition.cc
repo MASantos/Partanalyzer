@@ -860,14 +860,22 @@ bool _isComment(ifstream& _is, string& it, partFileFormat& iformat, int nit, cha
 }
 
 void Partition::summary(){
-	if(!QUIET||INFO) cout<<"#items= "<<_nitems<<\
+	if(!QUIET||INFO){
+		cout.setf(ios::fixed,ios::floatfield);
+		streamsize p=cout.precision();
+		 cout<<"#items= "<<_nitems<<\
 		" clusters= "<<clusters.size()<<\
 		" #singletons= "<<_nsingletons<<\
-		" #pairs= "<<_npairs<<\
-		" \%non-trivial/trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size()<<\
-		" largest-cluster-size= "<<_largest_cluster_size<<\
+		" #pairs= "<<_npairs;
+		cout.precision(2);
+		cout<<\
+		" \%nonTrivial/Trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size();
+		cout.precision(p);
+		cout<<\
+		" largestClusterSize= "<<_largest_cluster_size<<\
 //		" largest-cluster-index= "<<_largest_cluster<<
 		endl;
+	}
 }
 
 void Partition::_readClusters(){ ///For the time being, we'll assume each cluster has its number of items as the first string, its name as the second and then the items we'll follow:
