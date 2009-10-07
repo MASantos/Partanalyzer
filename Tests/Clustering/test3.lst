@@ -1,0 +1,7 @@
+#items= 12 clusters= 3 #singletons= 0 #pairs= 0 %non-trivial/trivial= 0/0 largest-cluster-size= 0 largest-cluster-index= 0
+#Partition output format: PART
+#Clusters: 3
+6       C1      A1      A2      B1      B2      C1      C2
+3       C2      A3      B3      C3
+3       C3      A4      B4      C4
+

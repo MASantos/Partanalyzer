@@ -1,0 +1,16 @@
+# ../../partanalyzer Version alpha 0.6.5
+# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build Oct  3 2009
+# Licensed under the GNU GPL version 3 or later.       
+# (see http://www.gnu.org/copyleft/gpl.html )          
+#
+#Sat Oct  3 20:47:37 EDT 2009
+#Reading matrix graph ... #
+#Finish Reading matrix: #items=12 #matrixelements=18 #pairs=18 TWeight=147
+#Pruning edges below 9
+#Partition output format: PART
+#Clusters: 4
+3	C1	A1	B1	C1	
+3	C2	A2	B2	C2	
+3	C3	A3	B3	C3	
+3	C4	A4	B4	C4	
+#Sat Oct  3 20:47:37 EDT 2009
