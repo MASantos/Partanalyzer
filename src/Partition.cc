@@ -866,11 +866,10 @@ void Partition::summary(){
 		" #pairs= "<<_npairs<<\
 		" \%non-trivial/trivial= "<<(_nnontrivial)*1.0/clusters.size()<<"/"<<(_nsingletons+_npairs)*1.0/clusters.size()<<\
 		" largest-cluster-size= "<<_largest_cluster_size<<\
-		" largest-cluster-index= "<<_largest_cluster<<\
+//		" largest-cluster-index= "<<_largest_cluster<<
 		endl;
 }
-/*
-*/
+
 void Partition::_readClusters(){ ///For the time being, we'll assume each cluster has its number of items as the first string, its name as the second and then the items we'll follow:
 	string it;		///That is, e.g, "95 N245 Alx3 Alx4 Cart1 ..." This would require an offset _items_offset=2. However, the lowest offset we expect is 
 	int nit,nitems;	/// _items_offset=1, as at least the first item must be the cluster size. Including the name is optional.
