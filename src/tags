@@ -70,9 +70,9 @@ PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Charr >
 PartitionStats	PartitionStats.cc	/^PartitionStats::PartitionStats(vector<Partition >& vpart, double extensivity){$/;"	f	class:PartitionStats
 PartitionStats	PartitionStats.h	/^class PartitionStats$/;"	c
 QUIET	partanalyzer.h	/^bool    QUIET=false;$/;"	v
-RDC_DEFAULT_NUMBER_NEIGHBORS	RobustDivisiveClustering.h	35;"	d
-RDC_DEFAULT_NUMBER_SAMPLES	RobustDivisiveClustering.h	34;"	d
-RDC_DEFAULT_TOP_BEST_PARTITIONS	RobustDivisiveClustering.h	36;"	d
+RDC_DEFAULT_NUMBER_NEIGHBORS	RobustDivisiveClustering.h	31;"	d
+RDC_DEFAULT_NUMBER_SAMPLES	RobustDivisiveClustering.h	30;"	d
+RDC_DEFAULT_TOP_BEST_PARTITIONS	RobustDivisiveClustering.h	32;"	d
 RDC_DEFAULT_TOP_BEST_PARTITIONS	partanalyzer_definitions.h	94;"	d
 REDMxVal	partanalyzer_definitions.h	/^enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;$/;"	g
 RS	Partition.cc	/^double Partition::RS(double q){$/;"	f	class:Partition

@@ -105,8 +105,8 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 		cout<<"#Averaging over following "<<windpart.size()<<" partitions:"<<endl;
 		for(vector<Partition >::iterator p=windpart.begin();p!=windpart.end();p++){
 			p->summary();
-			//p->printPartition();
-			windpart.rbegin()->printPartition();
+			p->printPartition();
+			//windpart.rbegin()->printPartition();
 		}
 	}
 	///Instantiate the set of partitions within the averaging window
@@ -117,7 +117,7 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 	Sampling pdistr=pstat.distancesDistribution(pmetric, refpart);
 	if(DEBUG)cout<<"#DistanceDistribution: "<<_graph_pruning_thr-gauge<<"\t"<<pdistr<<endl;
 	if(!QUIET){
-		cout<<"#"<<_graph_pruning_thr-gauge<<"\t";
+		cout<<"#"<<_graph_pruning_thr-gauge<<"\t"<<pdistr.mean()<<"\t";
 		windpart[refpart].summary();
 	}
 	///Store these sampling results vs pruning threshold

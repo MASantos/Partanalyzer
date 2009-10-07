@@ -201,7 +201,7 @@ Partition::Partition(set<sset* > sclassp, int ofs, char* partf, char* tabf){
 	if(_nitems!=sitems.size() || ! sitems.size()>0){
 		string msgt="ERROR";
 		stringstream ss;
-		ss<<": Partition::Partition(set<sset*>...) : _nitems("<<_nitems<<")!=sitems.size("<<sitems.size()<<")";
+		ss<<": Partition::Partition(set<sset*>...) : _nitems("<<_nitems<<")!=sitems.size("<<sitems.size()<<")... Using a fuzzy partition?";
 		string msgm=ss.str();
 		if(FUZZYPARTITION&&!QUIET){
 			msgt="#WARNING";
@@ -209,6 +209,7 @@ Partition::Partition(set<sset* > sclassp, int ofs, char* partf, char* tabf){
 		}
 		else{
 			cout<<msgt<<msgm<<endl;
+			isaPartition();
 			exit(1);
 		}
 	}

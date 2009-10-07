@@ -202,7 +202,10 @@ set<E > operator+(set<E>& sa, set<E>& sb){
 ///sa+=sb, modifies sa by appending to it sb
 template <class E>
 set<E>& operator+=(set<E>& sa, set<E>& sb){
-	return (sa=(sa+sb));
+	for(typename set<E>::iterator e=sb.begin();e!=sb.end(); e++)
+		sa.insert(*e);
+	return sa;
+	//return (sa=(sa+sb));
 };
 
 /* TESTING CUSTOM GRAPH CLASS */

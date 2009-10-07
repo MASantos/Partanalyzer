@@ -108,16 +108,19 @@ MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, bool below, bool 
 		cout<<"#Pruning edges "<<s<<" "<<edgethreshold<<endl;
 	}
 	long int ndeledges=0;
+	///If we erase edges we'll lose the singletons. Thus, instead just label those edges as NaN
 	graph prunedGraph(_graph.begin(),_graph.end());
 	for(graph::iterator e=_graph.begin();e!=_graph.end();e++){
 		if(below){
 			if(e->second<edgethreshold){
-				prunedGraph.erase(e->first);
+				//prunedGraph.erase(e->first);
+				prunedGraph[e->first]=numeric_limits<edge>::quiet_NaN();
 				ndeledges++;
 			}
 		}
 		else if(e->second>=edgethreshold){
-				prunedGraph.erase(e->first);
+				//prunedGraph.erase(e->first);
+				prunedGraph[e->first]=numeric_limits<edge>::quiet_NaN();
 				ndeledges++;
 			}
 	}
@@ -135,7 +138,13 @@ Partition MatrixOfValues::cluster(){
 		node A=(e->first).first;
 		///B
 		node B=(e->first).second;
-		if(DEBUG)cout<<"#Found edge (A="<<A<<" , B="<<B<<")= "<<(e->second)<<endl;
+		if(DEBUG){
+			if(isnan(e->second)){
+				cout<<"#Found unconnected nodes {A="<<A<<" , B="<<B<<"}= "<<(e->second)<<endl;
+			}else{
+				cout<<"#Found edge (A="<<A<<" , B="<<B<<")= "<<(e->second)<<endl;
+			}
+		}
 		if(!(A<coset)){
 		/**If A hasn't been already assigned to a class, then
 			if B wasn't assigned either
@@ -145,27 +154,53 @@ Partition MatrixOfValues::cluster(){
 				sset* sptr = new sset ;
 				///Equivalence class of A gets its inaugural (& representative) member A
 				sptr->insert(A);
-				///and B is in the same class as A
-				sptr->insert(B);
-				if(DEBUG)cout<<"#First time seing A and B: Both assigned to the same cluster: "<<*sptr<<endl;
-				///Store each member's pointer, which point 
-				canonicalMapping.insert(pair<node, sset*> (A,sptr));
-				///to that same class
-				canonicalMapping.insert(pair<node, sset*> (B,sptr));
-				///Update the list of assigned clusters
+				///If there is no actual edge between A and B
+				if(isnan(e->second)){
+					///Allocate memory for a new class (B's)
+					sset* bsptr = new sset ;
+					///Equivalence class of B gets its inaugural (& representative) member B
+					bsptr->insert(B);
+					if(DEBUG)cout<<"#First time seing A and B: Each assigned to different clusters: ("<<sptr<<") "<<*sptr<<" and ("<<bsptr<<") "<<*bsptr<<endl;
+					///Store each member's pointer, which point 
+					canonicalMapping.insert(pair<node, sset*> (A,sptr));
+					///to that same class
+					canonicalMapping.insert(pair<node, sset*> (B,bsptr));
+				///If there is an actual edge between A and B
+				}else{
+					///and B is in the same class as A
+					sptr->insert(B);
+					if(DEBUG)cout<<"#First time seing A and B: Both assigned to the same cluster: ("<<sptr<<") "<<*sptr<<endl;
+					///Store each member's pointer, which point 
+					canonicalMapping.insert(pair<node, sset*> (A,sptr));
+					///to that same class
+					canonicalMapping.insert(pair<node, sset*> (B,sptr));
+				}
+				///Update the list of assigned nodes
 				coset.insert(A);
 				coset.insert(B);
 			}
 			///else, if B had already been assigned to a class
 			else{
-				///retrieve B's class pointer
-				set<node >* bptr=canonicalMapping[B];
-				///and insert A in the same class as B 
-				bptr->insert(A);
-				if(DEBUG)cout<<"#First time seing A : assigned to the same cluster as B: "<<*bptr<<endl;
-				///Store A's class pointer (pointing to A's class) as the same pointer B has
-				canonicalMapping.insert(pair<node, sset*> (A,bptr));
-				///Update the list of assigned clusters
+				///If there is no actual edge between A and B
+				if(isnan(e->second)){
+					///Allocate memory for a new class (A's)
+					sset* sptr = new sset ;
+					///Equivalence class of A gets its inaugural (& representative) member A
+					sptr->insert(A);
+					if(DEBUG)cout<<"#First time seing A : assigned to each own cluster: ("<<sptr<<") "<<*sptr<<endl;
+					///Store A's own class pointer (pointing to A's class) 
+					canonicalMapping.insert(pair<node, sset*> (A,sptr));
+				///If there is an actual edge between A and B
+				}else{
+					///retrieve B's class pointer
+					set<node >* bptr=canonicalMapping[B];
+					///and insert A in the same class as B 
+					bptr->insert(A);
+					if(DEBUG)cout<<"#First time seing A : assigned to the same cluster as B: ("<<bptr<<") "<<*bptr<<endl;
+					///Store A's class pointer (pointing to A's class) as the same pointer B has
+					canonicalMapping.insert(pair<node, sset*> (A,bptr));
+				}
+				///Update the list of assigned nodes
 				coset.insert(A);
 			}
 		}else{
@@ -173,36 +208,57 @@ Partition MatrixOfValues::cluster(){
 			if B was not,
 			*/
 			if(!(B<coset)){
-				///retrieve A's class pointer
-				set<node >* aptr=canonicalMapping[A];
-				///and insert B in the same class as A 
-				aptr->insert(B);
-				if(DEBUG)cout<<"#First time seing B : assigned to the same cluster as A: "<<*aptr<<endl;
-				///Store B's class pointer (pointing to B's class) as the same pointer A has
-				canonicalMapping.insert(pair<node, sset*> (B,aptr));
+				///If there is no actual edge between A and B
+				if(isnan(e->second)){
+					///Allocate memory for a new class (B's)
+					sset* bsptr = new sset ;
+					///Equivalence class of B gets its inaugural (& representative) member B
+					bsptr->insert(B);
+					if(DEBUG)cout<<"#First time seing B : assigned to each own cluster: ("<<bsptr<<") "<<*bsptr<<endl;
+					///Store B's class pointer (pointing to B's class) as the same pointer A has
+					canonicalMapping.insert(pair<node, sset*> (B,bsptr));
+				///If there is an actual edge between A and B
+				}else{
+					///retrieve A's class pointer
+					set<node >* aptr=canonicalMapping[A];
+					///and insert B in the same class as A 
+					aptr->insert(B);
+					if(DEBUG)cout<<"#First time seing B : assigned to the same cluster as A: ("<<aptr<<") "<<*aptr<<endl;
+					///Store B's class pointer (pointing to B's class) as the same pointer A has
+					canonicalMapping.insert(pair<node, sset*> (B,aptr));
+				}
 				///Update the list of assigned clusters
 				coset.insert(B);
 			}
 			/**else, if B had also been already assigned to a class
-			we need to merge both clusters (A's and B's)
+			we need to merge both clusters (A's and B's) if this is an actual edge, so...
 			*/ 
 			else{
-				///retrieve A's class pointer
-				set<node >* aptr=canonicalMapping[A];
-				///retrieve B's class pointer
-				set<node >* bptr=canonicalMapping[B];
-				///There shouldn't be any duplicate edge, but just in case, let's not waste resources
-				if(aptr==bptr){
-					if(DEBUG)cout<<"#A and B belong to the same class. Nothing to do."<<endl;
-					continue;
+				///If there is no actual edge between A and B, do nothing, but
+				if(isnan(e->second)){
+					if(DEBUG)cout<<"#A and B were already assigned, but No edge between A and B: Nothing to do."<<endl;
+				///If there is an actual edge between A and B
 				}else{
-					if(DEBUG)cout<<"#A and B were already assigned to, respectively, "<<*aptr<<" and "<<*bptr<<endl;
+					///retrieve A's class pointer
+					set<node >* aptr=canonicalMapping[A];
+					///retrieve B's class pointer
+					set<node >* bptr=canonicalMapping[B];
+					///There shouldn't be any duplicate edge, but just in case, let's not waste resources
+					if(aptr==bptr){
+						if(DEBUG)cout<<"#A and B belong to the same class. Nothing to do."<<endl;
+						continue;
+					}else{
+						if(DEBUG)cout<<"#A and B were already assigned to, respectively, ("<<aptr<<") "<<*aptr<<" and ("<<bptr<<") "<<*bptr<<endl;
+					}
+					///merge B into A
+					(*aptr)+=(*bptr);
+					if(DEBUG)cout<<"#Merging them now into A's cluster : ("<<aptr<<") "<<*aptr<<endl;
+					///Update B's class pointer (pointing to B's class), as well as that of each of its relatives, to the same pointer A has
+					for(sset::iterator n=bptr->begin();n!=bptr->end();n++) 
+						canonicalMapping[*n]=aptr;
+					///Delete B's old cluster
+					delete bptr;
 				}
-				///merge B into A
-				(*aptr)+=(*bptr);
-				if(DEBUG)cout<<"#Merging them now into A's cluster : "<<*aptr<<endl;
-				///Store B's class pointer (pointing to B's class) as the same pointer A has
-				canonicalMapping.insert(pair<node, sset*> (B,aptr));
 			}
 			
 		}
@@ -211,6 +267,11 @@ Partition MatrixOfValues::cluster(){
 	set<sset* > sclassp;
 	for(map<node, sset*>::iterator cm=canonicalMapping.begin();cm!=canonicalMapping.end();cm++){
 		sclassp.insert(cm->second);
+		if(DEBUG)cout<<"#CanonicalMap: "<<cm->first<<"\t"<<cm->second<<"\t"<<*(cm->second)<<endl;
+	}
+	if(DEBUG){
+		for(set<sset*>::iterator pp=sclassp.begin();pp!=sclassp.end();pp++)
+			cout<<"#ClusterFound: "<<*pp<<"\t"<<**pp<<endl;
 	}
 	int offset=2;
 	char* partf=NULL;
