@@ -121,6 +121,7 @@ void Partition::_resetMembers(){
 	_largest_cluster=-1;
 	_largest_cluster_size=0;
 	_nnontrivial=0;
+	_npairs=0;
 	//_it_largest_cluster=clusters.end();
 	sitems.clear();
 	ssingletons.clear();
@@ -134,6 +135,7 @@ void Partition::_resetMembers(){
 			_it_largest_cluster=cl;
 		}
 		if(cl->size()-_items_offset>3)_nnontrivial++;
+		if(cl->size()-_items_offset==2)_npairs++;
 		if(cl->size()-_items_offset==1) {
 			_nsingletons++; 		//We might assign its value at the end to ssingletons.size(), but this way allows for checking of duplicate singleton clusters, i.e., non-sound partition.
 			ssingletons.insert( (*cl)[_items_offset] );
