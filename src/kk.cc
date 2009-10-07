@@ -7,6 +7,8 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <vector>
+#include <limits>
+
 using namespace std;
 
 string getSubstr(string a){
@@ -72,6 +74,14 @@ int main(){
 	cout<<"set s2 has "<<s2.size()<<" members"<<endl;
 	set<int > ss=s+s2;
 	cout<<"set s+s2 has "<<ss.size()<<" members"<<endl;
+	cout<<"\nLIMITS<double>: inf="<<numeric_limits<double>::infinity()<<\
+	" qNaN="<<numeric_limits<double>::quiet_NaN()<<\
+	" sNaN="<<numeric_limits<double>::signaling_NaN()<<\
+	endl;
+	cout<<"#----------------"<<endl;
+	int count=0;
+	for(set<int>::iterator i=s.begin();i!=s.end();i++ , ++count)
+		cout<<"s.size()="<<s.size()<<" *i="<<*i<<" count="<<count<<endl;
 	/*
 	map<string , double > mymap;
 	mymap.insert(pair<string,double> ("a",0.988));
