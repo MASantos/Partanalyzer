@@ -398,7 +398,7 @@ int main(int argc, char* argv[]) {
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
 			if(strcmp(*argv,"-ref")==0){
-				if(analysis=prgPSYM) analysis=prgPSYR;
+				if(analysis==prgPSYM) analysis=prgPSYR;
 				else analysis=prgPSSR;
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
@@ -1233,7 +1233,7 @@ int main(int argc, char* argv[]) {
 						case prgTDST: metric=tsallis; break;
 						case prgRDST: metric=renyi; break;
 						case prgJDST: metric=jeffreyQnorm; break;
-						deafault: cout<<"ERROR: unknown metric option"; exit(1); break;
+						default: cout<<"ERROR: unknown metric option"; exit(1); break;
 					}
 					if(!DIST_SUBSPROJECT) partstats.distances(metric);
 					else	partstats.distances_Subsprojection(metric);
