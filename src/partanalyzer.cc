@@ -620,17 +620,17 @@ int main(int argc, char* argv[]) {
 			analysis=prgPART;
 			if(argc<2)printCommandLineError("Missing graph");
 			argc--;argv++;
-			if(strcmp(*argv,"below")==0||strcmp(*argv,"bove")==0)printCommandLineError("File name must be first argument");
+			if(strcmp(*argv,"-below")==0||strcmp(*argv,"-above")==0)printCommandLineError("File name must be first argument");
 			mxofval=argv[0];
 			argc--;argv++;
 			if(argc>0){
-				if(strcmp(*argv,"above")==0){
+				if(strcmp(*argv,"-above")==0){
 					analysis=prgPARA;
 					if(argc<2)printCommandLineError("Missing threshold");
 					argc--;argv++;
 				}else{
 					analysis=prgPARB;
-					if(strcmp(*argv,"below")==0){
+					if(strcmp(*argv,"-below")==0){
 						if(argc<2)printCommandLineError("Missing threshold");
 						argc--;argv++;
 					}
