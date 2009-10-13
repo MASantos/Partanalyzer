@@ -45,6 +45,7 @@ void RobustDivisiveClustering::_summaryParameters(){
 		cout<<"#BeginRobustDivisiveClustering"<<endl;
 		cout<<"#Pruning= "<<prune<<" Nsamples= "<<nsamples<<" metric= "<<metric<<" extensivity= "<<extensivity<<" neighbors= "<<numberOfNeighbors<<endl;
 		cout<<"#min= "<<_min<<" max= "<<_max<<" Delta= "<<_delta<<endl;
+		cout<<"#RecommendedMaxNsamples= "<<_variance<<" (variance)"<<endl;
 	}
 }
 
@@ -62,6 +63,7 @@ void RobustDivisiveClustering::reset(){
 	Sampling graphEdgeDistribution=_graphptr->edgeDistributionStats();
 	_min=graphEdgeDistribution.minimum_value();
 	_max=graphEdgeDistribution.maximum_value();
+	_variance=graphEdgeDistribution.variance();
 }
 
 void RobustDivisiveClustering::_initialize(char* graphfile){
@@ -147,6 +149,8 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, pmetricv metric, double extensivity){
 	_setMainParameters(prunebelow,samples,metric,extensivity);
 	_summaryParameters();
+	long int nprunedges=0;
+	long int onprunedges=0;
 	int refpart=0;
 	///pruning treshold for refpart relative to current (last) partition
 	double gauge=numberOfNeighbors*_delta;
@@ -154,6 +158,7 @@ void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples
 	vector<Partition > windpart;
 	///Perform nsamples steps with a pruning threshold > minimum edge value
 	for(int it=0;it<=nsamples;it++){
+		nprunedges=0;
 		///
 		///New step: update pruning threshold
 		///Notice: both it and _graph_pruning_thr always point to the right-end of the sampling window
@@ -164,10 +169,10 @@ void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples
 		*/
 		if(below){
 			///pruning below threshold
-			P = _graphptr->pruneEdgesBelow(_graph_pruning_thr, false).cluster();
+			P = _graphptr->pruneEdgesBelow(_graph_pruning_thr,nprunedges, false).cluster();
 		}else{
 			///or pruning above threshold
-			P = _graphptr->pruneEdgesAbove(_graph_pruning_thr, false).cluster();
+			P = _graphptr->pruneEdgesAbove(_graph_pruning_thr,nprunedges, false).cluster();
 		}
 		///... and add it to the averaging window
 		windpart.push_back( P );
@@ -177,11 +182,14 @@ void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples
 		}
 		///If we have at least numberOfNeighbors + 1, then we can do calculations
 		if(it>=numberOfNeighbors){
+			//cout<<"pthr= "<<_graph_pruning_thr<<" REE-pruned= "<<nprunedges<<" ("<<onprunedges<<") "<<endl;
+			if(nprunedges-onprunedges==0&&!QUIET)cout<<"#WARNING: NO additional edges deleted "<<nprunedges<<" pthr= "<<_graph_pruning_thr<<endl;
 			///Index of reference partition  (index starts by 0).
 			refpart=(it+1>=_MOVINGWINDOW)?numberOfNeighbors:(it-numberOfNeighbors);
 			if(VERBOSE)cout<<"#it="<<it<<" refpart="<<refpart<<" winsize="<<windpart.size()<<" #neigh="<<numberOfNeighbors<<" Movingwindow="<<_MOVINGWINDOW<<" nsamples="<<nsamples<<endl;
 			///Calculate average distance between neighbors for partition refpart in window
 			_calculateVariation(windpart, refpart, gauge);
+			onprunedges=nprunedges;
 		}
 	}
 	///Calculate variation for the last numberOfNeighbors partitions (They'll have less than 2*numberOfNeighbors 

@@ -60,7 +60,12 @@ set<E>& operator+=(set<E>& sa, set<E>& sb){
         return (sa=(sa+sb));
 };
 
-int main(){
+int main(int argc, char* argv[]){
+	if(argc>1){
+		double f=atof(argv[1]);
+		cout<<"SEEN: f="<<f<<"=> 10*f="<<10*f<<endl;
+		exit(0);
+	}
 	int intarray[] = {1,2,3};
 	set<int > s(intarray,intarray+3);
 	int ia=4;

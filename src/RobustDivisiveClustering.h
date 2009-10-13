@@ -39,6 +39,7 @@ class RobustDivisiveClustering
 	double _min;
 	double _max;
 	double _delta;
+	double _variance;
 	double _graph_pruning_thr;
 	int  _MOVINGWINDOW;
 	void _initialize(char* graphfile);

@@ -97,12 +97,20 @@ void MatrixOfValues::reset(){
 }
 
 MatrixOfValues MatrixOfValues::pruneEdgesBelow(float edgethreshold, bool terse){
-	return pruneEdges(edgethreshold, true, terse);
+	long int nprunedges=0;
+	return pruneEdges(edgethreshold, nprunedges, true, terse);
+}
+MatrixOfValues MatrixOfValues::pruneEdgesBelow(float edgethreshold, long int& nprunedges, bool terse){
+	return pruneEdges(edgethreshold, nprunedges, true, terse);
 }
 MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, bool terse){
-	return pruneEdges(edgethreshold, false, terse);
+	long int nprunedges=0;
+	return pruneEdges(edgethreshold, nprunedges, false, terse);
 }
-MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, bool below, bool terse){
+MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, long int& nprunedges, bool terse){
+	return pruneEdges(edgethreshold, nprunedges, false, terse);
+}
+MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, long int& nedgesdel, bool below, bool terse){
 	if(terse&&!QUIET){
 		string s=below?"below":"above";
 		cout<<"#Pruning edges "<<s<<" "<<edgethreshold<<endl;
@@ -124,7 +132,8 @@ MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, bool below, bool 
 				ndeledges++;
 			}
 	}
-	if(DEBUG)cout<<"#Edges deleted= "<<ndeledges<<endl;
+	if(terse&&!QUIET)cout<<"#Edges deleted= "<<ndeledges<<endl;
+	nedgesdel=ndeledges-nedgesdel;
 	return MatrixOfValues(prunedGraph);
 }
 

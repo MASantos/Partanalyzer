@@ -224,6 +224,7 @@ _setFormat	Sequence.cc	/^void Sequence::_setFormat(){$/;"	f	class:Sequence
 _setMainParameters	RobustDivisiveClustering.cc	/^void  RobustDivisiveClustering::_setMainParameters(bool prunebelow,int samples, pmetricv metric, double ext){$/;"	f	class:RobustDivisiveClustering
 _summaryParameters	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::_summaryParameters(){$/;"	f	class:RobustDivisiveClustering
 _threshold	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
+_variance	RobustDivisiveClustering.h	/^	double _variance;$/;"	m	class:RobustDivisiveClustering
 _vint	Roulette.h	/^	vector<int > _vint;$/;"	m	class:roulette
 _vitems	Partition.h	/^	vector<string > _vitems;$/;"	m	class:Partition
 _w_inter	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
@@ -530,9 +531,11 @@ printPartition	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::prin
 printVersion	partanalyzer_help.cc	/^void printVersion(){$/;"	f
 printWithClusterLabels	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printWithClusterLabels(Partition* part, MSAformat fmt){$/;"	f	class:MultipleSeqAlign
 program	partanalyzer.cc	/^char* program;$/;"	v
-pruneEdges	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, bool below, bool terse){$/;"	f	class:MatrixOfValues
+pruneEdges	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, long int& nedgesdel, bool below, bool terse){$/;"	f	class:MatrixOfValues
 pruneEdgesAbove	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, bool terse){$/;"	f	class:MatrixOfValues
+pruneEdgesAbove	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, long int& nprunedges, bool terse){$/;"	f	class:MatrixOfValues
 pruneEdgesBelow	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdgesBelow(float edgethreshold, bool terse){$/;"	f	class:MatrixOfValues
+pruneEdgesBelow	MatrixOfValues.cc	/^MatrixOfValues MatrixOfValues::pruneEdgesBelow(float edgethreshold, long int& nprunedges, bool terse){$/;"	f	class:MatrixOfValues
 purityLax	Partition.h	/^	double purityLax(Partition* part2){ return purityScore(part2)[1];}$/;"	f	class:Partition
 purityScore	Partition.cc	/^vector<double > Partition::purityScore(Partition* part2){$/;"	f	class:Partition
 purityStrict	Partition.h	/^	double purityStrict(Partition* part2){ return purityScore(part2)[0];}$/;"	f	class:Partition

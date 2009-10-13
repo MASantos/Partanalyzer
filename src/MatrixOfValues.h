@@ -59,10 +59,13 @@ public:
 	MatrixOfValues(const MatrixOfValues& MOV);
 	///Prunes all edges with weight < threshold	
 	MatrixOfValues pruneEdgesBelow(float edgethreshold, bool terse=true);
+	MatrixOfValues pruneEdgesBelow(float edgethreshold, long int& nprunedges, bool terse=true);
 	///Prunes all edges with weight > threshold	
 	MatrixOfValues pruneEdgesAbove(float edgethreshold, bool terse=true);
+	MatrixOfValues pruneEdgesAbove(float edgethreshold, long int& nprunedges, bool terse=true);
 	///Prunes all edges with weight < threshold if flag is true; > threshold otherwise
-	MatrixOfValues pruneEdges(float edgethreshold, bool below=true, bool terse=true);
+	MatrixOfValues pruneEdges(float edgethreshold, long int& nprunedges, bool below=true, bool terse=true);
+	//MatrixOfValues pruneEdges(float edgethreshold, bool below=true, bool terse=true);
 	///Cluster graph
 	Partition cluster();
 	//Class assignment operator
