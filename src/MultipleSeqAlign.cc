@@ -47,10 +47,11 @@ MultipleSeqAlign::MultipleSeqAlign(char* msaf)
         string str; //String read from file
         string seq=""; //String containing sequence read from file
         Sequence Seq; //Actual sequence structure
-        while(_is>>str){
+        //while(_is>>str){
+        while(getline(_is,str)){
                 string fchr=str.substr(0,1);
                 if(fchr.compare("#")==0){
-				getline(_is,str);
+				//getline(_is,str);
 				continue;
 		}
                 //Found beginning of new sequence: push old one to the MSA and set name of the current new one
