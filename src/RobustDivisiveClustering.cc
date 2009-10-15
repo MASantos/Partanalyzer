@@ -101,7 +101,10 @@ int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
 	bool thisoneOK;
 	double delta;
 	set<int> badNs;
-	if(!QUIET)cout<<"#Finding optimal nsamples: No="<<samples<<" _min="<<_min<<" _max="<<_max<<endl;
+	if(!QUIET){
+		cout<<"#Finding optimal nsamples: No="<<samples<<" _min="<<_min<<" _max="<<_max<<endl;
+		systemDate();
+	}
 	while(true){
 		thisoneOK=true;
 		onprunedges=0;
@@ -132,7 +135,10 @@ int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
 			}else{
 				lastoneOK=false;
 			}
-			if(DeltaN==1||DeltaN==-1) return lastgoodN;
+			if(DeltaN==1||DeltaN==-1) {
+				systemDate();
+				return lastgoodN;
+			}
 			newn=(samples+lastN)/2;
 		}
 		else{
