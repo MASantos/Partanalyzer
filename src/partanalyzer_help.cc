@@ -95,8 +95,9 @@ void printHelp(){
 	cout<<"       (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]"<<endl;
 	cout<<endl;
 	cout<<"   For creating partitions ( Clustering )                             "<<endl;
-	cout<<"       --cluster-robust graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
 	cout<<"       --cluster graph [-below|-above] [ threshold ]                   "<<endl;
+	cout<<"       --cluster-robust graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
+	cout<<"       --cluster-robust-self-consistently graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
 	cout<<endl;
 	cout<<"   For editing partitions                                             "<<endl;
 	cout<<"       --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
@@ -132,8 +133,8 @@ void printHelp(){
 	cout<<"       -m matrix-of-values1 matrix-of-values2 "<<endl;
 	cout<<"       -r matrix-of-values1 matrix-of-values2 partition [partition_offset (=2)]"<<endl;
 	cout<<"       -l matrix-of-values1 matrix-of-values2 "<<endl;
-	cout<<"       --purge-edges-above float graphfile    "<<endl;
-	cout<<"       --purge-edges-below float graphfile    "<<endl;
+	cout<<"       --prune-edges-above float graphfile    "<<endl;
+	cout<<"       --prune-edges-below float graphfile    "<<endl;
 	cout<<"       --print-matrix matrix-of-values "<<endl;
 }
 void printHelpLong(){
@@ -323,16 +324,6 @@ void printHelpLong(){
 	cout<<"           given partitions.                                           "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"For creating partitions ( clustering )                                 "<<endl;
-	cout<<"       --cluster-robust graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
-	cout<<"           Gives the most robut clustering with respect to edge pruning."<<endl;
-	cout<<"           It repeatedly clusters the graph starting with a pruning    "<<endl;
-	cout<<"           threshold equal to the lowest edge and increasing it by a fixed"<<endl;
-	cout<<"           amount until reaching the highest edge value. The total     "<<endl;
-	cout<<"           number of samples determine each step increase of threshold."<<endl;
-	cout<<"           We may be pruning the edges above the threshold (as if the  "<<endl;
-	cout<<"           later were a temperature T) or below the threshold (1/T).   "<<endl;
-	cout<<"           Defaults: #samples=10 ; Pruning=below ; Metric=shannon (-V) "<<endl;
-	cout<<"                                                                       "<<endl;
 	cout<<"       --cluster graph [ [-below|-above] treshold ]                    "<<endl;
 	cout<<"           Defines clusters from the transitivity relation given by the"<<endl;
 	cout<<"           graph's edges. If a treshold is provided, it prunes first the"<<endl;
@@ -343,6 +334,25 @@ void printHelpLong(){
 	cout<<"           obtain the clusters generated that way. For pruning above we"<<endl;
 	cout<<"           must use the second explicit form                           "<<endl;
 	cout<<"                 partanalyzer --cluster gf -above 0.7                  "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --cluster-robust graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
+	cout<<"           Gives the most robut clustering with respect to edge pruning."<<endl;
+	cout<<"           It repeatedly clusters the graph starting with a pruning    "<<endl;
+	cout<<"           threshold equal to the lowest edge and increasing it by a fixed"<<endl;
+	cout<<"           amount until reaching the highest edge value. The total     "<<endl;
+	cout<<"           number of samples determine each step increase of threshold."<<endl;
+	cout<<"           We may be pruning the edges above the threshold (as if the  "<<endl;
+	cout<<"           later were a temperature T) or below the threshold (1/T).   "<<endl;
+	cout<<"           Defaults: #samples=10 ; Pruning=below ; Metric=shannon (-V) "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --RDC                                                           "<<endl;
+	cout<<"       --cluster-robust-self-consistently graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
+	cout<<"           As --cluster-robust, but it determines self-consitently the "<<endl;
+	cout<<"           largest possible number of samples. The latter is defined as"<<endl;
+	cout<<"           the largest for which each pruning interval removes at least"<<endl;
+	cout<<"           one edge. The method used is bisectioning and the provided  "<<endl;
+	cout<<"           #samples is used as the seed for the search. All defaults as"<<endl;
+	cout<<"           for --cluster-robust.                                       "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"For editing partitions                                                 "<<endl;
 	cout<<"       --part-extract-elements {--extract-elements} elements_file      " <<endl;
@@ -530,8 +540,8 @@ void printHelpLong(){
 	cout<<"       -l , --cull-edges                                               "<<endl;
 	cout<<"          Culls from matrix of values edges specified in second file.  "<<endl;
 	cout<<"                                                                       "<<endl;
-	cout<<"       --purge-edges-below float graphfile                             "<<endl;
-	cout<<"       --purge-edges-above float graphfile                             "<<endl;
+	cout<<"       --prune-edges-below float graphfile                             "<<endl;
+	cout<<"       --prune-edges-above float graphfile                             "<<endl;
 	cout<<"          Removes all edges below or above the given threshold.        "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --print-matrix                                                  "<<endl;

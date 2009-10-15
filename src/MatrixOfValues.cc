@@ -71,9 +71,12 @@ void MatrixOfValues::reset(){
 	_mx.clear();
 	_nedges=0;
 	for(graph::iterator g=_graph.begin();g!=_graph.end();g++){
-		_nedges++;
 		edge e=g->second; 
-		_Tweight+=e;
+		if(!isnan(e)){
+			_nedges++;
+			_Tweight+=e;
+		}
+		//Maybe later we would like to toggle on/off the printing of removed edges. So let's keep them.
 		_mx.push_back(e);
 		node pa=(g->first).first;
 		node pb=(g->first).second;
@@ -87,6 +90,7 @@ void MatrixOfValues::reset(){
 			_items.push_back(pb);
 			oitemssize=items.size();
 		}
+		//Maybe later we would like to toggle on/off the printing of removed edges. So let's keep them.
 		_pairs.insert(pair<string,string> (pa,pb) );
 	}
 	_nitems=items.size();
@@ -112,7 +116,7 @@ MatrixOfValues MatrixOfValues::pruneEdgesAbove(float edgethreshold, long int& np
 }
 MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, long int& nedgesdel, bool below, bool terse){
 	if(terse&&!QUIET){
-		string s=below?"below":"above";
+		string s=below?"below":"above or equal to";
 		cout<<"#Pruning edges "<<s<<" "<<edgethreshold<<endl;
 	}
 	long int ndeledges=0;
@@ -134,6 +138,7 @@ MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, long int& nedgesd
 	}
 	if(terse&&!QUIET)cout<<"#Edges deleted= "<<ndeledges<<endl;
 	nedgesdel=ndeledges-nedgesdel;
+	if(!QUIET)cout<<"#Setting up new graph "<<endl;
 	return MatrixOfValues(prunedGraph);
 }
 
@@ -549,10 +554,11 @@ void MatrixOfValues::merge(MatrixOfValues* mx2, Partition* pt){
 }
 
 void MatrixOfValues::printMatrix(){
-	if(!QUIET)cout<<"#items "<<_nitems<<endl;
-	if(!QUIET)cout<<"#Number of pairs: "<<_pairs.size()<<endl;
+	//if(!QUIET)cout<<"#Number of pairs: "<<_pairs.size()<<endl;
+	if(!QUIET)cout<<"#items "<<n_items()<<" #edges: "<<n_edges()<<" TWeight="<<W()<<endl;
 	for(smap::iterator it=_pairs.begin();it!=_pairs.end();it++)
-		cout<<it->first<<"\t"<<it->second<<"\t"<<v(it->first,it->second)<<endl;
+		if(!isnan(v(it->first,it->second)))
+			cout<<it->first<<"\t"<<it->second<<"\t"<<v(it->first,it->second)<<endl;
 }
 
 #endif //END _CLASS_MATRIXOFVALUES

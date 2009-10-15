@@ -565,8 +565,11 @@ int main(int argc, char* argv[]) {
 				}
 		}
 ///(For creating partitions)
-		else if(strcmp(*argv,"--cluster-robust")==0||strcmp(*argv,"--robustcluster")==0||strcmp(*argv,"--rc")==0||strcmp(*argv,"--partition")==0){
+		else if(strcmp(*argv,"--cluster-robust")==0||strcmp(*argv,"--robust-cluster")==0||strcmp(*argv,"--cluster-robust-self-consistent")==0||strcmp(*argv,"--RDC")==0){
 			analysis=prgRPAR;
+			if(strcmp(*argv,"--cluster-robust-self-consistent")==0||strcmp(*argv,"--RDC")==0){
+				analysis=prgRPSC;
+			}
 			if(argc<2)printCommandLineError("Missing graph");
 			argc--;argv++;
 			mxofval=argv[0];
@@ -575,11 +578,19 @@ int main(int argc, char* argv[]) {
 			while(argc>0){
 				//if(strcmp(*argv,"below")==0||strcmp(*argv,"above")==0){
 				if(strcmp(*argv,"-below")==0){
-					analysis=prgRPAB;
+					if(analysis==prgRPSC){
+						analysis=prgRDCB;
+					}else{
+						analysis=prgRPAB;
+					}
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-above")==0){
-					analysis=prgRPAA;
+					if(analysis==prgRPSC){
+						analysis=prgRDCA;
+					}else{
+						analysis=prgRPAA;
+					}
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-s")==0){
@@ -1346,10 +1357,13 @@ int main(int argc, char* argv[]) {
 			}
 ///(For creating partitions)
 		case prgRPAR:
+		case prgRDCB:
+		case prgRDCA:
 		case prgRPAA:
 		case prgRPAB:{
 			bool pruneBelow=true;
 			switch(analysis){
+				case prgRDCA:
 				case prgRPAA:{
 					pruneBelow=false;
 					break;

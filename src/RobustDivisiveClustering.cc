@@ -82,18 +82,88 @@ RobustDivisiveClustering::~RobustDivisiveClustering(){
 	if(_inStack) delete _graphptr;
 }
 
-RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, pmetricv pmetric, double extensivity){
+RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, pmetricv pmetric, double extensivity, bool selfConsistenly){
 	_initialize(graphfile);
-	runPruningClustering(below,nsamples, pmetric, extensivity);
+	runPruningClustering(below,nsamples, pmetric, extensivity, selfConsistenly);
 }
-RobustDivisiveClustering::RobustDivisiveClustering(MatrixOfValues* graph, bool below, int nsamples, pmetricv pm, double extensivity){
+RobustDivisiveClustering::RobustDivisiveClustering(MatrixOfValues* graph, bool below, int nsamples, pmetricv pm, double extensivity, bool selfConsistenly){
 	_initialize(graph);
-	runPruningClustering(below,nsamples, pm, extensivity);
+	runPruningClustering(below,nsamples, pm, extensivity, selfConsistenly);
 }
 
-void  RobustDivisiveClustering::_setMainParameters(bool prunebelow,int samples, pmetricv metric, double ext){
+int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
+	long int nprunedges;
+	long int onprunedges;
+	int lastN=1;
+	int lastgoodN=1;
+	bool lastoneOK=true;
+	int DeltaN=samples;
+	bool thisoneOK;
+	double delta;
+	set<int> badNs;
+	if(!QUIET)cout<<"#Finding optimal nsamples: No="<<samples<<" _min="<<_min<<" _max="<<_max<<endl;
+	while(true){
+		thisoneOK=true;
+		onprunedges=0;
+		delta=(_max-_min)/(1.0*samples);
+		int it;
+		for(it=0;it<=samples;it++){
+			nprunedges=0;
+			_graph_pruning_thr=_min+it*delta;
+			if(below){
+				_graphptr->pruneEdgesBelow(_graph_pruning_thr,nprunedges, false).cluster();
+			}else{
+				_graphptr->pruneEdgesAbove(_graph_pruning_thr,nprunedges, false).cluster();
+			}
+			if(VERBOSE&&it%10==0)cout<<"it="<<it<<" ptr="<<_graph_pruning_thr<<" delta="<<delta<<" prunedges="<<nprunedges<<" Netpruned="<<nprunedges-onprunedges<<endl;
+			if(it>=numberOfNeighbors && nprunedges-onprunedges==0){
+				thisoneOK=false;
+				if(!QUIET)cout<<"#Not good: it="<<it<<": "<<_graph_pruning_thr<<"/"<<nprunedges<<"("<<_graph_pruning_thr-delta<<"/"<<onprunedges<<")"<<endl;
+				badNs.insert(samples);
+				break;
+			}
+			onprunedges=nprunedges;
+		}
+		int newn;
+		if((thisoneOK&&!lastoneOK)||(!thisoneOK&&lastoneOK)){
+			if(thisoneOK){
+				lastgoodN=samples;
+				lastoneOK=true;
+			}else{
+				lastoneOK=false;
+			}
+			if(DeltaN==1||DeltaN==-1) return lastgoodN;
+			newn=(samples+lastN)/2;
+		}
+		else{
+			if(thisoneOK){
+				lastgoodN=samples;
+				newn=samples+DeltaN;
+			}else{
+				if(lastgoodN==1){
+					newn=samples-4*DeltaN/5;
+				}else{
+					newn=(samples+lastgoodN)/2;
+				}
+			}
+		}
+		DeltaN=newn-samples;
+		lastN=samples;
+		samples=newn;
+		if(!QUIET)cout<<"#Trying now: N="<<samples<<" DeltaN="<<DeltaN<<endl;
+	}
+	cout<<"ERROR: RobustDivisiveClustering::optimal_Nsamples : Couldn't find optimal Nsamples"<<endl;
+	exit(1);
+}
+
+void  RobustDivisiveClustering::_setMainParameters(bool prunebelow,int samples, pmetricv metric, double ext, bool selfConsistently){
 	below=prunebelow;
-	nsamples=samples;
+	if(selfConsistently){
+		nsamples=optimal_Nsamples(samples,prunebelow);
+		if(!QUIET)cout<<"#OptimalNsamples= "<<nsamples<<endl;
+	}else{
+		nsamples=samples;
+	}
 	pmetric=metric;
 	extensivity=ext;
 	///Step of pruning thresholds
@@ -103,7 +173,7 @@ void  RobustDivisiveClustering::_setMainParameters(bool prunebelow,int samples, 
 }
 
 void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart, int& refpart , double& gauge, bool reducewin){
-	if(VERBOSE){
+	if(DEBUG){
 		cout<<"#Averaging over following "<<windpart.size()<<" partitions:"<<endl;
 		for(vector<Partition >::iterator p=windpart.begin();p!=windpart.end();p++){
 			p->summary();
@@ -136,7 +206,7 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 		///... by erasing the worst one.
 		optimal_partitions.erase( last );
 	}
-	if(VERBOSE){
+	if(DEBUG){
 		cout<<"#BestOptimal partition so far ("<<optimal_partitions.size()<<"):"<<endl;
 		optimal_partitions.begin()->second.printPartition();
 		cout<<"#-----------------------------------------"<<endl;
@@ -146,8 +216,8 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 	//if(it>=_MOVINGWINDOW)windpart.erase(windpart.begin());
 }
 
-void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, pmetricv metric, double extensivity){
-	_setMainParameters(prunebelow,samples,metric,extensivity);
+void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, pmetricv metric, double extensivity, bool selfConsistently){
+	_setMainParameters(prunebelow,samples,metric,extensivity, selfConsistently);
 	_summaryParameters();
 	long int nprunedges=0;
 	long int onprunedges=0;
@@ -186,11 +256,11 @@ void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples
 			if(nprunedges-onprunedges==0&&!QUIET)cout<<"#WARNING: NO additional edges deleted "<<nprunedges<<" pthr= "<<_graph_pruning_thr<<endl;
 			///Index of reference partition  (index starts by 0).
 			refpart=(it+1>=_MOVINGWINDOW)?numberOfNeighbors:(it-numberOfNeighbors);
-			if(VERBOSE)cout<<"#it="<<it<<" refpart="<<refpart<<" winsize="<<windpart.size()<<" #neigh="<<numberOfNeighbors<<" Movingwindow="<<_MOVINGWINDOW<<" nsamples="<<nsamples<<endl;
+			if(VERBOSE)cout<<"#it="<<it<<" pthr="<<_graph_pruning_thr<<" nprunedges="<<nprunedges<<" refpart="<<refpart<<" winsize="<<windpart.size()<<" #neigh="<<numberOfNeighbors<<" Movingwindow="<<_MOVINGWINDOW<<" nsamples="<<nsamples<<endl;
 			///Calculate average distance between neighbors for partition refpart in window
 			_calculateVariation(windpart, refpart, gauge);
-			onprunedges=nprunedges;
 		}
+			onprunedges=nprunedges;
 	}
 	///Calculate variation for the last numberOfNeighbors partitions (They'll have less than 2*numberOfNeighbors 
 	for(int it=0;it<numberOfNeighbors;it++){

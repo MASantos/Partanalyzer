@@ -44,13 +44,13 @@ class RobustDivisiveClustering
 	int  _MOVINGWINDOW;
 	void _initialize(char* graphfile);
 	void _initialize(MatrixOfValues* graph);
-	void _setMainParameters(bool prunebelow,int samples, pmetricv metric, double ext);
+	void _setMainParameters(bool prunebelow,int samples, pmetricv metric, double ext, bool selfConsistently);
 	void _summaryParameters();
 	void _calculateVariation(vector<Partition >& windpart, int& refpart, double& gauge, bool reducewin=false);
-	void runPruningClustering(bool below, int nsamples, pmetricv pm, double extensivity);
+	void runPruningClustering(bool below, int nsamples, pmetricv pm, double extensivity, bool selfConsistently);
 public:
-	RobustDivisiveClustering(char* graphfile, bool prunebelow, int nsamples=RDC_DEFAULT_NUMBER_SAMPLES, pmetricv pm=shannon, double extensivity=EXTENSIVITY_DEFAULT);
-	RobustDivisiveClustering(MatrixOfValues* graph, bool prunebelow, int nsamples=RDC_DEFAULT_NUMBER_SAMPLES, pmetricv pm=shannon, double extensivity=EXTENSIVITY_DEFAULT);
+	RobustDivisiveClustering(char* graphfile, bool prunebelow, int nsamples=RDC_DEFAULT_NUMBER_SAMPLES, pmetricv pm=shannon, double extensivity=EXTENSIVITY_DEFAULT, bool selfConsistently=false);
+	RobustDivisiveClustering(MatrixOfValues* graph, bool prunebelow, int nsamples=RDC_DEFAULT_NUMBER_SAMPLES, pmetricv pm=shannon, double extensivity=EXTENSIVITY_DEFAULT, bool selfConsistently=false);
 	~RobustDivisiveClustering(); 
 	//RobustDivisiveClustering(RobustDivisiveClustering& RDC);
 	//RobustDivisiveClustering operator=(RobustDivisiveClustering& RDC);
@@ -63,6 +63,7 @@ public:
 	int topBestPartitions;
 	map<double, Sampling > pdistance_vs_pruningthr;
 	map<double, Partition> optimal_partitions;
+	int optimal_Nsamples(int Nbsamples, bool below);
 	//map<double, double> optimal_pruningthr;
 	void printPartition();
 	void printDistanceVsPruningThreshold();
