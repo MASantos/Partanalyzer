@@ -64,6 +64,10 @@ int main(int argc, char* argv[]){
 	if(argc>1){
 		double f=atof(argv[1]);
 		cout<<"SEEN: f="<<f<<"=> 10*f="<<10*f<<endl;
+		int n=11;
+		int m=5;
+		n/=m;
+		cout<<"11/5="<<11/5<<" n/m="<<n<<endl;
 		exit(0);
 	}
 	int intarray[] = {1,2,3};
