@@ -1357,19 +1357,26 @@ int main(int argc, char* argv[]) {
 			}
 ///(For creating partitions)
 		case prgRPAR:
+		case prgRPSC:
 		case prgRDCB:
 		case prgRDCA:
 		case prgRPAA:
 		case prgRPAB:{
 			bool pruneBelow=true;
+			bool RDCselfconsistently=false;
 			switch(analysis){
+				case prgRPSC:
+				case prgRDCB:
+					RDCselfconsistently=true;
+					break;
 				case prgRDCA:
+					RDCselfconsistently=true;
 				case prgRPAA:{
 					pruneBelow=false;
 					break;
 					}
 			}
-			RobustDivisiveClustering pruneCluster(mxofval,pruneBelow,Nsamples,metric,extensivity);
+			RobustDivisiveClustering pruneCluster(mxofval,pruneBelow,Nsamples,metric,extensivity,RDCselfconsistently);
 			pruneCluster.printPartition();
 			pruneCluster.printDistanceVsPruningThreshold();
 			break;

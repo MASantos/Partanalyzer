@@ -138,7 +138,7 @@ MatrixOfValues MatrixOfValues::pruneEdges(float edgethreshold, long int& nedgesd
 	}
 	if(terse&&!QUIET)cout<<"#Edges deleted= "<<ndeledges<<endl;
 	nedgesdel=ndeledges-nedgesdel;
-	if(!QUIET)cout<<"#Setting up new graph "<<endl;
+	if(terse&&!QUIET)cout<<"#Setting up new graph "<<endl;
 	return MatrixOfValues(prunedGraph);
 }
 
