@@ -161,7 +161,10 @@ int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
 			cout<<"ERROR: something strange happened: DeltaN==0 !?"<<endl;
 			exit(1);
 		}
-		if(!QUIET)cout<<"#Trying now: N="<<samples<<" DeltaN="<<DeltaN<<endl;
+		if(!QUIET){
+			cout<<"#Trying now: N="<<samples<<" DeltaN="<<DeltaN<<" : ";
+			systemDate();
+		}
 	}
 	cout<<"ERROR: RobustDivisiveClustering::optimal_Nsamples : Couldn't find optimal Nsamples"<<endl;
 	exit(1);
