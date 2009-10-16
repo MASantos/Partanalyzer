@@ -121,7 +121,7 @@ int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
 			if(VERBOSE&&it%10==0)cout<<"it="<<it<<" ptr="<<_graph_pruning_thr<<" delta="<<delta<<" prunedges="<<nprunedges<<" Netpruned="<<nprunedges-onprunedges<<endl;
 			if(it>=numberOfNeighbors && nprunedges-onprunedges==0){
 				thisoneOK=false;
-				if(!QUIET)cout<<"#Not good: it="<<it<<": "<<_graph_pruning_thr<<"/"<<nprunedges<<"("<<_graph_pruning_thr-delta<<"/"<<onprunedges<<")"<<endl;
+				if(!QUIET)cout<<"#Bad #samples: found pruning interval with no edges : it="<<it<<": "<<_graph_pruning_thr<<"/"<<nprunedges<<"("<<_graph_pruning_thr-delta<<"/"<<onprunedges<<")"<<endl;
 				badNs.insert(samples);
 				break;
 			}
@@ -147,6 +147,7 @@ int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
 				newn=samples+DeltaN;
 			}else{
 				if(lastgoodN==1){
+					DeltaN=DeltaN<0?-DeltaN:DeltaN;
 					newn=samples-4*DeltaN/5;
 				}else{
 					newn=(samples+lastgoodN)/2;
@@ -156,6 +157,10 @@ int RobustDivisiveClustering::optimal_Nsamples(int samples, bool below){
 		DeltaN=newn-samples;
 		lastN=samples;
 		samples=newn;
+		if(DeltaN==0){
+			cout<<"ERROR: something strange happened: DeltaN==0 !?"<<endl;
+			exit(1);
+		}
 		if(!QUIET)cout<<"#Trying now: N="<<samples<<" DeltaN="<<DeltaN<<endl;
 	}
 	cout<<"ERROR: RobustDivisiveClustering::optimal_Nsamples : Couldn't find optimal Nsamples"<<endl;

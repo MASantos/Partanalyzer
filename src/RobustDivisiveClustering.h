@@ -29,7 +29,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #define RDC_DEFAULT_NUMBER_SAMPLES 100
 #define RDC_DEFAULT_NUMBER_NEIGHBORS 2
-#define RDC_DEFAULT_TOP_BEST_PARTITIONS 10
+#define RDC_DEFAULT_TOP_BEST_PARTITIONS 20
 /**Performs a robust pruning clustering of the input graph
  * */
 class RobustDivisiveClustering
