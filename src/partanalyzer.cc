@@ -48,11 +48,11 @@ int main(int argc, char* argv[]) {
 	bool DIST_SUBSPROJECT=false;
 	char* msaf=NULL;
 	char* msafb=NULL;
-	char* partitionf1;
-	char* partitionf2;
-	char* mcltabfile;
-	char* mxofval;
-	char* mxofvalb;
+	char* partitionf1=NULL;
+	char* partitionf2=NULL;
+	char* mcltabfile=NULL;
+	char* mxofval=NULL;
+	char* mxofvalb=NULL;
 	string ClusterPrefix="C";
 	double doublea;
 	double doubleb;
