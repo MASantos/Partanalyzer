@@ -136,6 +136,7 @@ void printHelp(){
 	cout<<"       --prune-edges-above float graphfile    "<<endl;
 	cout<<"       --prune-edges-below float graphfile    "<<endl;
 	cout<<"       --print-matrix matrix-of-values "<<endl;
+	cout<<"       --graph-nodes matrix-of-values "<<endl;
 }
 void printHelpLong(){
 	cout<<"                                                                       "<<endl;
@@ -543,6 +544,10 @@ void printHelpLong(){
 	cout<<"       --prune-edges-below float graphfile                             "<<endl;
 	cout<<"       --prune-edges-above float graphfile                             "<<endl;
 	cout<<"          Removes all edges below or above the given threshold.        "<<endl;
+	cout<<"                                                                       "<<endl;
+	cout<<"       --graph-nodes graphfile                                         "<<endl;
+	cout<<"       --matrix-nodes graphfile                                        "<<endl;
+	cout<<"          Prints the list of nodes of the given interaction matrix.    "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --print-matrix                                                  "<<endl;
 	cout<<"          Print the given interaction matrix. For debugging.       "<<endl;
