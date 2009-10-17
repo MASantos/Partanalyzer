@@ -102,7 +102,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.8.3";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.8.4";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -525,6 +525,7 @@ printHasseNodes	PartitionStats.cc	/^void PartitionStats::printHasseNodes(){$/;"	
 printHelp	partanalyzer_help.cc	/^void printHelp(){$/;"	f
 printHelpLong	partanalyzer_help.cc	/^void printHelpLong(){$/;"	f
 printMatrix	MatrixOfValues.cc	/^void MatrixOfValues::printMatrix(){$/;"	f	class:MatrixOfValues
+printNodes	MatrixOfValues.cc	/^void MatrixOfValues::printNodes(){$/;"	f	class:MatrixOfValues
 printPIDNormalization	Sequence.cc	/^void printPIDNormalization(){$/;"	f
 printPairwiseIds	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printPairwiseIds(MultipleSeqAlign& msa, vector<int>* positions)$/;"	f	class:MultipleSeqAlign
 printPairwiseIds	MultipleSeqAlign.cc	/^void MultipleSeqAlign::printPairwiseIds(vector<int>* positions)$/;"	f	class:MultipleSeqAlign

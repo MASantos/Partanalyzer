@@ -110,6 +110,8 @@ public:
 	void edgeDistribution(Partition* pt=NULL);
 	///Get Median, mean, std, var, min and max of all edges
 	Sampling edgeDistributionStats();
+	///print the nodes of the graph
+	void printNodes();
 };
 
 #endif //END _CLASS_MATRIXOFVALUES_H

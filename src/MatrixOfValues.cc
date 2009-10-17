@@ -561,4 +561,21 @@ void MatrixOfValues::printMatrix(){
 			cout<<it->first<<"\t"<<it->second<<"\t"<<v(it->first,it->second)<<endl;
 }
 
+void MatrixOfValues::printNodes(){
+	if(!QUIET)cout<<"#items "<<n_items()<<" #edges: "<<n_edges()<<" TWeight="<<W()<<endl;
+	sset nodes;
+	size_t size=0;
+	for(smap::iterator it=_pairs.begin();it!=_pairs.end();it++){
+			nodes.insert(it->first);
+			if(nodes.size()>size){
+				size=nodes.size();
+				cout<<it->first<<endl;
+			}
+			nodes.insert(it->second);
+			if(nodes.size()>size){
+				size=nodes.size();
+				cout<<it->second<<endl;
+			}
+	}
+}
 #endif //END _CLASS_MATRIXOFVALUES
