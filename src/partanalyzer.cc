@@ -614,23 +614,23 @@ int main(int argc, char* argv[]) {
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-v")==0||strcmp(*argv,"-V")==0){
-					metric==shannon;
+					metric=shannon;
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-e")==0||strcmp(*argv,"-E")==0){
-					metric==cardinality;
+					metric=cardinality;
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-r")==0||strcmp(*argv,"-R")==0){
-					metric==renyi;
+					metric=renyi;
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-t")==0||strcmp(*argv,"-T")==0){
-					metric==tsallis;
+					metric=tsallis;
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-j")==0||strcmp(*argv,"-J")==0){
-					metric==jeffreyQnorm;
+					metric=jeffreyQnorm;
 					argc--;argv++;
 				}
 			}

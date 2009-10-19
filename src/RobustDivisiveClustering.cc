@@ -81,9 +81,9 @@ RobustDivisiveClustering::~RobustDivisiveClustering(){
 	if(_inStack) delete _graphptr;
 }
 
-RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, int nneighbors, pmetricv pmetric, double extensivity, bool selfConsistenly){
+RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, int nneighbors, pmetricv metric, double extensivity, bool selfConsistenly){
 	_initialize(graphfile);
-	runPruningClustering(below,nsamples, nneighbors, pmetric, extensivity, selfConsistenly);
+	runPruningClustering(below,nsamples, nneighbors, metric, extensivity, selfConsistenly);
 }
 RobustDivisiveClustering::RobustDivisiveClustering(MatrixOfValues* graph, bool below, int nsamples, int nneighbors, pmetricv pm, double extensivity, bool selfConsistenly){
 	_initialize(graph);
@@ -240,8 +240,8 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 	//if(it>=_MOVINGWINDOW)windpart.erase(windpart.begin());
 }
 
-void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, int nneighbors, pmetricv metric, double extensivity, bool selfConsistently){
-	_setMainParameters(prunebelow,samples,nneighbors,metric,extensivity, selfConsistently);
+void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, int nneighbors, pmetricv metric, double extensiv, bool selfConsistently){
+	_setMainParameters(prunebelow,samples,nneighbors,metric,extensiv, selfConsistently);
 	_summaryParameters();
 	long int nprunedges=0;
 	long int onprunedges=0;

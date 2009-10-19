@@ -80,7 +80,7 @@ RS	PartitionStats.h	/^	double RS(Partition p){ return p.RS();}$/;"	f	class:Parti
 RS	PartitionStats.h	/^	double RS(Partition p, double q){ return p.RS(q);}$/;"	f	class:PartitionStats
 RS	PartitionStats.h	/^	double RS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, renyi);}$/;"	f	class:PartitionStats
 RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(MatrixOfValues* graph, bool below, int nsamples, int nneighbors, pmetricv pm, double extensivity, bool selfConsistenly){$/;"	f	class:RobustDivisiveClustering
-RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, int nneighbors, pmetricv pmetric, double extensivity, bool selfConsistenly){$/;"	f	class:RobustDivisiveClustering
+RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, int nneighbors, pmetricv metric, double extensivity, bool selfConsistenly){$/;"	f	class:RobustDivisiveClustering
 RobustDivisiveClustering	RobustDivisiveClustering.h	/^class RobustDivisiveClustering$/;"	c
 SETUPCONSENSUSP	PartitionStats.h	/^	bool SETUPCONSENSUSP;$/;"	m	class:PartitionStats
 SPEER	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
@@ -103,7 +103,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.8.4.2";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.8.4.3";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -557,7 +557,7 @@ roulette	Roulette.cc	/^roulette::roulette(){$/;"	f	class:roulette
 roulette	Roulette.h	/^class roulette$/;"	c
 row	partanalyzer_definitions.h	/^typedef vector<edge > row;$/;"	t
 ruleta	MultipleSeqAlign.h	/^	roulette ruleta;$/;"	m	class:MultipleSeqAlign
-runPruningClustering	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, int nneighbors, pmetricv metric, double extensivity, bool selfConsistently){$/;"	f	class:RobustDivisiveClustering
+runPruningClustering	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::runPruningClustering(bool prunebelow, int samples, int nneighbors, pmetricv metric, double extensiv, bool selfConsistently){$/;"	f	class:RobustDivisiveClustering
 sNeighborhood	sNeighborhood.cc	/^sNeighborhood::sNeighborhood(){$/;"	f	class:sNeighborhood
 sNeighborhood	sNeighborhood.cc	/^sNeighborhood::sNeighborhood(string p, svect* cl){$/;"	f	class:sNeighborhood
 sNeighborhood	sNeighborhood.h	/^class sNeighborhood$/;"	c
