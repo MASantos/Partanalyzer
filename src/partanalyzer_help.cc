@@ -96,8 +96,8 @@ void printHelp(){
 	cout<<endl;
 	cout<<"   For creating partitions ( Clustering )                             "<<endl;
 	cout<<"       --cluster graph [-below|-above] [ threshold ]                   "<<endl;
-	cout<<"       --cluster-robust graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
-	cout<<"       --cluster-robust-self-consistently graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
+	cout<<"       --cluster-robust graph [-s #samples] [-n #neighbors] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
+	cout<<"       --cluster-robust-self-consistently graph [-s #samples] [-n #neighbors] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity] "<<endl;
 	cout<<endl;
 	cout<<"   For editing partitions                                             "<<endl;
 	cout<<"       --part-extract-elements elements_file [-tab mcl_tab_file] partition [partition1_offset (=2) ]" <<endl;
@@ -336,8 +336,13 @@ void printHelpLong(){
 	cout<<"           must use the second explicit form                           "<<endl;
 	cout<<"                 partanalyzer --cluster gf -above 0.7                  "<<endl;
 	cout<<"                                                                       "<<endl;
-	cout<<"       --cluster-robust graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
+	cout<<"       --cluster-robust graph [-s #samples] [-n #neighbors] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
 	cout<<"           Gives the most robut clustering with respect to edge pruning."<<endl;
+	cout<<"           This is defined as the partition showing the smallest average"<<endl;
+	cout<<"           variability _after_ the phase transition. The average varia-"<<endl;
+	cout<<"           bility is calculated as the average distance against those  "<<endl;
+	cout<<"           partitions at its #neighbors nearest pruning thresholds     "<<endl;
+	cout<<"           (#neighbors above; #neighbors below).                       "<<endl;
 	cout<<"           It repeatedly clusters the graph starting with a pruning    "<<endl;
 	cout<<"           threshold equal to the lowest edge and increasing it by a fixed"<<endl;
 	cout<<"           amount until reaching the highest edge value. The total     "<<endl;
@@ -345,9 +350,10 @@ void printHelpLong(){
 	cout<<"           We may be pruning the edges above the threshold (as if the  "<<endl;
 	cout<<"           later were a temperature T) or below the threshold (1/T).   "<<endl;
 	cout<<"           Defaults: #samples=10 ; Pruning=below ; Metric=shannon (-V) "<<endl;
+	cout<<"           #neighbors=2.                                               "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --RDC                                                           "<<endl;
-	cout<<"       --cluster-robust-self-consistently graph [-s #samples] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
+	cout<<"       --cluster-robust-self-consistently graph [-s #samples] [-n #neighbors] [-below|-above] [-V|-E|-R|-T|-J] [-ext extensivity]"<<endl;
 	cout<<"           As --cluster-robust, but it determines self-consitently the "<<endl;
 	cout<<"           largest possible number of samples. The latter is defined as"<<endl;
 	cout<<"           the largest for which each pruning interval removes at least"<<endl;

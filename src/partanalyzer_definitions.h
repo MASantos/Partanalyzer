@@ -97,6 +97,8 @@ inline string ToString(const T& x){
 #define MSADEFAULTFMT FASTA
 ///Default Cluster offset
 #define CLUSTEROFFSET_DEFAULT 2
+///For RDC
+#define RDC_DEFAULT_NUMBER_NEIGHBORS 2
 ///Available types of symmetric and non-symmetric pair-wise measures. 
 //enum pmeasure { conditionalEntropy=conditionalPotential , jointEntropy=jointPotential , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
 enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};

@@ -64,6 +64,7 @@ int main(int argc, char* argv[]) {
 	int cluster2_offset=cluster1_offset;
 	int clstat_normalization_ofs=0;
 	int Nsamples=1;
+	int Nneighbors=1;
 	int Nseq=1;
 	int seed=-1;
 	vector<int> positions;
@@ -575,6 +576,7 @@ int main(int argc, char* argv[]) {
 			mxofval=argv[0];
 			argc--;argv++;
 			Nsamples=RDC_DEFAULT_TOP_BEST_PARTITIONS;
+			Nneighbors=RDC_DEFAULT_NUMBER_NEIGHBORS;
 			while(argc>0){
 				//if(strcmp(*argv,"below")==0||strcmp(*argv,"above")==0){
 				if(strcmp(*argv,"-below")==0){
@@ -597,6 +599,12 @@ int main(int argc, char* argv[]) {
 					if(argc<2)printCommandLineError("Missing NumberOfSample");
 					argc--;argv++;
 					Nsamples=atoi(argv[0]);
+					argc--;argv++;
+				}
+				else if(strcmp(*argv,"-n")==0){
+					if(argc<2)printCommandLineError("Missing NumberOfNeighbors");
+					argc--;argv++;
+					Nneighbors=atoi(argv[0]);
 					argc--;argv++;
 				}
 				else if(strcmp(*argv,"-ext")==0){
@@ -1382,7 +1390,7 @@ int main(int argc, char* argv[]) {
 					break;
 					}
 			}
-			RobustDivisiveClustering pruneCluster(mxofval,pruneBelow,Nsamples,metric,extensivity,RDCselfconsistently);
+			RobustDivisiveClustering pruneCluster(mxofval,pruneBelow,Nsamples,Nneighbors,metric,extensivity,RDCselfconsistently);
 			pruneCluster.printPartition();
 			pruneCluster.printDistanceVsPruningThreshold();
 			break;
