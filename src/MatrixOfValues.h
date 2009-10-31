@@ -27,7 +27,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "partanalyzer_definitions.h"
 #include "Partition.h"
 #include "Statistics.h"
-
+#include <limits>
 
 /**Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .
  * It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair
@@ -48,6 +48,12 @@ class MatrixOfValues
 	long int _nitems;
 	edge _Tweight;
 	int _getIndexOfItem(string str);
+///
+///In order to specificy singletons, input matrix should contain them as self-loops
+///Partanalyzer, however, ignores self-loops. This member functions resets the diagonal
+///to a nan, except for those values explicitely specified in the input file
+///
+	void _setGraphDiagonal();
 public:
 	///Default Constructor
 	MatrixOfValues();

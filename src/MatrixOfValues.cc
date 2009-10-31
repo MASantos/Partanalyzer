@@ -484,7 +484,6 @@ void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a s
 #ifdef DEBUGDETAILS
 		cout<<"Seen: "<<pa<<" "<<pb<<" "<<v<<endl;
 #endif
-		if(pa==pb) continue; 
 		a=b=c=0;
 		for(int i=0;i<_items.size();i++){
 			if(strcmp(_items[i].c_str(),pa.c_str())==0)a=1;
@@ -493,6 +492,7 @@ void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a s
 		}
 		
 		if(a==0){ _items.push_back(pa); _nitems++;}
+		if(pa==pb) continue; 
 		if(b==0){ _items.push_back(pb); _nitems++;}
 		//if(a*b==1)continue;
 		_nedges++;
@@ -506,7 +506,21 @@ void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a s
 		cout<<"#inserting pair: "<<pa<<" "<<pb<<" #pairs="<<_pairs.size()<<endl;
 #endif
 	}
+	_setGraphDiagonal();
 	if(!QUIET) cout<<"#\n#Finish Reading matrix: #items="<<_nitems<<" #matrixelements="<<_mx.size()<<" #pairs="<<_pairs.size()<<" TWeight="<<_Tweight<<endl;
+}
+
+///
+///In order to specificy singletons, input matrix should contain them as self-loops
+///Partanalyzer, however, ignores self-loops. This member functions resets the diagonal
+///to a nan, except for those values explicitely specified in the input file
+///
+void MatrixOfValues::_setGraphDiagonal(){
+	for(svect::iterator it=_items.begin();it!=_items.end();it++){
+		if(_graph.find(pair<string,string> (*it,*it))==_graph.end()){
+			_graph[pair<string,string> (*it,*it)]=numeric_limits<edge>::quiet_NaN();
+		}
+	}
 }
 
 void MatrixOfValues::cull(MatrixOfValues* mx2){

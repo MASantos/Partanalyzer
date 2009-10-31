@@ -103,7 +103,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.8.4.3";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.0";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -221,6 +221,7 @@ _seed	Roulette.h	/^	unsigned int _seed;$/;"	m	class:roulette
 _sequence	Sequence.h	/^        string _sequence;$/;"	m	class:Sequence
 _setActualSeq	Sequence.cc	/^void Sequence::_setActualSeq(){$/;"	f	class:Sequence
 _setFormat	Sequence.cc	/^void Sequence::_setFormat(){$/;"	f	class:Sequence
+_setGraphDiagonal	MatrixOfValues.cc	/^void MatrixOfValues::_setGraphDiagonal(){$/;"	f	class:MatrixOfValues
 _setMainParameters	RobustDivisiveClustering.cc	/^void  RobustDivisiveClustering::_setMainParameters(bool prunebelow,int samples, int nneighbors, pmetricv metric, double ext, bool selfConsistently){$/;"	f	class:RobustDivisiveClustering
 _summaryParameters	RobustDivisiveClustering.cc	/^void RobustDivisiveClustering::_summaryParameters(){$/;"	f	class:RobustDivisiveClustering
 _threshold	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
