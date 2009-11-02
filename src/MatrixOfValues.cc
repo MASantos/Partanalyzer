@@ -306,6 +306,8 @@ Sampling MatrixOfValues::edgeDistributionStats(){
 	double x;
 	for(graph::iterator g=_graph.begin();g!=_graph.end();g++){
 		x=g->second;
+		///nan values specify absence of edge; c++, however, treats them as numeric values: We have to take care of that.
+		if(isnan(x))continue;
 		v+=x;
 		vv+=(g->second)*(g->second);
 		min=(x<min)?x:min;
@@ -371,6 +373,8 @@ void MatrixOfValues::edgeDistribution(const string& sa, int clusterSize, string 
 	//edge v;
 	for(graph::iterator g=_graph.begin();g!=_graph.end();g++){
 		const edge& v=g->second;
+		///nan values specify absence of edge; c++, however, treats them as numeric values: We have to take care of that.
+		if(isnan(v))continue;
 		const string& sb1=(g->first).first;
 		const string& sb2=(g->first).second;
 		if(sa.compare(sb1)==0||sa.compare(sb2)==0){
