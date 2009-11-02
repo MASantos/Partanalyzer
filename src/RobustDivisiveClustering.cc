@@ -213,7 +213,10 @@ void RobustDivisiveClustering::_calculateVariation(vector<Partition >& windpart,
 	Sampling pdistr=pstat.distancesDistribution(pmetric, refpart);
 	if(DEBUG)cout<<"#DistanceDistribution: "<<_graph_pruning_thr-gauge<<"\t"<<pdistr<<endl;
 	if(!QUIET){
+		if(refpart==0)cout<<"#PruningThr\tDeltaP\tEntropy\tHomogeneity\tPartitionSummary"<<endl;
 		cout<<"#"<<_graph_pruning_thr-gauge<<"\t"<<pdistr.mean()<<"\t";
+		cout<<windpart[refpart].H()<<"\t";
+		cout<<(1.0-windpart[refpart].H()/log((double)windpart[refpart].n_items()))<<"\t";
 		windpart[refpart].summary();
 	}
 	///Store these sampling results vs pruning threshold
