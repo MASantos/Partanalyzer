@@ -1031,6 +1031,25 @@ void PartitionStats::getPurityRef(){
 	if(!QUIET)cout<<"#EndPurityScores"<<endl;
 }
 
+void PartitionStats::getPurityTarget(){
+	Partition* pa=&_partitionl[0];
+	if(!QUIET)cout<<"#BeginPurityScores\n#Reference: "<<pa->FileName()<<endl;
+	if(!QUIET)cout<<"#Partition(reference)\tPurity Strict(raw)\tPurity Lax(raw)\tPurity Strict\tPurity Lax"<<endl;
+	int ns,nl;
+	double ps,pl;
+	vector<double> pscores;
+	for(int j=1;j<_partitionl.size();j++){
+		Partition* pb=&_partitionl[j];
+		pscores=pa->purityScore(pb);
+		ps=pscores[0];
+		pl=pscores[1];
+		ns=(int)(ps*(double)pb->n_nonSingClusters());
+		nl=(int)(pl*(double)pa->n_nonSingClusters());
+		cout<<pb->FileName()<<"\t"<<ns<<"\t"<<nl<<"\t"<<ps<<"\t"<<pl<<endl;
+	}
+	if(!QUIET)cout<<"#EndPurityScores"<<endl;
+}
+
 void PartitionStats::getPurity(){
 	if(!QUIET)cout<<"#BeginPurityScores"<<endl;
 	if(!QUIET)cout<<"#Partition(target)\tPartition(ref)\tPurity Strict(raw)\tPurity Lax(raw)\tPurity Strict\tPurity Lax"<<endl;

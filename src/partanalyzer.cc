@@ -404,6 +404,12 @@ int main(int argc, char* argv[]) {
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
 			}
+			if(strcmp(*argv,"-target")==0){
+				if(analysis==prgPSYM) analysis=prgPSYR;
+				else analysis=prgPSTG;
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+			}
 			if(strcmp(*argv,"-ofs")==0){
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
@@ -1219,6 +1225,7 @@ int main(int argc, char* argv[]) {
 		case prgRDSR:
 		case prgJDSR:
 		case prgPSSR:
+		case prgPSTG:
 		case prgPSST:{
 			if(VERBOSE){
 				cout<<"#Read "<<infilenames.size()<<" partitions: ";
@@ -1241,6 +1248,9 @@ int main(int argc, char* argv[]) {
 			switch(analysis){
 				case prgPSSR:
 					partstats.getPurityRef();
+					break;
+				case prgPSTG:
+					partstats.getPurityTarget();
 					break;
 				case prgPSST:
 					partstats.getPurity();

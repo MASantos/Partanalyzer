@@ -224,11 +224,13 @@ void printHelpLong(){
 	cout<<"          With option -ref, the first partition is taken as a reference"<<endl;
 	cout<<"          and it calculates the distances of all againts that one.     "<<endl;
 	cout<<"                                                                       "<<endl;
-	cout<<"       -P , --pstat [-ref]                                             "<<endl;
+	cout<<"       -P , --pstat [-ref | -target]                                   "<<endl;
 	cout<<"          Calculates the purity scores (strict and lax) for each pair  "<<endl;
 	cout<<"          of partitions. With option -ref, it calculates the purity    "<<endl;
 	cout<<"          scores of all againts the first one, which is taken as a     "<<endl;
-	cout<<"          reference.                                                   "<<endl;
+	cout<<"          reference. With option -target, the first one is considered  "<<endl;
+	cout<<"          the target and it calculates the scores of that one against  "<<endl;
+	cout<<"          all others taken as reference.                               "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"       --pstat-sym , --pstat-symmetric                                 "<<endl;
 	cout<<"          Calculates arithmetic averages of purity stric and purity lax"<<endl;

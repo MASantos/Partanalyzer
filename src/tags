@@ -103,7 +103,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.1";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.5";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -313,6 +313,7 @@ getPartInputFormat	Partition.h	/^	partFileFormat getPartInputFormat(){ return _p
 getPartition	MultipleSeqAlign.cc	/^Partition MultipleSeqAlign::getPartition(char* msaf,MSAformat fmt){$/;"	f	class:MultipleSeqAlign
 getPurity	PartitionStats.cc	/^void PartitionStats::getPurity(){$/;"	f	class:PartitionStats
 getPurityRef	PartitionStats.cc	/^void PartitionStats::getPurityRef(){$/;"	f	class:PartitionStats
+getPurityTarget	PartitionStats.cc	/^void PartitionStats::getPurityTarget(){$/;"	f	class:PartitionStats
 getSeed	Roulette.h	/^	unsigned int getSeed(){return _seed;}$/;"	f	class:roulette
 getSplitsRef	PartitionStats.cc	/^void PartitionStats::getSplitsRef(splitmethod similarity=overlap){$/;"	f	class:PartitionStats
 get_Ad	PartitionStats.cc	/^void PartitionStats::get_Ad(){$/;"	f	class:PartitionStats
@@ -484,9 +485,10 @@ prgPASO	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enu
 prgPASR	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPAXE	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPMSA	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgPSPP	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,$/;"	e	enum:prganalysis
-prgPSSR	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,$/;"	e	enum:prganalysis
-prgPSST	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,$/;"	e	enum:prganalysis
+prgPSPP	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
+prgPSSR	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
+prgPSST	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
+prgPSTG	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSYM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgPSYR	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgRDCA	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis

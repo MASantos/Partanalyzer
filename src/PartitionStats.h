@@ -134,6 +134,8 @@ public:
 	void getPurity();
 	///Calculate purity scores of all againts the first partition (reference)
 	void getPurityRef();
+	///Calculate purity scores of this partition (target) againts all other partition
+	void getPurityTarget();
 	///Compare cluster by cluster against the first partition's clusters (reference) and print overlap (fraction elements present in referece cluster)
 	void getSplitsRef(splitmethod similarity);
 	///get cardinality of partition

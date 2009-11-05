@@ -111,7 +111,7 @@ enum REDMxVal { useOrgRED, useOwnRED, useZeroRED } ;
 ///Enummerates possible main program command lines options
 enum prganalysis { prgCCOP=1,prgCDIS,
 	prgPAXE,prgPASO,prgPASR,prgPACN,
-	prgPSPP,prgPSST,prgPSSR,
+	prgPSPP,prgPSST,prgPSSR,prgPSTG,
 	prgVIPP,prgVIST,prgVISR,
 	prgEDSC,prgEDST,prgEDSR,
 	prgBDST,prgBDSR,
