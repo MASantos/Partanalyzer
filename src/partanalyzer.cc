@@ -370,6 +370,9 @@ int main(int argc, char* argv[]) {
 				}
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
+				Charr f={argv[0]};
+				infilenames.push_back( f );
+				argc--;argv++;
 			}
 			if(strcmp(*argv,"-f")==0){
 				if(argc<2)printCommandLineError();
@@ -403,11 +406,17 @@ int main(int argc, char* argv[]) {
 				else analysis=prgPSSR;
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
+				Charr f={argv[0]};
+				infilenames.push_back( f );
+				argc--;argv++;
 			}
 			if(strcmp(*argv,"-target")==0){
 				if(analysis==prgPSYM) analysis=prgPSYR;
 				else analysis=prgPSTG;
 				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				Charr f={argv[0]};
+				infilenames.push_back( f );
 				argc--;argv++;
 			}
 			if(strcmp(*argv,"-ofs")==0){

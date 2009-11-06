@@ -49,7 +49,7 @@ g++ -o partanalyzer partanalyzer.cc
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.9.5";
+const char* VERSION="alpha 0.9.6";
 
 bool 	DEBUG=false;
 
@@ -82,6 +82,7 @@ template<class T> void readListFromFile(char* argv0, T& container){
 
 //void readListInputFiles(ifstream is, vector<Charr> infilenames){
 inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){
+	size_t inif=infilenames.size();
         ifstream is(argv0);
         if(!is){
                 cout<<"ERROR: Cannot open file "<<argv0<<endl;
@@ -99,7 +100,7 @@ inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){
                 strcpy(f.car,fn.c_str());
                 infilenames.push_back(f);
         }
-        if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries.\n#First entry seen "<<infilenames[0].car<<"\n#Last ("<<infilenames.size()<<") entry seen "<<infilenames[infilenames.size()-1].car<<endl;
+        if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries.\n#First entry seen "<<infilenames[inif].car<<"\n#Last ("<<infilenames.size()<<") entry seen "<<infilenames[infilenames.size()-1].car<<endl;
 }
 
 #endif //END _PARTANALYZER_MAIN_HEADER
