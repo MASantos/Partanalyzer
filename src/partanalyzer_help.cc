@@ -33,7 +33,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 void printCopyright(){
         cout<<"# "<<program<<" Version "<<VERSION<<endl;
-        cout<<"# Copyright (c) Miguel A. Santos, May. 2008-2009 .Build "<<__DATE__<<endl;
+        cout<<"# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build "<<__DATE__<<endl;
         cout<<"# Licensed under the GNU GPL version 3 or later.       "<<endl;
         cout<<"# (see http://www.gnu.org/copyleft/gpl.html )          "<<endl;
         cout<<"#"<<endl;
