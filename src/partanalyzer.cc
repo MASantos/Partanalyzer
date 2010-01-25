@@ -1113,11 +1113,13 @@ int main(int argc, char* argv[]) {
 		else if(strcmp(*argv,"--print-matrix")==0||strcmp(*argv,"--graph-print")==0||strcmp(*argv,"--matrix-print")==0){
 			argc--;argv++;
 			int col=EDGES_DEFAULT_COLUMN;
-			if(argc<1)printCommandLineError("Missing graph file");
+			//if(argc<1)printCommandLineError("Missing graph file");
+			mxofval="/dev/stdin";
 			while(argc>0){
 				if(strcmp(*argv,"-c")==0||strcmp(*argv,"-col")==0||strcmp(*argv,"-column")==0){
 					argc--;argv++;
-					if(argc<2)printCommandLineError("Missing graph file");
+					//if(argc<2)printCommandLineError("Missing graph file");
+					if(argc<1)printCommandLineError("Missing column number");
 					col=atoi(*argv);
 					argc--;argv++;
 				}else{
@@ -1130,7 +1132,12 @@ int main(int argc, char* argv[]) {
 			exit(0);
 		}
 		else if(strcmp(*argv,"--graph-nodes")==0||strcmp(*argv,"--matrix-nodes")==0){
-			mxofval=argv[1];
+			argc--;argv++;
+			mxofval="/dev/stdin";
+			while(argc>0){
+				mxofval=argv[0];
+				argc--;argv++;
+			}
         		MatrixOfValues MX(mxofval);
 			MX.printNodes();
 			exit(0);
