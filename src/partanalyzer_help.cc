@@ -125,7 +125,7 @@ void printHelp(){
 	cout<<"       --msa-extract-sequences-by-topid msa_file1 msa_file2 [count]"<<endl;
 	cout<<"       --msa-drop-sequences-by-topid msa_file1 msa_file [count]"<<endl;
 	cout<<"       --msa-map-partition partition multiple_seq_alignment.fasta [MSAformat]"<<endl;
-	cout<<"       --print-msa multiple_seq_alignment.fasta "<<endl;
+	cout<<"       --msa-print [-sort|-nosort] multiple_seq_alignment.fasta "<<endl;
 	cout<<"       --msa-redundant [-nsam nsam] [-nseq nseq] [-seed seed] multiple_seq_alignment.fasta "<<endl;
 	cout<<endl;
 	cout<<"   For dealing with -interaction- matrices (aka, undirected graph)   "<<endl;
@@ -513,9 +513,10 @@ void printHelpLong(){
 	cout<<"          but uses `==' instead of `%'. Finally, GSIM adds cluster name"<<endl;
 	cout<<"          as the last string of the fasta label separated from it by `|'"<<endl;
 	cout<<"                                                                       "<<endl;
-	cout<<"       --print-msa                                                     "<<endl;
+	cout<<"       --msa-print , --print-msa [-sort|-nosort]                       "<<endl;
 	cout<<"          Prints the given multiple sequence alignment. Useful for     "<<endl;
-	cout<<"          debugging.                                                   "<<endl;
+	cout<<"          debugging. With -sort, sequences are sorted alphabetically;  "<<endl;
+	cout<<"          -nosort leaves them sorted as in the input file (default).   "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"For dealing with -interaction- matrices                                "<<endl;
 	cout<<"                                                                       "<<endl;

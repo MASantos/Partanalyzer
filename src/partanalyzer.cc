@@ -778,8 +778,23 @@ int main(int argc, char* argv[]) {
                         analysis=prgPMSA;
                         if(argc<2)printCommandLineError();
                         argc--;argv++;
-                        msaf=argv[0];
-                        argc--;argv++;
+			while(argc>0){
+				if(strcmp(*argv,"-nosort")==0){
+                        		argc--;argv++;
+                        		if(argc<1)printCommandLineError("Missing MSA filename");
+				}
+				else if(strcmp(*argv,"-sort")==0){
+                        		argc--;argv++;
+                        		if(argc<1)printCommandLineError("Missing MSA filename");
+                        		analysis=prgPMAS;
+				}
+				else {
+                        		msaf=argv[0];
+                        		argc--;argv++;
+				}
+			}
+                        //msaf=argv[0];
+                        //argc--;argv++;
                 }
                 else if (strcmp(*argv,"--msa-map-partition")==0){
                         analysis=prgMSMP;
@@ -1504,10 +1519,17 @@ int main(int argc, char* argv[]) {
 			break;
 			}
 ///(For analyzing Multiple Sequence Alignments)
-		case prgPMSA:{
+		case prgPMSA:
+		case prgPMAS:{
                         MultipleSeqAlign msa(msaf);
                         if(!QUIET)cout<<"#avgSeqId "<<msa.averageId()<<endl;
-                        msa.print();
+			bool sorted=false;
+                        switch(analysis){
+				case prgPMAS:
+					sorted=true;
+					break;
+			}
+			msa.print(sorted);
 			break;
 			}
 		case prgMSMP:{

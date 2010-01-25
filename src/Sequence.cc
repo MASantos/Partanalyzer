@@ -49,6 +49,10 @@ void printPIDNormalization(){
 
 ostream& operator<<(ostream& os , Sequence& s){ os<<s._name<<"\n"<<s._alignedsequence; return os;}
 
+bool sequenceNameSmallerThan(Sequence Sa, Sequence Sb){
+	return (Sa.name()<Sb.name());
+}
+
 Sequence::Sequence()
 {
         _name="";

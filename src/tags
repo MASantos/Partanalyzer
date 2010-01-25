@@ -103,7 +103,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.6";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.7";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -462,21 +462,21 @@ prgJDSR	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
 prgJDST	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
 prgJPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgM2PA	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
-prgMAPI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMAPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMGMX	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
-prgMMAI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMMPI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMMAI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMMPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMMXC	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
-prgMRED	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSDI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSDS	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSDT	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSMP	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSPI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSXI	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSXP	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSXS	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
-prgMSXT	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMRED	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSDI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSDS	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSDT	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSMP	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSXI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSXP	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSXS	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgMSXT	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgPACN	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPARA	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgPARB	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
@@ -484,7 +484,8 @@ prgPART	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,pr
 prgPASO	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPASR	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
 prgPAXE	partanalyzer_definitions.h	/^	prgPAXE,prgPASO,prgPASR,prgPACN,$/;"	e	enum:prganalysis
-prgPMSA	partanalyzer_definitions.h	/^	prgPMSA,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgPMAS	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
+prgPMSA	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgPSPP	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSSR	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSST	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
@@ -512,7 +513,7 @@ prgVMAM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,pr
 prgVMGM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgVMHM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prganalysis	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	g
-print	MultipleSeqAlign.cc	/^void MultipleSeqAlign::print()$/;"	f	class:MultipleSeqAlign
+print	MultipleSeqAlign.cc	/^void MultipleSeqAlign::print(bool sorted)$/;"	f	class:MultipleSeqAlign
 print	Sequence.h	/^        void print(){ return printAlignment(true);}$/;"	f	class:Sequence
 printAlignment	Sequence.cc	/^void Sequence::printAlignment(MSAformat msafmt, string suffix, bool withoutgaps){$/;"	f	class:Sequence
 printAlignment	Sequence.cc	/^void Sequence::printAlignment(bool withoutgaps){$/;"	f	class:Sequence
@@ -568,6 +569,7 @@ sample_size	Statistics.cc	/^double Sampling::sample_size(){ return _X[7];}$/;"	f
 sample_size	Statistics.cc	/^double Sampling::sample_size(double v){ double ov=_X[7] ; _X[7]=v ; return ov;}$/;"	f	class:Sampling
 scover	partanalyzer_definitions.h	/^typedef map<string, pair<sset,double> > scover ;$/;"	t
 sequence	Sequence.h	/^        string sequence(){return _sequence;}$/;"	f	class:Sequence
+sequenceNameSmallerThan	Sequence.cc	/^bool sequenceNameSmallerThan(Sequence Sa, Sequence Sb){$/;"	f
 set	partanalyzer_definitions.h	/^typedef map<string, pair<sset,double> > scover ;$/;"	t
 set	partanalyzer_definitions.h	/^typedef pair<string, pair<sset,double> > neighborhood ;$/;"	t
 set	sNeighborhood.h	/^	map<sset,double> neighborhoods;$/;"	m	class:sNeighborhood
@@ -634,7 +636,7 @@ xtrConsPart	Partition.cc	/^void Partition::xtrConsPart(multimap<int,string,great
 xtractElements	Partition.cc	/^Partition Partition::xtractElements(svect* elements){$/;"	f	class:Partition
 xtractPositions	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 xtractPositions	Sequence.cc	/^string Sequence::xtractPositions(vector<int>* positions){$/;"	f	class:Sequence
-xtractSequences	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){$/;"	f	class:MultipleSeqAlign
+xtractSequences	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool extract){$/;"	f	class:MultipleSeqAlign
 xtractSequencesById	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequencesById(MultipleSeqAlign* msab, double minId, double maxId, bool equal,vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 xtractSequencesHighestId	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize, vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 ~RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::~RobustDivisiveClustering(){$/;"	f	class:RobustDivisiveClustering

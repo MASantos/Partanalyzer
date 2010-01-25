@@ -103,7 +103,7 @@ public:
 	///Given alternative MSA, prints the average pair-wise identity and the fraction of all pairs with identity above thr. Default thr=50. 
         void printAveragePairwiseIds(MultipleSeqAlign& msa, double thr,vector<int>* positions=NULL);
 	///Print the whole multiple sequence alignment
-        void print();
+        void print(bool sorted=false);
 	///Generates randomly n additional sequences each an exact copy of one of the original sequences
 	MultipleSeqAlign genRedundantMSA(int n);
 	/**Generaes nsamples of MSAs each with redundancy of size n, i.e., each having n redundant sequences. The system clock is used for 

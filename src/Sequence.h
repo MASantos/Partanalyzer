@@ -113,6 +113,8 @@ public:
 	vector<int > getActualResidueNumbersFromMSAPositions(vector<int>* residueNumbers=NULL);
 	///Streams out a sequence and its name. Does not add a newline at the end.
 	friend ostream& operator<<(ostream& os , Sequence& s);
+	///Compares to Sequences by name
+	friend bool sequenceNameSmallerThan(Sequence sa , Sequence sb);
 };
 #endif //END _CLASS_SEQUENCE_H
 

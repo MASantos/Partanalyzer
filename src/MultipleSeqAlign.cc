@@ -111,7 +111,38 @@ void MultipleSeqAlign::addSeq(Sequence* Seq){
 }
 
 //Extract sequences specified by name. IF bool equal=false, drop them instead.
-MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){
+//MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal){
+//	MultipleSeqAlign nmsa;
+//	string name;
+//	nmsa.setName("Extracted sequences");
+//	bool found,cond;
+//	for(MSA::iterator st=_Seqlist.begin();st!=_Seqlist.end();st++){
+//		name=st->name();
+//		found=false;
+//		if(VERBOSE)cout<<name<<"? :";
+//		for(svect::iterator nit=seqnames->begin();nit!=seqnames->end();nit++){
+//			cond=(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0); //Name may start by >
+//			if(cond){
+//				found=true;
+//				if(equal){
+//					nmsa.addSeq(*st); //If equal, add sequences found to list; else
+//					if(VERBOSE)cout<<" (Equal="<<equal<<"/found="<<found<<") Cull :"<<*nit;
+//				}else if(VERBOSE)cout<<" (Equal="<<equal<<"/found="<<found<<")  Drop :"<<*nit;
+//			}
+//		}
+//		if(!(equal||found)){
+//			nmsa.addSeq(*st); //... add sequences NOT yet in list
+//			if(VERBOSE)cout<<" Keeping ";
+//		}else if(VERBOSE)cout<<" Ignoring :";
+//		if(VERBOSE)cout<<endl;
+//	}
+//	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
+//	if(!QUIET)cout<<"#Extracted "<<nmsa.getNumberOfSeq()<<" sequences"<<endl;
+//	return nmsa;
+//}
+
+//Extract sequences specified by name. IF bool equal=false, drop them instead.
+MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool extract){ //Rewritten for version Version alpha 0.9.7
 	MultipleSeqAlign nmsa;
 	string name;
 	nmsa.setName("Extracted sequences");
@@ -122,18 +153,22 @@ MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool equal)
 		if(VERBOSE)cout<<name<<"? :";
 		for(svect::iterator nit=seqnames->begin();nit!=seqnames->end();nit++){
 			cond=(name.compare(*nit)==0||name.substr(1,name.length()-1).compare(*nit)==0); //Name may start by >
-			if(cond){
-				found=true;
-				if(equal){
-					nmsa.addSeq(*st); //If equal, add sequences found to list; else
-					if(VERBOSE)cout<<" (Equal="<<equal<<"/found="<<found<<") Cull :"<<*nit;
-				}else if(VERBOSE)cout<<" (Equal="<<equal<<"/found="<<found<<")  Drop :"<<*nit;
+			if(cond){ //Sequence st was 
+				found=true; // found in list seqnames
+				if(extract){ // If we are culling those sequences in seqnames, 
+					//nmsa.addSeq(*st); // add sequences found to new list nmsa, and notify it if verbose mode is on
+					if(VERBOSE)cout<<" (Equal="<<extract<<"/found="<<found<<") Cull :"<<*nit;
+				}else  //Else, we are dropping sequences, thus notify
+					if(VERBOSE)cout<<" (Equal="<<extract<<"/found="<<found<<")  Drop :"<<*nit;
+				break; // go on with next sequence in MSA _Seqlist
 			}
 		}
-		if(!(equal||found)){
-			nmsa.addSeq(*st); //... add sequences NOT yet in list
+		//...If we are dropping, st wasnt found (i.e., we want to keep it)  or we're culling and found st in query list, then
+		if(!(extract||found) || (extract&&found)){
+			nmsa.addSeq(*st); //... add sequence st to new list nmsa and notify it.
 			if(VERBOSE)cout<<" Keeping ";
-		}else if(VERBOSE)cout<<" Ignoring :";
+		}else // Butm if we are dropping and st was in query list (i.e., labeled for being dropped), or we are extracting and not found, 
+			if(VERBOSE)cout<<" Ignoring :";
 		if(VERBOSE)cout<<endl;
 	}
 	if(nmsa.empty()&&!QUIET)cout<<"WARNING : NO sequence extracted"<<endl;
@@ -576,10 +611,13 @@ void MultipleSeqAlign::printAveragePairwiseIds(double thr, vector<int>* position
         }
 }
 
-void MultipleSeqAlign::print()
+void MultipleSeqAlign::print(bool sorted)
 {
-        for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-0;ita++)
-                (*ita).printAlignment();
+        if(sorted){
+		sort(_Seqlist.begin(),_Seqlist.end(),sequenceNameSmallerThan);
+        }
+	for(MSA::iterator ita=_Seqlist.begin();ita!=_Seqlist.end()-0;ita++)
+               	(*ita).printAlignment();
 }
 
 MultipleSeqAlign MultipleSeqAlign::genRedundantMSA(int n){
