@@ -29,6 +29,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "Statistics.h"
 #include <limits>
 
+#define EDGES_DEFAULT_COLUMN 3
 /**Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .
  * It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair
  * of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily)
@@ -40,6 +41,7 @@ class MatrixOfValues
 {
 	char* _mxofvf;
 	//ifstream _is;
+	int _edgesColumn;
 	svect _items;
 	smap	_pairs;
 	graph  _graph;
@@ -58,7 +60,7 @@ public:
 	///Default Constructor
 	MatrixOfValues();
 	///Constructor based on a file
-	MatrixOfValues(char* file);
+	MatrixOfValues(char* file, int col=EDGES_DEFAULT_COLUMN);
 	///Constructor based on a graph
 	MatrixOfValues(graph Graph);
 	///Copy-constructor
@@ -82,8 +84,8 @@ public:
 	graph getGraph() const { return _graph;}
 	///Get File name
 	char* FileName() const {return _mxofvf ;}
-	///Read matrix of values from file
-	void readMxValues();
+	///Read matrix of values from file: First two columns are vertices, int col locates the column containing the edge values
+	void readMxValues(int col=3);
 	///Print matrix of values to standard output
 	void printMatrix();
 	///Get value of k-th edge

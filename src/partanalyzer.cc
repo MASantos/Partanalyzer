@@ -1111,8 +1111,21 @@ int main(int argc, char* argv[]) {
 			argc--;argv++;
 		}
 		else if(strcmp(*argv,"--print-matrix")==0||strcmp(*argv,"--graph-print")==0||strcmp(*argv,"--matrix-print")==0){
-			mxofval=argv[1];
-        		MatrixOfValues MX(mxofval);
+			argc--;argv++;
+			int col=EDGES_DEFAULT_COLUMN;
+			if(argc<1)printCommandLineError("Missing graph file");
+			while(argc>0){
+				if(strcmp(*argv,"-c")==0||strcmp(*argv,"-col")==0||strcmp(*argv,"-column")==0){
+					argc--;argv++;
+					if(argc<2)printCommandLineError("Missing graph file");
+					col=atoi(*argv);
+					argc--;argv++;
+				}else{
+					mxofval=argv[0];
+					argc--;argv++;
+				}
+			}
+        		MatrixOfValues MX(mxofval,col);
 			MX.printMatrix();
 			exit(0);
 		}

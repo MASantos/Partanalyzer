@@ -19,6 +19,7 @@ BellNumber	BellNumber.h	/^class BellNumber$/;"	c
 CLUSTEROFFSET_DEFAULT	partanalyzer_definitions.h	99;"	d
 Charr	partanalyzer_definitions.h	/^class Charr{$/;"	c
 DEBUG	partanalyzer.h	/^bool 	DEBUG=false;$/;"	v
+EDGES_DEFAULT_COLUMN	MatrixOfValues.h	32;"	d
 END	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	e	enum:flagheader
 ES	PartitionStats.h	/^	long int ES(Partition& p1, Partition& p2){ return _pmetric(p1,p2,0);}$/;"	f	class:PartitionStats
 EXTENSIVITY_DEFAULT	partanalyzer_definitions.h	90;"	d
@@ -48,7 +49,7 @@ MSAformat	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GD
 MU_DEFAULT	partanalyzer_definitions.h	88;"	d
 MU_UNSET	partanalyzer_definitions.h	86;"	d
 MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(){$/;"	f	class:MatrixOfValues
-MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(char* file){$/;"	f	class:MatrixOfValues
+MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(char* file, int col){$/;"	f	class:MatrixOfValues
 MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(const MatrixOfValues& MOV){$/;"	f	class:MatrixOfValues
 MatrixOfValues	MatrixOfValues.cc	/^MatrixOfValues::MatrixOfValues(graph Graph){$/;"	f	class:MatrixOfValues
 MatrixOfValues	MatrixOfValues.h	/^class MatrixOfValues$/;"	c
@@ -103,7 +104,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.7";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.8";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -154,6 +155,7 @@ _clsnofs	PartitionStats.h	/^	int _clsnofs;$/;"	m	class:PartitionStats
 _consPart	PartitionStats.h	/^	multimap<int,string,greaterThan> _consPart;$/;"	m	class:PartitionStats
 _cover	PartitionStats.h	/^	map<string,sNeighborhood> _cover;$/;"	m	class:PartitionStats
 _delta	RobustDivisiveClustering.h	/^	double _delta;$/;"	m	class:RobustDivisiveClustering
+_edgesColumn	MatrixOfValues.h	/^	int _edgesColumn;$/;"	m	class:MatrixOfValues
 _extensivity_degree	PartitionStats.h	/^	double _extensivity_degree;$/;"	m	class:PartitionStats
 _f	PartitionStats.cc	/^double PartitionStats::_f(Partition& p, pmetricv metric){ \/\/POTENTIAL ASSOCIATED WITH A PARTITION.$/;"	f	class:PartitionStats
 _f_intra_thr	Ccop.h	/^	double _w_intra,_w_inter,_w_intra_thr,_f_intra_thr,_threshold;$/;"	m	class:ccop
@@ -550,7 +552,7 @@ purityScore	Partition.cc	/^vector<double > Partition::purityScore(Partition* par
 purityStrict	Partition.h	/^	double purityStrict(Partition* part2){ return purityScore(part2)[0];}$/;"	f	class:Partition
 readListFromFile	partanalyzer.h	/^template<class T> void readListFromFile(char* argv0, T& container){$/;"	f
 readListInputFiles	partanalyzer.h	/^inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){$/;"	f
-readMxValues	MatrixOfValues.cc	/^void MatrixOfValues::readMxValues(){ \/\/\/Later on we'll assume _mx represents a square matrix and we don't care about the diagonal values. $/;"	f	class:MatrixOfValues
+readMxValues	MatrixOfValues.cc	/^void MatrixOfValues::readMxValues(int col){ \/\/\/Later on we'll assume _mx represents a square matrix and we don't care about the diagonal values. $/;"	f	class:MatrixOfValues
 removeGaps	Sequence.cc	/^string Sequence::removeGaps(){$/;"	f	class:Sequence
 renyi	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	e	enum:pmetricv
 reol_	Partition.cc	/^const char* reol_="$\\0";$/;"	v
@@ -636,7 +638,7 @@ xtrConsPart	Partition.cc	/^void Partition::xtrConsPart(multimap<int,string,great
 xtractElements	Partition.cc	/^Partition Partition::xtractElements(svect* elements){$/;"	f	class:Partition
 xtractPositions	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractPositions(vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 xtractPositions	Sequence.cc	/^string Sequence::xtractPositions(vector<int>* positions){$/;"	f	class:Sequence
-xtractSequences	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool extract){$/;"	f	class:MultipleSeqAlign
+xtractSequences	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequences(svect* seqnames, bool extract){ \/\/Rewritten for version Version alpha 0.9.7$/;"	f	class:MultipleSeqAlign
 xtractSequencesById	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequencesById(MultipleSeqAlign* msab, double minId, double maxId, bool equal,vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 xtractSequencesHighestId	MultipleSeqAlign.cc	/^MultipleSeqAlign  MultipleSeqAlign::xtractSequencesHighestId(MultipleSeqAlign* msab, int cullsize, vector<int>* positions){$/;"	f	class:MultipleSeqAlign
 ~RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::~RobustDivisiveClustering(){$/;"	f	class:RobustDivisiveClustering

@@ -558,8 +558,10 @@ void printHelpLong(){
 	cout<<"       --matrix-nodes graphfile                                        "<<endl;
 	cout<<"          Prints the list of nodes of the given interaction matrix.    "<<endl;
 	cout<<"                                                                       "<<endl;
-	cout<<"       --print-matrix                                                  "<<endl;
-	cout<<"          Print the given interaction matrix. For debugging.       "<<endl;
+	cout<<"       --graph-print [-c col] , --matrix-print [-c col]                "<<endl;
+	cout<<"          Print the given interaction matrix. For debugging. Integer   "<<endl;
+	cout<<"          col specifies the column containing the edge values. Default:"<<endl;
+	cout<<"          col=3.                                                       "<<endl;
 	cout<<"                                                                       "<<endl;
 	cout<<"General options                                                        "<<endl;
 	cout<<"                                                                       "<<endl;

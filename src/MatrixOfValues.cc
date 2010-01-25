@@ -27,6 +27,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 MatrixOfValues::MatrixOfValues(){
 	_mxofvf=NULL;
+	_edgesColumn=EDGES_DEFAULT_COLUMN;
 	_items.clear();
 	_pairs.clear();
 	_graph.clear();
@@ -36,9 +37,10 @@ MatrixOfValues::MatrixOfValues(){
 	_Tweight=-696969;
 }
 
-MatrixOfValues::MatrixOfValues(char* file){
+MatrixOfValues::MatrixOfValues(char* file, int col){
 	_mxofvf=file;
-	readMxValues();
+	_edgesColumn=col;
+	readMxValues(_edgesColumn);
 }
 
 MatrixOfValues::MatrixOfValues(graph Graph){
@@ -464,7 +466,7 @@ int MatrixOfValues::_getIndexOfItem(string str){
 	exit(1);
 }
 
-void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a square matrix and we don't care about the diagonal values. 
+void MatrixOfValues::readMxValues(int col){ ///Later on we'll assume _mx represents a square matrix and we don't care about the diagonal values. 
 	string pa,pb,s;	///Thus input matrix element (i,j) is located at index k=(_nitems-1-i/2)*(i+1)+j-_nitems  of vector _mx, where i,j=0,1,2,... and 
 	edge v;		///
 	long int rep;
@@ -478,13 +480,28 @@ void MatrixOfValues::readMxValues(){ ///Later on we'll assume _mx represents a s
 	_nitems=0;
 	_Tweight=0;
 	int a,b,c,m;
-	if(!QUIET) cout<<"#Reading matrix "<<_mxofvf<<" ... ";
-	while(_is>>pa){
-		if(pa.substr(0,1).compare("#")==0){
-			getline(_is,pa);
+	if(!QUIET) cout<<"#Reading graph (matrix) "<<_mxofvf<<" at column "<<col<<" ... ";
+	string ln,kk;
+//	while(_is>>pa){
+//		if(pa.substr(0,1).compare("#")==0){
+//			getline(_is,pa);
+//			continue;
+//		}
+//		_is>>pb ; _is>>v;
+	while(getline(_is,ln)){
+		if(ln.substr(0,1).compare("#")==0){
 			continue;
 		}
-		_is>>pb ; _is>>v;
+		stringstream ss;
+		ss<<ln;
+		ss>>pa; ss>>pb;
+		if(pa.empty()||pb.empty()){
+			//Ignore blank lines
+			continue;
+		}
+		int shft=col-2;
+		while(shft-->1)ss>>kk;
+		ss>>v;
 #ifdef DEBUGDETAILS
 		cout<<"Seen: "<<pa<<" "<<pb<<" "<<v<<endl;
 #endif
