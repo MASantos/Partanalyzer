@@ -16,12 +16,12 @@
 *
 */
 /** Partanalyzer
-Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
+Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
 /** Partanalyzer
-Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2009.
+Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 
 Compile Options:
