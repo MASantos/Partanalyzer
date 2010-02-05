@@ -49,7 +49,7 @@ g++ -o partanalyzer partanalyzer.cc
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.9.9";
+const char* VERSION="alpha 0.9.9.5";
 
 bool 	DEBUG=false;
 
@@ -78,29 +78,6 @@ template<class T> void readListFromFile(char* argv0, T& container){
 		container.push_back(fn);
         }
         if(!QUIET)cout<<"#List file contains "<<container.size()<<" entries.\n#First entry seen "<<container[0]<<"\n#Last ("<<container.size()<<") entry seen "<<container[container.size()-1]<<endl;
-}
-
-//void readListInputFiles(ifstream is, vector<Charr> infilenames){
-inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){
-	size_t inif=infilenames.size();
-        ifstream is(argv0);
-        if(!is){
-                cout<<"ERROR: Cannot open file "<<argv0<<endl;
-                exit(1);
-        }
-        string fn;
-        Charr f;
-        if(!QUIET)cout<<"#Getting list of partitions from "<<argv0<<endl;
-        while(is>>fn){
-                if(fn.compare(0,1,"#")==0){ // It's a comment line...
-                        getline(is,fn);
-                        continue;               // ignore the whole line and get to the next one.
-                }
-                f.car = new char[fn.size()+1];
-                strcpy(f.car,fn.c_str());
-                infilenames.push_back(f);
-        }
-        if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries.\n#First entry seen "<<infilenames[inif].car<<"\n#Last ("<<infilenames.size()<<") entry seen "<<infilenames[infilenames.size()-1].car<<endl;
 }
 
 #endif //END _PARTANALYZER_MAIN_HEADER

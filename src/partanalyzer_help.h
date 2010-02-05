@@ -40,6 +40,8 @@ void printHelp();
 
 void printHelpLong();
 
+void exitWithMsg(const string="ERROR... somewhere... I guess...");
+
 void exitWithHelp();
 
 #endif //END _HELPFUNCTIONS_H

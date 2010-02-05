@@ -104,7 +104,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.9";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.9.5";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -255,6 +255,7 @@ ccop	Ccop.cc	/^ccop::ccop(MatrixOfValues* MX, Partition* part){$/;"	f	class:ccop
 ccop	Ccop.cc	/^ccop::ccop(MatrixOfValues* MX, Partition* part, double thr){$/;"	f	class:ccop
 ccop	Ccop.h	/^class ccop$/;"	c
 checkConsistency	Ccop.cc	/^void ccop::checkConsistency(){$/;"	f	class:ccop
+checkIfStandardInput	partanalyzer.cc	/^inline bool checkIfStandardInput(char* file1, char* file2="nofile", char* file3="nofile"){$/;"	f
 chrAt	Sequence.cc	/^string Sequence::chrAt(int pos){$/;"	f	class:Sequence
 clear2ndListOfPartitions	PartitionStats.cc	/^bool PartitionStats::clear2ndListOfPartitions(){$/;"	f	class:PartitionStats
 cluster	MatrixOfValues.cc	/^Partition MatrixOfValues::cluster(){$/;"	f	class:MatrixOfValues
@@ -290,6 +291,7 @@ entropy	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, ca
 eps	sNeighborhood.h	/^	double eps;$/;"	m	class:sNeighborhood
 existEdge	MatrixOfValues.cc	/^bool MatrixOfValues::existEdge(string a, string b){$/;"	f	class:MatrixOfValues
 exitWithHelp	partanalyzer_help.cc	/^void exitWithHelp()$/;"	f
+exitWithMsg	partanalyzer_help.cc	/^void exitWithMsg(const string msg){$/;"	f
 extensivity	RobustDivisiveClustering.h	/^	double extensivity;$/;"	m	class:RobustDivisiveClustering
 firstResidueNumber	Sequence.cc	/^int Sequence::firstResidueNumber(int nb){$/;"	f	class:Sequence
 flagheader	partanalyzer_definitions.h	/^enum flagheader {BEGIN,END};$/;"	g
@@ -551,7 +553,8 @@ purityLax	Partition.h	/^	double purityLax(Partition* part2){ return purityScore(
 purityScore	Partition.cc	/^vector<double > Partition::purityScore(Partition* part2){$/;"	f	class:Partition
 purityStrict	Partition.h	/^	double purityStrict(Partition* part2){ return purityScore(part2)[0];}$/;"	f	class:Partition
 readListFromFile	partanalyzer.h	/^template<class T> void readListFromFile(char* argv0, T& container){$/;"	f
-readListInputFiles	partanalyzer.h	/^inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){$/;"	f
+readListInputFiles	partanalyzer.cc	/^inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){$/;"	f
+readListInputFiles	partanalyzer.cc	/^inline void readListInputFiles(int& argc, char* argv[], vector<Charr>& infilenames, int nfiles=1000){$/;"	f
 readMxValues	MatrixOfValues.cc	/^void MatrixOfValues::readMxValues(int col){ \/\/\/Later on we'll assume _mx represents a square matrix and we don't care about the diagonal values. $/;"	f	class:MatrixOfValues
 removeGaps	Sequence.cc	/^string Sequence::removeGaps(){$/;"	f	class:Sequence
 renyi	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	e	enum:pmetricv

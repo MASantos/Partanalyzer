@@ -51,6 +51,11 @@ void printCommandLineError(char* lastSeenOption){
 	exit(1);
 }
 
+void exitWithMsg(const string msg){
+	cout<<_programb_<<" : "<<msg<<endl;
+	exit(1);
+}
+
 void exitWithHelp()
 {
 	printHelp();

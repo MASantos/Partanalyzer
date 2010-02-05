@@ -27,6 +27,107 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 #include "partanalyzer.h"
 
+//extern void printCommandLineError(const string label);
+//extern void printCommandLineError(char* lastSeeOption);
+//extern void exitWithMsg(const string);
+//Reading from standard input
+inline bool checkIfStandardInput(char* file1, char* file2="nofile", char* file3="nofile"){
+			if(VERBOSE)cout<<"#Checking for standard input...";
+			if(strcmp(file1,"-")==0&&strcmp(file2,"-")==0)printCommandLineError("Standard input can be assigned to only 1 input file");
+			if(strcmp(file1,"-")==0&&strcmp(file3,"-")==0)printCommandLineError("Standard input can be assigned to only 1 input file");
+			if(strcmp(file2,"-")==0&&strcmp(file3,"-")==0)printCommandLineError("Standard input can be assigned to only 1 input file");
+			if(strcmp(file1,"-")==0){
+				strcpy(file1,"/dev/stdin");
+				if(!QUIET)cout<<"#Reading file1 from standard input "<<file1<<endl;
+				return true;
+			}
+			else if(strcmp(file2,"-")==0){
+				strcpy(file2,"/dev/stdin");
+				if(!QUIET)cout<<"#Reading file2 from standard input "<<file2<<endl;
+				return true;
+			}
+			else if(strcmp(file3,"-")==0){
+				strcpy(file3,"/dev/stdin");
+				if(!QUIET)cout<<"#Reading file3 from standard input "<<file3<<endl;
+				return true;
+			}
+			if(VERBOSE)cout<<" NO"<<endl;
+			return false;
+}
+
+//void readListInputFiles(ifstream is, vector<Charr> infilenames){
+inline void readListInputFiles(char* argv0, vector<Charr>& infilenames){
+	const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
+	bool usestdin=false;
+	size_t inif=infilenames.size();
+        ifstream is(argv0);
+        if(!is){
+                cout<<"ERROR: Cannot open file "<<argv0<<endl;
+                exit(1);
+        }
+        string fn;
+        Charr f;
+        if(!QUIET)cout<<"#Getting list of partitions from "<<argv0<<endl;
+        while(is>>fn){
+                if(fn.compare(0,1,"#")==0){ // It's a comment line...
+                        getline(is,fn);
+                        continue;               // ignore the whole line and get to the next one.
+                }
+                f.car = new char[fn.size()+1];
+                strcpy(f.car,fn.c_str());
+	                if(checkIfStandardInput(f.car)){
+				if(usestdin)printCommandLineError(errmsg);
+				usestdin=true;
+			}
+                infilenames.push_back(f);
+        }
+        if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries.\n#First entry seen "<<infilenames[inif].car<<"\n#Last ("<<infilenames.size()<<") entry seen "<<infilenames[infilenames.size()-1].car<<endl;
+}
+
+inline void readListInputFiles(int& argc, char* argv[], vector<Charr>& infilenames, int nfiles=1000){
+	const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
+	bool usestdin=false;
+	size_t inif=infilenames.size();
+	if(strcmp(*argv,"-f")==0){
+		if(argc<2)printCommandLineError();
+		argc--;argv++;
+	        ifstream is(*argv);
+	        if(!is){
+	                cout<<"ERROR: Cannot open file "<<*argv<<endl;
+	                exit(1);
+	        }
+	        string fn;
+	        Charr f;
+	        if(!QUIET)cout<<"#Getting list of partitions from "<<*argv<<endl;
+	        while(is>>fn){
+	                if(fn.compare(0,1,"#")==0){ // It's a comment line...
+	                        getline(is,fn);
+	                        continue;               // ignore the whole line and get to the next one.
+	                }
+	                f.car = new char[fn.size()+1];
+	                strcpy(f.car,fn.c_str());
+	                if(checkIfStandardInput(f.car)){
+				if(usestdin)printCommandLineError(errmsg);
+				usestdin=true;
+			}
+	                infilenames.push_back(f);
+	        }
+	}else {
+		if(nfiles>argc)exitWithMsg("readListInputFilesI: Expect more files than arguments provided. Check code!");
+		for(int i=0;i<nfiles;i++){
+			Charr f={argv[0]};
+			argc--;argv--;
+	                if(checkIfStandardInput(f.car)){
+				if(usestdin)printCommandLineError(errmsg);
+				usestdin=true;
+			}
+			infilenames.push_back( f );
+		}
+	}
+        if(!QUIET)cout<<"#Partitions list file contains "<<infilenames.size()<<" entries.\n#First entry seen "<<infilenames[inif].car<<"\n#Last ("<<infilenames.size()<<") entry seen "<<infilenames[infilenames.size()-1].car<<endl;
+}
+
+
 ///Current name (full path) of Partanalyzer
 char* program;
 double beta;
@@ -226,6 +327,7 @@ int main(int argc, char* argv[]) {
 			if(argc<3)printCommandLineError();
 			mxofval=argv[1];
 			partitionf1=argv[2];
+			checkIfStandardInput(mxofval,partitionf1);
         		if(argc>3) cluster1_offset=atoi(argv[4]);
 		}
 		///Check consistency of partition according to weights in maxofval
@@ -244,6 +346,7 @@ int main(int argc, char* argv[]) {
 			}
 			mxofval=argv[0];
 			partitionf1=argv[1];
+			checkIfStandardInput(mxofval,partitionf1);
 			argc--;argv++;
 			argc--;argv++;
         		if(argc>0) threshold=atof(argv[0]);
@@ -265,10 +368,17 @@ int main(int argc, char* argv[]) {
 				cout<<"ERROR: invalid binary option"<<endl;
 				exit(1);
 			}
-				
 			if(argc<3)printCommandLineError();
 			partitionf1=argv[1];
 			partitionf2=argv[2];
+			checkIfStandardInput(partitionf1,partitionf2);
+			/*if(strcmp(partitionf1,"-")==0&&strcmp(partitionf2,"-")==0)printCommandLineError("Standard input can be assigned to only 1 input file");
+			if(strcmp(partitionf1,"-")==0){
+				partitionf1="/dev/stdin";
+			}
+			else if(strcmp(partitionf2,"-")==0){
+				partitionf2="/dev/stdin";
+			}*/
 			if(argc>3) cluster1_offset=atoi(argv[3]);
 			if(argc>4) cluster2_offset=atoi(argv[4]);
 		}
