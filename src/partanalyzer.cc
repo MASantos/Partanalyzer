@@ -438,11 +438,18 @@ int main(int argc, char* argv[]) {
 				argc--;argv++;
 				readListInputFiles(argv[0],infilenames);
 			}
-			else
+			else{
+				bool usestdin=false;
+				const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
 				for(int i=0;i<argc;i++){
 					Charr f={argv[i]};
+			                if(checkIfStandardInput(f.car)){
+						if(usestdin)printCommandLineError(errmsg);
+						usestdin=true;
+					}
 					infilenames.push_back( f );
 				}
+			}
 		}
 		else if (strcmp(*argv,"-V")==0||strcmp(*argv,"-E")==0||strcmp(*argv,"-B")==0||strcmp(*argv,"-T")==0||strcmp(*argv,"-R")==0||strcmp(*argv,"-J")==0\
 			||strcmp(*argv,"--vstat")==0||strcmp(*argv,"--estat")==0||strcmp(*argv,"--bstat")==0||strcmp(*argv,"--tstat")==0||strcmp(*argv,"--rstat")==0||strcmp(*argv,"--jstat")==0){
