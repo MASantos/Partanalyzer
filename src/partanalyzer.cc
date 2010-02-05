@@ -467,6 +467,8 @@ int main(int argc, char* argv[]) {
 			}
 			else
 				analysis=prgEDST;
+			bool usestdin=false;
+			const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
 			if(strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
@@ -488,6 +490,10 @@ int main(int argc, char* argv[]) {
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
 				Charr f={argv[0]};
+			                if(checkIfStandardInput(f.car)){
+						if(usestdin)printCommandLineError(errmsg);
+						usestdin=true;
+					}
 				infilenames.push_back( f );
 				argc--;argv++;
 			}
@@ -505,11 +511,16 @@ int main(int argc, char* argv[]) {
 					argc--;argv++;
 				}
 			}
-			else
+			else{
 				for(int i=0;i<argc;i++){
 					Charr f={argv[i]};
+			                if(checkIfStandardInput(f.car)){
+						if(usestdin)printCommandLineError(errmsg);
+						usestdin=true;
+					}
 					infilenames.push_back( f );
 				}
+			}
 		}
 		else if (strcmp(*argv,"-P")==0||strcmp(*argv,"--pstat")==0\
 			||strcmp(*argv,"--pstat-sym")==0||strcmp(*argv,"--pstat-symmetric")==0){
