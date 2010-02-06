@@ -173,7 +173,7 @@ double PartitionStats::_f(Partition& p, pmetricv metric){ //POTENTIAL ASSOCIATED
 				break;
 		case cardinality:
 				if(VERBOSE)cout<<"#WARNING: PartitionStats::_f : using cardinality as double"<<endl;
-				f=card(p);
+				f=card(p)-1;
 				break;
 		case tsallis:	
 				if(_extensivity_degree==EXTENSIVITY_DEFAULT)
