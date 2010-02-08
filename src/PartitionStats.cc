@@ -171,10 +171,15 @@ double PartitionStats::_f(Partition& p, pmetricv metric){ //POTENTIAL ASSOCIATED
 		case shannon:
 				f=H(p);
 				break;
-		case cardinality:
+		case cardinality:{
 				if(VERBOSE)cout<<"#WARNING: PartitionStats::_f : using cardinality as double"<<endl;
-				f=card(p)-1;
+				//int fo;
+				//fo=_extensivity_degree==1?1:0;
+				double fo;
+				fo=_extensivity_degree==EXTENSIVITY_DEFAULT?0:_extensivity_degree;
+				f=card(p)+fo;
 				break;
+				}
 		case tsallis:	
 				if(_extensivity_degree==EXTENSIVITY_DEFAULT)
 					f=TS(p);
