@@ -409,15 +409,17 @@ int main(int argc, char* argv[]) {
 			}
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
-			if(strcmp(*argv,"v")==0|strcmp(*argv,"shannon")==0)
+			if(strcmp(*argv,"v")==0||strcmp(*argv,"s")==0||strcmp(*argv,"vonneumann")==0||strcmp(*argv,"shannon")==0)
 				metric=shannon;
-			else if(strcmp(*argv,"e")==0|strcmp(*argv,"cardinality")==0)
+			else if(strcmp(*argv,"b")==0||strcmp(*argv,"boltzmann")==0)
+				metric=boltzmann;
+			else if(strcmp(*argv,"e")==0||strcmp(*argv,"c")==0||strcmp(*argv,"cardinality")==0)
 				metric=cardinality;
-			else if(strcmp(*argv,"r")==0|strcmp(*argv,"renyi")==0)
+			else if(strcmp(*argv,"r")==0||strcmp(*argv,"renyi")==0)
 				metric=renyi;
-			else if(strcmp(*argv,"t")==0|strcmp(*argv,"tsallis")==0)
+			else if(strcmp(*argv,"t")==0||strcmp(*argv,"tsallis")==0)
 				metric=tsallis;
-			else if(strcmp(*argv,"j")==0|strcmp(*argv,"tarantola")==0|strcmp(*argv,"jeffrey")==0|strcmp(*argv,"tjqn")==0){ //TARANTOLA-JEFFREY QNORM
+			else if(strcmp(*argv,"j")==0||strcmp(*argv,"tarantola")==0||strcmp(*argv,"jeffrey")==0||strcmp(*argv,"tjqn")==0){ //TARANTOLA-JEFFREY QNORM
 				metric=jeffreyQnorm;
 				extensivity=1.0;//DEFAULT VALUE FOR TARANTOLA QNORM
 			}
@@ -426,7 +428,7 @@ int main(int argc, char* argv[]) {
 				exit(1);
 			}
 			argc--;argv++;
-			if(strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
+			if(strcmp(*argv,"-e")==0||strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
 				extensivity=atof(argv[0]);
