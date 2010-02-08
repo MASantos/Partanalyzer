@@ -226,23 +226,27 @@ For analyzing partitions
           Calculates arithmetic averages of purity stric and purity lax
           scores for each pair of partitions.                          
                                                                        
-       -n , --ipot  entropy [-ext extensivity]                         
+       -n , --ipot  entropy [(-e|-ext) extensivity]                    
           Calculates (information theoretic) potential (entropy) of each
           partition. The possible values for entropy are:              
-          v | shannon                                                  
-          e | cardinality                                              
-          r | renyi                                                    
-          t | tsallis                                                  
+          v/s | vonneumann/shannon                                     
+          b   | boltzmann                                              
+          c/e | cardinality                                            
+          r   | renyi                                                  
+          t   | tsallis                                                
+          j   | tarantola/jeffrey/tjqn                                 
           Both, long and short option names are valid.                 
           Default extensivity coefficient is 2.
+          For cardinality potential, this coefficient will be used as a
+          gauge determining the card(1)=1+extensivity.                 
                                                                        
        --cpot, --conditional-potential entropy [-ext extensivity]      
-          Calculates conditional entropy for each partition.           
+          Calculates conditional entropy for each pair of partitions.  
           The possible values for entropy and extensivity are the same 
           as for option --ipot.                                        
                                                                        
        --jpot, --joint-potential entropy [-ext extensivity]            
-          Calculates joint entropy for each partition.                 
+          Calculates joint entropy for each pair of partitions.        
           The possible values for entropy and extensivity are the same 
           as for option --ipot.                                        
                                                                        
@@ -612,7 +616,7 @@ File formats:
 
 License
 # partanalyzer Version alpha 0.9.9.6
-# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build Feb  6 2010
+# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build Feb  8 2010
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #
