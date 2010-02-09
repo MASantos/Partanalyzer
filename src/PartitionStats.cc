@@ -235,6 +235,35 @@ void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){
 				case jointEntropy:
 					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<jointH<<endl;
 					break;
+				//case SA:
+				case mutualInformation:
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<_f(pa,metric)+_f(pb,metric)-jointH<<endl;
+					break;
+				//case SSA: //Strong Subadditivity
+				case conditionalMutualInformation:
+				case SSSA: //Soft Strong Subadditivity
+					{
+					for(int k=0;k<_partitionl.size()-1;k++){
+						Partition pc=_partitionl[k];
+						double gC=_f(pc,metric);
+						Partition pac=pa*pc;
+						Partition pcb=pb*pc;
+						Partition pabc=pi*pc;
+						double gAC=_f(pac,metric);
+						double gCB=_f(pcb,metric);
+						double gABC=_f(pabc,metric);
+						cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<pc.FileName()<<"\t";
+						switch(measure){
+							case SSA:
+								cout<<gAC+gCB-gC-gABC<<endl;
+								break;
+							case SSSA:
+								cout<<gAC+gCB-gC-jointH<<endl;
+								break;
+						}
+					}
+					break;
+					}
 				case vmeasureArithmetic:
 					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t"<<0.5*(vmeasure_h+vmeasure_c)<<endl;
 					break;
@@ -271,54 +300,86 @@ void PartitionStats::pmeasuresRef(pmeasure measure , pmetricv metric){
 	Partition p=_partitionl[0];
 	bool usingREF=true;
 	distancesPrintHeadComment(measure, metric,(flagheader) BEGIN);
-	for(int i=1;i<_partitionl.size()-1;i++){
-		for(int j=i+1;j<_partitionl.size();j++){
-			if(_DIST_SUBSPROJECT) p=_partitionl[i];
-			Partition pb=_partitionl[j];
-			Partition pi=p*pb;
-			if(_DIST_SUBSPROJECT){
-				if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;
-				p.SubsProject(pi.sitems);
-				pb.SubsProject(pi.sitems);
-			}
-			double jointH=_f(pi,metric);
-			double ipota=_f(p,metric);
-			double ipotb=_f(pb,metric);
-			double vmeasure_h=ipotb<1.0E-12?1.0:1-(jointH-ipota)/ipotb;
-			double vmeasure_c=ipota<1.0E-12?1.0:1-(jointH-ipotb)/ipota;
-			switch(measure){
-				case conditionalEntropy:
-					cout<<pb.FileName()<<"\t"<<jointH-_f(p,metric)<<"\t"<<2.0*jointH-_f(p,metric)-_f(pb,metric)<<endl;
-					break;
-				case jointEntropy:
-					cout<<pb.FileName()<<"\t"<<jointH<<endl;
-					break;
-				case vmeasureArithmetic:
-					cout<<pb.FileName()<<"\t"<<0.5*(vmeasure_h+vmeasure_c)<<endl;
-					break;
-				case vmeasureGeometric:
-					cout<<pb.FileName()<<"\t"<<sqrt(vmeasure_h*vmeasure_c)<<endl;
-					break;
-				case vmeasureHarmonic:
-					cout<<pb.FileName()<<"\t"<<(1.0+beta)*vmeasure_h*vmeasure_c/(beta*vmeasure_h+vmeasure_c)<<endl;
-					break;
-				case symmetricPurity:{
-					double pl=0.0;
-					double ps=0.0;
-					vector<double> pscores;
-					pscores=p.purityScore(&pb);
-					ps+=pscores[0];
-					pl+=pscores[1];
-					pscores=pb.purityScore(&p);
-					ps+=pscores[0];
-					pl+=pscores[1];
-					cout<<pb.FileName()<<"\t"<<0.5*ps<<"\t"<<0.5*pl<<endl;
+	if(!QUIET){
+		cout<<"#Partition(reference):"<<p.FileName()<<endl;
+		//cout<<"#Partition(target)\ttarget-intersection\tref-intersection\ttarget-ref"<<endl;
+	}
+	for(int j=1;j<_partitionl.size()-1;j++){
+		if(_DIST_SUBSPROJECT) p=_partitionl[0];
+		Partition pb=_partitionl[j];
+		Partition pi=p*pb;
+		if(_DIST_SUBSPROJECT){
+			if(VERBOSE)cout<<"#Projecting onto common subspace ("<<pi.sitems.size()<<") "<<endl;
+			p.SubsProject(pi.sitems);
+			pb.SubsProject(pi.sitems);
+		}
+		double jointH=_f(pi,metric);
+		double ipota=_f(p,metric);
+		double ipotb=_f(pb,metric);
+		double vmeasure_h=ipotb<1.0E-12?1.0:1-(jointH-ipota)/ipotb;
+		double vmeasure_c=ipota<1.0E-12?1.0:1-(jointH-ipotb)/ipota;
+		switch(measure){
+			case conditionalEntropy:
+				cout<<pb.FileName()<<"\t"<<jointH-_f(p,metric)<<"\t"<<2.0*jointH-_f(p,metric)-_f(pb,metric)<<endl;
+				break;
+			case jointEntropy:
+				cout<<pb.FileName()<<"\t"<<jointH<<endl;
+				break;
+			//case SA:
+			case mutualInformation:
+				cout<<pb.FileName()<<"\t"<<_f(p,metric)+_f(pb,metric)-jointH<<endl;
+				break;
+			//case SSA: //Strong Subadditivity
+			case conditionalMutualInformation:
+			case SSSA: //Soft Strong Subadditivity
+				{
+				double gC=ipota;
+				double gCB=jointH;
+				for(int k=0;k<_partitionl.size()-1;k++){
+					Partition pa=_partitionl[k];
+					Partition pac=pa*p;
+					Partition pab=pa*pb;
+					Partition pabc=pi*pa;
+					double gAC=_f(pac,metric);
+					double gABC=_f(pabc,metric);
+					double gAB=_f(pab,metric);
+					cout<<pa.FileName()<<"\t"<<pb.FileName()<<"\t";
+					switch(measure){
+						case SSA:
+							cout<<gAC+gCB-gC-gABC<<endl;
+							break;
+						case SSSA:
+							cout<<gAC+gCB-gC-gAB<<endl;
+							break;
 					}
-					break;
-				default:
-					cout<<"ERROR: PartitionStat::measureRef() : unknown measure case"<<endl;
-					exit(1);
-			}
+				}
+				break;
+				}
+			case vmeasureArithmetic:
+				cout<<pb.FileName()<<"\t"<<0.5*(vmeasure_h+vmeasure_c)<<endl;
+				break;
+			case vmeasureGeometric:
+				cout<<pb.FileName()<<"\t"<<sqrt(vmeasure_h*vmeasure_c)<<endl;
+				break;
+			case vmeasureHarmonic:
+				cout<<pb.FileName()<<"\t"<<(1.0+beta)*vmeasure_h*vmeasure_c/(beta*vmeasure_h+vmeasure_c)<<endl;
+				break;
+			case symmetricPurity:{
+				double pl=0.0;
+				double ps=0.0;
+				vector<double> pscores;
+				pscores=p.purityScore(&pb);
+				ps+=pscores[0];
+				pl+=pscores[1];
+				pscores=pb.purityScore(&p);
+				ps+=pscores[0];
+				pl+=pscores[1];
+				cout<<pb.FileName()<<"\t"<<0.5*ps<<"\t"<<0.5*pl<<endl;
+				}
+				break;
+			default:
+				cout<<"ERROR: PartitionStat::measureRef() : unknown measure case"<<endl;
+				exit(1);
 		}
 	}	
 	distancesPrintHeadComment(measure, metric,(flagheader) END);
@@ -630,6 +691,39 @@ void PartitionStats::distancesPrintHeadComment(pmeasure measure, pmetricv metric
 				else {
 					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
 					cout<<"#PartitionB\tH(B,Ref)"<<endl;
+				}
+			}
+			break;
+		case mutualInformation:
+			cout<<"#"<<prefix<<"SA"<<": "<<entropy<<"\t(Subadditivity=MutualInformation)"<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tH(A:B)"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionB\tH(B:Ref)"<<endl;
+				}
+			}
+			break;
+		case conditionalMutualInformation:
+			cout<<"#"<<prefix<<"SSA"<<": "<<entropy<<"\t(StrongSubadditivity=ConditionalMutualInformation)"<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tpartitionC\tH(A:B|C)"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionA\tPartitionB\tH(A:B|Ref)"<<endl;
+				}
+			}
+			break;
+		case SSSA:
+			cout<<"#"<<prefix<<"SSSA"<<": "<<entropy<<"\t(SoftStrongSubadditivity=TriangularInequality)"<<endl;
+			if(!QUIET&&hd==BEGIN){
+				if(!usingREF)
+					cout<<"#PartitionA\tPartitionB\tpartitionC\tH(A:B|C)+H(A,B,C|A,B)"<<endl;
+				else {
+					cout<<"#Partition(reference):"<<_partitionl[0].FileName()<<endl;
+					cout<<"#PartitionA\tPartitionB\tH(A:B|Ref)+H(A,B,Ref|A,B)"<<endl;
 				}
 			}
 			break;

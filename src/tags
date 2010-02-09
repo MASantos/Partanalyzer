@@ -83,10 +83,13 @@ RS	PartitionStats.h	/^	double RS(Partition& p1, Partition& p2){ return _pmetric(
 RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(MatrixOfValues* graph, bool below, int nsamples, int nneighbors, pmetricv pm, double extensivity, bool selfConsistenly){$/;"	f	class:RobustDivisiveClustering
 RobustDivisiveClustering	RobustDivisiveClustering.cc	/^RobustDivisiveClustering::RobustDivisiveClustering(char* graphfile, bool below, int nsamples, int nneighbors, pmetricv metric, double extensivity, bool selfConsistenly){$/;"	f	class:RobustDivisiveClustering
 RobustDivisiveClustering	RobustDivisiveClustering.h	/^class RobustDivisiveClustering$/;"	c
+SA	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 SETUPCONSENSUSP	PartitionStats.h	/^	bool SETUPCONSENSUSP;$/;"	m	class:PartitionStats
 SPEER	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 SPEER2	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 SPEER3	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
+SSA	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+SSSA	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 STATISTICS_DEFAULT_NUMBER_VARIABLES	Statistics.h	33;"	d
 Sampling	Statistics.cc	/^Sampling::Sampling(){$/;"	f	class:Sampling
 Sampling	Statistics.h	/^class Sampling$/;"	c
@@ -104,7 +107,7 @@ TS	PartitionStats.h	/^	double TS(Partition p, double q){ return p.TS(q);}$/;"	f	
 TS	PartitionStats.h	/^	double TS(Partition& p1, Partition& p2){ return _pmetric(p1,p2, tsallis);}$/;"	f	class:PartitionStats
 ToString	partanalyzer_definitions.h	/^inline string ToString(const T& x){$/;"	f
 VERBOSE	partanalyzer.h	/^bool 	VERBOSE=false;$/;"	v
-VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.9.6";$/;"	v
+VERSION	partanalyzer.h	/^const char* VERSION="alpha 0.9.9.7";$/;"	v
 VI	PartitionStats.h	/^	double VI(Partition& p1, Partition& p2){return _pmetric(p1,p2,shannon);}$/;"	f	class:PartitionStats
 W	MatrixOfValues.h	/^	edge W(){ return _Tweight;}$/;"	f	class:MatrixOfValues
 _Ad	Partition.h	/^	graph _Ad;$/;"	m	class:Partition
@@ -263,7 +266,8 @@ cluster	partanalyzer_definitions.h	/^typedef svect cluster;$/;"	t
 cluster_offset	Partition.h	/^	int cluster_offset(){return _items_offset;}$/;"	f	class:Partition
 clusters	Partition.h	/^	smat clusters;$/;"	m	class:Partition
 column	partanalyzer_definitions.h	/^typedef row column;$/;"	t
-conditionalEntropy	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+conditionalEntropy	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+conditionalMutualInformation	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 containerLargerThan	partanalyzer_definitions.h	/^struct containerLargerThan {$/;"	s
 containerLargerThan_Offset	partanalyzer_definitions.h	/^struct containerLargerThan_Offset {$/;"	s
 cosine	partanalyzer_definitions.h	/^enum splitmethod {split,cosine,overlap,fraction=overlap} ;$/;"	e	enum:splitmethod
@@ -337,7 +341,7 @@ isaPartition	Partition.cc	/^bool Partition::isaPartition(){$/;"	f	class:Partitio
 isaPartitionOf	Partition.cc	/^bool Partition::isaPartitionOf(svect& svecOfelements){\/\/\/One single clusters does make a sound partitions$/;"	f	class:Partition
 it_largest_Cluster	Partition.h	/^	smat::iterator it_largest_Cluster(){ return _it_largest_cluster;}$/;"	f	class:Partition
 jeffreyQnorm	partanalyzer_definitions.h	/^enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;$/;"	e	enum:pmetricv
-jointEntropy	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+jointEntropy	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 largest_Cluster	Partition.h	/^	int largest_Cluster(){ return _largest_cluster;}$/;"	f	class:Partition
 lbegin	sNeighborhood.h	/^	sset::iterator lbegin(){ return (neighbors.begin());}$/;"	f	class:sNeighborhood
 lend	sNeighborhood.h	/^	sset::iterator lend(){ return (neighbors.end());}$/;"	f	class:sNeighborhood
@@ -361,6 +365,7 @@ missing	Partition.cc	/^void Partition::missing(svect* it_found){$/;"	f	class:Par
 msaFmtNULL	partanalyzer_definitions.h	/^enum MSAformat { msaFmtNULL=-1, FASTA, GDE , SPEER, FASTA2, GDE2, SPEER2, FASTA3, GDE3, SPEER3, GSIM, GSIM2, GSIM3 } ;$/;"	e	enum:MSAformat
 mu	partanalyzer.cc	/^double mu;$/;"	v
 multimode	sNeighborhood.h	/^	long int multimode;		$/;"	m	class:sNeighborhood
+mutualInformation	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 n	BellNumber.h	/^	long int n(){ return _n;}$/;"	f	class:BellNumber
 n_clusters	Partition.h	/^	long int n_clusters(){ return _nclusters;}$/;"	f	class:Partition
 n_edges	MatrixOfValues.h	/^	long int n_edges(){ return _nedges;}$/;"	f	class:MatrixOfValues
@@ -432,7 +437,7 @@ partitionInputFormat	Partition.cc	/^void Partition::partitionInputFormat(partFil
 pdistance_vs_pruningthr	RobustDivisiveClustering.h	/^	map<double, Sampling > pdistance_vs_pruningthr;$/;"	m	class:RobustDivisiveClustering
 pgm_Ad	PartitionStats.h	/^	void pgm_Ad(){cout<<"#BeginConsensusAdjacencyMatrixPGMImage\\n"<<_Ad<<"#EndConsensusAdjacencyMatrixPGMImage"<<endl;}$/;"	f	class:PartitionStats
 pid_normalization	Sequence.h	/^enum pid_normalization { $/;"	g
-pmeasure	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	g
+pmeasure	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	g
 pmeasures	PartitionStats.cc	/^void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){$/;"	f	class:PartitionStats
 pmeasuresRef	PartitionStats.cc	/^void PartitionStats::pmeasuresRef(pmeasure measure , pmetricv metric){$/;"	f	class:PartitionStats
 pmetric	RobustDivisiveClustering.h	/^	pmetricv pmetric;$/;"	m	class:RobustDivisiveClustering
@@ -449,8 +454,11 @@ prgBDST	partanalyzer_definitions.h	/^	prgBDST,prgBDSR,$/;"	e	enum:prganalysis
 prgCCOP	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	e	enum:prganalysis
 prgCDIS	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	e	enum:prganalysis
 prgCEMX	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
+prgCKSA	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgCLST	partanalyzer_definitions.h	/^	prgCLST,$/;"	e	enum:prganalysis
-prgCPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgCMPO	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgCPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgCSSA	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgEDMP	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgEDMX	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgEDSC	partanalyzer_definitions.h	/^	prgEDSC,prgEDST,prgEDSR,$/;"	e	enum:prganalysis
@@ -461,16 +469,17 @@ prgGPRB	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;
 prgHASS	partanalyzer_definitions.h	/^	prgHASS,$/;"	e	enum:prganalysis
 prgINTE	partanalyzer_definitions.h	/^	prgINTE,$/;"	e	enum:prganalysis
 prgIPAR	partanalyzer_definitions.h	/^	prgIPAR,$/;"	e	enum:prganalysis
-prgIPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgIPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgJDSR	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
 prgJDST	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
-prgJPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgJPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgM2PA	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
 prgMAPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMGMX	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
 prgMMAI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMMPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMMXC	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
+prgMPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgMRED	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMSDI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMSDS	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
@@ -494,8 +503,8 @@ prgPSPP	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enu
 prgPSSR	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSST	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSTG	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
-prgPSYM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgPSYR	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgPSYM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgPSYR	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgRDCA	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgRDCB	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgRDSR	partanalyzer_definitions.h	/^	prgRDST,prgRDSR,$/;"	e	enum:prganalysis
@@ -508,14 +517,15 @@ prgSNOC	partanalyzer_definitions.h	/^	prgSNOC,$/;"	e	enum:prganalysis
 prgSPSO	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
 prgSPSS	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
 prgSPST	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
+prgSSSA	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prgTDSR	partanalyzer_definitions.h	/^	prgTDST,prgTDSR,$/;"	e	enum:prganalysis
 prgTDST	partanalyzer_definitions.h	/^	prgTDST,prgTDSR,$/;"	e	enum:prganalysis
 prgVIPP	partanalyzer_definitions.h	/^	prgVIPP,prgVIST,prgVISR,$/;"	e	enum:prganalysis
 prgVISR	partanalyzer_definitions.h	/^	prgVIPP,prgVIST,prgVISR,$/;"	e	enum:prganalysis
 prgVIST	partanalyzer_definitions.h	/^	prgVIPP,prgVIST,prgVISR,$/;"	e	enum:prganalysis
-prgVMAM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgVMGM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgVMHM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgVMAM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgVMGM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgVMHM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
 prganalysis	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	g
 print	MultipleSeqAlign.cc	/^void MultipleSeqAlign::print(bool sorted)$/;"	f	class:MultipleSeqAlign
 print	Sequence.h	/^        void print(){ return printAlignment(true);}$/;"	f	class:Sequence
@@ -608,7 +618,7 @@ strpair	partanalyzer_definitions.h	/^typedef pair<string,string> strpair;$/;"	t
 summary	Partition.cc	/^void Partition::summary(){$/;"	f	class:Partition
 svect	partanalyzer_definitions.h	/^typedef vector< string > svect;$/;"	t
 swapLabels	Partition.cc	/^void Partition::swapLabels(char* mcltabf){$/;"	f	class:Partition
-symmetricPurity	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+symmetricPurity	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 systemDate	partanalyzer_help.cc	/^void systemDate(){$/;"	f
 tabFile	Partition.cc	/^void Partition::tabFile(char* tabf){$/;"	f	class:Partition
 td	Partition.cc	/^void Partition::td(Partition* p2, double q=1.0){$/;"	f	class:Partition
@@ -632,9 +642,9 @@ v	MatrixOfValues.h	/^	double v(int k) { return _mx[k]; }$/;"	f	class:MatrixOfVal
 variance	Statistics.cc	/^double Sampling::variance(){ return _X[4];}$/;"	f	class:Sampling
 variance	Statistics.cc	/^double Sampling::variance(double v){ double ov=_X[4] ; _X[4]=v ; return ov;}$/;"	f	class:Sampling
 vipp	Partition.cc	/^void Partition::vipp(Partition* part2){$/;"	f	class:Partition
-vmeasureArithmetic	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
-vmeasureGeometric	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
-vmeasureHarmonic	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+vmeasureArithmetic	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+vmeasureGeometric	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
+vmeasureHarmonic	partanalyzer_definitions.h	/^enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};$/;"	e	enum:pmeasure
 writeSeed	Roulette.cc	/^void roulette::writeSeed(){$/;"	f	class:roulette
 writeSeed	Roulette.cc	/^void roulette::writeSeed(const char* dir){$/;"	f	class:roulette
 xtrConsPart	Partition.cc	/^void Partition::xtrConsPart(multimap<int,string,greaterThan> consPart, int ofs){$/;"	f	class:Partition

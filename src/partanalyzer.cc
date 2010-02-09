@@ -385,6 +385,9 @@ int main(int argc, char* argv[]) {
 		else if (strcmp(*argv,"-n")==0||strcmp(*argv,"--ipot")==0||strcmp(*argv,"--iPot")==0\
 			||strcmp(*argv,"--cpot")==0||strcmp(*argv,"--conditional-potential")==0\
 			||strcmp(*argv,"--jpot")==0||strcmp(*argv,"--joint-potential")==0\
+			||strcmp(*argv,"--mpot")==0||strcmp(*argv,"--mutual-potential")==0||strcmp(*argv,"--SA")==0||strcmp(*argv,"--subadditivity")==0\
+			||strcmp(*argv,"--cmpot")==0||strcmp(*argv,"--conditional-mutual-potential")==0||strcmp(*argv,"--SSA")==0||strcmp(*argv,"--strong-subadditivity")==0\
+			||strcmp(*argv,"--SSSA")==0||strcmp(*argv,"--soft-strong-subadditivity")==0||strcmp(*argv,"--SSA")==0\
 			||strcmp(*argv,"--v-measure-a")==0||strcmp(*argv,"--v-measure-arithmetic")==0\
 			||strcmp(*argv,"--v-measure-g")==0||strcmp(*argv,"--v-measure-geometric")==0\
 			||strcmp(*argv,"--v-measure-h")==0||strcmp(*argv,"--v-measure-harmonic")==0){
@@ -394,6 +397,12 @@ int main(int argc, char* argv[]) {
 				analysis=prgCPOT;
 			else if(strcmp(*argv,"--jpot")==0||strcmp(*argv,"--joint-potential")==0)
 				analysis=prgJPOT;
+			else if(strcmp(*argv,"--mpot")==0||strcmp(*argv,"--mutual-potential")==0||strcmp(*argv,"--SA")==0||strcmp(*argv,"--subadditivity")==0)
+				analysis=prgMPOT;
+			else if(strcmp(*argv,"--cmpot")==0||strcmp(*argv,"--conditional-mutual-potential")==0||strcmp(*argv,"--SSA")==0||strcmp(*argv,"--strong-subadditivity")==0)
+				analysis=prgCMPO;
+			else if(strcmp(*argv,"--SSSA")==0||strcmp(*argv,"--soft-strong-subadditivity")==0||strcmp(*argv,"--SSA")==0)
+				analysis=prgSSSA;
 			else if(strcmp(*argv,"--v-measure-a")==0||strcmp(*argv,"--v-measure-arithmetic")==0)
 				analysis=prgVMAM;
 			else if(strcmp(*argv,"--v-measure-g")==0||strcmp(*argv,"--v-measure-geometric")==0)
@@ -435,6 +444,28 @@ int main(int argc, char* argv[]) {
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
 			}
+			if(strcmp(*argv,"-ref")==0){
+				printCommandLineError("Using reference partition for pmeasures : Not yet implemented");
+				/*
+				switch(analysis){
+					case prgVIST: analysis=prgVISR; break;
+					case prgEDST: analysis=prgEDSR; break;
+					case prgBDST: analysis=prgBDSR; break;
+					case prgTDST: analysis=prgTDSR; break;
+					case prgRDST: analysis=prgRDSR; break;
+					case prgJDST: analysis=prgJDSR; break;
+				}
+				if(argc<3)printCommandLineError();
+				argc--;argv++;
+				Charr f={argv[0]};
+			                if(checkIfStandardInput(f.car)){
+						if(usestdin)printCommandLineError(errmsg);
+						usestdin=true;
+					}
+				infilenames.push_back( f );
+				argc--;argv++;
+				*/
+			}
 			if(strcmp(*argv,"-f")==0){
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
@@ -473,7 +504,7 @@ int main(int argc, char* argv[]) {
 			const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
 			if(argc<3)printCommandLineError();
 			argc--;argv++;
-			if(strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
+			if(strcmp(*argv,"-e")==0||strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
 				if(argc<4)printCommandLineError();
 				argc--;argv++;
 				extensivity=atof(argv[0]);
@@ -752,7 +783,7 @@ int main(int argc, char* argv[]) {
 					Nneighbors=atoi(argv[0]);
 					argc--;argv++;
 				}
-				else if(strcmp(*argv,"-ext")==0){
+				else if(strcmp(*argv,"-ext")==0||strcmp(*argv,"--extensivity")==0){
 					if(argc<2)printCommandLineError("Missing NumberOfSample");
 					argc--;argv++;
 					extensivity=atof(argv[0]);
@@ -1348,6 +1379,9 @@ int main(int argc, char* argv[]) {
 		case prgIPOT:
 		case prgCPOT:
 		case prgJPOT:
+		case prgMPOT:
+		case prgCMPO:
+		case prgSSSA:
 		case prgPSYM:
 		case prgPSYR:
 		case prgVMAM:
@@ -1365,6 +1399,20 @@ int main(int argc, char* argv[]) {
 					break;
 				case prgJPOT:
 					measure=jointEntropy;
+					partstats.pmeasures(measure,metric);
+					break;
+				//case prgMPOT: //Testing for subadditivity
+				case prgCKSA: //Testing for subadditivity
+					measure=mutualInformation;
+					partstats.pmeasures(measure,metric);
+					break;
+				//case prgCMPO: //Check if Strong Subadditivity holds
+				case prgCSSA: //Check if Strong Subadditivity holds
+					measure=conditionalMutualInformation;
+					partstats.pmeasures(measure,metric);
+					break;
+				case prgSSSA: //Check if Weak-Strong Subadditivity holds
+					measure=SSSA;
 					partstats.pmeasures(measure,metric);
 					break;
 				case prgVMAM:

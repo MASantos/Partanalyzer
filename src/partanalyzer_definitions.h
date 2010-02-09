@@ -101,7 +101,7 @@ inline string ToString(const T& x){
 #define RDC_DEFAULT_NUMBER_NEIGHBORS 2
 ///Available types of symmetric and non-symmetric pair-wise measures. 
 //enum pmeasure { conditionalEntropy=conditionalPotential , jointEntropy=jointPotential , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
-enum pmeasure { conditionalEntropy , jointEntropy , symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
+enum pmeasure { conditionalEntropy , jointEntropy , SA, mutualInformation=SA , SSA , conditionalMutualInformation=SSA , SSSA, symmetricPurity , vmeasureArithmetic , vmeasureGeometric , vmeasureHarmonic};
 ///Available types of pmetric functions (functions inducing a metric on partitions)
 enum pmetricv { shannon,entropy=shannon, cardinality , boltzmann, tsallis,renyi, jeffreyQnorm} ;
 ///Available types of pmetric header comments (#BeginViDistances or #EndEditDistances)
@@ -127,7 +127,7 @@ enum prganalysis { prgCCOP=1,prgCDIS,
 	prgHASS,
 	prgIPAR,
 	prg2MCL,prg2FRE,prgM2PA, prgA2PA,
-	prgIPOT,prgCPOT,prgJPOT,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,
+	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,
 	prgADST,prgASFP,
 	prgSPST,prgSPSS,prgSPSO,
 	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB
