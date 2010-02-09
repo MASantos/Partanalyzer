@@ -54,7 +54,7 @@ For debugging: print the interaction matrix read by the program
 ./partanalyze --print-matrix test-blast_pairwise_id
 
 
-Full help (as of version alpha 0.9.9.6)
+Full help (as of version alpha 0.9.9.7)
 			partanalyzer (Partition Analyzer)
 
 Usage:
@@ -83,6 +83,7 @@ Usage:
        (-V|-E|-P) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        --pstat-sym [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        (--ipot|--cpot|--jpot|--v-measure-h) entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       (--mpot|--cmpot|--SSSA) entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
        (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
 
@@ -226,31 +227,54 @@ For analyzing partitions
           Calculates arithmetic averages of purity stric and purity lax
           scores for each pair of partitions.                          
                                                                        
-       -n , --ipot  entropy [(-e|-ext) extensivity]                    
+       -n , --ipot  entropy [(-e|-ext) extensivity] [-ref]             
           Calculates (information theoretic) potential (entropy) of each
-          partition. The possible values for entropy are:              
-          v/s | vonneumann/shannon                                     
-          b   | boltzmann                                              
-          c/e | cardinality                                            
-          r   | renyi                                                  
-          t   | tsallis                                                
-          j   | tarantola/jeffrey/tjqn                                 
+          partition. The possible values for entropy are (short|long): 
+          v | s | vonneumann | shannon                                 
+          b     | boltzmann                                            
+          c | e | cardinality                                          
+          r     | renyi                                                
+          t     | tsallis                                              
+          j     | tarantola/jeffrey/tjqn                               
           Both, long and short option names are valid.                 
           Default extensivity coefficient is 2.
           For cardinality potential, this coefficient will be used as a
           gauge determining the card(1)=1+extensivity.                 
                                                                        
-       --cpot, --conditional-potential entropy [-ext extensivity]      
+       --cpot, --conditional-potential entropy [-ext extensivity] [-ref]
           Calculates conditional entropy for each pair of partitions.  
           The possible values for entropy and extensivity are the same 
           as for option --ipot.                                        
                                                                        
-       --jpot, --joint-potential entropy [-ext extensivity]            
+       --jpot, --joint-potential entropy [-ext extensivity] [-ref]     
           Calculates joint entropy for each pair of partitions.        
           The possible values for entropy and extensivity are the same 
           as for option --ipot.                                        
                                                                        
-       --v-measure-h , --v-measure-harmonic entropy [-ext extensivity] 
+       --mpot, --mutual-potential entropy [-ext extensivity] [-ref]    
+       --SA, --subadditivity entropy [-ext extensivity]                
+          Calculates the mutual potential (mutual information)         
+          for each pair of partitions. If positive, subadditivity holds.
+          The possible values for entropy and extensivity are the same 
+          as for option --ipot.                                        
+                                                                       
+       --cmpot, --conditional-mutual-potential entropy [-ext extensivity]
+       --SSA, --strong-subadditivity entropy [-ext extensivity] [-ref] 
+          Calculates the conditional mutual potential (conditional     
+          mutual information) for each pair of partitions. If positive,
+          for all three partitions, then strong subadditivity holds.   
+          The possible values for entropy and extensivity are the same 
+          as for option --ipot.                                        
+                                                                       
+       --SSSA, --soft-strong-subadditivity entropy [-ext extensivity] [-ref]
+          Calculates a softer version of the strong subadditivity      
+          condition for all three partitions. If positive, then the    
+          potential acts as a norm and defines a metric, which thus    
+          satisfies the triangular inequality.                         
+          The possible values for entropy and extensivity are the same 
+          as for option --ipot.                                        
+                                                                       
+       --v-measure-h , --v-measure-harmonic entropy [-ext extensivity] [-ref]
           Calculates the Vmeasure between each pair of partitions. This
           measure is as that defined by Roseberg, A. and Hirschberg, J.
           in http://acl.ldc.upenn.edu/D/D07/D07-1043.pdf. Use global   
@@ -260,11 +284,11 @@ For analyzing partitions
           The possible values for entropy and extensivity are the same 
           as for option --ipot.                                        
                                                                        
-       --v-measure-a , --v-measure-arithmetic entropy [-ext extensivity]
+       --v-measure-a , --v-measure-arithmetic entropy [-ext extensivity] [-ref]
           Analogous to --v-measure-h but using arithmetic mean between 
           homogeneity and completeness.                                
                                                                        
-       --v-measure-g , --v-measure-geometric entropy [-ext extensivity]
+       --v-measure-g , --v-measure-geometric entropy [-ext extensivity] [-ref]
           Analogous to --v-measure-h but using geometric mean between 
           homogeneity and completeness.                                
                                                                        
@@ -615,8 +639,8 @@ File formats:
          MCL : MCL's own matrix format for partitions. See MCL manual. 
 
 License
-# partanalyzer Version alpha 0.9.9.6
-# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build Feb  8 2010
+# partanalyzer Version alpha 0.9.9.7
+# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build Feb  9 2010
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #
