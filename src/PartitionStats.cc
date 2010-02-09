@@ -243,7 +243,7 @@ void PartitionStats::pmeasures(pmeasure measure , pmetricv metric){
 				case conditionalMutualInformation:
 				case SSSA: //Soft Strong Subadditivity
 					{
-					for(int k=0;k<_partitionl.size()-1;k++){
+					for(int k=0;k<_partitionl.size();k++){
 						Partition pc=_partitionl[k];
 						double gC=_f(pc,metric);
 						Partition pac=pa*pc;
@@ -304,7 +304,17 @@ void PartitionStats::pmeasuresRef(pmeasure measure , pmetricv metric){
 		cout<<"#Partition(reference):"<<p.FileName()<<endl;
 		//cout<<"#Partition(target)\ttarget-intersection\tref-intersection\ttarget-ref"<<endl;
 	}
-	for(int j=1;j<_partitionl.size()-1;j++){
+	size_t jmin=1;
+	size_t jmax=0;
+	switch(measure){
+		case SA:
+		case SSA:
+		case SSSA:
+			jmin=0;
+			jmax=1;
+			break;
+	}
+	for(int j=jmin;j<_partitionl.size()-jmax;j++){
 		if(_DIST_SUBSPROJECT) p=_partitionl[0];
 		Partition pb=_partitionl[j];
 		Partition pi=p*pb;
@@ -335,7 +345,7 @@ void PartitionStats::pmeasuresRef(pmeasure measure , pmetricv metric){
 				{
 				double gC=ipota;
 				double gCB=jointH;
-				for(int k=0;k<_partitionl.size()-1;k++){
+				for(int k=j+1;k<_partitionl.size();k++){
 					Partition pa=_partitionl[k];
 					Partition pac=pa*p;
 					Partition pab=pa*pb;

@@ -454,11 +454,13 @@ prgBDST	partanalyzer_definitions.h	/^	prgBDST,prgBDSR,$/;"	e	enum:prganalysis
 prgCCOP	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	e	enum:prganalysis
 prgCDIS	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	e	enum:prganalysis
 prgCEMX	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
-prgCKSA	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgCKSA	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
 prgCLST	partanalyzer_definitions.h	/^	prgCLST,$/;"	e	enum:prganalysis
-prgCMPO	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgCPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgCSSA	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgCMPO	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgCMPR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgCPOR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgCPOT	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgCSSA	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
 prgEDMP	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgEDMX	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;"	e	enum:prganalysis
 prgEDSC	partanalyzer_definitions.h	/^	prgEDSC,prgEDST,prgEDSR,$/;"	e	enum:prganalysis
@@ -469,17 +471,22 @@ prgGPRB	partanalyzer_definitions.h	/^	prgCEMX,prgEDMX,prgEDMP,prgGPRA,prgGPRB$/;
 prgHASS	partanalyzer_definitions.h	/^	prgHASS,$/;"	e	enum:prganalysis
 prgINTE	partanalyzer_definitions.h	/^	prgINTE,$/;"	e	enum:prganalysis
 prgIPAR	partanalyzer_definitions.h	/^	prgIPAR,$/;"	e	enum:prganalysis
-prgIPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgIPOR	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgIPOT	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
 prgJDSR	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
 prgJDST	partanalyzer_definitions.h	/^	prgJDST,prgJDSR,$/;"	e	enum:prganalysis
-prgJPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgJPOR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgJPOT	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgKSAR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgKSSR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
 prgM2PA	partanalyzer_definitions.h	/^	prg2MCL,prg2FRE,prgM2PA, prgA2PA,$/;"	e	enum:prganalysis
 prgMAPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMGMX	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
 prgMMAI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMMPI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMMXC	partanalyzer_definitions.h	/^	prgMGMX,prgMMXC, $/;"	e	enum:prganalysis
-prgMPOT	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgMPOR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgMPOT	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
 prgMRED	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMSDI	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
 prgMSDS	partanalyzer_definitions.h	/^	prgPMSA,prgPMAS,prgMSPI,prgMAPI,prgMRED,prgMSXP,prgMMAI,prgMMPI,prgMSXS,prgMSDS,prgMSXI,prgMSDI,prgMSXT,prgMSDT,prgMSMP,$/;"	e	enum:prganalysis
@@ -503,8 +510,8 @@ prgPSPP	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enu
 prgPSSR	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSST	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
 prgPSTG	partanalyzer_definitions.h	/^	prgPSPP,prgPSST,prgPSSR,prgPSTG,$/;"	e	enum:prganalysis
-prgPSYM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgPSYR	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgPSYM	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgPSYR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
 prgRDCA	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgRDCB	partanalyzer_definitions.h	/^	prgRPAR,prgRPSC,prgRDCB,prgRDCA,prgRPAA,prgRPAB,prgPART,prgPARA,prgPARB,$/;"	e	enum:prganalysis
 prgRDSR	partanalyzer_definitions.h	/^	prgRDST,prgRDSR,$/;"	e	enum:prganalysis
@@ -517,15 +524,19 @@ prgSNOC	partanalyzer_definitions.h	/^	prgSNOC,$/;"	e	enum:prganalysis
 prgSPSO	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
 prgSPSS	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
 prgSPST	partanalyzer_definitions.h	/^	prgSPST,prgSPSS,prgSPSO,$/;"	e	enum:prganalysis
-prgSSSA	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgSSSA	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgSSSR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
 prgTDSR	partanalyzer_definitions.h	/^	prgTDST,prgTDSR,$/;"	e	enum:prganalysis
 prgTDST	partanalyzer_definitions.h	/^	prgTDST,prgTDSR,$/;"	e	enum:prganalysis
+prgVAMR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgVGMR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
+prgVHMR	partanalyzer_definitions.h	/^	prgCPOR,prgJPOR,prgMPOR, prgKSAR=prgMPOR,prgCMPR, prgKSSR=prgCMPR,prgSSSR,prgVAMR,prgVGMR,prgVHMR,prgPSYR,$/;"	e	enum:prganalysis
 prgVIPP	partanalyzer_definitions.h	/^	prgVIPP,prgVIST,prgVISR,$/;"	e	enum:prganalysis
 prgVISR	partanalyzer_definitions.h	/^	prgVIPP,prgVIST,prgVISR,$/;"	e	enum:prganalysis
 prgVIST	partanalyzer_definitions.h	/^	prgVIPP,prgVIST,prgVISR,$/;"	e	enum:prganalysis
-prgVMAM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgVMGM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
-prgVMHM	partanalyzer_definitions.h	/^	prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,prgPSYR,$/;"	e	enum:prganalysis
+prgVMAM	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgVMGM	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
+prgVMHM	partanalyzer_definitions.h	/^	prgIPOT,prgIPOR=prgIPOT,prgCPOT,prgJPOT,prgMPOT, prgCKSA=prgMPOT,prgCMPO, prgCSSA=prgCMPO,prgSSSA,prgVMAM,prgVMGM,prgVMHM,prgPSYM,$/;"	e	enum:prganalysis
 prganalysis	partanalyzer_definitions.h	/^enum prganalysis { prgCCOP=1,prgCDIS,$/;"	g
 print	MultipleSeqAlign.cc	/^void MultipleSeqAlign::print(bool sorted)$/;"	f	class:MultipleSeqAlign
 print	Sequence.h	/^        void print(){ return printAlignment(true);}$/;"	f	class:Sequence

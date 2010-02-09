@@ -444,27 +444,31 @@ int main(int argc, char* argv[]) {
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
 			}
+			bool usestdin=false;
+			const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
 			if(strcmp(*argv,"-ref")==0){
-				printCommandLineError("Using reference partition for pmeasures : Not yet implemented");
-				/*
 				switch(analysis){
-					case prgVIST: analysis=prgVISR; break;
-					case prgEDST: analysis=prgEDSR; break;
-					case prgBDST: analysis=prgBDSR; break;
-					case prgTDST: analysis=prgTDSR; break;
-					case prgRDST: analysis=prgRDSR; break;
-					case prgJDST: analysis=prgJDSR; break;
+					case prgIPOT: analysis=prgIPOR; break;
+					case prgCPOT: analysis=prgCPOR; break;
+					case prgMPOT: analysis=prgMPOR; break;
+					case prgCMPO: analysis=prgCMPR; break;
+					case prgSSSA: analysis=prgSSSR; break;
+					case prgVMAM: analysis=prgVAMR; break;
+					case prgVMGM: analysis=prgVGMR; break;
+					case prgVMHM: analysis=prgVHMR; break;
+					case prgPSYM: analysis=prgPSYR; break;
 				}
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
-				Charr f={argv[0]};
-			                if(checkIfStandardInput(f.car)){
-						if(usestdin)printCommandLineError(errmsg);
-						usestdin=true;
-					}
-				infilenames.push_back( f );
-				argc--;argv++;
-				*/
+				if(strcmp(*argv,"-f")!=0){
+					Charr f={argv[0]};
+			        	        if(checkIfStandardInput(f.car)){
+							if(usestdin)printCommandLineError(errmsg);
+							usestdin=true;
+						}
+					infilenames.push_back( f );
+					argc--;argv++;
+				}
 			}
 			if(strcmp(*argv,"-f")==0){
 				if(argc<2)printCommandLineError();
@@ -472,8 +476,6 @@ int main(int argc, char* argv[]) {
 				readListInputFiles(argv[0],infilenames);
 			}
 			else{
-				bool usestdin=false;
-				const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
 				for(int i=0;i<argc;i++){
 					Charr f={argv[i]};
 			                if(checkIfStandardInput(f.car)){
@@ -522,13 +524,15 @@ int main(int argc, char* argv[]) {
 				}
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
-				Charr f={argv[0]};
-			                if(checkIfStandardInput(f.car)){
-						if(usestdin)printCommandLineError(errmsg);
-						usestdin=true;
-					}
-				infilenames.push_back( f );
-				argc--;argv++;
+				if(strcmp(*argv,"-f")!=0){
+					Charr f={argv[0]};
+			        	        if(checkIfStandardInput(f.car)){
+							if(usestdin)printCommandLineError(errmsg);
+							usestdin=true;
+						}
+					infilenames.push_back( f );
+					argc--;argv++;
+				}
 			}
 			if(strcmp(*argv,"-f")==0){
 				if(argc<2)printCommandLineError();
@@ -1383,53 +1387,90 @@ int main(int argc, char* argv[]) {
 		case prgCMPO:
 		case prgSSSA:
 		case prgPSYM:
-		case prgPSYR:
 		case prgVMAM:
 		case prgVMGM:
-		case prgVMHM:{
+		case prgVMHM:
+		case prgCPOR:
+		case prgJPOR:
+		case prgMPOR:
+		case prgCMPR:
+		case prgSSSR:
+		case prgVAMR:
+		case prgVGMR:
+		case prgVHMR:
+		case prgPSYR:
+		{
 			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
 			pmeasure measure;
 			switch(analysis){
-				case prgIPOT:
-					partstats.iPotential(metric);
-					break;
 				case prgCPOT:
+				case prgCPOR:
 					measure=conditionalEntropy;
-					partstats.pmeasures(measure,metric);
 					break;
 				case prgJPOT:
+				case prgJPOR:
 					measure=jointEntropy;
-					partstats.pmeasures(measure,metric);
 					break;
 				//case prgMPOT: //Testing for subadditivity
 				case prgCKSA: //Testing for subadditivity
+				case prgMPOR: //Testing for subadditivity
 					measure=mutualInformation;
-					partstats.pmeasures(measure,metric);
 					break;
 				//case prgCMPO: //Check if Strong Subadditivity holds
 				case prgCSSA: //Check if Strong Subadditivity holds
+				case prgCMPR: //Check if Strong Subadditivity holds
 					measure=conditionalMutualInformation;
-					partstats.pmeasures(measure,metric);
 					break;
 				case prgSSSA: //Check if Weak-Strong Subadditivity holds
+				case prgSSSR: //Check if Weak-Strong Subadditivity holds
 					measure=SSSA;
-					partstats.pmeasures(measure,metric);
 					break;
 				case prgVMAM:
+				case prgVAMR:
 					measure=vmeasureArithmetic;
-					partstats.pmeasures(measure,metric);
 					break;
 				case prgVMGM:
+				case prgVGMR:
 					measure=vmeasureGeometric;
-					partstats.pmeasures(measure,metric);
 					break;
 				case prgVMHM:
+				case prgVHMR:
 					measure=vmeasureHarmonic;
+					break;
+				case prgPSYM:
+				case prgPSYR:
+					measure=symmetricPurity;
+					break;
+			}
+			switch(analysis){
+				case prgIPOT: //==prgIPOTR
+					partstats.iPotential(metric);
+					break;
+				case prgCPOT:
+				case prgJPOT:
+				case prgCKSA: //Testing for subadditivity
+				case prgCSSA: //Check if Strong Subadditivity holds
+				case prgSSSA: //Check if Weak-Strong Subadditivity holds
+				case prgVMAM:
+				case prgVMGM:
+				case prgVMHM:
 					partstats.pmeasures(measure,metric);
 					break;
 				case prgPSYM:
-					measure=symmetricPurity;
 					partstats.pmeasures(measure);
+					break;
+				case prgCPOR:
+				case prgJPOR:
+				case prgMPOR: //Testing for subadditivity
+				case prgKSSR: //Check if Strong Subadditivity holds
+				case prgSSSR: //Check if Weak-Strong Subadditivity holds
+				case prgVAMR:
+				case prgVGMR:
+				case prgVHMR:
+					partstats.pmeasuresRef(measure,metric);
+					break;
+				case prgPSYR:
+					partstats.pmeasuresRef(measure);
 					break;
 			}
 			break;
