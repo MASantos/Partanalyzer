@@ -1,58 +1,148 @@
 \section{Partition\-Stats Class Reference}
 \label{classPartitionStats}\index{PartitionStats@{PartitionStats}}
+{\tt \#include $<$Partition\-Stats.h$>$}
+
 \subsection*{Public Member Functions}
 \begin{CompactItemize}
 \item 
-{\bf Partition\-Stats} (vector$<$ {\bf Charr} $>$ fnames, part\-File\-Format iformat, int ofs, int clstat\_\-normalization\_\-ofs)\label{classPartitionStats_a1}
+{\bf Partition\-Stats} ()\label{classPartitionStats_a0}
 
-\begin{CompactList}\small\item\em Instantiates a Partition\-Stats out of a list of filenames, a common file input format, a common cluster-offset value and a common normalization factor gauge (default=0). \item\end{CompactList}\item 
-void {\bf get\-Cover} ()\label{classPartitionStats_a2}
+\begin{CompactList}\small\item\em Default constructor simply resets all members to \char`\"{}zero\char`\"{}. \item\end{CompactList}\item 
+{\bf Partition\-Stats} (vector$<$ {\bf Charr} $>$ fnames, part\-File\-Format iformat=part\-Fmt\-PART, double extensivity=EXTENSIVITY\_\-DEFAULT, int ofs=CLUSTEROFFSET\_\-DEFAULT, int clstat\_\-normalization\_\-ofs=0, char $\ast$mcltabfile=NULL)\label{classPartitionStats_a1}
+
+\begin{CompactList}\small\item\em Instantiates a Partition\-Stats out of a list of filenames, a common file input format, a float parameter, a common cluster-offset value and a common normalization factor gauge (default=0). \item\end{CompactList}\item 
+{\bf Partition\-Stats} (vector$<$ {\bf Charr} $>$ fnames, char $\ast$mcltabfile=NULL, double extensivity=EXTENSIVITY\_\-DEFAULT)\label{classPartitionStats_a2}
+
+\begin{CompactList}\small\item\em Instantiates a Partition\-Stats out of a list of filenames, a common file tabfile, and a float parameter used for non-standard entropies. \item\end{CompactList}\item 
+{\bf Partition\-Stats} (vector$<$ {\bf Partition} $>$ \&vpart, double extensivity=EXTENSIVITY\_\-DEFAULT)\label{classPartitionStats_a3}
+
+\begin{CompactList}\small\item\em Instantiates from a vector of partitions. \item\end{CompactList}\item 
+void {\bf define\-List\-Of\-Partitions} (vector$<$ {\bf Charr} $>$ fnames, char $\ast$mcltabfile=NULL, part\-File\-Format iformat=part\-Fmt\-PART, int ofs=CLUSTEROFFSET\_\-DEFAULT)\label{classPartitionStats_a4}
+
+\begin{CompactList}\small\item\em Declares a second list of input partition files, or the initial one, if it hasn't been declared before. \item\end{CompactList}\item 
+bool {\bf clear2nd\-List\-Of\-Partitions} ()\label{classPartitionStats_a5}
+
+\begin{CompactList}\small\item\em Erases second list of input partition files. \item\end{CompactList}\item 
+bool {\bf has2nd\-List\-Of\-Partitions} ()\label{classPartitionStats_a6}
+
+\begin{CompactList}\small\item\em Checks whether a second list of input partitions file has been defined. \item\end{CompactList}\item 
+int {\bf are\-Partitions} ()\label{classPartitionStats_a7}
+
+\begin{CompactList}\small\item\em Checks if each of the provided partitions is a sound partition, i.e., if all clusters are pair-wise disjoint. \item\end{CompactList}\item 
+void {\bf get\-Cover} ()\label{classPartitionStats_a8}
 
 \begin{CompactList}\small\item\em Builds the cover \_\-cover of the underlying set of elements out of the list of partitions. \item\end{CompactList}\item 
-bool {\bf hasa\-Cover} ()\label{classPartitionStats_a3}
+bool {\bf hasa\-Cover} ()\label{classPartitionStats_a9}
 
 \begin{CompactList}\small\item\em Check if \_\-cover has been build. \item\end{CompactList}\item 
 void {\bf print\-Cover} (bool SETUPCONSENSUSP)
 \begin{CompactList}\small\item\em Prints out \_\-cover, eventually printing out also the consensus if SETUPCONSENSUSP=true within the same loop. Notice this doesn't instantiates a consensus partition, but just prints it. \item\end{CompactList}\item 
-void {\bf print\-Consensus\-Part} ()\label{classPartitionStats_a5}
+void {\bf print\-Consensus\-Part} ()\label{classPartitionStats_a11}
 
 \begin{CompactList}\small\item\em Used by print\-Cover to print the consensus partition. \item\end{CompactList}\item 
 {\bf Partition} {\bf get\-Consensus\-Partition} ()
-\begin{CompactList}\small\item\em Explicitly build an instantiate a new partition which is the consensus one of the given list of partitions. \item\end{CompactList}\item 
-int {\bf are\-Partitions} ()\label{classPartitionStats_a7}
+\begin{CompactList}\small\item\em Explicitly build and instantiate a new partition which is the consensus one of the given list of partitions. \item\end{CompactList}\item 
+void {\bf set\-Consensus\_\-Ad} ()\label{classPartitionStats_a13}
 
-\begin{CompactList}\small\item\em Checks if each of the provided partitions is a sound partition, i.e., if all clusters are pair-wise disjoint. \item\end{CompactList}\item 
-void {\bf get\-Purity} ()\label{classPartitionStats_a8}
+\begin{CompactList}\small\item\em Build consensus adjacency matrix. \item\end{CompactList}\item 
+graph {\bf Ad} ()\label{classPartitionStats_a14}
+
+\begin{CompactList}\small\item\em Returns consensus adjacency matrix. \item\end{CompactList}\item 
+void {\bf pgm\_\-Ad} ()\label{classPartitionStats_a15}
+
+\begin{CompactList}\small\item\em Print grey-scale image (pgm) of consensus adjacency matrix. \item\end{CompactList}\item 
+void {\bf get\_\-Ad} ()\label{classPartitionStats_a16}
+
+\begin{CompactList}\small\item\em Print consensus adjacency matrix in raw format: list of rows for each edge : str\-A str\-B double. \item\end{CompactList}\item 
+void {\bf get\_\-Fuzzy\-Consensus\-Partition} ()\label{classPartitionStats_a17}
+
+\begin{CompactList}\small\item\em Print fuzzy partition associated to the consensus adjacency matrix. \item\end{CompactList}\item 
+void {\bf get\-Ad\-Cos} ()\label{classPartitionStats_a18}
+
+\begin{CompactList}\small\item\em Calculate cosine distance between associated Adjacency matrices. \item\end{CompactList}\item 
+void {\bf get\-Purity} ()\label{classPartitionStats_a19}
 
 \begin{CompactList}\small\item\em Calculate all pair-wise purity scores. \item\end{CompactList}\item 
-void {\bf get\-Purity\-Ref} ()\label{classPartitionStats_a9}
+void {\bf get\-Purity\-Ref} ()\label{classPartitionStats_a20}
 
 \begin{CompactList}\small\item\em Calculate purity scores of all againts the first partition (reference). \item\end{CompactList}\item 
-double {\bf H} ({\bf Partition} p)\label{classPartitionStats_a10}
+void {\bf get\-Purity\-Target} ()\label{classPartitionStats_a21}
 
-\begin{CompactList}\small\item\em Get entropy of partition. \item\end{CompactList}\item 
-long int {\bf card} ({\bf Partition} p)\label{classPartitionStats_a11}
+\begin{CompactList}\small\item\em Calculate purity scores of this partition (target) againts all other partition. \item\end{CompactList}\item 
+void {\bf get\-Splits\-Ref} (splitmethod similarity)\label{classPartitionStats_a22}
+
+\begin{CompactList}\small\item\em Compare cluster by cluster against the first partition's clusters (reference) and print overlap (fraction elements present in referece cluster). \item\end{CompactList}\item 
+long int {\bf card} ({\bf Partition} p)\label{classPartitionStats_a23}
 
 \begin{CompactList}\small\item\em get cardinality of partition \item\end{CompactList}\item 
-double {\bf VI} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a12}
+double {\bf H} ({\bf Partition} p)\label{classPartitionStats_a24}
 
-\begin{CompactList}\small\item\em Calculates VI distance between part1 and part2 using pmetric. Should give the same as using partition explicitly built-in vipp function. Already checked? \item\end{CompactList}\item 
-void {\bf distances} ({\bf Partition} \&p, pmetricv pm)\label{classPartitionStats_a13}
+\begin{CompactList}\small\item\em Get Shannon entropy of partition. \item\end{CompactList}\item 
+double {\bf BK} ({\bf Partition} p)\label{classPartitionStats_a25}
 
-\begin{CompactList}\small\item\em Calculates all distances againts the specified reference partition. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
-void {\bf distances\-Ref} (pmetricv pm)\label{classPartitionStats_a14}
+\begin{CompactList}\small\item\em Get Boltzman entropy of partition. \item\end{CompactList}\item 
+double {\bf TS} ({\bf Partition} p, double q)\label{classPartitionStats_a26}
 
-\begin{CompactList}\small\item\em Calculates all distances againts the reference partition. This is the first partition read. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
-void {\bf distances} (pmetricv pm)\label{classPartitionStats_a15}
+\begin{CompactList}\small\item\em Get Tsallis entropy of partition. \item\end{CompactList}\item 
+double {\bf TS} ({\bf Partition} p)\label{classPartitionStats_a27}
 
-\begin{CompactList}\small\item\em Calculates all pair-wise distances. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
-long int {\bf ES} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a16}
+\item 
+double {\bf RS} ({\bf Partition} p, double q)\label{classPartitionStats_a28}
+
+\begin{CompactList}\small\item\em Get Renyi entropy of partition. \item\end{CompactList}\item 
+double {\bf RS} ({\bf Partition} p)\label{classPartitionStats_a29}
+
+\item 
+double {\bf JQnorm} ({\bf Partition} p, double q)\label{classPartitionStats_a30}
+
+\begin{CompactList}\small\item\em Get Jeffreys Qnorm (a la Tarantola) of partition. \item\end{CompactList}\item 
+void {\bf i\-Potential} (pmetricv pm)\label{classPartitionStats_a31}
+
+\begin{CompactList}\small\item\em Print the value of the (information theoretic) potential associated with each partition. \item\end{CompactList}\item 
+long int {\bf ES} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a32}
 
 \begin{CompactList}\small\item\em Calculates edit score distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
-void {\bf print\-Hasse\-Diagram} ()\label{classPartitionStats_a17}
+double {\bf VI} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a33}
+
+\begin{CompactList}\small\item\em Calculates VI (Shannon) distance between part1 and part2 using pmetric. Should give the same as using partition explicitly built-in vipp function. Already checked? \item\end{CompactList}\item 
+double {\bf BK} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a34}
+
+\begin{CompactList}\small\item\em Calculates Boltzman distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
+double {\bf TS} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a35}
+
+\begin{CompactList}\small\item\em Calculates Tsallis distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
+double {\bf RS} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a36}
+
+\begin{CompactList}\small\item\em Calculates Renyi distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
+double {\bf TD} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a37}
+
+\begin{CompactList}\small\item\em Calculates Tarantola distance between part1 and part2 using Jeffrey's Qnorm. \item\end{CompactList}\item 
+void {\bf distances} ({\bf Partition} \&p, pmetricv pm=shannon)\label{classPartitionStats_a38}
+
+\begin{CompactList}\small\item\em Calculates all distances againts the specified reference partition. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
+void {\bf distances\-Ref} (pmetricv pm=shannon)\label{classPartitionStats_a39}
+
+\begin{CompactList}\small\item\em Calculates all distances againts the reference partition. This is the first partition read. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
+void {\bf distances} (pmetricv pm=shannon)\label{classPartitionStats_a40}
+
+\begin{CompactList}\small\item\em Calculates all pair-wise distances. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
+{\bf Sampling} {\bf distances\-Distribution} (pmetricv pm=shannon, int refindex=-1)
+\item 
+void {\bf distances\_\-Subsprojection} (pmetricv pm=shannon)
+\item 
+void {\bf distances\-Ref\_\-Subsprojection} (pmetricv pm=shannon)\label{classPartitionStats_a43}
+
+\begin{CompactList}\small\item\em Equivalent one for distances againts a common reference partition. \item\end{CompactList}\item 
+void {\bf pmeasures} (pmeasure measure, pmetricv pm=shannon)\label{classPartitionStats_a44}
+
+\begin{CompactList}\small\item\em Calculates different symmetric and non-symmetric pair-wise measures. \item\end{CompactList}\item 
+void {\bf pmeasures\-Ref} (pmeasure measure, pmetricv pm=shannon)\label{classPartitionStats_a45}
+
+\begin{CompactList}\small\item\em Calculates different symmetric and non-symmetric pair-wise measures against a common reference partition. \item\end{CompactList}\item 
+void {\bf print\-Hasse\-Diagram} ()\label{classPartitionStats_a46}
 
 \begin{CompactList}\small\item\em Prints the Hasse diagram corresponding to the given list of partitions. \item\end{CompactList}\item 
-void {\bf print\-Hasse\-Nodes} ()\label{classPartitionStats_a18}
+void {\bf print\-Hasse\-Nodes} ()\label{classPartitionStats_a47}
 
 \begin{CompactList}\small\item\em Print. \item\end{CompactList}\end{CompactItemize}
 \subsection*{Public Attributes}
@@ -69,12 +159,22 @@ Implements operations between multiple partitions. The most important one is det
 
 
 \subsection{Member Function Documentation}
-\index{PartitionStats@{Partition\-Stats}!getConsensusPartition@{getConsensusPartition}}
+\index{PartitionStats@{Partition\-Stats}!distances_Subsprojection@{distances\_\-Subsprojection}}
+\index{distances_Subsprojection@{distances\_\-Subsprojection}!PartitionStats@{Partition\-Stats}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Partition\-Stats::distances\_\-Subsprojection (pmetricv {\em pm} = shannon)}\label{classPartitionStats_a42}
+
+
+Aproximate calculation of pair-wise distance between paritions with different number of elements It stripps of all elements that aren't share and calculates the distance using simply the rest. \index{PartitionStats@{Partition\-Stats}!distancesDistribution@{distancesDistribution}}
+\index{distancesDistribution@{distancesDistribution}!PartitionStats@{Partition\-Stats}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Sampling} Partition\-Stats::distances\-Distribution (pmetricv {\em pm} = shannon, int {\em refindex} = -1)}\label{classPartitionStats_a41}
+
+
+Meadian, avg, std, std.err, var, min , max and sample sizeof the pair-wise distances among its partitions. If a non negative index is provided, distances are calculated with respect to partition refindex\index{PartitionStats@{Partition\-Stats}!getConsensusPartition@{getConsensusPartition}}
 \index{getConsensusPartition@{getConsensusPartition}!PartitionStats@{Partition\-Stats}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition\-Stats::get\-Consensus\-Partition ()}\label{classPartitionStats_a6}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition\-Stats::get\-Consensus\-Partition ()}\label{classPartitionStats_a12}
 
 
-Explicitly build an instantiate a new partition which is the consensus one of the given list of partitions. 
+Explicitly build and instantiate a new partition which is the consensus one of the given list of partitions. 
 
 ccl is a simple map with a string as key. Thus each neighbors set appears only once.
 
@@ -82,7 +182,7 @@ If the map increased in size it means that the last set of neighbors is a new on
 
 update then the counter and add this set to the consensus partition. \index{PartitionStats@{Partition\-Stats}!printCover@{printCover}}
 \index{printCover@{printCover}!PartitionStats@{Partition\-Stats}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Partition\-Stats::print\-Cover (bool {\em PRINTCONSENSUP} = false)}\label{classPartitionStats_a4}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Partition\-Stats::print\-Cover (bool {\em PRINTCONSENSUP} = false)}\label{classPartitionStats_a10}
 
 
 Prints out \_\-cover, eventually printing out also the consensus if SETUPCONSENSUSP=true within the same loop. Notice this doesn't instantiates a consensus partition, but just prints it. 
@@ -93,6 +193,7 @@ If the map increased in size it means that the last set of neighbors is a new on
 
 update then the counter and add this set to the consensus partition. 
 
-The documentation for this class was generated from the following file:\begin{CompactItemize}
+The documentation for this class was generated from the following files:\begin{CompactItemize}
 \item 
-partanalyze.cc\end{CompactItemize}
+Partition\-Stats.h\item 
+Partition\-Stats.cc\end{CompactItemize}

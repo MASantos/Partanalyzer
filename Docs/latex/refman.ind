@@ -5,98 +5,129 @@
   \indexspace
 
   \item {ccop}, 4
+    \subitem {ccop}, 4
   \item {Charr}, 5
+  \item {cluster}
+    \subitem {Matrix\-Of\-Values}, 9
+
+  \indexspace
+
+  \item {distances\_\-Subsprojection}
+    \subitem {Partition\-Stats}, 26
+  \item {distancesDistribution}
+    \subitem {Partition\-Stats}, 26
+
+  \indexspace
+
+  \item {edgeDistribution}
+    \subitem {Matrix\-Of\-Values}, 10
+  \item {edgeDistributionStats}
+    \subitem {Matrix\-Of\-Values}, 10
 
   \indexspace
 
   \item {getConsensusPartition}
-    \subitem {Partition\-Stats}, 16
+    \subitem {Partition\-Stats}, 26
   \item {greaterThan}, 6
 
   \indexspace
 
   \item {id}
-    \subitem {Sequence}, 19
+    \subitem {Sequence}, 33
   \item {intersection}
-    \subitem {Partition}, 13
+    \subitem {Partition}, 20
   \item {isaPartitionOf}
-    \subitem {Partition}, 13
+    \subitem {Partition}, 20
 
   \indexspace
 
   \item {MatrixOfValues}, 7
   \item {Matrix\-Of\-Values}
-    \subitem {merge}, 7
-    \subitem {readMxValues}, 7
-    \subitem {v}, 7
+    \subitem {cluster}, 9
+    \subitem {edgeDistribution}, 10
+    \subitem {edgeDistributionStats}, 10
+    \subitem {merge}, 10
+    \subitem {pruneEdges}, 11
+    \subitem {readMxValues}, 11
+    \subitem {v}, 11
   \item {merge}
-    \subitem {Matrix\-Of\-Values}, 7
-  \item {MultipleSeqAlign}, 9
-    \subitem {Multiple\-Seq\-Align}, 10
+    \subitem {Matrix\-Of\-Values}, 10
+  \item {MultipleSeqAlign}, 12
+    \subitem {Multiple\-Seq\-Align}, 14
   \item {Multiple\-Seq\-Align}
-    \subitem {MultipleSeqAlign}, 10
-    \subitem {NsamplesRedMSA}, 10
-    \subitem {printAveragePairwiseIds}, 10
-    \subitem {setFileName}, 10
+    \subitem {MultipleSeqAlign}, 14
+    \subitem {NsamplesRedMSA}, 14
+    \subitem {printAveragePairwiseIds}, 14
+    \subitem {setFileName}, 14
 
   \indexspace
 
   \item {NsamplesRedMSA}
-    \subitem {Multiple\-Seq\-Align}, 10
+    \subitem {Multiple\-Seq\-Align}, 14
 
   \indexspace
 
   \item {operator+}
-    \subitem {Partition}, 14
+    \subitem {Partition}, 21
   \item {operator+=}
-    \subitem {s\-Neighborhood}, 21
+    \subitem {s\-Neighborhood}, 36
 
   \indexspace
 
-  \item {Partition}, 11
-    \subitem {intersection}, 13
-    \subitem {isaPartitionOf}, 13
-    \subitem {operator+}, 14
-    \subitem {Partition}, 13
-    \subitem {purityScore}, 14
-    \subitem {vipp}, 14
-  \item {PartitionStats}, 15
+  \item {Partition}, 16
+    \subitem {intersection}, 20
+    \subitem {isaPartitionOf}, 20
+    \subitem {operator+}, 21
+    \subitem {Partition}, 20
+    \subitem {purityScore}, 21
+    \subitem {vipp}, 21
+  \item {PartitionStats}, 23
   \item {Partition\-Stats}
-    \subitem {getConsensusPartition}, 16
-    \subitem {printCover}, 16
+    \subitem {distances\_\-Subsprojection}, 26
+    \subitem {distancesDistribution}, 26
+    \subitem {getConsensusPartition}, 26
+    \subitem {printCover}, 26
   \item {printAveragePairwiseIds}
-    \subitem {Multiple\-Seq\-Align}, 10
+    \subitem {Multiple\-Seq\-Align}, 14
   \item {printCover}
-    \subitem {Partition\-Stats}, 16
+    \subitem {Partition\-Stats}, 26
+  \item {pruneEdges}
+    \subitem {Matrix\-Of\-Values}, 11
   \item {purityScore}
-    \subitem {Partition}, 14
+    \subitem {Partition}, 21
 
   \indexspace
 
   \item {readMxValues}
-    \subitem {Matrix\-Of\-Values}, 7
-  \item {roulette}, 17
+    \subitem {Matrix\-Of\-Values}, 11
+  \item {reset}
+    \subitem {Robust\-Divisive\-Clustering}, 28
+  \item {RobustDivisiveClustering}, 28
+  \item {Robust\-Divisive\-Clustering}
+    \subitem {reset}, 28
+  \item {roulette}, 29
 
   \indexspace
 
-  \item {Sequence}, 18
-    \subitem {id}, 19
+  \item {Sampling}, 30
+  \item {Sequence}, 32
+    \subitem {id}, 33
   \item {setFileName}
-    \subitem {Multiple\-Seq\-Align}, 10
+    \subitem {Multiple\-Seq\-Align}, 14
   \item {setMostFrequentNeighborhood}
-    \subitem {s\-Neighborhood}, 21
-  \item {sNeighborhood}, 20
-    \subitem {s\-Neighborhood}, 21
+    \subitem {s\-Neighborhood}, 36
+  \item {sNeighborhood}, 35
+    \subitem {s\-Neighborhood}, 36
   \item {s\-Neighborhood}
-    \subitem {operator+=}, 21
-    \subitem {setMostFrequentNeighborhood}, 21
-    \subitem {sNeighborhood}, 21
+    \subitem {operator+=}, 36
+    \subitem {setMostFrequentNeighborhood}, 36
+    \subitem {sNeighborhood}, 36
 
   \indexspace
 
   \item {v}
-    \subitem {Matrix\-Of\-Values}, 7
+    \subitem {Matrix\-Of\-Values}, 11
   \item {vipp}
-    \subitem {Partition}, 14
+    \subitem {Partition}, 21
 
 \end{theindex}

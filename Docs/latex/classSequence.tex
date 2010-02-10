@@ -1,5 +1,7 @@
 \section{Sequence Class Reference}
 \label{classSequence}\index{Sequence@{Sequence}}
+{\tt \#include $<$Sequence.h$>$}
+
 \subsection*{Public Member Functions}
 \begin{CompactItemize}
 \item 
@@ -9,57 +11,93 @@
 {\bf Sequence} (string name, string seq)\label{classSequence_a1}
 
 \begin{CompactList}\small\item\em Instatiate a sequence given its name label and the sequence proper seq. \item\end{CompactList}\item 
-string {\bf chr\-At} (int pos)\label{classSequence_a2}
+int {\bf first\-Residue\-Number} (int nb=0)\label{classSequence_a2}
 
-\begin{CompactList}\small\item\em Get the character at position pos. \item\end{CompactList}\item 
-int {\bf length} ()\label{classSequence_a3}
+\begin{CompactList}\small\item\em Sets actual residue number of first residue and return it. If nb=0, just returns first residue number. \item\end{CompactList}\item 
+string {\bf chr\-At} (int pos)\label{classSequence_a3}
 
-\begin{CompactList}\small\item\em Get its lenght. \item\end{CompactList}\item 
-double {\bf id} ({\bf Sequence} $\ast$Seq)
-\begin{CompactList}\small\item\em Calculate its sequence identity with respect to sequence Seq. The latter can be passed by pointer or content. \item\end{CompactList}\item 
-double {\bf id} ({\bf Sequence} Seq)\label{classSequence_a5}
+\begin{CompactList}\small\item\em Get the character at position pos of the MSA sequence. \item\end{CompactList}\item 
+string {\bf chr\-At\_\-bare} (int pos)\label{classSequence_a4}
+
+\begin{CompactList}\small\item\em Get the character at position pos of the actual sequence. \item\end{CompactList}\item 
+string {\bf xtract\-Positions} (vector$<$ int $>$ $\ast$positions=NULL)\label{classSequence_a5}
+
+\begin{CompactList}\small\item\em Copy extracting from sequence the given positions. \item\end{CompactList}\item 
+int {\bf alignment\-Length} ()\label{classSequence_a6}
+
+\begin{CompactList}\small\item\em Get its MSA lenght. \item\end{CompactList}\item 
+int {\bf number\-Of\-Residues} ()\label{classSequence_a7}
+
+\begin{CompactList}\small\item\em Get its actual lenght. \item\end{CompactList}\item 
+double {\bf id} ({\bf Sequence} $\ast$Seq, vector$<$ int $>$ $\ast$positions=NULL)
+\item 
+double {\bf id} ({\bf Sequence} Seq, vector$<$ int $>$ $\ast$positions=NULL)\label{classSequence_a9}
 
 \item 
-string {\bf name} ()\label{classSequence_a6}
+string {\bf name} ()\label{classSequence_a10}
 
 \begin{CompactList}\small\item\em Get its name. \item\end{CompactList}\item 
-string {\bf sequence} ()\label{classSequence_a7}
+string {\bf aligned\-Sequence} ()\label{classSequence_a11}
 
-\begin{CompactList}\small\item\em Get its sequence proper. \item\end{CompactList}\item 
-void {\bf set\-Seq} (string seq)\label{classSequence_a8}
+\begin{CompactList}\small\item\em Get its sequence as in MSA, including possible gaps. \item\end{CompactList}\item 
+string {\bf sequence} ()\label{classSequence_a12}
+
+\begin{CompactList}\small\item\em Get its actual sequence, without gaps. \item\end{CompactList}\item 
+void {\bf set\-Aligned\-Seq} (string seq)\label{classSequence_a13}
 
 \begin{CompactList}\small\item\em Set its sequence. \item\end{CompactList}\item 
-void {\bf set\-Name} (string name)\label{classSequence_a9}
+void {\bf set\-Name} (string name)\label{classSequence_a14}
 
 \begin{CompactList}\small\item\em Set its name. \item\end{CompactList}\item 
-void {\bf print} ()\label{classSequence_a10}
+string {\bf format\-Name} (MSAformat msafmt=MSADEFAULTFMT, string suffix=\char`\"{}\char`\"{})\label{classSequence_a15}
 
-\begin{CompactList}\small\item\em Print a sequence with its name adding a newline at the end. \item\end{CompactList}\end{CompactItemize}
+\begin{CompactList}\small\item\em Stream out its name in the given MSA format. Does not actually change the sequence's format. \item\end{CompactList}\item 
+void {\bf set\-Format} (MSAformat msafmt, string sufix=\char`\"{}\char`\"{})\label{classSequence_a16}
+
+\begin{CompactList}\small\item\em Set MSA format. This does change the sequence's format. \item\end{CompactList}\item 
+void {\bf print\-Alignment} (bool withoutgaps=false)\label{classSequence_a17}
+
+\begin{CompactList}\small\item\em Print a sequence with its name adding a newline at the end. If bare=true, print its actual sequence, i.e., without gaps. \item\end{CompactList}\item 
+void {\bf print\-Alignment} (MSAformat msafmt, string suffix=\char`\"{}\char`\"{}, bool withoutgaps=false)\label{classSequence_a18}
+
+\item 
+void {\bf print} ()\label{classSequence_a19}
+
+\begin{CompactList}\small\item\em Print the actual sequence with its name adding a newline at the end. \item\end{CompactList}\item 
+string {\bf remove\-Gaps} ()\label{classSequence_a20}
+
+\begin{CompactList}\small\item\em Remove gaps. \item\end{CompactList}\item 
+vector$<$ int $>$ {\bf get\-MSAPositions\-From\-Actual\-Residue\-Numbers} (vector$<$ int $>$ $\ast$residue\-Numbers=NULL)\label{classSequence_a21}
+
+\begin{CompactList}\small\item\em Maps actual residue numbers to aligned position numbers. If NULL, returns MSA positions of all residues (gaps ignored). \item\end{CompactList}\item 
+vector$<$ int $>$ {\bf get\-Actual\-Residue\-Numbers\-From\-MSAPositions} (vector$<$ int $>$ $\ast$residue\-Numbers=NULL)\label{classSequence_a22}
+
+\begin{CompactList}\small\item\em Maps aligned position numbers to actual residue numbers. If NULL, returns Actual residue numbers of all residues. \item\end{CompactList}\end{CompactItemize}
 \subsection*{Friends}
 \begin{CompactItemize}
 \item 
 ostream \& {\bf operator$<$$<$} (ostream \&os, {\bf Sequence} \&s)\label{classSequence_n0}
 
-\begin{CompactList}\small\item\em Streams out a sequence and its name. Does not add a newline at the end. \item\end{CompactList}\end{CompactItemize}
+\begin{CompactList}\small\item\em Streams out a sequence and its name. Does not add a newline at the end. \item\end{CompactList}\item 
+bool {\bf sequence\-Name\-Smaller\-Than} ({\bf Sequence} sa, {\bf Sequence} sb)\label{classSequence_n1}
+
+\begin{CompactList}\small\item\em Compares to Sequences by name. \item\end{CompactList}\end{CompactItemize}
 
 
 \subsection{Detailed Description}
-Allows dealing with sequences. 
+Allows dealing with sequences (protein sequences, DNA sequences,etc.). 
 
 
 
 \subsection{Member Function Documentation}
 \index{Sequence@{Sequence}!id@{id}}
 \index{id@{id}!Sequence@{Sequence}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Sequence::id ({\bf Sequence} $\ast$ {\em Seq})}\label{classSequence_a4}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Sequence::id ({\bf Sequence} $\ast$ {\em Seq}, vector$<$ int $>$ $\ast$ {\em positions} = NULL)}\label{classSequence_a8}
 
 
-Calculate its sequence identity with respect to sequence Seq. The latter can be passed by pointer or content. 
+Calculate its sequence identity with respect to sequence Seq. The latter can be passed by pointer or content A non null second parameter specifies which positions will be considered to calculate the sequence similarity, all by default. 
 
-Normalize by the longest sequence
-
-Normalize by the shortest sequence 
-
-The documentation for this class was generated from the following file:\begin{CompactItemize}
+The documentation for this class was generated from the following files:\begin{CompactItemize}
 \item 
-partanalyze.cc\end{CompactItemize}
+Sequence.h\item 
+Sequence.cc\end{CompactItemize}

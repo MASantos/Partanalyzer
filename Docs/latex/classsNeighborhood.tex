@@ -1,7 +1,6 @@
 \section{s\-Neighborhood Class Reference}
 \label{classsNeighborhood}\index{sNeighborhood@{sNeighborhood}}
-It defines the neighborhood of a given point, or ball of radius eps around an element 'x'.  
-
+{\tt \#include $<$s\-Neighborhood.h$>$}
 
 \subsection*{Public Member Functions}
 \begin{CompactItemize}
@@ -44,12 +43,6 @@ long int {\bf multimode}\label{classsNeighborhood_o4}
 \subsection{Detailed Description}
 It defines the neighborhood of a given point, or ball of radius eps around an element 'x'. 
 
-Allows to deal with (sets of) neighborhood(s) of a given point. In particular, it allows to obtain its most frequent neighborhood: given a list of sets containing a point p, what is the one that repeats more often. If two or more of them have the same frequency, it chooses the first one seen.
-
-It allows the its construction iteratively given other previously instantiated s\-Neighborhood's.
-
-Its main members point, neighbors and eps, always contain the most frequent neighborhood, with frequency eps, around 'point' (or the largest ball around 'point'). 
-
 
 
 \subsection{Constructor \& Destructor Documentation}
@@ -79,6 +72,7 @@ Determines which neighborhood is the most frequent one.
 
 Runs through each neighborhood in neighborhoods and checks two things: if its radius == eps , i.e., to present one, updates multimode++ if radius $>$ eps, selects that neighborhood as the current one, updating also the value of eps to radius.
 
-The documentation for this class was generated from the following file:\begin{CompactItemize}
+The documentation for this class was generated from the following files:\begin{CompactItemize}
 \item 
-partanalyze.cc\end{CompactItemize}
+s\-Neighborhood.h\item 
+s\-Neighborhood.cc\end{CompactItemize}

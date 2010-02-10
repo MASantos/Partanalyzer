@@ -1,56 +1,246 @@
 \section{Matrix\-Of\-Values Class Reference}
 \label{classMatrixOfValues}\index{MatrixOfValues@{MatrixOfValues}}
+{\tt \#include $<$Matrix\-Of\-Values.h$>$}
+
 \subsection*{Public Member Functions}
 \begin{CompactItemize}
 \item 
-{\bf Matrix\-Of\-Values} (char $\ast$file)\label{classMatrixOfValues_a1}
+{\bf Matrix\-Of\-Values} ()\label{classMatrixOfValues_a0}
+
+\begin{CompactList}\small\item\em Default Constructor. \item\end{CompactList}\item 
+{\bf Matrix\-Of\-Values} (char $\ast$file, int col=EDGES\_\-DEFAULT\_\-COLUMN)\label{classMatrixOfValues_a1}
+
+\begin{CompactList}\small\item\em Constructor based on a file. \item\end{CompactList}\item 
+{\bf Matrix\-Of\-Values} (graph Graph)\label{classMatrixOfValues_a2}
+
+\begin{CompactList}\small\item\em Constructor based on a graph. \item\end{CompactList}\item 
+{\bf Matrix\-Of\-Values} (const {\bf Matrix\-Of\-Values} \&MOV)\label{classMatrixOfValues_a3}
+
+\begin{CompactList}\small\item\em Copy-constructor. \item\end{CompactList}\item 
+{\bf Matrix\-Of\-Values} {\bf prune\-Edges\-Below} (float edgethreshold, bool terse=true)\label{classMatrixOfValues_a4}
+
+\begin{CompactList}\small\item\em Prunes all edges with weight $<$ threshold. \item\end{CompactList}\item 
+{\bf Matrix\-Of\-Values} {\bf prune\-Edges\-Below} (float edgethreshold, long int \&nprunedges, bool terse=true)\label{classMatrixOfValues_a5}
 
 \item 
-void {\bf read\-Mx\-Values} ()
-\item 
-void {\bf print\-Matrix} ()\label{classMatrixOfValues_a3}
+{\bf Matrix\-Of\-Values} {\bf prune\-Edges\-Above} (float edgethreshold, bool terse=true)\label{classMatrixOfValues_a6}
+
+\begin{CompactList}\small\item\em Prunes all edges with weight $>$ threshold. \item\end{CompactList}\item 
+{\bf Matrix\-Of\-Values} {\bf prune\-Edges\-Above} (float edgethreshold, long int \&nprunedges, bool terse=true)\label{classMatrixOfValues_a7}
 
 \item 
-double {\bf v} (int k)\label{classMatrixOfValues_a4}
+{\bf Matrix\-Of\-Values} {\bf prune\-Edges} (float edgethreshold, long int \&nprunedges, bool below=true, bool terse=true)
+\begin{CompactList}\small\item\em Prunes all edges with weight $<$ threshold if flag is true; $>$ threshold otherwise. \item\end{CompactList}\item 
+{\bf Partition} {\bf cluster} ()
+\begin{CompactList}\small\item\em Cluster graph. \item\end{CompactList}\item 
+void {\bf reset} ()\label{classMatrixOfValues_a10}
 
-\item 
-double {\bf v} (int i, int j)\label{classMatrixOfValues_a5}
+\begin{CompactList}\small\item\em Reset private members based on interal \_\-graph. \item\end{CompactList}\item 
+graph {\bf get\-Graph} () const\label{classMatrixOfValues_a11}
 
-\item 
-double {\bf v} (string a, string b, REDMx\-Val use\-RED)
-\item 
-void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$matrix2)\label{classMatrixOfValues_a7}
+\begin{CompactList}\small\item\em Get underlying graph. \item\end{CompactList}\item 
+char $\ast$ {\bf File\-Name} () const\label{classMatrixOfValues_a12}
 
-\item 
+\begin{CompactList}\small\item\em Get File name. \item\end{CompactList}\item 
+void {\bf read\-Mx\-Values} (int col=3)
+\begin{CompactList}\small\item\em Read matrix of values from file: First two columns are vertices, int col locates the column containing the edge values. \item\end{CompactList}\item 
+void {\bf print\-Matrix} ()\label{classMatrixOfValues_a14}
+
+\begin{CompactList}\small\item\em Print matrix of values to standard output. \item\end{CompactList}\item 
+double {\bf v} (int k)\label{classMatrixOfValues_a15}
+
+\begin{CompactList}\small\item\em Get value of k-th edge. \item\end{CompactList}\item 
+double {\bf v} (int i, int j)\label{classMatrixOfValues_a16}
+
+\begin{CompactList}\small\item\em Get value of edge between i-th and j-th elements. \item\end{CompactList}\item 
+double {\bf v} (string a, string b, REDMx\-Val use\-RED=use\-Org\-RED)
+\begin{CompactList}\small\item\em Get value of edge spanned by nodes a and b. \item\end{CompactList}\item 
+void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$matrix2)\label{classMatrixOfValues_a18}
+
+\begin{CompactList}\small\item\em Merge two matrix of values. \item\end{CompactList}\item 
 void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$mx2, {\bf Partition} $\ast$pt)
-\item 
-void {\bf clusteranalysis} ()\label{classMatrixOfValues_a9}
+\begin{CompactList}\small\item\em Merge two matrix of values and add cluster information for each edge. \item\end{CompactList}\item 
+void {\bf cull} ({\bf Matrix\-Of\-Values} $\ast$matrix2)\label{classMatrixOfValues_a20}
 
-\end{CompactItemize}
+\begin{CompactList}\small\item\em Cull edges specified in list matrix2. \item\end{CompactList}\item 
+strpair {\bf cull\-Edge} (string a, string b)\label{classMatrixOfValues_a21}
+
+\begin{CompactList}\small\item\em Cull edges spanned by nodes a and b. \item\end{CompactList}\item 
+void {\bf clusteranalysis} ()\label{classMatrixOfValues_a22}
+
+\begin{CompactList}\small\item\em Analyze cluster. \item\end{CompactList}\item 
+long int {\bf n\_\-edges} ()\label{classMatrixOfValues_a23}
+
+\begin{CompactList}\small\item\em Get the number of edges present in the graph. \item\end{CompactList}\item 
+long int {\bf n\_\-items} ()\label{classMatrixOfValues_a24}
+
+\begin{CompactList}\small\item\em Get the number of items spanning the actual graph. \item\end{CompactList}\item 
+bool {\bf exist\-Edge} (string a, string b)\label{classMatrixOfValues_a25}
+
+\begin{CompactList}\small\item\em Checks wether the edge was defined or not. \item\end{CompactList}\item 
+edge {\bf W} ()\label{classMatrixOfValues_a26}
+
+\begin{CompactList}\small\item\em Gets total sum of edge weights. \item\end{CompactList}\item 
+void {\bf edge\-Distribution} (const string \&sa, int cluster\-Size=-1, string cluster\-Name=\char`\"{}NAN\char`\"{})
+\begin{CompactList}\small\item\em For each node, print distribution of edge weights. Add information of cluster size and name. \item\end{CompactList}\item 
+void {\bf edge\-Distribution} ({\bf Partition} $\ast$pt=NULL)\label{classMatrixOfValues_a28}
+
+\item 
+{\bf Sampling} {\bf edge\-Distribution\-Stats} ()
+\begin{CompactList}\small\item\em Get Median, mean, std, var, min and max of all edges. \item\end{CompactList}\item 
+void {\bf print\-Nodes} ()\label{classMatrixOfValues_a30}
+
+\begin{CompactList}\small\item\em print the nodes of the graph \item\end{CompactList}\end{CompactItemize}
 
 
 \subsection{Detailed Description}
-Allows dealing with graph. A matrix of values here, in each line, specifies an edge value for a given pair of elements . It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily) name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element does not exist in the provided partition. 
+Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements . It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily) name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element does not exist in the provided partition. 
 
 
 
 \subsection{Member Function Documentation}
-\index{MatrixOfValues@{Matrix\-Of\-Values}!merge@{merge}}
+\index{MatrixOfValues@{Matrix\-Of\-Values}!cluster@{cluster}}
+\index{cluster@{cluster}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Matrix\-Of\-Values::cluster ()}\label{classMatrixOfValues_a9}
+
+
+Cluster graph. 
+
+First generate the clusters as ssets (=set)
+
+For each pairs of nodes A and
+
+B
+
+Allocate memory for a new class (A's)
+
+Equivalence class of A gets its inaugural (\& representative) member A
+
+If there is no actual edge between A and B
+
+Allocate memory for a new class (B's)
+
+Equivalence class of B gets its inaugural (\& representative) member B
+
+Store each member's pointer, which point 
+
+to that same class
+
+If there is an actual edge between A and B
+
+and B is in the same class as A
+
+Store each member's pointer, which point 
+
+to that same class
+
+Update the list of assigned nodes
+
+else, if B had already been assigned to a class
+
+If there is no actual edge between A and B
+
+Allocate memory for a new class (A's)
+
+Equivalence class of A gets its inaugural (\& representative) member A
+
+Store A's own class pointer (pointing to A's class) 
+
+If there is an actual edge between A and B
+
+retrieve B's class pointer
+
+and insert A in the same class as B 
+
+Store A's class pointer (pointing to A's class) as the same pointer B has
+
+Update the list of assigned nodes
+
+If there is no actual edge between A and B
+
+Allocate memory for a new class (B's)
+
+Equivalence class of B gets its inaugural (\& representative) member B
+
+Store B's class pointer (pointing to B's class) as the same pointer A has
+
+If there is an actual edge between A and B
+
+retrieve A's class pointer
+
+and insert B in the same class as A 
+
+Store B's class pointer (pointing to B's class) as the same pointer A has
+
+Update the list of assigned clusters
+
+If there is no actual edge between A and B, do nothing, but
+
+If there is an actual edge between A and B
+
+retrieve A's class pointer
+
+retrieve B's class pointer
+
+There shouldn't be any duplicate edge, but just in case, let's not waste resources
+
+merge B into A
+
+Update B's class pointer (pointing to B's class), as well as that of each of its relatives, to the same pointer A has
+
+Delete B's old cluster
+
+Then generate a set of unique sset$\ast$ pointers. Each point to one of the distinct classes (clusters) defined earlier.
+
+Finally, generate the (fully-sorted) partition and return it as a value
+
+If A hasn't been already assigned to a class, then if B wasn't assigned either
+
+However, if A was already assigned to a class, then if B was not,
+
+else, if B had also been already assigned to a class we need to merge both clusters (A's and B's) if this is an actual edge, so...\index{MatrixOfValues@{Matrix\-Of\-Values}!edgeDistribution@{edgeDistribution}}
+\index{edgeDistribution@{edgeDistribution}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::edge\-Distribution (const string \& {\em sa}, int {\em cluster\-Size} = -1, string {\em cl\-Name} = \char`\"{}NAN\char`\"{})}\label{classMatrixOfValues_a27}
+
+
+For each node, print distribution of edge weights. Add information of cluster size and name. 
+
+nan values specify absence of edge; c++, however, treats them as numeric values: We have to take care of that. \index{MatrixOfValues@{Matrix\-Of\-Values}!edgeDistributionStats@{edgeDistributionStats}}
+\index{edgeDistributionStats@{edgeDistributionStats}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Sampling} Matrix\-Of\-Values::edge\-Distribution\-Stats ()}\label{classMatrixOfValues_a29}
+
+
+Get Median, mean, std, var, min and max of all edges. 
+
+nan values specify absence of edge; c++, however, treats them as numeric values: We have to take care of that. \index{MatrixOfValues@{Matrix\-Of\-Values}!merge@{merge}}
 \index{merge@{merge}!MatrixOfValues@{Matrix\-Of\-Values}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::merge ({\bf Matrix\-Of\-Values} $\ast$ {\em mx2}, {\bf Partition} $\ast$ {\em pt})}\label{classMatrixOfValues_a8}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::merge ({\bf Matrix\-Of\-Values} $\ast$ {\em mx2}, {\bf Partition} $\ast$ {\em pt})}\label{classMatrixOfValues_a19}
 
 
-Old version of overlap\-Vspearson-toxmgrace script requires an additional dummy column...to be removed soon... \index{MatrixOfValues@{Matrix\-Of\-Values}!readMxValues@{readMxValues}}
+Merge two matrix of values and add cluster information for each edge. 
+
+Old version of overlap\-Vspearson-toxmgrace script requires an additional dummy column...to be removed soon... \index{MatrixOfValues@{Matrix\-Of\-Values}!pruneEdges@{pruneEdges}}
+\index{pruneEdges@{pruneEdges}!MatrixOfValues@{Matrix\-Of\-Values}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Matrix\-Of\-Values} Matrix\-Of\-Values::prune\-Edges (float {\em edgethreshold}, long int \& {\em nedgesdel}, bool {\em below} = true, bool {\em terse} = true)}\label{classMatrixOfValues_a8}
+
+
+Prunes all edges with weight $<$ threshold if flag is true; $>$ threshold otherwise. 
+
+If we erase edges we'll lose the singletons. Thus, instead just label those edges as Na\-N \index{MatrixOfValues@{Matrix\-Of\-Values}!readMxValues@{readMxValues}}
 \index{readMxValues@{readMxValues}!MatrixOfValues@{Matrix\-Of\-Values}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::read\-Mx\-Values ()}\label{classMatrixOfValues_a2}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::read\-Mx\-Values (int {\em col} = 3)}\label{classMatrixOfValues_a13}
 
+
+Read matrix of values from file: First two columns are vertices, int col locates the column containing the edge values. 
 
 Later on we'll assume \_\-mx represents a square matrix and we don't care about the diagonal values. 
 
 Thus input matrix element (i,j) is located at index k=(\_\-nitems-1-i/2)$\ast$(i+1)+j-\_\-nitems of vector \_\-mx, where i,j=0,1,2,... and \index{MatrixOfValues@{Matrix\-Of\-Values}!v@{v}}
 \index{v@{v}!MatrixOfValues@{Matrix\-Of\-Values}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Matrix\-Of\-Values::v (string {\em a}, string {\em b}, REDMx\-Val {\em use\-RED} = use\-Org\-RED)}\label{classMatrixOfValues_a6}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}double Matrix\-Of\-Values::v (string {\em a}, string {\em b}, REDMx\-Val {\em use\-RED} = use\-Org\-RED)}\label{classMatrixOfValues_a17}
 
+
+Get value of edge spanned by nodes a and b. 
 
 Should be valid only for the artificially generated duplicates. Care should be taken that it doesn't affect other cases
 
@@ -58,6 +248,7 @@ As we are passing a copy, we can change here a,b without changing the orignal va
 
 Using a map with doubles as values (pair of strings as keys) does not allow in an easy way to distinguish between a key with a value=0 or a key that simply was not previously defined. as we are dealing here with graphs, i.e, those keys represent edges, and the values represent numerical weight (and given that I haven't found an easy walkaround) for the time being I'll silently ignore and just print the value for the first key. Still I leave the checking above, otherwise we may assign a zero to an otherwise non-zero edge. cout$<$$<$\char`\"{}ERROR in reading matrix \char`\"{}$<$$<$\_\-mxofvf$<$$<$\char`\"{} : Pair not found \char`\"{}$<$$<$a$<$$<$\char`\"{} , \char`\"{}$<$$<$b$<$$<$endl; 
 
-The documentation for this class was generated from the following file:\begin{CompactItemize}
+The documentation for this class was generated from the following files:\begin{CompactItemize}
 \item 
-partanalyze.cc\end{CompactItemize}
+Matrix\-Of\-Values.h\item 
+Matrix\-Of\-Values.cc\end{CompactItemize}

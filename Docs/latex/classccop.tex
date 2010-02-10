@@ -1,24 +1,51 @@
 \section{ccop Class Reference}
 \label{classccop}\index{ccop@{ccop}}
+DEFAULT THERMODYNAMIC COEFF.  
+
+
+{\tt \#include $<$Ccop.h$>$}
+
 \subsection*{Public Member Functions}
 \begin{CompactItemize}
 \item 
-{\bf ccop} ({\bf Matrix\-Of\-Values} $\ast$MX, {\bf Partition} $\ast$part)\label{classccop_a0}
-
+{\bf ccop} ({\bf Matrix\-Of\-Values} $\ast$MX, {\bf Partition} $\ast$part)
 \item 
 {\bf ccop} ({\bf Matrix\-Of\-Values} $\ast$MX, {\bf Partition} $\ast$part, double thr)\label{classccop_a1}
 
 \item 
-double {\bf threshold} ()\label{classccop_a2}
+void {\bf check\-Consistency} ()\label{classccop_a2}
+
+\item 
+void {\bf distribution} ()\label{classccop_a3}
+
+\item 
+double {\bf threshold} ()\label{classccop_a4}
+
+\end{CompactItemize}
+\subsection*{Public Attributes}
+\begin{CompactItemize}
+\item 
+bool {\bf is\-Sparse\-Graph}\label{classccop_o0}
 
 \end{CompactItemize}
 
 
 \subsection{Detailed Description}
+DEFAULT THERMODYNAMIC COEFF. 
+
+Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this whole project. 
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{ccop@{ccop}!ccop@{ccop}}
+\index{ccop@{ccop}!ccop@{ccop}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}ccop::ccop ({\bf Matrix\-Of\-Values} $\ast$ {\em MX}, {\bf Partition} $\ast$ {\em part})}\label{classccop_a0}
+
+
 Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this while project. 
 
-
-
-The documentation for this class was generated from the following file:\begin{CompactItemize}
+The documentation for this class was generated from the following files:\begin{CompactItemize}
 \item 
-partanalyze.cc\end{CompactItemize}
+Ccop.h\item 
+Ccop.cc\end{CompactItemize}

@@ -1,7 +1,9 @@
 \section{roulette Class Reference}
 \label{classroulette}\index{roulette@{roulette}}
-Generates random objects.  
+Generates random objects (int, double, string,...).  
 
+
+{\tt \#include $<$Roulette.h$>$}
 
 \subsection*{Public Member Functions}
 \begin{CompactItemize}
@@ -21,16 +23,17 @@ vector$<$ int $>$ {\bf spin\-Wheeli} (int n, int L)\label{classroulette_a4}
 void {\bf write\-Seed} ()\label{classroulette_a5}
 
 \begin{CompactList}\small\item\em Writes the seed used in the current directory under the file .seed\_\-used. \item\end{CompactList}\item 
-void {\bf write\-Seed} (char $\ast$dir)\label{classroulette_a6}
+void {\bf write\-Seed} (const char $\ast$dir)\label{classroulette_a6}
 
 \begin{CompactList}\small\item\em Writes the seed used in the provided directory under the file .seed\_\-used. \item\end{CompactList}\end{CompactItemize}
 
 
 \subsection{Detailed Description}
-Generates random objects. 
+Generates random objects (int, double, string,...). 
 
 
 
-The documentation for this class was generated from the following file:\begin{CompactItemize}
+The documentation for this class was generated from the following files:\begin{CompactItemize}
 \item 
-partanalyze.cc\end{CompactItemize}
+Roulette.h\item 
+Roulette.cc\end{CompactItemize}
