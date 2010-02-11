@@ -13,9 +13,9 @@
   \indexspace
 
   \item {distances\_\-Subsprojection}
-    \subitem {Partition\-Stats}, 26
+    \subitem {Partition\-Stats}, 19
   \item {distancesDistribution}
-    \subitem {Partition\-Stats}, 26
+    \subitem {Partition\-Stats}, 19
 
   \indexspace
 
@@ -27,17 +27,13 @@
   \indexspace
 
   \item {getConsensusPartition}
-    \subitem {Partition\-Stats}, 26
+    \subitem {Partition\-Stats}, 19
   \item {greaterThan}, 6
 
   \indexspace
 
   \item {id}
-    \subitem {Sequence}, 33
-  \item {intersection}
-    \subitem {Partition}, 20
-  \item {isaPartitionOf}
-    \subitem {Partition}, 20
+    \subitem {Sequence}, 26
 
   \indexspace
 
@@ -67,67 +63,54 @@
 
   \indexspace
 
-  \item {operator+}
-    \subitem {Partition}, 21
   \item {operator+=}
-    \subitem {s\-Neighborhood}, 36
+    \subitem {s\-Neighborhood}, 29
 
   \indexspace
 
-  \item {Partition}, 16
-    \subitem {intersection}, 20
-    \subitem {isaPartitionOf}, 20
-    \subitem {operator+}, 21
-    \subitem {Partition}, 20
-    \subitem {purityScore}, 21
-    \subitem {vipp}, 21
-  \item {PartitionStats}, 23
+  \item {PartitionStats}, 16
   \item {Partition\-Stats}
-    \subitem {distances\_\-Subsprojection}, 26
-    \subitem {distancesDistribution}, 26
-    \subitem {getConsensusPartition}, 26
-    \subitem {printCover}, 26
+    \subitem {distances\_\-Subsprojection}, 19
+    \subitem {distancesDistribution}, 19
+    \subitem {getConsensusPartition}, 19
+    \subitem {printCover}, 19
   \item {printAveragePairwiseIds}
     \subitem {Multiple\-Seq\-Align}, 14
   \item {printCover}
-    \subitem {Partition\-Stats}, 26
+    \subitem {Partition\-Stats}, 19
   \item {pruneEdges}
     \subitem {Matrix\-Of\-Values}, 11
-  \item {purityScore}
-    \subitem {Partition}, 21
 
   \indexspace
 
   \item {readMxValues}
     \subitem {Matrix\-Of\-Values}, 11
   \item {reset}
-    \subitem {Robust\-Divisive\-Clustering}, 28
-  \item {RobustDivisiveClustering}, 28
+    \subitem {Robust\-Divisive\-Clustering}, 21
+  \item {RobustDivisiveClustering}, 21
   \item {Robust\-Divisive\-Clustering}
-    \subitem {reset}, 28
-  \item {roulette}, 29
+    \subitem {reset}, 21
+  \item {roulette}, 22
 
   \indexspace
 
-  \item {Sampling}, 30
-  \item {Sequence}, 32
-    \subitem {id}, 33
+  \item {Sampling}, 23
+  \item {Sequence}, 25
+    \subitem {id}, 26
   \item {setFileName}
     \subitem {Multiple\-Seq\-Align}, 14
   \item {setMostFrequentNeighborhood}
-    \subitem {s\-Neighborhood}, 36
-  \item {sNeighborhood}, 35
-    \subitem {s\-Neighborhood}, 36
+    \subitem {s\-Neighborhood}, 29
+  \item {sNeighborhood}, 28
+    \subitem {s\-Neighborhood}, 29
   \item {s\-Neighborhood}
-    \subitem {operator+=}, 36
-    \subitem {setMostFrequentNeighborhood}, 36
-    \subitem {sNeighborhood}, 36
+    \subitem {operator+=}, 29
+    \subitem {setMostFrequentNeighborhood}, 29
+    \subitem {sNeighborhood}, 29
 
   \indexspace
 
   \item {v}
     \subitem {Matrix\-Of\-Values}, 11
-  \item {vipp}
-    \subitem {Partition}, 21
 
 \end{theindex}

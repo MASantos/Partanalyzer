@@ -14,7 +14,7 @@
 {\bf Partition\-Stats} (vector$<$ {\bf Charr} $>$ fnames, char $\ast$mcltabfile=NULL, double extensivity=EXTENSIVITY\_\-DEFAULT)\label{classPartitionStats_a2}
 
 \begin{CompactList}\small\item\em Instantiates a Partition\-Stats out of a list of filenames, a common file tabfile, and a float parameter used for non-standard entropies. \item\end{CompactList}\item 
-{\bf Partition\-Stats} (vector$<$ {\bf Partition} $>$ \&vpart, double extensivity=EXTENSIVITY\_\-DEFAULT)\label{classPartitionStats_a3}
+{\bf Partition\-Stats} (vector$<$ Partition $>$ \&vpart, double extensivity=EXTENSIVITY\_\-DEFAULT)\label{classPartitionStats_a3}
 
 \begin{CompactList}\small\item\em Instantiates from a vector of partitions. \item\end{CompactList}\item 
 void {\bf define\-List\-Of\-Partitions} (vector$<$ {\bf Charr} $>$ fnames, char $\ast$mcltabfile=NULL, part\-File\-Format iformat=part\-Fmt\-PART, int ofs=CLUSTEROFFSET\_\-DEFAULT)\label{classPartitionStats_a4}
@@ -40,7 +40,7 @@ void {\bf print\-Cover} (bool SETUPCONSENSUSP)
 void {\bf print\-Consensus\-Part} ()\label{classPartitionStats_a11}
 
 \begin{CompactList}\small\item\em Used by print\-Cover to print the consensus partition. \item\end{CompactList}\item 
-{\bf Partition} {\bf get\-Consensus\-Partition} ()
+Partition {\bf get\-Consensus\-Partition} ()
 \begin{CompactList}\small\item\em Explicitly build and instantiate a new partition which is the consensus one of the given list of partitions. \item\end{CompactList}\item 
 void {\bf set\-Consensus\_\-Ad} ()\label{classPartitionStats_a13}
 
@@ -72,52 +72,52 @@ void {\bf get\-Purity\-Target} ()\label{classPartitionStats_a21}
 void {\bf get\-Splits\-Ref} (splitmethod similarity)\label{classPartitionStats_a22}
 
 \begin{CompactList}\small\item\em Compare cluster by cluster against the first partition's clusters (reference) and print overlap (fraction elements present in referece cluster). \item\end{CompactList}\item 
-long int {\bf card} ({\bf Partition} p)\label{classPartitionStats_a23}
+long int {\bf card} (Partition p)\label{classPartitionStats_a23}
 
 \begin{CompactList}\small\item\em get cardinality of partition \item\end{CompactList}\item 
-double {\bf H} ({\bf Partition} p)\label{classPartitionStats_a24}
+double {\bf H} (Partition p)\label{classPartitionStats_a24}
 
 \begin{CompactList}\small\item\em Get Shannon entropy of partition. \item\end{CompactList}\item 
-double {\bf BK} ({\bf Partition} p)\label{classPartitionStats_a25}
+double {\bf BK} (Partition p)\label{classPartitionStats_a25}
 
 \begin{CompactList}\small\item\em Get Boltzman entropy of partition. \item\end{CompactList}\item 
-double {\bf TS} ({\bf Partition} p, double q)\label{classPartitionStats_a26}
+double {\bf TS} (Partition p, double q)\label{classPartitionStats_a26}
 
 \begin{CompactList}\small\item\em Get Tsallis entropy of partition. \item\end{CompactList}\item 
-double {\bf TS} ({\bf Partition} p)\label{classPartitionStats_a27}
+double {\bf TS} (Partition p)\label{classPartitionStats_a27}
 
 \item 
-double {\bf RS} ({\bf Partition} p, double q)\label{classPartitionStats_a28}
+double {\bf RS} (Partition p, double q)\label{classPartitionStats_a28}
 
 \begin{CompactList}\small\item\em Get Renyi entropy of partition. \item\end{CompactList}\item 
-double {\bf RS} ({\bf Partition} p)\label{classPartitionStats_a29}
+double {\bf RS} (Partition p)\label{classPartitionStats_a29}
 
 \item 
-double {\bf JQnorm} ({\bf Partition} p, double q)\label{classPartitionStats_a30}
+double {\bf JQnorm} (Partition p, double q)\label{classPartitionStats_a30}
 
 \begin{CompactList}\small\item\em Get Jeffreys Qnorm (a la Tarantola) of partition. \item\end{CompactList}\item 
 void {\bf i\-Potential} (pmetricv pm)\label{classPartitionStats_a31}
 
 \begin{CompactList}\small\item\em Print the value of the (information theoretic) potential associated with each partition. \item\end{CompactList}\item 
-long int {\bf ES} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a32}
+long int {\bf ES} (Partition \&p1, Partition \&p2)\label{classPartitionStats_a32}
 
 \begin{CompactList}\small\item\em Calculates edit score distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
-double {\bf VI} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a33}
+double {\bf VI} (Partition \&p1, Partition \&p2)\label{classPartitionStats_a33}
 
 \begin{CompactList}\small\item\em Calculates VI (Shannon) distance between part1 and part2 using pmetric. Should give the same as using partition explicitly built-in vipp function. Already checked? \item\end{CompactList}\item 
-double {\bf BK} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a34}
+double {\bf BK} (Partition \&p1, Partition \&p2)\label{classPartitionStats_a34}
 
 \begin{CompactList}\small\item\em Calculates Boltzman distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
-double {\bf TS} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a35}
+double {\bf TS} (Partition \&p1, Partition \&p2)\label{classPartitionStats_a35}
 
 \begin{CompactList}\small\item\em Calculates Tsallis distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
-double {\bf RS} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a36}
+double {\bf RS} (Partition \&p1, Partition \&p2)\label{classPartitionStats_a36}
 
 \begin{CompactList}\small\item\em Calculates Renyi distance between part1 and part2 using pmetric. \item\end{CompactList}\item 
-double {\bf TD} ({\bf Partition} \&p1, {\bf Partition} \&p2)\label{classPartitionStats_a37}
+double {\bf TD} (Partition \&p1, Partition \&p2)\label{classPartitionStats_a37}
 
 \begin{CompactList}\small\item\em Calculates Tarantola distance between part1 and part2 using Jeffrey's Qnorm. \item\end{CompactList}\item 
-void {\bf distances} ({\bf Partition} \&p, pmetricv pm=shannon)\label{classPartitionStats_a38}
+void {\bf distances} (Partition \&p, pmetricv pm=shannon)\label{classPartitionStats_a38}
 
 \begin{CompactList}\small\item\em Calculates all distances againts the specified reference partition. Argument pmetricv specifies which metric to use (VI, Edit score,...). \item\end{CompactList}\item 
 void {\bf distances\-Ref} (pmetricv pm=shannon)\label{classPartitionStats_a39}
@@ -154,7 +154,7 @@ void {\bf print\-Hasse\-Nodes} ()\label{classPartitionStats_a47}
 
 
 \subsection{Detailed Description}
-Implements operations between multiple partitions. The most important one is determining the consensus partition among a given set of partitions of a same set X 
+Implements operations between multiple partitions. Calculates different kind of pair-wise potentials, distances, inequality-residuals, the cover, ... 
 
 
 
@@ -171,7 +171,7 @@ Aproximate calculation of pair-wise distance between paritions with different nu
 
 Meadian, avg, std, std.err, var, min , max and sample sizeof the pair-wise distances among its partitions. If a non negative index is provided, distances are calculated with respect to partition refindex\index{PartitionStats@{Partition\-Stats}!getConsensusPartition@{getConsensusPartition}}
 \index{getConsensusPartition@{getConsensusPartition}!PartitionStats@{Partition\-Stats}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition\-Stats::get\-Consensus\-Partition ()}\label{classPartitionStats_a12}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Partition Partition\-Stats::get\-Consensus\-Partition ()}\label{classPartitionStats_a12}
 
 
 Explicitly build and instantiate a new partition which is the consensus one of the given list of partitions. 

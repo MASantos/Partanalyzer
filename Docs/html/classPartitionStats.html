@@ -23,7 +23,7 @@
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Instantiates a PartitionStats out of a list of filenames, a common file tabfile, and a float parameter used for non-standard entropies. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a3" doxytag="PartitionStats::PartitionStats"></a>
-&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a3">PartitionStats</a> (vector&lt; <a class="el" href="classPartition.html">Partition</a> &gt; &amp;vpart, double extensivity=EXTENSIVITY_DEFAULT)</td></tr>
+&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a3">PartitionStats</a> (vector&lt; Partition &gt; &amp;vpart, double extensivity=EXTENSIVITY_DEFAULT)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Instantiates from a vector of partitions. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a4" doxytag="PartitionStats::defineListOfPartitions"></a>
@@ -57,7 +57,7 @@ bool&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classP
 void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a11">printConsensusPart</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Used by printCover to print the consensus partition. <br><br></td></tr>
-<tr><td class="memItemLeft" nowrap align=right valign=top><a class="el" href="classPartition.html">Partition</a>&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a12">getConsensusPartition</a> ()</td></tr>
+<tr><td class="memItemLeft" nowrap align=right valign=top>Partition&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a12">getConsensusPartition</a> ()</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Explicitly build and instantiate a new partition which is the consensus one of the given list of partitions. </em> <a href="#a12"></a><em><br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a13" doxytag="PartitionStats::setConsensus_Ad"></a>
@@ -101,33 +101,33 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classP
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Compare cluster by cluster against the first partition's clusters (reference) and print overlap (fraction elements present in referece cluster). <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a23" doxytag="PartitionStats::card"></a>
-long int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a23">card</a> (<a class="el" href="classPartition.html">Partition</a> p)</td></tr>
+long int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a23">card</a> (Partition p)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">get cardinality of partition <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a24" doxytag="PartitionStats::H"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a24">H</a> (<a class="el" href="classPartition.html">Partition</a> p)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a24">H</a> (Partition p)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get Shannon entropy of partition. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a25" doxytag="PartitionStats::BK"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a25">BK</a> (<a class="el" href="classPartition.html">Partition</a> p)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a25">BK</a> (Partition p)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get Boltzman entropy of partition. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a26" doxytag="PartitionStats::TS"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a26">TS</a> (<a class="el" href="classPartition.html">Partition</a> p, double q)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a26">TS</a> (Partition p, double q)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get Tsallis entropy of partition. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a27" doxytag="PartitionStats::TS"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><b>TS</b> (<a class="el" href="classPartition.html">Partition</a> p)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><b>TS</b> (Partition p)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a28" doxytag="PartitionStats::RS"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a28">RS</a> (<a class="el" href="classPartition.html">Partition</a> p, double q)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a28">RS</a> (Partition p, double q)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get Renyi entropy of partition. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a29" doxytag="PartitionStats::RS"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><b>RS</b> (<a class="el" href="classPartition.html">Partition</a> p)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><b>RS</b> (Partition p)</td></tr>
 
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a30" doxytag="PartitionStats::JQnorm"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a30">JQnorm</a> (<a class="el" href="classPartition.html">Partition</a> p, double q)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a30">JQnorm</a> (Partition p, double q)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Get Jeffreys Qnorm (a la Tarantola) of partition. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a31" doxytag="PartitionStats::iPotential"></a>
@@ -135,31 +135,31 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classP
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Print the value of the (information theoretic) potential associated with each partition. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a32" doxytag="PartitionStats::ES"></a>
-long int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a32">ES</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p1, <a class="el" href="classPartition.html">Partition</a> &amp;p2)</td></tr>
+long int&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a32">ES</a> (Partition &amp;p1, Partition &amp;p2)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates edit score distance between part1 and part2 using pmetric. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a33" doxytag="PartitionStats::VI"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a33">VI</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p1, <a class="el" href="classPartition.html">Partition</a> &amp;p2)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a33">VI</a> (Partition &amp;p1, Partition &amp;p2)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates VI (Shannon) distance between part1 and part2 using pmetric. Should give the same as using partition explicitly built-in vipp function. Already checked? <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a34" doxytag="PartitionStats::BK"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a34">BK</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p1, <a class="el" href="classPartition.html">Partition</a> &amp;p2)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a34">BK</a> (Partition &amp;p1, Partition &amp;p2)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates Boltzman distance between part1 and part2 using pmetric. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a35" doxytag="PartitionStats::TS"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a35">TS</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p1, <a class="el" href="classPartition.html">Partition</a> &amp;p2)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a35">TS</a> (Partition &amp;p1, Partition &amp;p2)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates Tsallis distance between part1 and part2 using pmetric. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a36" doxytag="PartitionStats::RS"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a36">RS</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p1, <a class="el" href="classPartition.html">Partition</a> &amp;p2)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a36">RS</a> (Partition &amp;p1, Partition &amp;p2)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates Renyi distance between part1 and part2 using pmetric. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a37" doxytag="PartitionStats::TD"></a>
-double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a37">TD</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p1, <a class="el" href="classPartition.html">Partition</a> &amp;p2)</td></tr>
+double&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a37">TD</a> (Partition &amp;p1, Partition &amp;p2)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates Tarantola distance between part1 and part2 using Jeffrey's Qnorm. <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a38" doxytag="PartitionStats::distances"></a>
-void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a38">distances</a> (<a class="el" href="classPartition.html">Partition</a> &amp;p, pmetricv pm=shannon)</td></tr>
+void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classPartitionStats.html#a38">distances</a> (Partition &amp;p, pmetricv pm=shannon)</td></tr>
 
 <tr><td class="mdescLeft">&nbsp;</td><td class="mdescRight">Calculates all distances againts the specified reference partition. Argument pmetricv specifies which metric to use (VI, Edit score,...). <br><br></td></tr>
 <tr><td class="memItemLeft" nowrap align=right valign=top><a name="a39" doxytag="PartitionStats::distancesRef"></a>
@@ -200,7 +200,7 @@ void&nbsp;</td><td class="memItemRight" valign=bottom><a class="el" href="classP
 
 </table>
 <hr><a name="_details"></a><h2>Detailed Description</h2>
-Implements operations between multiple partitions. The most important one is determining the consensus partition among a given set of partitions of a same set X 
+Implements operations between multiple partitions. Calculates different kind of pair-wise potentials, distances, inequality-residuals, the cover, ... 
 <p>
 <hr><h2>Member Function Documentation</h2>
 <a name="a42" doxytag="PartitionStats::distances_Subsprojection"></a><p>
@@ -276,7 +276,7 @@ Meadian, avg, std, std.err, var, min , max and sample sizeof the pair-wise dista
     <td class="mdRow">
       <table cellpadding="0" cellspacing="0" border="0">
         <tr>
-          <td class="md" nowrap valign="top"> <a class="el" href="classPartition.html">Partition</a> PartitionStats::getConsensusPartition </td>
+          <td class="md" nowrap valign="top"> Partition PartitionStats::getConsensusPartition </td>
           <td class="md" valign="top">(&nbsp;</td>
           <td class="mdname1" valign="top" nowrap>          </td>
           <td class="md" valign="top">&nbsp;)&nbsp;</td>
@@ -337,7 +337,7 @@ update then the counter and add this set to the consensus partition.     </td>
 </table>
 <hr>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="PartitionStats_8h-source.html">PartitionStats.h</a><li>PartitionStats.cc</ul>
-<hr size="1"><address style="align: right;"><small>Generated on Wed Feb 10 11:33:43 2010 for Partanalyzer by
+<hr size="1"><address style="align: right;"><small>Generated on Thu Feb 11 18:21:14 2010 for Partanalyzer by
 <a href="http://www.doxygen.org/index.html">
 <img src="doxygen.png" alt="doxygen" align="middle" border=0 > 
 </a>1.3.2 </small></address>

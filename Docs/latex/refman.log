@@ -1,4 +1,4 @@
-This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  10 FEB 2010 11:33
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  11 FEB 2010 18:21
 **refman.tex
 (./refman.tex
 LaTeX2e <2001/06/01>
@@ -152,8 +152,8 @@ Package: array 1998/05/13 v2.3m Tabular extension package (FMi)
 
 Writing index file refman.idx
 (./refman.aux (./classccop.aux) (./classCharr.aux) (./structgreaterThan.aux)
-(./classMatrixOfValues.aux) (./classMultipleSeqAlign.aux) (./classPartition.aux
-) (./classPartitionStats.aux) (./classRobustDivisiveClustering.aux)
+(./classMatrixOfValues.aux) (./classMultipleSeqAlign.aux)
+(./classPartitionStats.aux) (./classRobustDivisiveClustering.aux)
 (./classroulette.aux) (./classSampling.aux) (./classSequence.aux)
 (./classsNeighborhood.aux))
 \openout1 = `refman.aux'.
@@ -252,36 +252,23 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 ] [13] [14]) [15]
-\openout2 = `classPartition.aux'.
-
- (./classPartition.tex
-Underfull \hbox (badness 3407) in paragraph at lines 13--14
-[]\OT1/cmr/bx/n/10 Partition \OT1/cmr/m/n/10 (smat $\OMS/cmsy/m/n/10 ^^C$\OT1/c
-mr/m/n/10 clustersl, int ofs, bool dosort=true, char $\OMS/cmsy/m/n/10 ^^C$\OT1
-/cmr/m/n/10 partf=NULL, char
- []
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 32.
-(/usr/share/texmf/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/it' in size <9> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 32.
- [16
-
-
-] [17] [18] [19] [20] [21])
-[22]
 \openout2 = `classPartitionStats.aux'.
 
- (./classPartitionStats.tex [23
+
+(./classPartitionStats.tex
+Underfull \hbox (badness 1817) in paragraph at lines 17--18
+[]\OT1/cmr/bx/n/10 Partition-Stats \OT1/cmr/m/n/10 (vector$\OML/cmm/m/it/10 <$ 
+\OT1/cmr/m/n/10 Par-ti-tion $\OML/cmm/m/it/10 >$ \OT1/cmr/m/n/10 &vpart, dou-bl
+e ex-ten-siv-ity=EXTENSIVITY[]-
+ []
+
+[16
 
 
-] [24] [25] [26]) [27]
+] [17] [18] [19]) [20]
 \openout2 = `classRobustDivisiveClustering.aux'.
 
-
-(./classRobustDivisiveClustering.tex
+ (./classRobustDivisiveClustering.tex
 Underfull \hbox (badness 10000) in paragraph at lines 8--9
 \OT1/cmr/m/n/10 DEFAULT[]-NUMBER[]-SAMPLES, int nneigh-bors=RDC[]-DEFAULT[]-NUM
 BER[]-
@@ -294,13 +281,13 @@ Underfull \hbox (badness 1199) in paragraph at lines 11--12
 , int nsam-
  []
 
-) [28
+) [21
 
 
 ]
 \openout2 = `classroulette.aux'.
 
- (./classroulette.tex) [29
+ (./classroulette.tex) [22
 
 
 ]
@@ -309,40 +296,38 @@ Underfull \hbox (badness 1199) in paragraph at lines 11--12
  (./classSampling.tex
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 1.
- [30
+ [23
 
 
-]) [31]
+]) [24]
 \openout2 = `classSequence.aux'.
 
 
-(./classSequence.tex [32
+(./classSequence.tex [25
 
 
-]) [33] [34]
+]) [26] [27]
 \openout2 = `classsNeighborhood.aux'.
 
- (./classsNeighborhood.tex [35
+ (./classsNeighborhood.tex [28
 
 
-]) [36]
-(./refman.ind [37
+]) [29]
+(./refman.ind [30
 
-
-] [38
 
 ]) (./refman.aux (./classccop.aux) (./classCharr.aux)
 (./structgreaterThan.aux) (./classMatrixOfValues.aux)
-(./classMultipleSeqAlign.aux) (./classPartition.aux) (./classPartitionStats.aux
-) (./classRobustDivisiveClustering.aux) (./classroulette.aux)
+(./classMultipleSeqAlign.aux) (./classPartitionStats.aux)
+(./classRobustDivisiveClustering.aux) (./classroulette.aux)
 (./classSampling.aux) (./classSequence.aux) (./classsNeighborhood.aux)) ) 
 Here is how much of TeX's memory you used:
- 1785 strings out of 95847
- 26911 string characters out of 1195963
- 73217 words of memory out of 1000001
- 4624 multiletter control sequences out of 10000+50000
+ 1692 strings out of 95847
+ 25156 string characters out of 1195963
+ 72177 words of memory out of 1000001
+ 4541 multiletter control sequences out of 10000+50000
  10633 words of font info for 37 fonts, out of 500000 for 1000
  14 hyphenation exceptions out of 1000
- 29i,12n,43p,845b,571s stack positions out of 1500i,500n,5000p,200000b,5000s
+ 29i,12n,43p,845b,572s stack positions out of 1500i,500n,5000p,200000b,5000s
 
-Output written on refman.dvi (42 pages, 89624 bytes).
+Output written on refman.dvi (34 pages, 71596 bytes).

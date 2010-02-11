@@ -31,7 +31,7 @@
 \item 
 {\bf Matrix\-Of\-Values} {\bf prune\-Edges} (float edgethreshold, long int \&nprunedges, bool below=true, bool terse=true)
 \begin{CompactList}\small\item\em Prunes all edges with weight $<$ threshold if flag is true; $>$ threshold otherwise. \item\end{CompactList}\item 
-{\bf Partition} {\bf cluster} ()
+Partition {\bf cluster} ()
 \begin{CompactList}\small\item\em Cluster graph. \item\end{CompactList}\item 
 void {\bf reset} ()\label{classMatrixOfValues_a10}
 
@@ -58,7 +58,7 @@ double {\bf v} (string a, string b, REDMx\-Val use\-RED=use\-Org\-RED)
 void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$matrix2)\label{classMatrixOfValues_a18}
 
 \begin{CompactList}\small\item\em Merge two matrix of values. \item\end{CompactList}\item 
-void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$mx2, {\bf Partition} $\ast$pt)
+void {\bf merge} ({\bf Matrix\-Of\-Values} $\ast$mx2, Partition $\ast$pt)
 \begin{CompactList}\small\item\em Merge two matrix of values and add cluster information for each edge. \item\end{CompactList}\item 
 void {\bf cull} ({\bf Matrix\-Of\-Values} $\ast$matrix2)\label{classMatrixOfValues_a20}
 
@@ -83,7 +83,7 @@ edge {\bf W} ()\label{classMatrixOfValues_a26}
 \begin{CompactList}\small\item\em Gets total sum of edge weights. \item\end{CompactList}\item 
 void {\bf edge\-Distribution} (const string \&sa, int cluster\-Size=-1, string cluster\-Name=\char`\"{}NAN\char`\"{})
 \begin{CompactList}\small\item\em For each node, print distribution of edge weights. Add information of cluster size and name. \item\end{CompactList}\item 
-void {\bf edge\-Distribution} ({\bf Partition} $\ast$pt=NULL)\label{classMatrixOfValues_a28}
+void {\bf edge\-Distribution} (Partition $\ast$pt=NULL)\label{classMatrixOfValues_a28}
 
 \item 
 {\bf Sampling} {\bf edge\-Distribution\-Stats} ()
@@ -101,7 +101,7 @@ Allows dealing with graphs. A matrix of values here, in each line, specifies an 
 \subsection{Member Function Documentation}
 \index{MatrixOfValues@{Matrix\-Of\-Values}!cluster@{cluster}}
 \index{cluster@{cluster}!MatrixOfValues@{Matrix\-Of\-Values}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Matrix\-Of\-Values::cluster ()}\label{classMatrixOfValues_a9}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}Partition Matrix\-Of\-Values::cluster ()}\label{classMatrixOfValues_a9}
 
 
 Cluster graph. 
@@ -214,7 +214,7 @@ Get Median, mean, std, var, min and max of all edges.
 
 nan values specify absence of edge; c++, however, treats them as numeric values: We have to take care of that. \index{MatrixOfValues@{Matrix\-Of\-Values}!merge@{merge}}
 \index{merge@{merge}!MatrixOfValues@{Matrix\-Of\-Values}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::merge ({\bf Matrix\-Of\-Values} $\ast$ {\em mx2}, {\bf Partition} $\ast$ {\em pt})}\label{classMatrixOfValues_a19}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Matrix\-Of\-Values::merge ({\bf Matrix\-Of\-Values} $\ast$ {\em mx2}, Partition $\ast$ {\em pt})}\label{classMatrixOfValues_a19}
 
 
 Merge two matrix of values and add cluster information for each edge. 
