@@ -1,4 +1,4 @@
-This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  12 FEB 2010 11:49
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  12 FEB 2010 11:56
 **refman.tex
 (./refman.tex
 LaTeX2e <2001/06/01>
@@ -245,23 +245,20 @@ Chapter 3.
 
  (./classMatrixOfValues.tex
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 22.
+(Font)              <9> on input line 25.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 22.
+(Font)              <6> on input line 25.
  [9
 
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 84--85
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
 []\OT1/cmr/m/n/10 void \OT1/cmr/bx/n/10 edge-Distribution \OT1/cmr/m/n/10 (cons
 t string &sa, int cluster-Size=-1, string cluster-
  []
 
-[10]
-Underfull \vbox (badness 1158) has occurred while \output is active []
-
- [11]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+[10] [11]
+Underfull \vbox (badness 1939) has occurred while \output is active []
 
  [12])
 [13]
@@ -288,13 +285,13 @@ e ex-ten-siv-ity=EXTENSIVITY[]-
 \openout2 = `classRobustDivisiveClustering.aux'.
 
  (./classRobustDivisiveClustering.tex
-Underfull \hbox (badness 10000) in paragraph at lines 8--9
+Underfull \hbox (badness 10000) in paragraph at lines 11--12
 \OT1/cmr/m/n/10 DEFAULT[]-NUMBER[]-SAMPLES, int nneigh-bors=RDC[]-DEFAULT[]-NUM
 BER[]-
  []
 
 
-Underfull \hbox (badness 1199) in paragraph at lines 11--12
+Underfull \hbox (badness 1199) in paragraph at lines 14--15
 []\OT1/cmr/bx/n/10 Robust-Divisive-Clustering \OT1/cmr/m/n/10 (\OT1/cmr/bx/n/10
  Matrix-Of-Values $\OMS/cmsy/m/n/10 ^^C$\OT1/cmr/m/n/10 graph, bool prunebe-low
 , int nsam-
@@ -325,7 +322,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (./classSequence.tex [27
 
 
-]) [28] [29]
+] [28]) [29]
 \openout2 = `classsNeighborhood.aux'.
 
  (./classsNeighborhood.tex [30
@@ -343,10 +340,10 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 Here is how much of TeX's memory you used:
  1695 strings out of 95847
  25183 string characters out of 1195963
- 72198 words of memory out of 1000001
+ 72199 words of memory out of 1000001
  4542 multiletter control sequences out of 10000+50000
  10633 words of font info for 37 fonts, out of 500000 for 1000
  14 hyphenation exceptions out of 1000
- 29i,12n,43p,845b,563s stack positions out of 1500i,500n,5000p,200000b,5000s
+ 29i,12n,43p,845b,571s stack positions out of 1500i,500n,5000p,200000b,5000s
 
-Output written on refman.dvi (36 pages, 72688 bytes).
+Output written on refman.dvi (36 pages, 74252 bytes).

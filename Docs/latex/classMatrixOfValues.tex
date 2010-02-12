@@ -1,5 +1,8 @@
 \section{Matrix\-Of\-Values Class Reference}
 \label{classMatrixOfValues}\index{MatrixOfValues@{MatrixOfValues}}
+Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .  
+
+
 {\tt \#include $<$Matrix\-Of\-Values.h$>$}
 
 \subsection*{Public Member Functions}
@@ -94,6 +97,8 @@ void {\bf print\-Nodes} ()\label{classMatrixOfValues_a30}
 
 
 \subsection{Detailed Description}
+Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements . 
+
 Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements . It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily) name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element does not exist in the provided partition. 
 
 

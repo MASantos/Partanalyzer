@@ -1,5 +1,8 @@
 \section{s\-Neighborhood Class Reference}
 \label{classsNeighborhood}\index{sNeighborhood@{sNeighborhood}}
+It defines the neighborhood of a given point, or ball of radius eps around an element 'x'.  
+
+
 {\tt \#include $<$s\-Neighborhood.h$>$}
 
 \subsection*{Public Member Functions}
@@ -42,6 +45,12 @@ long int {\bf multimode}\label{classsNeighborhood_o4}
 
 \subsection{Detailed Description}
 It defines the neighborhood of a given point, or ball of radius eps around an element 'x'. 
+
+Allows to deal with (sets of) neighborhood(s) of a given point. In particular, it allows to obtain its most frequent neighborhood: given a list of sets containing a point p, what is the one that repeats more often. If two or more of them have the same frequency, it chooses the first one seen.
+
+It allows the its construction iteratively given other previously instantiated s\-Neighborhood's.
+
+Its main members point, neighbors and eps, always contain the most frequent neighborhood, with frequency eps, around 'point' (or the largest ball around 'point'). 
 
 
 
