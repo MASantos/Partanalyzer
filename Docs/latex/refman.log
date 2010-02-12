@@ -1,4 +1,4 @@
-This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  12 FEB 2010 11:48
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  12 FEB 2010 11:49
 **refman.tex
 (./refman.tex
 LaTeX2e <2001/06/01>
@@ -275,7 +275,7 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 
 (./classPartitionStats.tex
-Underfull \hbox (badness 1817) in paragraph at lines 17--18
+Underfull \hbox (badness 1817) in paragraph at lines 20--21
 []\OT1/cmr/bx/n/10 Partition-Stats \OT1/cmr/m/n/10 (vector$\OML/cmm/m/it/10 <$ 
 \OT1/cmr/m/n/10 Par-ti-tion $\OML/cmm/m/it/10 >$ \OT1/cmr/m/n/10 &vpart, dou-bl
 e ex-ten-siv-ity=EXTENSIVITY[]-
@@ -347,6 +347,6 @@ Here is how much of TeX's memory you used:
  4542 multiletter control sequences out of 10000+50000
  10633 words of font info for 37 fonts, out of 500000 for 1000
  14 hyphenation exceptions out of 1000
- 29i,12n,43p,845b,572s stack positions out of 1500i,500n,5000p,200000b,5000s
+ 29i,12n,43p,845b,563s stack positions out of 1500i,500n,5000p,200000b,5000s
 
-Output written on refman.dvi (36 pages, 72752 bytes).
+Output written on refman.dvi (36 pages, 72688 bytes).
