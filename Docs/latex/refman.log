@@ -1,4 +1,4 @@
-This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  11 FEB 2010 18:29
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  12 FEB 2010 11:39
 **refman.tex
 (./refman.tex
 LaTeX2e <2001/06/01>
@@ -184,9 +184,9 @@ LaTeX Font Info:    ... okay on input line 14.
 
 ] (./refman.toc
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 2.
+(Font)              <7> on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 2.
+(Font)              <5> on input line 3.
 )
 \tf@toc=\write4
 \openout4 = `refman.toc'.
@@ -197,28 +197,47 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 ]
 Chapter 1.
-(./annotated.tex) [1
+(./index.tex
+Underfull \hbox (badness 10000) in paragraph at lines 2--2
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--4
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 6--6
+
+ []
+
+) [1
 
 ] [2
 
 ]
 Chapter 2.
-(./classBellNumber.tex) [3]
+(./annotated.tex) [3] [4
+
+]
+Chapter 3.
+(./classBellNumber.tex) [5]
 \openout2 = `classccop.aux'.
 
- (./classccop.tex) [4
+ (./classccop.tex) [6
 
 ]
 \openout2 = `classCharr.aux'.
 
- (./classCharr.tex) [5
+ (./classCharr.tex) [7
 
 
 ]
 \openout2 = `structgreaterThan.aux'.
 
 
-(./structgreaterThan.tex) [6
+(./structgreaterThan.tex) [8
 
 
 ]
@@ -229,7 +248,7 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <9> on input line 22.
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 22.
- [7
+ [9
 
 
 ]
@@ -238,20 +257,20 @@ Underfull \hbox (badness 10000) in paragraph at lines 84--85
 t string &sa, int cluster-Size=-1, string cluster-
  []
 
-[8]
+[10]
 Underfull \vbox (badness 1158) has occurred while \output is active []
 
- [9]
+ [11]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [10])
-[11]
+ [12])
+[13]
 \openout2 = `classMultipleSeqAlign.aux'.
 
- (./classMultipleSeqAlign.tex [12
+ (./classMultipleSeqAlign.tex [14
 
 
-] [13] [14]) [15]
+] [15] [16]) [17]
 \openout2 = `classPartitionStats.aux'.
 
 
@@ -262,10 +281,10 @@ Underfull \hbox (badness 1817) in paragraph at lines 17--18
 e ex-ten-siv-ity=EXTENSIVITY[]-
  []
 
-[16
+[18
 
 
-] [17] [18] [19]) [20]
+] [19] [20] [21]) [22]
 \openout2 = `classRobustDivisiveClustering.aux'.
 
  (./classRobustDivisiveClustering.tex
@@ -281,13 +300,13 @@ Underfull \hbox (badness 1199) in paragraph at lines 11--12
 , int nsam-
  []
 
-) [21
+) [23
 
 
 ]
 \openout2 = `classroulette.aux'.
 
- (./classroulette.tex) [22
+ (./classroulette.tex) [24
 
 
 ]
@@ -296,24 +315,24 @@ Underfull \hbox (badness 1199) in paragraph at lines 11--12
  (./classSampling.tex
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <14.4> on input line 1.
- [23
+ [25
 
 
-]) [24]
+]) [26]
 \openout2 = `classSequence.aux'.
 
 
-(./classSequence.tex [25
+(./classSequence.tex [27
 
 
-]) [26] [27]
+]) [28] [29]
 \openout2 = `classsNeighborhood.aux'.
 
- (./classsNeighborhood.tex [28
+ (./classsNeighborhood.tex [30
 
 
-]) [29]
-(./refman.ind [30
+]) [31]
+(./refman.ind [32
 
 
 ]) (./refman.aux (./classccop.aux) (./classCharr.aux)
@@ -322,12 +341,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 (./classRobustDivisiveClustering.aux) (./classroulette.aux)
 (./classSampling.aux) (./classSequence.aux) (./classsNeighborhood.aux)) ) 
 Here is how much of TeX's memory you used:
- 1692 strings out of 95847
- 25156 string characters out of 1195963
- 72177 words of memory out of 1000001
- 4541 multiletter control sequences out of 10000+50000
+ 1695 strings out of 95847
+ 25183 string characters out of 1195963
+ 72198 words of memory out of 1000001
+ 4542 multiletter control sequences out of 10000+50000
  10633 words of font info for 37 fonts, out of 500000 for 1000
  14 hyphenation exceptions out of 1000
  29i,12n,43p,845b,572s stack positions out of 1500i,500n,5000p,200000b,5000s
 
-Output written on refman.dvi (34 pages, 71596 bytes).
+Output written on refman.dvi (36 pages, 72752 bytes).

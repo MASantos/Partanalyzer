@@ -1,58 +1,59 @@
-\contentsline {chapter}{\numberline {1}Partanalyzer Compound Index}{1}
-\contentsline {section}{\numberline {1.1}Partanalyzer Compound List}{1}
-\contentsline {chapter}{\numberline {2}Partanalyzer Class Documentation}{3}
-\contentsline {section}{\numberline {2.1}Bell\discretionary {-}{}{}Number Class Reference}{3}
-\contentsline {subsection}{\numberline {2.1.1}Detailed Description}{3}
-\contentsline {section}{\numberline {2.2}ccop Class Reference}{4}
-\contentsline {subsection}{\numberline {2.2.1}Detailed Description}{4}
-\contentsline {subsection}{\numberline {2.2.2}Constructor \& Destructor Documentation}{4}
-\contentsline {subsubsection}{\numberline {2.2.2.1}\setlength {\rightskip }{0pt plus 5cm}ccop::ccop ({\bf Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values} $\ast $ {\em MX}, Partition $\ast $ {\em part})}{4}
-\contentsline {section}{\numberline {2.3}Charr Class Reference}{5}
-\contentsline {subsection}{\numberline {2.3.1}Detailed Description}{5}
-\contentsline {section}{\numberline {2.4}greater\discretionary {-}{}{}Than Struct Reference}{6}
-\contentsline {subsection}{\numberline {2.4.1}Detailed Description}{6}
-\contentsline {section}{\numberline {2.5}Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values Class Reference}{7}
-\contentsline {subsection}{\numberline {2.5.1}Detailed Description}{9}
-\contentsline {subsection}{\numberline {2.5.2}Member Function Documentation}{9}
-\contentsline {subsubsection}{\numberline {2.5.2.1}\setlength {\rightskip }{0pt plus 5cm}Partition Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::cluster ()}{9}
-\contentsline {subsubsection}{\numberline {2.5.2.2}\setlength {\rightskip }{0pt plus 5cm}void Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::edge\discretionary {-}{}{}Distribution (const string \& {\em sa}, int {\em cluster\discretionary {-}{}{}Size} = -1, string {\em cl\discretionary {-}{}{}Name} = \char `\"{}NAN\char `\"{})}{10}
-\contentsline {subsubsection}{\numberline {2.5.2.3}\setlength {\rightskip }{0pt plus 5cm}{\bf Sampling} Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::edge\discretionary {-}{}{}Distribution\discretionary {-}{}{}Stats ()}{10}
-\contentsline {subsubsection}{\numberline {2.5.2.4}\setlength {\rightskip }{0pt plus 5cm}void Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::merge ({\bf Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values} $\ast $ {\em mx2}, Partition $\ast $ {\em pt})}{11}
-\contentsline {subsubsection}{\numberline {2.5.2.5}\setlength {\rightskip }{0pt plus 5cm}{\bf Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values} Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::prune\discretionary {-}{}{}Edges (float {\em edgethreshold}, long int \& {\em nedgesdel}, bool {\em below} = true, bool {\em terse} = true)}{11}
-\contentsline {subsubsection}{\numberline {2.5.2.6}\setlength {\rightskip }{0pt plus 5cm}void Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::read\discretionary {-}{}{}Mx\discretionary {-}{}{}Values (int {\em col} = 3)}{11}
-\contentsline {subsubsection}{\numberline {2.5.2.7}\setlength {\rightskip }{0pt plus 5cm}double Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::v (string {\em a}, string {\em b}, REDMx\discretionary {-}{}{}Val {\em use\discretionary {-}{}{}RED} = use\discretionary {-}{}{}Org\discretionary {-}{}{}RED)}{11}
-\contentsline {section}{\numberline {2.6}Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align Class Reference}{12}
-\contentsline {subsection}{\numberline {2.6.1}Detailed Description}{14}
-\contentsline {subsection}{\numberline {2.6.2}Constructor \& Destructor Documentation}{14}
-\contentsline {subsubsection}{\numberline {2.6.2.1}\setlength {\rightskip }{0pt plus 5cm}Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align (char $\ast $ {\em msaf})}{14}
-\contentsline {subsection}{\numberline {2.6.3}Member Function Documentation}{14}
-\contentsline {subsubsection}{\numberline {2.6.3.1}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::Nsamples\discretionary {-}{}{}Red\discretionary {-}{}{}MSA (int {\em nsamples}, int {\em n})}{14}
-\contentsline {subsubsection}{\numberline {2.6.3.2}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::print\discretionary {-}{}{}Average\discretionary {-}{}{}Pairwise\discretionary {-}{}{}Ids ({\bf Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align} \& {\em msa}, double {\em thr}, vector$<$ int $>$ $\ast $ {\em positions} = NULL)}{14}
-\contentsline {subsubsection}{\numberline {2.6.3.3}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::print\discretionary {-}{}{}Average\discretionary {-}{}{}Pairwise\discretionary {-}{}{}Ids (double {\em thr} = 50.0, vector$<$ int $>$ $\ast $ {\em positions} = NULL)}{14}
-\contentsline {subsubsection}{\numberline {2.6.3.4}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::set\discretionary {-}{}{}File\discretionary {-}{}{}Name (char $\ast $ {\em fname})\hspace {0.3cm}{\tt [inline]}}{14}
-\contentsline {section}{\numberline {2.7}Partition\discretionary {-}{}{}Stats Class Reference}{16}
-\contentsline {subsection}{\numberline {2.7.1}Detailed Description}{19}
-\contentsline {subsection}{\numberline {2.7.2}Member Function Documentation}{19}
-\contentsline {subsubsection}{\numberline {2.7.2.1}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::distances\_\discretionary {-}{}{}Subsprojection (pmetricv {\em pm} = shannon)}{19}
-\contentsline {subsubsection}{\numberline {2.7.2.2}\setlength {\rightskip }{0pt plus 5cm}{\bf Sampling} Partition\discretionary {-}{}{}Stats::distances\discretionary {-}{}{}Distribution (pmetricv {\em pm} = shannon, int {\em refindex} = -1)}{19}
-\contentsline {subsubsection}{\numberline {2.7.2.3}\setlength {\rightskip }{0pt plus 5cm}Partition Partition\discretionary {-}{}{}Stats::get\discretionary {-}{}{}Consensus\discretionary {-}{}{}Partition ()}{19}
-\contentsline {subsubsection}{\numberline {2.7.2.4}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::print\discretionary {-}{}{}Cover (bool {\em PRINTCONSENSUP} = false)}{19}
-\contentsline {section}{\numberline {2.8}Robust\discretionary {-}{}{}Divisive\discretionary {-}{}{}Clustering Class Reference}{21}
-\contentsline {subsection}{\numberline {2.8.1}Detailed Description}{21}
-\contentsline {subsection}{\numberline {2.8.2}Member Function Documentation}{21}
-\contentsline {subsubsection}{\numberline {2.8.2.1}\setlength {\rightskip }{0pt plus 5cm}void Robust\discretionary {-}{}{}Divisive\discretionary {-}{}{}Clustering::reset ()}{21}
-\contentsline {section}{\numberline {2.9}roulette Class Reference}{22}
-\contentsline {subsection}{\numberline {2.9.1}Detailed Description}{22}
-\contentsline {section}{\numberline {2.10}Sampling$<$ T $>$ Class Template Reference}{23}
-\contentsline {subsection}{\numberline {2.10.1}Detailed Description}{24}
-\contentsline {section}{\numberline {2.11}Sequence Class Reference}{25}
-\contentsline {subsection}{\numberline {2.11.1}Detailed Description}{26}
-\contentsline {subsection}{\numberline {2.11.2}Member Function Documentation}{26}
-\contentsline {subsubsection}{\numberline {2.11.2.1}\setlength {\rightskip }{0pt plus 5cm}double Sequence::id ({\bf Sequence} $\ast $ {\em Seq}, vector$<$ int $>$ $\ast $ {\em positions} = NULL)}{26}
-\contentsline {section}{\numberline {2.12}s\discretionary {-}{}{}Neighborhood Class Reference}{28}
-\contentsline {subsection}{\numberline {2.12.1}Detailed Description}{28}
-\contentsline {subsection}{\numberline {2.12.2}Constructor \& Destructor Documentation}{29}
-\contentsline {subsubsection}{\numberline {2.12.2.1}\setlength {\rightskip }{0pt plus 5cm}s\discretionary {-}{}{}Neighborhood::s\discretionary {-}{}{}Neighborhood (string {\em p}, svect $\ast $ {\em cl})}{29}
-\contentsline {subsection}{\numberline {2.12.3}Member Function Documentation}{29}
-\contentsline {subsubsection}{\numberline {2.12.3.1}\setlength {\rightskip }{0pt plus 5cm}{\bf s\discretionary {-}{}{}Neighborhood} \& s\discretionary {-}{}{}Neighborhood::operator+= ({\bf s\discretionary {-}{}{}Neighborhood} \& {\em snbh})}{29}
-\contentsline {subsubsection}{\numberline {2.12.3.2}\setlength {\rightskip }{0pt plus 5cm}void s\discretionary {-}{}{}Neighborhood::set\discretionary {-}{}{}Most\discretionary {-}{}{}Frequent\discretionary {-}{}{}Neighborhood ()}{29}
+\contentsline {chapter}{\numberline {1}Partanalyzer }{1}
+\contentsline {chapter}{\numberline {2}Partanalyzer Compound Index}{3}
+\contentsline {section}{\numberline {2.1}Partanalyzer Compound List}{3}
+\contentsline {chapter}{\numberline {3}Partanalyzer Class Documentation}{5}
+\contentsline {section}{\numberline {3.1}Bell\discretionary {-}{}{}Number Class Reference}{5}
+\contentsline {subsection}{\numberline {3.1.1}Detailed Description}{5}
+\contentsline {section}{\numberline {3.2}ccop Class Reference}{6}
+\contentsline {subsection}{\numberline {3.2.1}Detailed Description}{6}
+\contentsline {subsection}{\numberline {3.2.2}Constructor \& Destructor Documentation}{6}
+\contentsline {subsubsection}{\numberline {3.2.2.1}\setlength {\rightskip }{0pt plus 5cm}ccop::ccop ({\bf Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values} $\ast $ {\em MX}, Partition $\ast $ {\em part})}{6}
+\contentsline {section}{\numberline {3.3}Charr Class Reference}{7}
+\contentsline {subsection}{\numberline {3.3.1}Detailed Description}{7}
+\contentsline {section}{\numberline {3.4}greater\discretionary {-}{}{}Than Struct Reference}{8}
+\contentsline {subsection}{\numberline {3.4.1}Detailed Description}{8}
+\contentsline {section}{\numberline {3.5}Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values Class Reference}{9}
+\contentsline {subsection}{\numberline {3.5.1}Detailed Description}{11}
+\contentsline {subsection}{\numberline {3.5.2}Member Function Documentation}{11}
+\contentsline {subsubsection}{\numberline {3.5.2.1}\setlength {\rightskip }{0pt plus 5cm}Partition Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::cluster ()}{11}
+\contentsline {subsubsection}{\numberline {3.5.2.2}\setlength {\rightskip }{0pt plus 5cm}void Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::edge\discretionary {-}{}{}Distribution (const string \& {\em sa}, int {\em cluster\discretionary {-}{}{}Size} = -1, string {\em cl\discretionary {-}{}{}Name} = \char `\"{}NAN\char `\"{})}{12}
+\contentsline {subsubsection}{\numberline {3.5.2.3}\setlength {\rightskip }{0pt plus 5cm}{\bf Sampling} Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::edge\discretionary {-}{}{}Distribution\discretionary {-}{}{}Stats ()}{12}
+\contentsline {subsubsection}{\numberline {3.5.2.4}\setlength {\rightskip }{0pt plus 5cm}void Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::merge ({\bf Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values} $\ast $ {\em mx2}, Partition $\ast $ {\em pt})}{13}
+\contentsline {subsubsection}{\numberline {3.5.2.5}\setlength {\rightskip }{0pt plus 5cm}{\bf Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values} Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::prune\discretionary {-}{}{}Edges (float {\em edgethreshold}, long int \& {\em nedgesdel}, bool {\em below} = true, bool {\em terse} = true)}{13}
+\contentsline {subsubsection}{\numberline {3.5.2.6}\setlength {\rightskip }{0pt plus 5cm}void Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::read\discretionary {-}{}{}Mx\discretionary {-}{}{}Values (int {\em col} = 3)}{13}
+\contentsline {subsubsection}{\numberline {3.5.2.7}\setlength {\rightskip }{0pt plus 5cm}double Matrix\discretionary {-}{}{}Of\discretionary {-}{}{}Values::v (string {\em a}, string {\em b}, REDMx\discretionary {-}{}{}Val {\em use\discretionary {-}{}{}RED} = use\discretionary {-}{}{}Org\discretionary {-}{}{}RED)}{13}
+\contentsline {section}{\numberline {3.6}Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align Class Reference}{14}
+\contentsline {subsection}{\numberline {3.6.1}Detailed Description}{16}
+\contentsline {subsection}{\numberline {3.6.2}Constructor \& Destructor Documentation}{16}
+\contentsline {subsubsection}{\numberline {3.6.2.1}\setlength {\rightskip }{0pt plus 5cm}Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align (char $\ast $ {\em msaf})}{16}
+\contentsline {subsection}{\numberline {3.6.3}Member Function Documentation}{16}
+\contentsline {subsubsection}{\numberline {3.6.3.1}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::Nsamples\discretionary {-}{}{}Red\discretionary {-}{}{}MSA (int {\em nsamples}, int {\em n})}{16}
+\contentsline {subsubsection}{\numberline {3.6.3.2}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::print\discretionary {-}{}{}Average\discretionary {-}{}{}Pairwise\discretionary {-}{}{}Ids ({\bf Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align} \& {\em msa}, double {\em thr}, vector$<$ int $>$ $\ast $ {\em positions} = NULL)}{16}
+\contentsline {subsubsection}{\numberline {3.6.3.3}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::print\discretionary {-}{}{}Average\discretionary {-}{}{}Pairwise\discretionary {-}{}{}Ids (double {\em thr} = 50.0, vector$<$ int $>$ $\ast $ {\em positions} = NULL)}{16}
+\contentsline {subsubsection}{\numberline {3.6.3.4}\setlength {\rightskip }{0pt plus 5cm}void Multiple\discretionary {-}{}{}Seq\discretionary {-}{}{}Align::set\discretionary {-}{}{}File\discretionary {-}{}{}Name (char $\ast $ {\em fname})\hspace {0.3cm}{\tt [inline]}}{16}
+\contentsline {section}{\numberline {3.7}Partition\discretionary {-}{}{}Stats Class Reference}{18}
+\contentsline {subsection}{\numberline {3.7.1}Detailed Description}{21}
+\contentsline {subsection}{\numberline {3.7.2}Member Function Documentation}{21}
+\contentsline {subsubsection}{\numberline {3.7.2.1}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::distances\_\discretionary {-}{}{}Subsprojection (pmetricv {\em pm} = shannon)}{21}
+\contentsline {subsubsection}{\numberline {3.7.2.2}\setlength {\rightskip }{0pt plus 5cm}{\bf Sampling} Partition\discretionary {-}{}{}Stats::distances\discretionary {-}{}{}Distribution (pmetricv {\em pm} = shannon, int {\em refindex} = -1)}{21}
+\contentsline {subsubsection}{\numberline {3.7.2.3}\setlength {\rightskip }{0pt plus 5cm}Partition Partition\discretionary {-}{}{}Stats::get\discretionary {-}{}{}Consensus\discretionary {-}{}{}Partition ()}{21}
+\contentsline {subsubsection}{\numberline {3.7.2.4}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::print\discretionary {-}{}{}Cover (bool {\em PRINTCONSENSUP} = false)}{21}
+\contentsline {section}{\numberline {3.8}Robust\discretionary {-}{}{}Divisive\discretionary {-}{}{}Clustering Class Reference}{23}
+\contentsline {subsection}{\numberline {3.8.1}Detailed Description}{23}
+\contentsline {subsection}{\numberline {3.8.2}Member Function Documentation}{23}
+\contentsline {subsubsection}{\numberline {3.8.2.1}\setlength {\rightskip }{0pt plus 5cm}void Robust\discretionary {-}{}{}Divisive\discretionary {-}{}{}Clustering::reset ()}{23}
+\contentsline {section}{\numberline {3.9}roulette Class Reference}{24}
+\contentsline {subsection}{\numberline {3.9.1}Detailed Description}{24}
+\contentsline {section}{\numberline {3.10}Sampling$<$ T $>$ Class Template Reference}{25}
+\contentsline {subsection}{\numberline {3.10.1}Detailed Description}{26}
+\contentsline {section}{\numberline {3.11}Sequence Class Reference}{27}
+\contentsline {subsection}{\numberline {3.11.1}Detailed Description}{28}
+\contentsline {subsection}{\numberline {3.11.2}Member Function Documentation}{28}
+\contentsline {subsubsection}{\numberline {3.11.2.1}\setlength {\rightskip }{0pt plus 5cm}double Sequence::id ({\bf Sequence} $\ast $ {\em Seq}, vector$<$ int $>$ $\ast $ {\em positions} = NULL)}{28}
+\contentsline {section}{\numberline {3.12}s\discretionary {-}{}{}Neighborhood Class Reference}{30}
+\contentsline {subsection}{\numberline {3.12.1}Detailed Description}{30}
+\contentsline {subsection}{\numberline {3.12.2}Constructor \& Destructor Documentation}{31}
+\contentsline {subsubsection}{\numberline {3.12.2.1}\setlength {\rightskip }{0pt plus 5cm}s\discretionary {-}{}{}Neighborhood::s\discretionary {-}{}{}Neighborhood (string {\em p}, svect $\ast $ {\em cl})}{31}
+\contentsline {subsection}{\numberline {3.12.3}Member Function Documentation}{31}
+\contentsline {subsubsection}{\numberline {3.12.3.1}\setlength {\rightskip }{0pt plus 5cm}{\bf s\discretionary {-}{}{}Neighborhood} \& s\discretionary {-}{}{}Neighborhood::operator+= ({\bf s\discretionary {-}{}{}Neighborhood} \& {\em snbh})}{31}
+\contentsline {subsubsection}{\numberline {3.12.3.2}\setlength {\rightskip }{0pt plus 5cm}void s\discretionary {-}{}{}Neighborhood::set\discretionary {-}{}{}Most\discretionary {-}{}{}Frequent\discretionary {-}{}{}Neighborhood ()}{31}
