@@ -54,7 +54,7 @@ For debugging: print the interaction matrix read by the program
 ./partanalyze --print-matrix test-blast_pairwise_id
 
 
-Full help (as of version alpha 0.9.9.7)
+Full help (as of version alpha 1.0.)
 			partanalyzer (Partition Analyzer)
 
 Usage:
@@ -75,17 +75,21 @@ Usage:
 
         COMMANDS                               
 
+   Defining the algebra of partitions                                
+       (-i|-u) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
+       (-I|-U) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+
    For analyzing partitions                                          
-       (-v|-e|-p|-i) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
+       (-v|-e|-p) partition1  partition2  [partition1_offset (=2) ] [partition2_offset (=partition1_offset) ] 
        -c matrix-of-values partition1 [threshold (=-1.0)] [partition_offset (=2)]
        -d matrix-of-values partition1 [partition_offset (=2)]
-       (-J|-R|-T) [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
+       (-Q|-R|-T) [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        (-V|-E|-P) [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        --pstat-sym [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        (--ipot|--cpot|--jpot|--v-measure-h) entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        (--mpot|--cmpot|--SSSA) entropy [-ext extensivity] [-ofs partition_offset (=2)] [-f partition_list | partition1 [ partition2 [ ... ]]]
        (-C|-H) [-cons] [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
-       (-A|-S|-I) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
+       (-A|-S|--Info) [-ofs partition_offset (=2)] [-f partition_list | [partition1 [ partition2 [ ... ]]]
 
    For creating partitions ( Clustering )                             
        --cluster graph [-below|-above] [ threshold ]                   
@@ -155,6 +159,28 @@ partanalyzer aims at being a general program for analyzing (sets of) partitions.
           Default normalization is the average sequence length, l.     
                                                                        
  COMMANDS:                                                             
+Defining algebra of partitions                                         
+                                                                       
+       -i , --intersection , -m , --meet                               
+          Calculate the intersection of  partition1 & partition2       
+                                                                       
+       -u , --union , -j , --join                                      
+          Calculate the union of  partition1 & partition2. This can be 
+          seen as the algebraic optimal consensus partition covering   
+          partition1 and partition2. Optimal means the most refined    
+          partition that covers both.                                  
+                                                                       
+       -I , --Intersection , -M , --Meet                               
+          Calculate the intersection of  all partitions provided       
+                                                                       
+       -U , --Union , -J , --Join                                      
+          Calculate the union of all partitions provided. This can be  
+          seen as the algebraic optimal consensus partition covering   
+          each and every input partition. Here, optimal means the most 
+          refined partition that covers any of the input partitions.   
+          Remark: This algebraic consensus is very sensitive to outlier
+          partitions.                                                  
+                                                                       
 For analyzing partitions                                               
                                                                        
        -v , --vi-distance                                              
@@ -168,9 +194,6 @@ For analyzing partitions
           Calculates the purity scores of partition2 (the target)      
                againts the partition1 (the reference).                 
                                                                        
-       -i , --intersection                                             
-          Calculate the intersection of  partition1 & partition2       
-                                                                       
        -c , --check-consistency-of-partition , --ccop [-tab tab_file]  
           Check cluster consistency according to the given matrix. If  
           partition and graph matrix label items differently, use the  
@@ -181,7 +204,7 @@ For analyzing partitions
           Calculate intra and inter cluster distribution of weights    
           according to the given matrix                                
                                                                        
-       -J , --jstat [-ext extensivity] [-ref]                          
+       -Q , --qstat [-ext extensivity] [-ref]                          
           Calculates Tarantola distance  for each pair of partitions.  
           For that it uses the Jeffrey's Qnorm based on Shannon Entropy.
           With option -ref, the first partition is taken as a reference
@@ -235,7 +258,7 @@ For analyzing partitions
           c | e | cardinality                                          
           r     | renyi                                                
           t     | tsallis                                              
-          j     | tarantola/jeffrey/tjqn                               
+          q     | tarantola/jeffrey/tjqn                               
           Both, long and short option names are valid.                 
           Default extensivity coefficient is 2.
           For cardinality potential, this coefficient will be used as a
@@ -334,7 +357,7 @@ For analyzing partitions
             levels); a right-most column shows whether these are perfect
             matches (black) or not (white).                            
                                                                        
-       -I , --info , {--isPart , --isaPart , --is-partition} [-ofs ofs]
+       --Info , {--isPart , --isaPart , --is-partition} [-ofs ofs]     
            For each partition checks whether it is a sound partition   
            or not, i.e., whether all of its clusters are pair-wise     
            disjoint. With option -q, only error message will be printed
@@ -639,8 +662,8 @@ File formats:
          MCL : MCL's own matrix format for partitions. See MCL manual. 
 
 License
-# partanalyzer Version alpha 0.9.9.7
-# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build Feb  9 2010
+# partanalyzer Version alpha 1.0.
+# Copyright (c) Miguel A. Santos, May. 2008-2010 .Build Feb 19 2010
 # Licensed under the GNU GPL version 3 or later.       
 # (see http://www.gnu.org/copyleft/gpl.html )          
 #
