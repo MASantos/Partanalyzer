@@ -60,7 +60,113 @@ set<E>& operator+=(set<E>& sa, set<E>& sb){
         return (sa=(sa+sb));
 };
 
+typedef vector<string > svect;
+
+ostream& operator<<(ostream& os, const svect& cl);
+
+bool operator==(const svect& cla, const svect& clb) {
+	//return (cla.size()<clb.size());
+	cout<<cla<<"=="<<clb<<"? ";
+	if(cla.size()!=clb.size()) { cout<<"NO"<<endl; return false; }
+        long int itfound=0;
+        cout<<"checking...";
+	/*
+        for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)
+                for(svect::const_iterator itb=clb.begin();itb!=clb.end();itb++){
+                        //cout<<"CL<= : "<<*ita<<"=="<<*itb<<"?"<<endl;
+                        if((*ita).compare(*itb)==0)itfound++;
+                }
+        if(itfound==cla.size()) { cout<<"SI"<<endl; return true;}
+	*/
+	set< string> elmts (clb.begin(), clb.end());
+        for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)elmts.insert(*ita);
+	if(elmts.size()==cla.size()){ cout<<"SI"<<endl; return true; }
+        cout<<"NO"<<endl; 
+	return false;
+}
+
+bool operator<(const svect& cla, const svect& clb) {
+	//return (cla.size()<clb.size());
+	cout<<cla<<"<"<<clb<<"? ";
+	if(cla.size()>clb.size()) { cout<<"NO"<<endl; return false; }
+        long int itfound=0;
+        cout<<"checking...";
+        for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)
+                for(svect::const_iterator itb=clb.begin();itb!=clb.end();itb++){
+                        //cout<<"CL<= : "<<*ita<<"=="<<*itb<<"?"<<endl;
+                        if((*ita).compare(*itb)==0)itfound++;
+                }
+        if(itfound==cla.size()&&cla.size()==clb.size()) { cout<<"NO"<<endl; return false; }
+        if(itfound==cla.size()) { cout<<"SI"<<endl; return true;}
+        cout<<"NO"<<endl; 
+	return false;
+}
+
+struct vect_compare{
+	bool operator() (const svect& cla, const svect& clb) const {
+		if(cla.size()==clb.size() && cla==clb) return false;
+		return (cla.size()<=clb.size());
+		}
+};
+
+inline ostream& operator<<(ostream& os, const svect& cl){
+	cout<<"{";
+	svect::const_iterator clast;
+	svect::const_iterator it;
+	clast=cl.end();
+	clast--;
+	for(it=cl.begin();it!=clast;it++){
+		cout<<*it<<",";
+	}
+	if(!cl.empty())cout<<(*(it));
+	cout<<"}";
+}
+
+inline ostream& operator<<(ostream& os, set< svect, vect_compare> S){
+	os<<"{";
+	if(S.empty()){ 
+		os<<"}";
+		return os;
+	}
+	set< svect, vect_compare>::iterator Slast;
+	set< svect, vect_compare>::iterator it;
+	Slast=S.end();
+	Slast--;
+	for(it=S.begin();it!=Slast;it++){
+		os<<*it<<",";	
+	}
+	if(!S.empty())os<<(*(it));
+	os<<"}";
+	return os;
+}
+
 int main(int argc, char* argv[]){
+	set< svect, vect_compare> coverset;
+	svect cla,clb,clc, cld;
+	cla.push_back("1");
+	clb.push_back("3");
+	clb.push_back("4");
+	clc.push_back("2");
+	clc.push_back("3");
+	clc.push_back("4");
+	cld.push_back("5");
+	cld.push_back("4");
+	cld.push_back("2");
+	cout<<"loading cla="<<cla<<" : "<<coverset<<endl;
+	coverset.insert(cla);
+	cout<<"loading clb="<<clb<<" : "<<coverset<<endl;
+	coverset.insert(clb);
+	cout<<"loading clc="<<clc<<" : "<<coverset<<endl;
+	coverset.insert(clc);
+	cout<<"loading AGAIN clc="<<clc<<" : "<<coverset<<endl;
+	coverset.insert(clc);
+	cout<<"loading cld="<<cld<<" : "<<coverset<<endl;
+	coverset.insert(cld);
+	cout<<"------------------"<<endl;
+	cout<<coverset<<endl;
+	exit(0);
+	/*
+	
 	if(argc>1){
 		double f=atof(argv[1]);
 		cout<<"SEEN: f="<<f<<"=> 10*f="<<10*f<<endl;
@@ -91,6 +197,7 @@ int main(int argc, char* argv[]){
 	int count=0;
 	for(set<int>::iterator i=s.begin();i!=s.end();i++ , ++count)
 		cout<<"s.size()="<<s.size()<<" *i="<<*i<<" count="<<count<<endl;
+	*/
 	/*
 	map<string , double > mymap;
 	mymap.insert(pair<string,double> ("a",0.988));
@@ -178,7 +285,6 @@ int main(int argc, char* argv[]){
 		//	cout<<st<<" doesn't start with a digit"<<endl;
 	*/
 	/*
-	*/
 	vector< int > v;
 	cout<<"Declaring vector: v={";
 	for(int i=0;i<10;i++){
@@ -220,6 +326,7 @@ int main(int argc, char* argv[]){
 	cout<<"sizeof(double)="<<sizeof(double)<<endl;
 	cout<<"sizeof(*str)="<<sizeof(&stra)<<endl;
 	cout<<"sizeof(mymap)="<<sizeof(mymap)<<endl;
+	*/
 	/*
 	cout<<"Instantiating template class kk"<<endl;
 	kk<int> mmap;
