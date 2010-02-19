@@ -36,8 +36,8 @@
 \contentsline {subsection}{\numberline {3.7.2}Member Function Documentation}{21}
 \contentsline {subsubsection}{\numberline {3.7.2.1}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::distances\_\discretionary {-}{}{}Subsprojection (pmetricv {\em pm} = shannon)}{21}
 \contentsline {subsubsection}{\numberline {3.7.2.2}\setlength {\rightskip }{0pt plus 5cm}{\bf Sampling} Partition\discretionary {-}{}{}Stats::distances\discretionary {-}{}{}Distribution (pmetricv {\em pm} = shannon, int {\em refindex} = -1)}{21}
-\contentsline {subsubsection}{\numberline {3.7.2.3}\setlength {\rightskip }{0pt plus 5cm}Partition Partition\discretionary {-}{}{}Stats::get\discretionary {-}{}{}Consensus\discretionary {-}{}{}Partition ()}{21}
-\contentsline {subsubsection}{\numberline {3.7.2.4}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::print\discretionary {-}{}{}Cover (bool {\em PRINTCONSENSUP} = false)}{21}
+\contentsline {subsubsection}{\numberline {3.7.2.3}\setlength {\rightskip }{0pt plus 5cm}Partition Partition\discretionary {-}{}{}Stats::get\discretionary {-}{}{}Consensus\discretionary {-}{}{}Partition ()}{22}
+\contentsline {subsubsection}{\numberline {3.7.2.4}\setlength {\rightskip }{0pt plus 5cm}void Partition\discretionary {-}{}{}Stats::print\discretionary {-}{}{}Cover (bool {\em PRINTCONSENSUP} = false)}{22}
 \contentsline {section}{\numberline {3.8}Robust\discretionary {-}{}{}Divisive\discretionary {-}{}{}Clustering Class Reference}{23}
 \contentsline {subsection}{\numberline {3.8.1}Detailed Description}{23}
 \contentsline {subsection}{\numberline {3.8.2}Member Function Documentation}{23}
@@ -57,3 +57,5 @@
 \contentsline {subsection}{\numberline {3.12.3}Member Function Documentation}{31}
 \contentsline {subsubsection}{\numberline {3.12.3.1}\setlength {\rightskip }{0pt plus 5cm}{\bf s\discretionary {-}{}{}Neighborhood} \& s\discretionary {-}{}{}Neighborhood::operator+= ({\bf s\discretionary {-}{}{}Neighborhood} \& {\em snbh})}{31}
 \contentsline {subsubsection}{\numberline {3.12.3.2}\setlength {\rightskip }{0pt plus 5cm}void s\discretionary {-}{}{}Neighborhood::set\discretionary {-}{}{}Most\discretionary {-}{}{}Frequent\discretionary {-}{}{}Neighborhood ()}{31}
+\contentsline {section}{\numberline {3.13}svect\_\discretionary {-}{}{}compare Struct Reference}{32}
+\contentsline {subsection}{\numberline {3.13.1}Detailed Description}{32}

@@ -73,11 +73,11 @@
     \subitem {distances\_\-Subsprojection}, 21
     \subitem {distancesDistribution}, 21
     \subitem {getConsensusPartition}, 21
-    \subitem {printCover}, 21
+    \subitem {printCover}, 22
   \item {printAveragePairwiseIds}
     \subitem {Multiple\-Seq\-Align}, 16
   \item {printCover}
-    \subitem {Partition\-Stats}, 21
+    \subitem {Partition\-Stats}, 22
   \item {pruneEdges}
     \subitem {Matrix\-Of\-Values}, 13
 
@@ -107,6 +107,7 @@
     \subitem {operator+=}, 31
     \subitem {setMostFrequentNeighborhood}, 31
     \subitem {sNeighborhood}, 31
+  \item {svect\_\-compare}, 32
 
   \indexspace
 

@@ -37,8 +37,8 @@
 \indexentry{distancesDistribution@{distancesDistribution}!PartitionStats@{Partition\-Stats}}{21}
 \indexentry{PartitionStats@{Partition\-Stats}!getConsensusPartition@{getConsensusPartition}}{21}
 \indexentry{getConsensusPartition@{getConsensusPartition}!PartitionStats@{Partition\-Stats}}{21}
-\indexentry{PartitionStats@{Partition\-Stats}!printCover@{printCover}}{21}
-\indexentry{printCover@{printCover}!PartitionStats@{Partition\-Stats}}{21}
+\indexentry{PartitionStats@{Partition\-Stats}!printCover@{printCover}}{22}
+\indexentry{printCover@{printCover}!PartitionStats@{Partition\-Stats}}{22}
 \indexentry{RobustDivisiveClustering@{RobustDivisiveClustering}}{23}
 \indexentry{RobustDivisiveClustering@{Robust\-Divisive\-Clustering}!reset@{reset}}{23}
 \indexentry{reset@{reset}!RobustDivisiveClustering@{Robust\-Divisive\-Clustering}}{23}
@@ -54,3 +54,4 @@
 \indexentry{operator+=@{operator+=}!sNeighborhood@{s\-Neighborhood}}{31}
 \indexentry{sNeighborhood@{s\-Neighborhood}!setMostFrequentNeighborhood@{setMostFrequentNeighborhood}}{31}
 \indexentry{setMostFrequentNeighborhood@{setMostFrequentNeighborhood}!sNeighborhood@{s\-Neighborhood}}{31}
+\indexentry{svect_compare@{svect\_\-compare}}{32}

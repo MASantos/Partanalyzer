@@ -1,4 +1,4 @@
-This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  12 FEB 2010 12:01
+This is TeX, Version 3.14159 (Web2C 7.4.5) (format=latex 2004.4.6)  19 FEB 2010 16:59
 **refman.tex
 (./refman.tex
 LaTeX2e <2001/06/01>
@@ -155,7 +155,7 @@ Writing index file refman.idx
 (./classMatrixOfValues.aux) (./classMultipleSeqAlign.aux)
 (./classPartitionStats.aux) (./classRobustDivisiveClustering.aux)
 (./classroulette.aux) (./classSampling.aux) (./classSequence.aux)
-(./classsNeighborhood.aux))
+(./classsNeighborhood.aux) (./structsvect__compare.aux))
 \openout1 = `refman.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
@@ -172,12 +172,12 @@ LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
 LaTeX Font Info:    ... okay on input line 14.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 14.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 14.
- (/usr/share/texmf/tex/latex/base/ts1cmr.fd
+
+(/usr/share/texmf/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 14.
-
-[1
+ [1
 
 
 ] [2
@@ -329,21 +329,28 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 
 
 ]) [31]
-(./refman.ind [32
+\openout2 = `structsvect__compare.aux'.
 
 
-]) (./refman.aux (./classccop.aux) (./classCharr.aux)
-(./structgreaterThan.aux) (./classMatrixOfValues.aux)
-(./classMultipleSeqAlign.aux) (./classPartitionStats.aux)
-(./classRobustDivisiveClustering.aux) (./classroulette.aux)
-(./classSampling.aux) (./classSequence.aux) (./classsNeighborhood.aux)) ) 
+(./structsvect__compare.tex) [32
+
+
+] (./refman.ind [33
+
+
+]) (./refman.aux
+(./classccop.aux) (./classCharr.aux) (./structgreaterThan.aux)
+(./classMatrixOfValues.aux) (./classMultipleSeqAlign.aux)
+(./classPartitionStats.aux) (./classRobustDivisiveClustering.aux)
+(./classroulette.aux) (./classSampling.aux) (./classSequence.aux)
+(./classsNeighborhood.aux) (./structsvect__compare.aux)) ) 
 Here is how much of TeX's memory you used:
- 1695 strings out of 95847
- 25183 string characters out of 1195963
- 72199 words of memory out of 1000001
- 4542 multiletter control sequences out of 10000+50000
+ 1708 strings out of 95847
+ 25498 string characters out of 1195963
+ 72524 words of memory out of 1000001
+ 4548 multiletter control sequences out of 10000+50000
  10633 words of font info for 37 fonts, out of 500000 for 1000
  14 hyphenation exceptions out of 1000
  29i,12n,43p,845b,571s stack positions out of 1500i,500n,5000p,200000b,5000s
 
-Output written on refman.dvi (36 pages, 74252 bytes).
+Output written on refman.dvi (37 pages, 76788 bytes).
