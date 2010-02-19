@@ -15,18 +15,17 @@
 *    along with Partanalyzer.  If not, see <http://www.gnu.org/licenses/>.
 *
 */
-/** Partanalyzer
-Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
-Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
-*/
-
-/** Partanalyzer
-Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
+/**@mainpage Partanalyzer
+@author Miguel A. Santos, msantos@wodaklab.org
+@date 2008-2011
+@note Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 
-Compile Options:
+@detail partanalyzer aims at being a general program for analyzing (sets of) partitions.
+ Here a partition is defined as in set theory of mathematics (see
+ http://en.wikipedia.org/wiki/Partition_of_a_set). It also allows to
+ edit (rudimentarily), as well as generate, partitions.                
 
-g++ -o partanalyzer partanalyzer.cc
 */
 
 #ifndef _PARTANALYZER_MAIN_HEADER
@@ -49,7 +48,7 @@ g++ -o partanalyzer partanalyzer.cc
 
 
 #ifdef _PARTANALYZER_MAIN
-const char* VERSION="alpha 0.9.9.7";
+const char* VERSION="alpha 1.0.";
 
 bool 	DEBUG=false;
 
@@ -59,7 +58,7 @@ bool    QUIET=false;
 
 bool	INFO=false;
 
-bool	FUZZYPARTITION=false; 
+bool	FUZZYPARTITION=false;
 #endif
 
 template<class T> void readListFromFile(char* argv0, T& container){

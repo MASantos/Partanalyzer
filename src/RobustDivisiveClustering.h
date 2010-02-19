@@ -31,8 +31,10 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #define RDC_DEFAULT_NUMBER_SAMPLES 100
 #define RDC_DEFAULT_NUMBER_NEIGHBORS 2
 #define RDC_DEFAULT_TOP_BEST_PARTITIONS 20
-/**Performs a robust pruning clustering of the input graph
- * */
+///Performs a robust pruning clustering of the input graph
+/**Performs a robust pruning clustering of the input graph by finding the pruning threshold
+with minimal entropy variation.
+*/
 class RobustDivisiveClustering
 {
 	MatrixOfValues* _graphptr;

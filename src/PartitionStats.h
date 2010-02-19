@@ -35,6 +35,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "BellNumber.h"
 
 #include "Statistics.h"
+#include "MatrixOfValues.h"
 
 // Prints system date; is defined elsewhere : partanalyzer_help.*
 extern void systemDate();
@@ -42,9 +43,10 @@ extern void systemDate();
 ///Type definition of a vector of partitions. Useful with trying to process multiple partitions at once, like in class PartitionStats
 typedef vector<Partition > ppvect;
 
-///**Implements operations between multiple partitions. The most important one is determining the
-//consensus partition among a given set of partitions of a same set X
-//*/
+///Implements operations between multiple partitions. 
+/**Implements operations between multiple partitions. 
+Calculates different kind of pair-wise potentials, distances, inequality-residuals, the cover, ...
+*/
 class PartitionStats
 {
 	///List of file that contain our partitions
@@ -64,6 +66,8 @@ class PartitionStats
 	map<long int, ppvect > _hasseNodes;
 	///Consensus Adjacency matrix (graph): Assumes all partitions defined on the same underlying set
 	graph _Ad;
+	///External matrix of Weights. Allows to define weighted potentials/probabilities.
+	MatrixOfValues* _W;
 	///Number of partitions. Equals _partitionl.size()
 	int _npart;
 	///General cluster offset
@@ -107,6 +111,12 @@ public:
 	bool has2ndListOfPartitions(){ return (_partitionl2.size()>0);}
 	///Checks if each of the provided partitions is a sound partition, i.e., if all clusters are pair-wise disjoint.
 	int arePartitions();
+	///Builds the Meet Partition (overall intersection) of the underlying set of elements out of the list of partitions.
+	Partition getMeet();
+	///Builds the Join Partition (overall union) of the underlying set of elements out of the list of partitions.
+	Partition getJoin();
+	///Builds the cover Partition (overall union) of the underlying set of elements out of the list of partitions.
+	Partition getCoverPartition(){ return getJoin();}
 	///Builds the cover _cover of the underlying set of elements out of the list of partitions.
 	void getCover();
 	///Check if _cover has been build.

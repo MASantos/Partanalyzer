@@ -32,9 +32,10 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 ///Type definition of a MSA as a vector of Sequences
 typedef vector< Sequence > MSA;
-///**Allows to perform operations on multiple sequence aligments. Its main member being of course the MSA object _Seqlist which
-//contains the list of all sequences and their names.
-//*/
+///Allows to deal wit and perform operations on multiple sequence aligments.
+/**Allows to perform operations on multiple sequence aligments. Its main member being of course the MSA object _Seqlist which
+contains the list of all sequences and their names.
+*/
 class MultipleSeqAlign
 {
         char* _msaf;

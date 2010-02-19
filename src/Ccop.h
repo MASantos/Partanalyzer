@@ -34,6 +34,7 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 //extern double beta;
 //extern double mu;
 
+///Checks the consistency of a partition relative to a given graph (matrix of edge values).
 /**Checks the consistency of a partition in relation to a given graph (matrix of values). It's the initial core of this whole project.
  * */
 class ccop

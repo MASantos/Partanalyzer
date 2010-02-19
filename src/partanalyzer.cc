@@ -353,17 +353,23 @@ int main(int argc, char* argv[]) {
         		if(argc>1) cluster1_offset=atoi(argv[1]);
 			
 		}
-		else if (strcmp(*argv,"-v")==0||strcmp(*argv,"-e")==0||strcmp(*argv,"-p")==0||strcmp(*argv,"-i")==0\
+		else if (strcmp(*argv,"-v")==0||strcmp(*argv,"-e")==0||strcmp(*argv,"-p")==0\
+			||strcmp(*argv,"-i")==0||strcmp(*argv,"--intersection")==0\
+			||strcmp(*argv,"-m")==0||strcmp(*argv,"--meet")==0\
+			||strcmp(*argv,"-u")==0||strcmp(*argv,"--union")==0\
+			||strcmp(*argv,"-j")==0||strcmp(*argv,"--join")==0\
 			||strcmp(*argv,"--vi-distance")==0||strcmp(*argv,"--edit-distance")==0\
-			||strcmp(*argv,"--purity-scores")==0||strcmp(*argv,"--intersection")==0){
+			||strcmp(*argv,"--purity-scores")==0){
 			if(strcmp(*argv,"-v")==0||strcmp(*argv,"--vi-distance")==0)///analysis="vipp";
 				analysis=prgVIPP;
 			else if(strcmp(*argv,"-e")==0||strcmp(*argv,"--edit-distance")==0)
 				analysis=prgEDSC;
 			else if(strcmp(*argv,"-p")==0||strcmp(*argv,"--purity-scores")==0)
 				analysis=prgPSPP;
-			else if(strcmp(*argv,"-i")==0||strcmp(*argv,"--intersection")==0)
-				analysis=prgINTE;
+			else if(strcmp(*argv,"-i")==0||strcmp(*argv,"--intersection")==0||strcmp(*argv,"-m")==0||strcmp(*argv,"--meet")==0)
+				analysis=prgMEET;
+			else if(strcmp(*argv,"-u")==0||strcmp(*argv,"--union")==0||strcmp(*argv,"-j")==0||strcmp(*argv,"--join")==0)
+				analysis=prgJOIN;
 			else {
 				cout<<"ERROR: invalid binary option"<<endl;
 				exit(1);
@@ -428,12 +434,12 @@ int main(int argc, char* argv[]) {
 				metric=renyi;
 			else if(strcmp(*argv,"t")==0||strcmp(*argv,"tsallis")==0)
 				metric=tsallis;
-			else if(strcmp(*argv,"j")==0||strcmp(*argv,"tarantola")==0||strcmp(*argv,"jeffrey")==0||strcmp(*argv,"tjqn")==0){ //TARANTOLA-JEFFREY QNORM
+			else if(strcmp(*argv,"q")==0||strcmp(*argv,"tarantola")==0||strcmp(*argv,"jeffrey")==0||strcmp(*argv,"tjqn")==0){ //TARANTOLA-JEFFREY QNORM
 				metric=jeffreyQnorm;
 				extensivity=1.0;//DEFAULT VALUE FOR TARANTOLA QNORM
 			}
 			else {
-				cout<<"ERROR: main : -xPot : unknown metric. Did you specified it?"<<endl;
+				cout<<"ERROR: main : --xPot : unknown metric. Did you specified it?"<<endl;
 				exit(1);
 			}
 			argc--;argv++;
@@ -444,12 +450,31 @@ int main(int argc, char* argv[]) {
 				if(argc<2)printCommandLineError();
 				argc--;argv++;
 			}
+			if(strcmp(*argv,"-g")==0||strcmp(*argv,"--graph")==0||strcmp(*argv,"--matrix")==0){
+				argc--;argv++;
+				if(argc<2)printCommandLineError();
+				mxofval=argv[0];
+				argc--;argv++;
+				if(argc<1)printCommandLineError();
+				switch(analysis){
+					case prgIPOT: analysis=prgIPOG; break;
+					case prgCPOT: analysis=prgCPOG; break;
+					case prgJPOT: analysis=prgJPOG; break;
+					case prgMPOT: analysis=prgMPOG; break;
+					case prgCMPO: analysis=prgCMPG; break;
+					case prgSSSA: analysis=prgSSSG; break;
+					default: 
+						printCommandLineError("Weighted potential not available for chosen measure, only for: iPot, jPot, cPot, SA, SSA and SSSA"); 
+						break;
+				}
+			}
 			bool usestdin=false;
 			const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
 			if(strcmp(*argv,"-ref")==0){
 				switch(analysis){
 					case prgIPOT: analysis=prgIPOR; break;
 					case prgCPOT: analysis=prgCPOR; break;
+					case prgJPOT: analysis=prgJPOR; break;
 					case prgMPOT: analysis=prgMPOR; break;
 					case prgCMPO: analysis=prgCMPR; break;
 					case prgSSSA: analysis=prgSSSR; break;
@@ -457,6 +482,9 @@ int main(int argc, char* argv[]) {
 					case prgVMGM: analysis=prgVGMR; break;
 					case prgVMHM: analysis=prgVHMR; break;
 					case prgPSYM: analysis=prgPSYR; break;
+					default: 
+						printCommandLineError("Using -ref for weighted potentials not yet implemented"); 
+						break;
 				}
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
@@ -486,8 +514,42 @@ int main(int argc, char* argv[]) {
 				}
 			}
 		}
-		else if (strcmp(*argv,"-V")==0||strcmp(*argv,"-E")==0||strcmp(*argv,"-B")==0||strcmp(*argv,"-T")==0||strcmp(*argv,"-R")==0||strcmp(*argv,"-J")==0\
-			||strcmp(*argv,"--vstat")==0||strcmp(*argv,"--estat")==0||strcmp(*argv,"--bstat")==0||strcmp(*argv,"--tstat")==0||strcmp(*argv,"--rstat")==0||strcmp(*argv,"--jstat")==0){
+		else if (strcmp(*argv,"-J")==0||strcmp(*argv,"--Join")==0||strcmp(*argv,"-U")==0||strcmp(*argv,"--Union")==0||strcmp(*argv,"-M")==0||strcmp(*argv,"--Meet")==0||strcmp(*argv,"-I")==0||strcmp(*argv,"--Intersection")==0){
+			if(strcmp(*argv,"-J")==0||strcmp(*argv,"--Join")==0||strcmp(*argv,"-U")==0||strcmp(*argv,"--Union")==0)
+				analysis=prgJOST;
+			else if(strcmp(*argv,"-M")==0||strcmp(*argv,"--Meet")==0||strcmp(*argv,"-I")==0||strcmp(*argv,"--Intersection")==0)
+				analysis=prgMEST;
+			bool usestdin=false;
+			const string errmsg="readListInputFilesI: Standard input can be assigned to only 1 input file";
+			if(argc<3)printCommandLineError();
+			argc--;argv++;
+			if(strcmp(*argv,"-f")==0){
+				if(argc<2)printCommandLineError();
+				argc--;argv++;
+				if(!QUIET)cout<<"#Detected input file list"<<endl;
+				readListInputFiles(argv[0],infilenames);
+				argc--;argv++;
+				if(argc>0&&strcmp(*argv,"-f2")==0){
+					if(argc!=2)printCommandLineError();
+					argc--;argv++;
+					if(!QUIET)cout<<"#Detected second input file list"<<endl;
+					readListInputFiles(argv[0],infilenames2);
+					argc--;argv++;
+				}
+			}
+			else{
+				for(int i=0;i<argc;i++){
+					Charr f={argv[i]};
+			                if(checkIfStandardInput(f.car)){
+						if(usestdin)printCommandLineError(errmsg);
+						usestdin=true;
+					}
+					infilenames.push_back( f );
+				}
+			}
+		}
+		else if (strcmp(*argv,"-V")==0||strcmp(*argv,"-E")==0||strcmp(*argv,"-B")==0||strcmp(*argv,"-T")==0||strcmp(*argv,"-R")==0||strcmp(*argv,"-Q")==0\
+			||strcmp(*argv,"--vstat")==0||strcmp(*argv,"--estat")==0||strcmp(*argv,"--bstat")==0||strcmp(*argv,"--tstat")==0||strcmp(*argv,"--rstat")==0||strcmp(*argv,"--qstat")==0){
 			if(strcmp(*argv,"--vstat")==0||strcmp(*argv,"-V")==0)///analysis="vipp";
 				analysis=prgVIST;
 			else if(strcmp(*argv,"--bstat")==0||strcmp(*argv,"-B")==0)
@@ -496,8 +558,8 @@ int main(int argc, char* argv[]) {
 				analysis=prgTDST;
 			else if(strcmp(*argv,"--rstat")==0||strcmp(*argv,"-R")==0)
 				analysis=prgRDST;
-			else if(strcmp(*argv,"--jstat")==0||strcmp(*argv,"-J")==0){
-				analysis=prgJDST;
+			else if(strcmp(*argv,"--qstat")==0||strcmp(*argv,"-Q")==0){
+				analysis=prgQDST;
 				extensivity=1.0;//SET 1 AS DEFAULT FOR TARANTOLA-JEFFREY QNORM DISTANCE
 			}
 			else
@@ -520,7 +582,7 @@ int main(int argc, char* argv[]) {
 					case prgBDST: analysis=prgBDSR; break;
 					case prgTDST: analysis=prgTDSR; break;
 					case prgRDST: analysis=prgRDSR; break;
-					case prgJDST: analysis=prgJDSR; break;
+					case prgQDST: analysis=prgQDSR; break;
 				}
 				if(argc<3)printCommandLineError();
 				argc--;argv++;
@@ -701,7 +763,7 @@ int main(int argc, char* argv[]) {
 					infilenames.push_back( f );
 				}
 		}
-		else if (strcmp(*argv,"-I")==0||strcmp(*argv,"--info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
+		else if (strcmp(*argv,"--Info")==0||strcmp(*argv,"--info")==0||strcmp(*argv,"--isPart")==0||strcmp(*argv,"--is-partition")==0||strcmp(*argv,"--isaPart")==0){
 			analysis=prgIPAR;
 			INFO=true;
 			if(argc<2)printCommandLineError();
@@ -809,7 +871,7 @@ int main(int argc, char* argv[]) {
 					metric=tsallis;
 					argc--;argv++;
 				}
-				else if(strcmp(*argv,"-j")==0||strcmp(*argv,"-J")==0){
+				else if(strcmp(*argv,"-q")==0||strcmp(*argv,"-Q")==0){
 					metric=jeffreyQnorm;
 					argc--;argv++;
 				}
@@ -1341,12 +1403,19 @@ int main(int argc, char* argv[]) {
 			}
 		case prgVIPP:
 		case prgEDSC:
-		case prgINTE:{ 
+		case prgMEET:
+		case prgJOIN:
+		{ 
 			Partition partition1(partitionf1,piformat,cluster1_offset);
 			Partition partition2(partitionf2,piformat,cluster2_offset);
 			if(!QUIET) systemDate();
+			if(analysis==prgJOIN){
+				Partition join_1_2=partition1+partition2;
+				join_1_2.printPartition(piformat);
+				exit(0);
+			}
 			Partition intersection_1_2=partition1*partition2;
-			if(analysis==prgINTE){
+			if(analysis==prgMEET){
 				if(!QUIET)cout<<"#Printing Intersection"<<endl;
 				intersection_1_2.printPartition(piformat);
 				exit(0);
@@ -1399,30 +1468,42 @@ int main(int argc, char* argv[]) {
 		case prgVGMR:
 		case prgVHMR:
 		case prgPSYR:
+		case prgSEXV: //Scan extensivity values
+		case prgIPOG:
+		case prgCPOG:
+		case prgJPOG:
+		case prgMPOG:
+		case prgCMPG:
+		case prgSSSG:
 		{
 			PartitionStats partstats(infilenames, piformat, extensivity, cluster1_offset, clstat_normalization_ofs);
 			pmeasure measure;
 			switch(analysis){
 				case prgCPOT:
 				case prgCPOR:
+				case prgCPOG:
 					measure=conditionalEntropy;
 					break;
 				case prgJPOT:
 				case prgJPOR:
+				case prgJPOG:
 					measure=jointEntropy;
 					break;
 				//case prgMPOT: //Testing for subadditivity
 				case prgCKSA: //Testing for subadditivity
 				case prgMPOR: //Testing for subadditivity
+				case prgMPOG: //Testing for subadditivity
 					measure=mutualInformation;
 					break;
 				//case prgCMPO: //Check if Strong Subadditivity holds
 				case prgCSSA: //Check if Strong Subadditivity holds
 				case prgCMPR: //Check if Strong Subadditivity holds
+				case prgCMPG: //Check if Strong Subadditivity holds
 					measure=conditionalMutualInformation;
 					break;
 				case prgSSSA: //Check if Weak-Strong Subadditivity holds
 				case prgSSSR: //Check if Weak-Strong Subadditivity holds
+				case prgSSSG: //Check if Weak-Strong Subadditivity holds
 					measure=SSSA;
 					break;
 				case prgVMAM:
@@ -1472,21 +1553,31 @@ int main(int argc, char* argv[]) {
 				case prgPSYR:
 					partstats.pmeasuresRef(measure);
 					break;
+				case prgIPOG:
+				case prgCPOG:
+				case prgJPOG:
+				case prgKSAG: //Testing for subadditivity
+				case prgKSSG: //Check if Strong Subadditivity holds
+				case prgSSSG: //Check if Weak-Strong Subadditivity holds
+					printCommandLineError("Not yet implemented");
+					break;
 			}
 			break;
 			}
+		case prgJOST:
+		case prgMEST:
 		case prgVIST:
 		case prgEDST:
 		case prgBDST:
 		case prgTDST:
 		case prgRDST:
-		case prgJDST:
+		case prgQDST:
 		case prgVISR:
 		case prgEDSR:
 		case prgBDSR:
 		case prgTDSR:
 		case prgRDSR:
-		case prgJDSR:
+		case prgQDSR:
 		case prgPSSR:
 		case prgPSTG:
 		case prgPSST:{
@@ -1509,6 +1600,12 @@ int main(int argc, char* argv[]) {
 			}
 			//pmetricv metric=shannon;
 			switch(analysis){
+				case prgJOST:
+					partstats.getJoin().print();
+					break;
+				case prgMEST:
+					partstats.getMeet().print();
+					break;
 				case prgPSSR:
 					partstats.getPurityRef();
 					break;
@@ -1523,14 +1620,14 @@ int main(int argc, char* argv[]) {
 				case prgBDST:
 				case prgTDST:
 				case prgRDST:
-				case prgJDST:
+				case prgQDST:
 					switch(analysis){
 						case prgVIST: metric=shannon; break;
 						case prgEDST: metric=cardinality ; break;
 						case prgBDST: metric=boltzmann; break;
 						case prgTDST: metric=tsallis; break;
 						case prgRDST: metric=renyi; break;
-						case prgJDST: metric=jeffreyQnorm; break;
+						case prgQDST: metric=jeffreyQnorm; break;
 						default: cout<<"ERROR: unknown metric option"; exit(1); break;
 					}
 					if(!DIST_SUBSPROJECT) partstats.distances(metric);
@@ -1541,14 +1638,14 @@ int main(int argc, char* argv[]) {
 				case prgBDSR:
 				case prgTDSR:
 				case prgRDSR:
-				case prgJDSR:
+				case prgQDSR:
 					switch(analysis){
 						case prgVISR: metric=shannon; break;
 						case prgEDSR: metric=cardinality; break;
 						case prgBDSR: metric=boltzmann; break;
 						case prgTDSR: metric=tsallis; break;
 						case prgRDSR: metric=renyi; break;
-						case prgJDSR: metric=jeffreyQnorm; break;
+						case prgQDSR: metric=jeffreyQnorm; break;
 					}
 					if(!DIST_SUBSPROJECT) partstats.distancesRef(metric);
 					else	partstats.distancesRef_Subsprojection(metric);

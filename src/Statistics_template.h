@@ -27,8 +27,9 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include <limits>
 
 #define STATISTICS_DEFAULT_NUMBER_VARIABLES 8
+///Stores sample values and allows to retrieve them back
 /**Stores sample values
- * */
+*/
 template <class T=double>
 class Sampling
 {

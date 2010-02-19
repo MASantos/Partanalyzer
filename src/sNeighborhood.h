@@ -28,16 +28,16 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 
 
 ///It defines the neighborhood of a given point, or ball of radius eps around an element 'x'.
-///**
-//Allows to deal with (sets of) neighborhood(s) of a given point. In particular, it allows to obtain its most frequent
-//neighborhood: given a list of sets containing a point p, what is the one that repeats more often.
-//If two or more of them have the same frequency, it chooses the first one seen.
-//
-//It allows the its construction iteratively given other previously instantiated sNeighborhood's.
-//
-//Its main members point, neighbors and eps, always contain the most frequent neighborhood, with frequency eps, around 'point' (or the largest
-//ball around 'point').
-//*/
+/**
+Allows to deal with (sets of) neighborhood(s) of a given point. In particular, it allows to obtain its most frequent
+neighborhood: given a list of sets containing a point p, what is the one that repeats more often.
+If two or more of them have the same frequency, it chooses the first one seen.
+
+It allows the its construction iteratively given other previously instantiated sNeighborhood's.
+
+Its main members point, neighbors and eps, always contain the most frequent neighborhood, with frequency eps, around 'point' (or the largest
+ball around 'point').
+*/
 class sNeighborhood
 {
 public:

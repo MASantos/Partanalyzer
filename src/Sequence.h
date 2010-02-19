@@ -41,8 +41,9 @@ enum pid_normalization {
 extern pid_normalization PIDNORMALIZATION;
 extern void printPIDNormalization();
 
+///Allows dealing with sequences (protein sequences, DNA sequences,etc.).
 /**Allows dealing with sequences (protein sequences, DNA sequences,etc.).
- * */
+*/
 class Sequence
 {
 	///Name of sequence

@@ -216,14 +216,43 @@ Partition::Partition(set<sset* > sclassp, int ofs, char* partf, char* tabf){
 		}
 	}
 }
-
+int Partition::_adjustItemsOffsetToFileFormat(){
+	switch(_piformat){
+		case partFmtFREE:
+			_items_offset=0;
+			break;
+		case partFmtLABEL:
+			_items_offset=1;
+			break;
+		default:
+			_items_offset=2;
+			break;
+			
+	}
+	return _items_offset;
+}
+  
 Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* tabf){//Defaults: partf=NULL, tabf=NULL
 	_partitionf=partf;
 	_mcltabf=tabf;
 	_piformat=partFmtPART;
 	clusters=*clustersl;
-	_items_offset=ofs;
+	//_items_offset=ofs;
+	_adjustItemsOffsetToFileFormat();
+	int n=1;
+	if(ofs<_items_offset){
+		for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++,n++){
+			if(_items_offset>1) {
+				stringstream ss;	
+				ss<<"C"<<n;
+				cl->insert(cl->begin(),ss.str());
+				cl->insert(cl->begin(),ToString((cl->size()-1)));
+			}
+			if(_items_offset==1) cl->insert(cl->begin(),ToString(cl->size()));
+		}
+	}
 	if(dosort){
+		if(DEBUG)cout<<"#Partition::Partition(smat* clustersl,...) : sorting"<<endl;
 		containerLargerThan_Offset<svect> svectComparator;
 		svectComparator.offset=_items_offset;
 		for(smat::iterator cl=clusters.begin();cl!=clusters.end();cl++){
@@ -231,6 +260,7 @@ Partition::Partition(smat* clustersl, int ofs, bool dosort, char* partf, char* t
 		}
 		sort(clusters.begin(),clusters.end(),svectComparator);
 	}
+	if(DEBUG)cout<<"#Partition::Partition(smat* clustersl,...) : Resetting members"<<endl;
 	_resetMembers();
 	/*
 	_nclusters=clusters.size();
@@ -580,38 +610,103 @@ Partition Partition::intersection(Partition* part2){
 	return Partition(&intersection, ofs2>_items_offset?ofs2:_items_offset);
 }
 
-Partition Partition::operator+(Partition& part2){
-	int ofs2=part2.cluster_offset();
-	int cln=0;
-	long int nitems=part2.n_items();
-	if(nitems<_nitems)nitems=_nitems;
-	string isize,iname; 
-	smat enose;
-	map<long int, smat > pan_enose;
-	svect::iterator iab,iae,ibb,ibe;
-	iab=clusters[largest_Cluster()].begin()+_items_offset; ///Start of largest cluster in this
-	iae=clusters[largest_Cluster()].end();			///and end.
-	svect acl (iab,iae);	///extract only the elements, i.e., w/o the labels.
-	ibb=part2.clusters[part2.largest_Cluster()].begin()+ofs2; ///Start of largest cluster in [art2
-	ibe=part2.clusters[part2.largest_Cluster()].end();	///and its end.
-	svect bcl (ibb,ibe);	///extract only the elements, i.e., w/o the labels.
-	svect enose_cl=acl+bcl; ///First join the two largest clusters
-	enose.push_back(enose_cl); 
-	if(enose_cl.size()<nitems)enose.push_back(enose_cl);
-	for(smat::iterator cla=clusters.begin();cla!=clusters.end();cla++){
-		if((*cla)<=enose_cl)continue;
-		for(smat::iterator clb=part2.clusters.begin();clb!=part2.clusters.end();clb++){
-			if((*clb)<=enose_cl)continue;
-			svect sum_cl=(*cla)+(*clb);
-			enose.push_back(sum_cl); 
-		}	
-	}
+Partition& Partition::operator*=(Partition& part2){
+	return ((*this)=(*this)*part2);
 }
 
-bool isInteger(string& str){
-	for(int i=0;i<str.length();i++)
-		if(!isdigit(str.at(i)))return false;
-	return true;
+Partition& Partition::operator+=(Partition& part2){
+	return ((*this)=(*this)+part2);
+}
+
+Partition Partition::operator+(Partition& part2){
+	///Offset of part2
+	//int ofs2=part2.cluster_offset();
+	///Will contain the set of pair-wise disjoint clusters defining the union
+	set<svect,svect_compare> coverset;
+	set<svect>::iterator below_cla;
+	set<svect>::iterator above_cla;
+	//<svect above_cla;
+	///pitemsset is a pointer to the largest set of items between the two partitions
+	sset* pitemsset=&sitems;
+	long int nitems=part2.n_items();
+	if(nitems>_nitems)pitemsset=&part2.sitems;
+	else nitems=_nitems;
+	if(pitemsset->size()==0){
+		cout<<"Partition::operator+(...) : ERROR : number of items = "<<pitemsset->size()<<endl;
+		exit(1);
+	}
+	if(DEBUG) cout<<"#Coverset: "<<coverset<<endl;
+	///For each element of the underlying set, obtain the union of its 2 clusters from both partitions
+	for(sset::iterator it=pitemsset->begin();it!=pitemsset->end();it++){
+		svect cla=getClusterOf(*it);
+		svect clb=part2.getClusterOf(*it);
+		if(DEBUG) cout<<*it<<" : "<<cla<<" + "<<clb<<" = ";
+		cla+=clb;
+		if(DEBUG) cout<<cla<<" ";
+		///If cla fills completely the set of elements, we are done. Build a partition with it (partition 1) and return
+		if(cla.size()==nitems){
+			if(DEBUG) cout<<" Done merging... building partition 1 using cluster "<<cla<<endl;
+			smat cls (1,cla);
+			return Partition(&cls, 0);
+		}
+		coverset.insert(cla);
+		below_cla=coverset.find(cla);
+		if(DEBUG) cout<<"#Coverset: "<<coverset<<" / current="<<*below_cla<<endl;
+		//while(below_cla--!=coverset.begin() && *below_cla<=cla){
+		///If cla is not the first element, remove the previous one if it's already contained within cla
+		while(below_cla--!=coverset.begin()){
+			if(DEBUG) cout<<"#connected to : "<<*below_cla<<" ? ";//<<endl;
+			svect k=*below_cla;
+			svect ki=k*cla;
+			if(ki.size()!=0){
+				coverset.erase(coverset.find(cla));
+				if(DEBUG)cout<<"YES => merging "<<*below_cla<<" + "<<cla<<" = ";
+				cla+=k;
+				if(DEBUG)cout<<cla<<" ; ";
+				if(cla.size()==nitems){
+					if(DEBUG) cout<<" Done merging... building partition 1 using cluster "<<cla<<endl;
+					smat cls (1,cla);
+					return Partition(&cls, 0);
+				}
+				if(DEBUG) cout<<"#Erasing "<<k;
+				coverset.erase(coverset.find(k));
+				coverset.insert(cla);
+				below_cla=coverset.find(cla);
+				if(DEBUG) cout<<" ; Coverset: "<<coverset<<" ; next: "<<*below_cla<<endl;
+			}
+			else{
+				if(DEBUG) cout<<"NO"<<endl;
+			}
+		}
+		///While cla is not the last element, remove it if it's already contained within next one
+		above_cla=coverset.upper_bound(cla);
+		svect k=*above_cla;
+		svect ai;
+		ai=k*cla;
+		if(DEBUG&&above_cla!=coverset.end())cout<<"#Upper bound of "<<cla<<" : "<<*above_cla<<endl;
+		while(above_cla!=coverset.end()&& ai.size()!=0  ){
+			coverset.erase(coverset.find(cla));
+			if(DEBUG)cout<<"# connected => merging "<<*above_cla<<" + "<<cla<<" = ";
+			cla+=k;
+			if(DEBUG)cout<<cla<<" ; ";
+			if(cla.size()==nitems){
+				if(DEBUG) cout<<" Done merging... building partition 1 using cluster "<<cla<<endl;
+				smat cls (1,cla);
+				return Partition(&cls, 0);
+			}
+			if(DEBUG) cout<<"#Erasing "<<k;
+			coverset.erase(coverset.find(k));
+			coverset.insert(cla);
+			above_cla=coverset.upper_bound(cla);
+			if(DEBUG) cout<<" ; Coverset: "<<coverset<<" ; next: "<<*above_cla<<endl;
+			if(above_cla==coverset.end())break;
+			k=*above_cla;
+			ai=k*cla;
+		}
+	}
+	smat join (coverset.begin(),coverset.end());
+	if(VERBOSE)cout<<"#Done merging ; building partition with coverset: "<<coverset<<endl;
+	return Partition(&join, 0);
 }
 
 void Partition::tabFile(char* tabf){
@@ -636,6 +731,13 @@ void Partition::tabFile(char* tabf){
 	}
 	if(!QUIET)cout<<"#Tab file: found "<<c<<" key-label pairs. Last pair is "<<_ftab.rbegin()->first<<" - "<<_ftab.rbegin()->second<<endl;
 }
+
+bool isInteger(string& str){
+       for(int i=0;i<str.length();i++)
+               if(!isdigit(str.at(i)))return false;
+       return true;
+}
+
 
 void Partition::mclTabFile(char* mcltabf){
 	_mcltabf=mcltabf;
@@ -989,12 +1091,14 @@ void Partition::_readClusters(){ ///For the time being, we'll assume each cluste
 	}
 }
 
-void Partition::printPartition(bool SequentialClusterNames, string ClusterPrefix){
+//void Partition::printPartition(bool SequentialClusterNames, string ClusterPrefix){
+void Partition::print(bool SequentialClusterNames, string ClusterPrefix){
 	partFileFormat format=_piformat;
 	printPartition(format);
 }
 
-void Partition::printPartition(partFileFormat format, bool SequentialClusterNames, string ClusterPrefix){
+//void Partition::printPartition(partFileFormat format, bool SequentialClusterNames, string ClusterPrefix){
+void Partition::print(partFileFormat format, bool SequentialClusterNames, string ClusterPrefix){
 	int ofs=0;
 	switch(format){
 		case partFmtMCL:

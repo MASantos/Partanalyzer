@@ -407,6 +407,42 @@ int PartitionStats::arePartitions(){
 	return nopart;
 }
 
+Partition PartitionStats::getMeet(){
+	if(VERBOSE) cout<<"#The Meet of all partitions..."<<endl;
+	Partition meetPartition;
+	meetPartition=_partitionl[0];
+	int n=2;
+	if(!QUIET)cout<<"#Intersecting partitions #1 ";
+	for(vector<Partition >::iterator p=++_partitionl.begin();p!=_partitionl.end();p++,n++){
+		if(!QUIET)cout<<" * #"<<n;
+		meetPartition=meetPartition*(*p);
+		if(meetPartition.isPartitionZERO()){
+			if(VERBOSE) cout<<" Already reached the bottom partition 0..."<<endl;
+			return meetPartition;
+		}
+	}
+	if(!QUIET)cout<<endl;
+	return meetPartition;
+}
+
+Partition PartitionStats::getJoin(){
+	if(VERBOSE) cout<<"#The Join of all partitions..."<<endl;
+	Partition coverPartition;
+	coverPartition=_partitionl[0];
+	int n=2;
+	if(!QUIET)cout<<"#Joining partitions #1 ";
+	for(vector<Partition >::iterator p=++_partitionl.begin();p!=_partitionl.end();p++,n++){
+		if(!QUIET)cout<<" + #"<<n;
+		coverPartition=coverPartition+(*p);
+		if(coverPartition.isPartitionONE()){
+			if(VERBOSE) cout<<" Already reached the top partition 1..."<<endl;
+			return coverPartition;
+		}
+	}
+	if(!QUIET)cout<<endl;
+	return coverPartition;
+}
+
 void PartitionStats::getCover(){
 	if(VERBOSE)
 		cout<<"#Counting neighborhoods..."<<endl;

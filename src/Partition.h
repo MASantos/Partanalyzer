@@ -22,13 +22,14 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "partanalyzer_includes.h"
 #include "partanalyzer_definitions.h"
 #include "partanalyzer_basic_operations.h"
+#include "MatrixOfValues.h"
 
 #ifndef _CLASS_PARTITION_H
 #define _CLASS_PARTITION_H 1
 
-
-/**Main class Partition implements a partition and its algebra
- * */
+/// Main class Partition implements a partition and its algebra
+/** Main class Partition implements a partition and its algebra
+*/
 class Partition
 {
 	///Filename containing partition
@@ -58,6 +59,8 @@ class Partition
 	smat::iterator _it_largest_cluster;
 	///Associated Adjacency matrix
 	graph _Ad;
+	///External matrix of Weights. Allows to define weighted potentials/probabilities.
+	//MatrixOfValues* _W;
 	///Update all member elements
 	void _resetMembers();
 	///Read partition from a file
@@ -67,6 +70,8 @@ class Partition
 	svect _it_found;
 	///Input format for reading partitions: MCL (partFmtMCL), FREE (partFmtFREE) and the default one, partanalyzer's own format (partFmtPART)
 	partFileFormat _piformat;
+	///Adjust _items_offset according to parition's input format
+	int _adjustItemsOffsetToFileFormat();
 	///Specific for MCL format: the partition tab file maps element labels to integers
 	char* _mcltabf;	
 	///The MCL tab file. It may be redundant with the implementation of the general tab map. To be changed in the future.
@@ -89,12 +94,17 @@ public:
 	// Partition(char* file, partFileFormat iformat);
 	///Instantiate partition from file using format iformat and specified offset (applies only to partanalyzer's own format partFmtPART)
 	Partition(char* file, partFileFormat iformat=partFmtPART, int ofs=2);
-	///Create a partition out of a set of clusters
+	///Create a partition out of a vector of clusters (the latter being svect)
 	Partition(smat* clustersl, int ofs, bool dosort=true, char* partf=NULL , char* tabf=NULL);
-	/**Create a partition out of a set of pointers to sets (let's call that classes: so a set of pointers to classes...) 
-	Partition _will_ be sorted by size of clusters and also within each cluster automatically.
-	*/
+	///Create a partition out of a set of pointers to sets (let's call that classes: so a set of pointers to classes...) 
+	///Partition _will_ be sorted by size of clusters and also within each cluster automatically.
 	Partition(set<sset* > sclassp, int ofs=2, char* partf=NULL , char* tabf=NULL);
+	///Set MatrixOfValues based on external file
+	void setMatrixOfValues(char *file, int col=EDGES_DEFAULT_COLUMN);
+	///Set MatrixOfValues based on given Matrix of Values
+	//void setMatrixOfValues(const MatrixOfValues& MOV);
+	///Set MatrixOfValues to default Identity matrix
+	void resetMatrixOfValues();
 	///Print summary of most import facts
 	void summary();
 	///Extract selected elements
@@ -109,10 +119,18 @@ public:
 	bool isaPartitionOf(svect& ssetOfElements); 
 	///Check it is a sound Partition of the default set of elements
 	bool isaPartition();
+	///Check if it is a Partition containing 1 single cluster, i.e., partition 1
+	bool isPartitionONE(){ return (clusters.size()==1);}
+	///Check if it is a Partition containing all singletons, i.e., partition 0
+	bool isPartitionZERO(){ return (clusters.size()==_nitems);}
 	///Print partition using the default partanalyzer format
-	void printPartition(bool SequentialClusterNames=false, string ClusterPrefix="C");
-	///Print partition in the specified format 
-	void printPartition(partFileFormat iformat, bool SequentialClusterNames=false, string ClusterPrefix="C");
+	void print(bool SequentialClusterNames=false, string ClusterPrefix="C");
+	///Print partition in the specified format
+	void print(partFileFormat iformat, bool SequentialClusterNames=false, string ClusterPrefix="C");
+	///Print partition using the default partanalyzer format ( DEPECRATED: Use print(...) instead )
+	void printPartition(bool SequentialClusterNames=false, string ClusterPrefix="C"){ print(SequentialClusterNames, ClusterPrefix);}
+	///Print partition in the specified format  ( DEPECRATED: Use print(...) instead )
+	void printPartition(partFileFormat iformat, bool SequentialClusterNames=false, string ClusterPrefix="C"){ print(iformat, SequentialClusterNames, ClusterPrefix);}
 	///Get number of clusters (including singletons)
 	long int n_clusters(){ return _nclusters;}
 	///Get number of singletons
@@ -139,8 +157,10 @@ public:
 	void tabFile(char* tabf);
 	///Swap labels according to the provided tab file
 	void swapLabels(char* mcltabf=NULL);
-	///Entropy of a partition
+	///Entropy of a partition (Shannon)
 	double H();
+	///Weighted (Shannon) Entropy of a partition
+	double wH();
 	///Cardinality of a partition
 	long int card(){return n_clusters();}
 	///Boltzman Entropy: log (#available states)
@@ -165,14 +185,20 @@ public:
 	vector<double> purityScore(Partition* part2);
 	void missing(svect* items_found);
 	void missing();
-	///Given an element, get the size of the cluster that contains it.
-	int getClusterSize(const string& item);
 	///Given an element, get the name of the cluster that contains it.
 	string getClusterName(string& item);
 	///Given an index from clusters, get the name of that cluster
 	string getClusterName(int& clidx);
 	///Given the cluster, get its name
 	string getClusterName(svect& cluster);
+	///Given an element, get the size of the cluster that contains it.
+	int getClusterSize(const string& item);
+	///Given an element, get the cluster that contains it. 
+	///*cluster is a typedef specific for Partition
+	//This will return a vector of strings correspoding to the actual elements that are
+	//clustered together with item, i.e., it returns THE cluster.
+	//*/
+	svect getClusterOf(string item);
 	///Given an element, get the index of the cluster that contains it.
 	int getClusterIdx(string& item);
 	///Two elements are equivalent if they belong to the same cluster
@@ -181,8 +207,6 @@ public:
 	string areWithinSameCluster(string ita, string itb);
 	///Get the filename.
 	char* FileName(){ return _partitionf;}
-	///cluster is a typedef specific for Partition
-	svect getClusterOf(string item);
 	///Build associated Adjacency matrix
 	graph setAdjacencyMatrix();
 	///Build associated Adjacency matrix sorting elements by clusters
@@ -200,6 +224,10 @@ public:
 	Partition intersection(Partition* part2);
 	///Calculate the partition intersection of the present one and part2 (passed by reference)
 	Partition intersection(Partition& part2){ Partition z=part2; return intersection(&z); }
+	///Calculate the partition union of the present one and part2 (passed by pointer)
+	Partition join(Partition* part2);
+	///Calculate the partition union of the present one and part2 (passed by reference)
+	Partition join(Partition& part2){ Partition z=part2; return join(&z); }
 	///Define Lattice preorder relation (as an interface)
 	bool lessThan(Partition* part2){ return purityLax(part2)==1?true:false;}
 	///Define Lattice preorder relation (as a binary operator)
@@ -212,8 +240,12 @@ public:
 	Partition operator*(Partition& part2){ return intersection(&part2); }
 	///Define intersetion of partitions ( as a binary operator ; arguments as pointers)
 	Partition operator*(Partition* part2){ Partition& p=*part2; return operator*(p);}
-	///(TO BE IMPLEMENTED) Define union of partitions (as a binary operator)
+	///Define intersetion of partitions ( as a unary operator ; arguments as refereces)
+	Partition& operator*=(Partition& part2);
+	///Define union of partitions (as a binary operator)
 	Partition operator+(Partition& part2);
+	///Define union of partitions (as a unary operator)
+	Partition& operator+=(Partition& part2);
 };
 #endif //END  _CLASS_PARTITION_H
 

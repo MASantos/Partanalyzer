@@ -37,24 +37,124 @@ g++ -o partanalyzer partanalyzer.cc
 #include <iostream>
 #include "partanalyzer_definitions.h"
 
+
+///Stream out a vector of strings 
+inline ostream& operator<<(ostream& os, const svect& cl){
+	os<<"{";
+	if(cl.empty()){
+		os<<"}";
+		return os;
+	}
+	svect::const_iterator it;
+	svect::const_iterator clast=cl.end();
+	clast--;
+	for(it=cl.begin();it!=clast;it++)
+		os<<*it<<",";
+	os<<*it<<"}";
+	return os;
+}
+///Stream out a set of strings
+inline ostream& operator<<(ostream& os, const sset& cl){
+	os<<"{";
+	if(cl.empty()){
+		os<<"}";
+		return os;
+	}
+	sset::const_iterator it;
+	sset::const_iterator clast=cl.end();
+	clast--;
+	for(it=cl.begin();it!=clast;it++)
+		os<<*it<<",";
+	os<<*it<<"}";
+	return os;
+}
+///Stream out a set of string vectors
+inline ostream& operator<<(ostream& os, const set<svect>& cl){
+	os<<"{";
+	if(cl.empty()){
+		os<<"}";
+		return os;
+	}
+	set< svect>::const_iterator it;
+	set< svect>::const_iterator clast=cl.end();
+	clast--;
+	for(it=cl.begin();it!=clast;it++)
+		os<<*it<<",";
+	os<<*it<<"}";
+	return os;
+}
+/*  
+*/
 /**Algebra of string vectors
 a<=b	a is subset of b
 */
-inline bool operator<=(svect& cla, svect& clb){
+inline bool operator<=(const svect& cla, const svect& clb){
+	if(DEBUG)cout<<cla<<"<="<<clb<<"?"; 
 	long int itfound=0;
-	if(cla.size()>clb.size())return false;
-	for(svect::iterator ita=cla.begin();ita!=cla.end();ita++)
-		for(svect::iterator itb=clb.begin();itb!=clb.end();itb++){
+	if(cla.size()>clb.size()){
+		if(DEBUG)cout<<"NO"<<endl;
+		return false;
+	}
+	if(DEBUG)cout<<"checking..."; 
+	for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)
+		for(svect::const_iterator itb=clb.begin();itb!=clb.end();itb++){
 			//cout<<"CL<= : "<<*ita<<"=="<<*itb<<"?"<<endl; 
 			if((*ita).compare(*itb)==0)itfound++;
 		}
-	if(itfound==cla.size())return true;
+	if(itfound==cla.size()){
+		if(DEBUG)cout<<"YES"<<endl;
+		return true;
+	}
+	if(DEBUG)cout<<"NO"<<endl;
 	return false;
 }
 ///a<b	a is a strict subset of b
-inline bool operator<(svect& cla, svect& clb){
+inline bool operator<(const svect& cla, const svect& clb){
+	if(DEBUG)cout<<cla<<"<"<<clb<<"?"<<endl; 
 	if(cla.size()<clb.size()&& cla<=clb)return true;
 	return false;
+}
+inline bool operator==(svect& cla, svect& clb);
+
+///svect class compare for defining ordered containers (e.g. sets) of svect with the appropriate order
+struct svect_compare{
+        bool operator() (const svect& cla, const svect& clb) const {
+                if(cla.size()==clb.size() && cla==clb) return false;
+                return (cla.size()<=clb.size());
+                }
+};
+
+/*
+///Stream out a set of string vectors
+inline ostream& operator<<(ostream& os, set< svect>& U){
+	os<<"{";
+	if(U.empty()){
+		os<<"}";
+		return os;
+	}
+	set< svect>::iterator it;
+	set< svect>::iterator Ulast=U.end();
+	Ulast--;
+	for(it=U.begin();it!=Ulast;it++)
+		os<<*it<<",";
+	os<<*it<<"}";
+	return os;
+}
+*/
+///Stream out a set< ,svect_compare> of string vectors
+inline ostream& operator<<(ostream& os, const set< svect,svect_compare>& U){
+	os<<"{";
+	if(U.empty()){
+		os<<"}";
+		return os;
+	}
+	set< svect,svect_compare>::const_iterator it;
+	set< svect,svect_compare>::const_iterator Ulast=U.end();
+	Ulast--;
+	for(it=U.begin();it!=Ulast;it++)
+		os<<*it<<",";
+	os<<*it<<"}";
+	return os;
 }
 ///b>=a	a is a subset of b
 inline bool operator>=(svect& cla, svect& clb){
@@ -196,21 +296,4 @@ inline ostream& operator<<(ostream& os, graph& g){
 	return os;
 }
 
-
-///Stream out a string vector
-inline ostream& operator<<(ostream& os, svect& cl){
-	os<<"{";
-	for(svect::iterator it=cl.begin();it!=cl.end();it++)
-		os<<*it<<",";
-	os<<"}";
-	return os;
-}
-///Stream out a string set
-inline ostream& operator<<(ostream& os, sset& cl){
-	os<<"{";
-	for(sset::iterator it=cl.begin();it!=cl.end();it++)
-		os<<*it<<",";
-	os<<"}";
-	return os;
-}
 #endif //END _PARTANALYZER_BASICOPERATIONS_HEADER

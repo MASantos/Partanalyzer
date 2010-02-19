@@ -20,6 +20,11 @@ Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
 
+///Matrices of values (aka graphs) are read from file with edges at column EDGES_DEFAULT_COLUMN
+#ifndef EDGES_DEFAULT_COLUMN
+#define EDGES_DEFAULT_COLUMN 3
+#endif
+
 #ifndef _CLASS_MATRIXOFVALUES_H
 #define _CLASS_MATRIXOFVALUES_H 1
 
@@ -29,14 +34,14 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #include "Statistics.h"
 #include <limits>
 
-#define EDGES_DEFAULT_COLUMN 3
+///Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .
 /**Allows dealing with graphs. A matrix of values here, in each line, specifies an edge value for a given pair of elements .
- * It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair
- * of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily)
- * name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like
- * coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element
- * does not exist in the provided partition.
- * */
+It also allows to merge two such graphs: The output is a pair of values -each from each of provided graphs- for each pair
+of elements found. This operation has an alternative form where each of these 4-tuples get a label stating the cluster (subfamily)
+name, if the edge is an intra-cluster edge; x if it's and inter-cluster edge. This requires to provide a partition. This is like
+coloring the graph. Therefore, the command line option -color. The color can also be NAN1(NAN2) if the first(second) element
+does not exist in the provided partition.
+*/
 class MatrixOfValues
 {
 	char* _mxofvf;
