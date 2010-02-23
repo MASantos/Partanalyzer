@@ -1,5 +1,8 @@
 \section{Partition Class Reference}
 \label{classPartition}\index{Partition@{Partition}}
+Main class Partition implements a partition and its algebra.  
+
+
 {\tt \#include $<$Partition.h$>$}
 
 \subsection*{Public Member Functions}
@@ -12,181 +15,213 @@
 \begin{CompactList}\small\item\em Instantiate partition from file using format iformat and specified offset (applies only to partanalyzer's own format part\-Fmt\-PART). \item\end{CompactList}\item 
 {\bf Partition} (smat $\ast$clustersl, int ofs, bool dosort=true, char $\ast$partf=NULL, char $\ast$tabf=NULL)\label{classPartition_a2}
 
-\begin{CompactList}\small\item\em Create a partition out of a set of clusters. \item\end{CompactList}\item 
+\begin{CompactList}\small\item\em Create a partition out of a vector of clusters (the latter being svect). \item\end{CompactList}\item 
 {\bf Partition} (set$<$ sset $\ast$ $>$ sclassp, int ofs=2, char $\ast$partf=NULL, char $\ast$tabf=NULL)
 \item 
-void {\bf summary} ()\label{classPartition_a4}
+void {\bf set\-Matrix\-Of\-Values} (char $\ast$file, int col=EDGES\_\-DEFAULT\_\-COLUMN)\label{classPartition_a4}
+
+\begin{CompactList}\small\item\em Set {\bf Matrix\-Of\-Values} based on external file. \item\end{CompactList}\item 
+void {\bf reset\-Matrix\-Of\-Values} ()\label{classPartition_a5}
+
+\begin{CompactList}\small\item\em Set {\bf Matrix\-Of\-Values} to default Identity matrix. \item\end{CompactList}\item 
+void {\bf summary} ()\label{classPartition_a6}
 
 \begin{CompactList}\small\item\em Print summary of most import facts. \item\end{CompactList}\item 
-{\bf Partition} {\bf xtract\-Elements} (svect $\ast$elements)\label{classPartition_a5}
+{\bf Partition} {\bf xtract\-Elements} (svect $\ast$elements)\label{classPartition_a7}
 
 \begin{CompactList}\small\item\em Extract selected elements. \item\end{CompactList}\item 
-void {\bf xtr\-Cons\-Part} (multimap$<$ int, string, {\bf greater\-Than} $>$ cons\-Part, int ofs=1)\label{classPartition_a6}
+void {\bf xtr\-Cons\-Part} (multimap$<$ int, string, {\bf greater\-Than} $>$ cons\-Part, int ofs=1)\label{classPartition_a8}
 
 \begin{CompactList}\small\item\em Create a consensus partition. \item\end{CompactList}\item 
-sset {\bf get\-Items} ()\label{classPartition_a7}
+sset {\bf get\-Items} ()\label{classPartition_a9}
 
 \begin{CompactList}\small\item\em Get (and reset) the underlying set of elements sorted by alphanumerically. \item\end{CompactList}\item 
-sset {\bf get\-Items} (cluster $\ast$cl)\label{classPartition_a8}
+sset {\bf get\-Items} (cluster $\ast$cl)\label{classPartition_a10}
 
 \begin{CompactList}\small\item\em Get an ordered set with all elements contained in (svect) cl. \{Doesn't affect Partition; should be external maybe\}. \item\end{CompactList}\item 
 bool {\bf isa\-Partition\-Of} (svect \&sset\-Of\-Elements)
 \begin{CompactList}\small\item\em Check it is a sound Partition of the specified set of elements. \item\end{CompactList}\item 
-bool {\bf isa\-Partition} ()\label{classPartition_a10}
+bool {\bf isa\-Partition} ()\label{classPartition_a12}
 
 \begin{CompactList}\small\item\em Check it is a sound Partition of the default set of elements. \item\end{CompactList}\item 
-void {\bf print\-Partition} (bool Sequential\-Cluster\-Names=false, string Cluster\-Prefix=\char`\"{}C\char`\"{})\label{classPartition_a11}
+bool {\bf is\-Partition\-ONE} ()\label{classPartition_a13}
+
+\begin{CompactList}\small\item\em Check if it is a Partition containing 1 single cluster, i.e., partition 1. \item\end{CompactList}\item 
+bool {\bf is\-Partition\-ZERO} ()\label{classPartition_a14}
+
+\begin{CompactList}\small\item\em Check if it is a Partition containing all singletons, i.e., partition 0. \item\end{CompactList}\item 
+void {\bf print} (bool Sequential\-Cluster\-Names=false, string Cluster\-Prefix=\char`\"{}C\char`\"{})\label{classPartition_a15}
 
 \begin{CompactList}\small\item\em Print partition using the default partanalyzer format. \item\end{CompactList}\item 
-void {\bf print\-Partition} (part\-File\-Format iformat, bool Sequential\-Cluster\-Names=false, string Cluster\-Prefix=\char`\"{}C\char`\"{})\label{classPartition_a12}
+void {\bf print} (part\-File\-Format iformat, bool Sequential\-Cluster\-Names=false, string Cluster\-Prefix=\char`\"{}C\char`\"{})\label{classPartition_a16}
 
 \begin{CompactList}\small\item\em Print partition in the specified format. \item\end{CompactList}\item 
-long int {\bf n\_\-clusters} ()\label{classPartition_a13}
+void {\bf print\-Partition} (bool Sequential\-Cluster\-Names=false, string Cluster\-Prefix=\char`\"{}C\char`\"{})\label{classPartition_a17}
+
+\begin{CompactList}\small\item\em Print partition using the default partanalyzer format ( DEPECRATED: Use print(...) instead ). \item\end{CompactList}\item 
+void {\bf print\-Partition} (part\-File\-Format iformat, bool Sequential\-Cluster\-Names=false, string Cluster\-Prefix=\char`\"{}C\char`\"{})\label{classPartition_a18}
+
+\begin{CompactList}\small\item\em Print partition in the specified format ( DEPECRATED: Use print(...) instead ). \item\end{CompactList}\item 
+long int {\bf n\_\-clusters} ()\label{classPartition_a19}
 
 \begin{CompactList}\small\item\em Get number of clusters (including singletons). \item\end{CompactList}\item 
-long int {\bf n\_\-singletons} ()\label{classPartition_a14}
+long int {\bf n\_\-singletons} ()\label{classPartition_a20}
 
 \begin{CompactList}\small\item\em Get number of singletons. \item\end{CompactList}\item 
-long int {\bf n\_\-pairs} ()\label{classPartition_a15}
+long int {\bf n\_\-pairs} ()\label{classPartition_a21}
 
 \begin{CompactList}\small\item\em Get number of pair clusters. \item\end{CompactList}\item 
-long int {\bf n\_\-non\-Sing\-Clusters} ()\label{classPartition_a16}
+long int {\bf n\_\-non\-Sing\-Clusters} ()\label{classPartition_a22}
 
 \begin{CompactList}\small\item\em Get number of non-singletons clusters. \item\end{CompactList}\item 
-long int {\bf n\_\-items} ()\label{classPartition_a17}
+long int {\bf n\_\-items} ()\label{classPartition_a23}
 
 \begin{CompactList}\small\item\em Get number of elements. \item\end{CompactList}\item 
-int {\bf cluster\_\-offset} ()\label{classPartition_a18}
+int {\bf cluster\_\-offset} ()\label{classPartition_a24}
 
 \begin{CompactList}\small\item\em Get cluster offset (used only with partanalyzer's own format part\-Fmt\-PART). \item\end{CompactList}\item 
-int {\bf largest\_\-Cluster} ()\label{classPartition_a19}
+int {\bf largest\_\-Cluster} ()\label{classPartition_a25}
 
 \begin{CompactList}\small\item\em Get index of largest cluster in (smat) Partition::smat. \item\end{CompactList}\item 
-smat::iterator {\bf it\_\-largest\_\-Cluster} ()\label{classPartition_a20}
+smat::iterator {\bf it\_\-largest\_\-Cluster} ()\label{classPartition_a26}
 
 \begin{CompactList}\small\item\em Get iterator pointing to largest cluster in (smat) Partition::smat. \item\end{CompactList}\item 
-void {\bf set\-Part\-Input\-Format} (part\-File\-Format iformat)\label{classPartition_a21}
+void {\bf set\-Part\-Input\-Format} (part\-File\-Format iformat)\label{classPartition_a27}
 
 \begin{CompactList}\small\item\em Set partition input file format. \item\end{CompactList}\item 
-part\-File\-Format {\bf get\-Part\-Input\-Format} ()\label{classPartition_a22}
+part\-File\-Format {\bf get\-Part\-Input\-Format} ()\label{classPartition_a28}
 
 \begin{CompactList}\small\item\em Retrieve partition input file format. \item\end{CompactList}\item 
-void {\bf mcl\-Tab\-File} (char $\ast$mcltabf)\label{classPartition_a23}
+void {\bf mcl\-Tab\-File} (char $\ast$mcltabf)\label{classPartition_a29}
 
 \begin{CompactList}\small\item\em Load MCL tab file. \item\end{CompactList}\item 
-void {\bf tab\-File} (char $\ast$tabf)\label{classPartition_a24}
+void {\bf tab\-File} (char $\ast$tabf)\label{classPartition_a30}
 
 \begin{CompactList}\small\item\em Load a general tab file for changing name of elements. \item\end{CompactList}\item 
-void {\bf swap\-Labels} (char $\ast$mcltabf=NULL)\label{classPartition_a25}
+void {\bf swap\-Labels} (char $\ast$mcltabf=NULL)\label{classPartition_a31}
 
 \begin{CompactList}\small\item\em Swap labels according to the provided tab file. \item\end{CompactList}\item 
-double {\bf H} ()\label{classPartition_a26}
+double {\bf H} ()\label{classPartition_a32}
 
-\begin{CompactList}\small\item\em Entropy of a partition. \item\end{CompactList}\item 
-long int {\bf card} ()\label{classPartition_a27}
+\begin{CompactList}\small\item\em Entropy of a partition (Shannon). \item\end{CompactList}\item 
+double {\bf w\-H} ()\label{classPartition_a33}
+
+\begin{CompactList}\small\item\em Weighted (Shannon) Entropy of a partition. \item\end{CompactList}\item 
+long int {\bf card} ()\label{classPartition_a34}
 
 \begin{CompactList}\small\item\em Cardinality of a partition. \item\end{CompactList}\item 
-double {\bf BK} ()\label{classPartition_a28}
+double {\bf BK} ()\label{classPartition_a35}
 
 \begin{CompactList}\small\item\em Boltzman Entropy: log (\#available states). \item\end{CompactList}\item 
-double {\bf TS} (double q=EXTENSIVITY\_\-DEFAULT\_\-TSALLIS)\label{classPartition_a29}
+double {\bf TS} (double q=EXTENSIVITY\_\-DEFAULT\_\-TSALLIS)\label{classPartition_a36}
 
 \begin{CompactList}\small\item\em Tsallis Entropy: is equal to H iif q=1 ; q=non-extensivity coefficient. \item\end{CompactList}\item 
-double {\bf RS} (double q=EXTENSIVITY\_\-DEFAULT\_\-RENYI)\label{classPartition_a30}
+double {\bf RS} (double q=EXTENSIVITY\_\-DEFAULT\_\-RENYI)\label{classPartition_a37}
 
 \begin{CompactList}\small\item\em Renyi Entropy: is equal to H iif q=1 ; q=non-extensivity coefficient. \item\end{CompactList}\item 
-double {\bf JQnorm} (double q)\label{classPartition_a31}
+double {\bf JQnorm} (double q)\label{classPartition_a38}
 
 \begin{CompactList}\small\item\em Calculates the Jeffrey Qnorm (a la Tarantola) of a partition= exp(RS(q)) or expr(TS(q)). \item\end{CompactList}\item 
 void {\bf vipp} ({\bf Partition} $\ast$part2)
 \begin{CompactList}\small\item\em Calculates and prints vi distance againts given partition part2. \item\end{CompactList}\item 
-void {\bf edsc} ({\bf Partition} $\ast$part2)\label{classPartition_a33}
+void {\bf edsc} ({\bf Partition} $\ast$part2)\label{classPartition_a40}
 
 \begin{CompactList}\small\item\em Calculates and prints edit score distance againts given partition part2. \item\end{CompactList}\item 
-void {\bf td} ({\bf Partition} $\ast$part2, double q)\label{classPartition_a34}
+void {\bf td} ({\bf Partition} $\ast$part2, double q)\label{classPartition_a41}
 
 \begin{CompactList}\small\item\em Calculates the Tarantola distance against given partition part2. \item\end{CompactList}\item 
-double {\bf purity\-Strict} ({\bf Partition} $\ast$part2)\label{classPartition_a35}
+double {\bf purity\-Strict} ({\bf Partition} $\ast$part2)\label{classPartition_a42}
 
 \begin{CompactList}\small\item\em Calculates the purity strict values againts the given partition p2. \item\end{CompactList}\item 
-double {\bf purity\-Lax} ({\bf Partition} $\ast$part2)\label{classPartition_a36}
+double {\bf purity\-Lax} ({\bf Partition} $\ast$part2)\label{classPartition_a43}
 
 \begin{CompactList}\small\item\em Calculates the purity lax values againts the given partition p2. \item\end{CompactList}\item 
 vector$<$ double $>$ {\bf purity\-Score} ({\bf Partition} $\ast$part2)
 \begin{CompactList}\small\item\em Calculates both purity score values againts the given partition p2. \item\end{CompactList}\item 
-void {\bf missing} (svect $\ast$items\_\-found)\label{classPartition_a38}
+void {\bf missing} (svect $\ast$items\_\-found)\label{classPartition_a45}
 
 \item 
-void {\bf missing} ()\label{classPartition_a39}
+void {\bf missing} ()\label{classPartition_a46}
 
 \item 
-int {\bf get\-Cluster\-Size} (const string \&item)\label{classPartition_a40}
-
-\begin{CompactList}\small\item\em Given an element, get the size of the cluster that contains it. \item\end{CompactList}\item 
-string {\bf get\-Cluster\-Name} (string \&item)\label{classPartition_a41}
+string {\bf get\-Cluster\-Name} (string \&item)\label{classPartition_a47}
 
 \begin{CompactList}\small\item\em Given an element, get the name of the cluster that contains it. \item\end{CompactList}\item 
-string {\bf get\-Cluster\-Name} (int \&clidx)\label{classPartition_a42}
+string {\bf get\-Cluster\-Name} (int \&clidx)\label{classPartition_a48}
 
 \begin{CompactList}\small\item\em Given an index from clusters, get the name of that cluster. \item\end{CompactList}\item 
-string {\bf get\-Cluster\-Name} (svect \&cluster)\label{classPartition_a43}
+string {\bf get\-Cluster\-Name} (svect \&cluster)\label{classPartition_a49}
 
 \begin{CompactList}\small\item\em Given the cluster, get its name. \item\end{CompactList}\item 
-int {\bf get\-Cluster\-Idx} (string \&item)\label{classPartition_a44}
+int {\bf get\-Cluster\-Size} (const string \&item)\label{classPartition_a50}
+
+\begin{CompactList}\small\item\em Given an element, get the size of the cluster that contains it. \item\end{CompactList}\item 
+svect {\bf get\-Cluster\-Of} (string item)
+\item 
+int {\bf get\-Cluster\-Idx} (string \&item)\label{classPartition_a52}
 
 \begin{CompactList}\small\item\em Given an element, get the index of the cluster that contains it. \item\end{CompactList}\item 
-bool {\bf are\-Equiv} (string a, string b)\label{classPartition_a45}
+bool {\bf are\-Equiv} (string a, string b)\label{classPartition_a53}
 
 \begin{CompactList}\small\item\em Two elements are equivalent if they belong to the same cluster. \item\end{CompactList}\item 
-string {\bf are\-Within\-Same\-Cluster} (string ita, string itb)\label{classPartition_a46}
+string {\bf are\-Within\-Same\-Cluster} (string ita, string itb)\label{classPartition_a54}
 
 \begin{CompactList}\small\item\em Return name of cluster if true; x if false ; NAN1 (NAN2) if first (second) not found. \item\end{CompactList}\item 
-char $\ast$ {\bf File\-Name} ()\label{classPartition_a47}
+char $\ast$ {\bf File\-Name} ()\label{classPartition_a55}
 
 \begin{CompactList}\small\item\em Get the filename. \item\end{CompactList}\item 
-svect {\bf get\-Cluster\-Of} (string item)\label{classPartition_a48}
-
-\begin{CompactList}\small\item\em cluster is a typedef specific for Partition \item\end{CompactList}\item 
-graph {\bf set\-Adjacency\-Matrix} ()\label{classPartition_a49}
+graph {\bf set\-Adjacency\-Matrix} ()\label{classPartition_a56}
 
 \begin{CompactList}\small\item\em Build associated Adjacency matrix. \item\end{CompactList}\item 
-graph {\bf set\-Adjacency\-Matrix\_\-os} ()\label{classPartition_a50}
+graph {\bf set\-Adjacency\-Matrix\_\-os} ()\label{classPartition_a57}
 
 \begin{CompactList}\small\item\em Build associated Adjacency matrix sorting elements by clusters. \item\end{CompactList}\item 
-graph {\bf Ad} ()\label{classPartition_a51}
+graph {\bf Ad} ()\label{classPartition_a58}
 
 \begin{CompactList}\small\item\em Get Adjacency\-Matrix. \item\end{CompactList}\item 
-graph {\bf Ad\_\-os} ()\label{classPartition_a52}
+graph {\bf Ad\_\-os} ()\label{classPartition_a59}
 
 \begin{CompactList}\small\item\em Get Adjacency\-Matrix with indexes ordered as given by the partition. \item\end{CompactList}\item 
-void {\bf Subs\-Project} (sset \&itemset)\label{classPartition_a53}
+void {\bf Subs\-Project} (sset \&itemset)\label{classPartition_a60}
 
 \begin{CompactList}\small\item\em Project a Partition of N elements onto a subspace of M$<$=N elements (active view). \item\end{CompactList}\item 
 {\bf Partition} {\bf intersection} ({\bf Partition} $\ast$part2)
 \begin{CompactList}\small\item\em Calculate the partition intersection of the present one and part2 (passed by pointer). \item\end{CompactList}\item 
-{\bf Partition} {\bf intersection} ({\bf Partition} \&part2)\label{classPartition_a55}
+{\bf Partition} {\bf intersection} ({\bf Partition} \&part2)\label{classPartition_a62}
 
 \begin{CompactList}\small\item\em Calculate the partition intersection of the present one and part2 (passed by reference). \item\end{CompactList}\item 
-bool {\bf less\-Than} ({\bf Partition} $\ast$part2)\label{classPartition_a56}
+{\bf Partition} {\bf join} ({\bf Partition} $\ast$part2)\label{classPartition_a63}
+
+\begin{CompactList}\small\item\em Calculate the partition union of the present one and part2 (passed by pointer). \item\end{CompactList}\item 
+{\bf Partition} {\bf join} ({\bf Partition} \&part2)\label{classPartition_a64}
+
+\begin{CompactList}\small\item\em Calculate the partition union of the present one and part2 (passed by reference). \item\end{CompactList}\item 
+bool {\bf less\-Than} ({\bf Partition} $\ast$part2)\label{classPartition_a65}
 
 \begin{CompactList}\small\item\em Define Lattice preorder relation (as an interface). \item\end{CompactList}\item 
-bool {\bf operator$<$=} ({\bf Partition} \&part2)\label{classPartition_a57}
+bool {\bf operator$<$=} ({\bf Partition} \&part2)\label{classPartition_a66}
 
 \begin{CompactList}\small\item\em Define Lattice preorder relation (as a binary operator). \item\end{CompactList}\item 
-bool {\bf operator$<$} ({\bf Partition} \&part2)\label{classPartition_a58}
+bool {\bf operator$<$} ({\bf Partition} \&part2)\label{classPartition_a67}
 
 \begin{CompactList}\small\item\em Define lattice strict preorder relation (as a binary operator). \item\end{CompactList}\item 
-bool {\bf operator==} ({\bf Partition} \&part2)\label{classPartition_a59}
+bool {\bf operator==} ({\bf Partition} \&part2)\label{classPartition_a68}
 
 \begin{CompactList}\small\item\em Define equality operater. \item\end{CompactList}\item 
-{\bf Partition} {\bf operator $\ast$} ({\bf Partition} \&part2)\label{classPartition_a60}
+{\bf Partition} {\bf operator $\ast$} ({\bf Partition} \&part2)\label{classPartition_a69}
 
 \begin{CompactList}\small\item\em Define intersetion of partitions ( as a binary operator ; arguments as refereces). \item\end{CompactList}\item 
-{\bf Partition} {\bf operator $\ast$} ({\bf Partition} $\ast$part2)\label{classPartition_a61}
+{\bf Partition} {\bf operator $\ast$} ({\bf Partition} $\ast$part2)\label{classPartition_a70}
 
 \begin{CompactList}\small\item\em Define intersetion of partitions ( as a binary operator ; arguments as pointers). \item\end{CompactList}\item 
+{\bf Partition} \& {\bf operator $\ast$=} ({\bf Partition} \&part2)\label{classPartition_a71}
+
+\begin{CompactList}\small\item\em Define intersetion of partitions ( as a unary operator ; arguments as refereces). \item\end{CompactList}\item 
 {\bf Partition} {\bf operator+} ({\bf Partition} \&part2)
-\begin{CompactList}\small\item\em (TO BE IMPLEMENTED) Define union of partitions (as a binary operator) \item\end{CompactList}\end{CompactItemize}
+\begin{CompactList}\small\item\em Define union of partitions (as a binary operator). \item\end{CompactList}\item 
+{\bf Partition} \& {\bf operator+=} ({\bf Partition} \&part2)\label{classPartition_a73}
+
+\begin{CompactList}\small\item\em Define union of partitions (as a unary operator). \item\end{CompactList}\end{CompactItemize}
 \subsection*{Public Attributes}
 \begin{CompactItemize}
 \item 
@@ -202,7 +237,9 @@ sset {\bf ssingletons}\label{classPartition_o2}
 
 
 \subsection{Detailed Description}
-Main class Partition implements a partition and its algebra 
+Main class Partition implements a partition and its algebra. 
+
+Main class Partition implements a partition and its algebra. The latter is defined by the join (union) and meet (intersection) operations. 
 
 
 
@@ -219,12 +256,17 @@ Let's make sure we do not get any duplicated singleton. This is just a cheap pat
 \subsubsection{\setlength{\rightskip}{0pt plus 5cm}Partition::Partition (set$<$ sset $\ast$ $>$ {\em sclassp}, int {\em ofs} = 2, char $\ast$ {\em partf} = NULL, char $\ast$ {\em tabf} = NULL)}\label{classPartition_a3}
 
 
-Create a partition out of a set of pointers to sets (let's call that classes: so a set of pointers to classes...) Partition \_\-will\_\- be sorted by size of clusters and also within each cluster automatically.
+Create a partition out of a set of pointers to sets (let's call that classes: so a set of pointers to classes...) Partition \_\-will\_\- be sorted by size of clusters and also within each cluster automatically. 
 
 \subsection{Member Function Documentation}
-\index{Partition@{Partition}!intersection@{intersection}}
+\index{Partition@{Partition}!getClusterOf@{getClusterOf}}
+\index{getClusterOf@{getClusterOf}!Partition@{Partition}}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}svect Partition::get\-Cluster\-Of (string {\em item})}\label{classPartition_a51}
+
+
+Given an element, get the cluster that contains it. cluster is a typedef specific for Partition \index{Partition@{Partition}!intersection@{intersection}}
 \index{intersection@{intersection}!Partition@{Partition}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition::intersection ({\bf Partition} $\ast$ {\em part2})}\label{classPartition_a54}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition::intersection ({\bf Partition} $\ast$ {\em part2})}\label{classPartition_a61}
 
 
 Calculate the partition intersection of the present one and part2 (passed by pointer). 
@@ -251,7 +293,7 @@ REmove the first fake reverse-sorting label of each cluster
 
 pointer refering to largest cluster \index{Partition@{Partition}!isaPartitionOf@{isaPartitionOf}}
 \index{isaPartitionOf@{isaPartitionOf}!Partition@{Partition}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Partition::isa\-Partition\-Of (svect \& {\em svec\-Ofelements})}\label{classPartition_a9}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}bool Partition::isa\-Partition\-Of (svect \& {\em svec\-Ofelements})}\label{classPartition_a11}
 
 
 Check it is a sound Partition of the specified set of elements. 
@@ -264,26 +306,26 @@ SKIP check for singletons, but non-singletons ARE checked againts clb singletons
 
 With the introduction of {\bf Partition::ssingletons}, no instantiated Partition can have the same singleton element more than once. Hence, there is no need in checking singletons againts singletons. Looping over them means that, on an Opteron 846 2GH, it takes 15sec to check a partition with 502 elements and on average 185 clusters and 95 singletons. Does skipping singletons helps to significantly improve this figure? Also, take svect cla= clusters[i]; out of the second loop (that was weird!). Ok, preliminary test shows an increase in speed of $\sim$28\%, i.e, 9.5sec/partition now versus 13.2sec before! (Compared both ways using a set of 19 partitions of those same sizes. \index{Partition@{Partition}!operator+@{operator+}}
 \index{operator+@{operator+}!Partition@{Partition}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition::operator+ ({\bf Partition} \& {\em part2})}\label{classPartition_a62}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}{\bf Partition} Partition::operator+ ({\bf Partition} \& {\em part2})}\label{classPartition_a72}
 
 
-(TO BE IMPLEMENTED) Define union of partitions (as a binary operator) 
+Define union of partitions (as a binary operator). 
 
-Start of largest cluster in this
+Offset of part2
 
-and end.
+Will contain the set of pair-wise disjoint clusters defining the union
 
-extract only the elements, i.e., w/o the labels.
+pitemsset is a pointer to the largest set of items between the two partitions
 
-Start of largest cluster in [art2
+For each element of the underlying set, obtain the union of its 2 clusters from both partitions
 
-and its end.
+If cla fills completely the set of elements, we are done. Build a partition with it (partition 1) and return
 
-extract only the elements, i.e., w/o the labels.
+If cla is not the first element, remove the previous one if it's already contained within cla
 
-First join the two largest clusters \index{Partition@{Partition}!purityScore@{purityScore}}
+While cla is not the last element, remove it if it's already contained within next one \index{Partition@{Partition}!purityScore@{purityScore}}
 \index{purityScore@{purityScore}!Partition@{Partition}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}vector$<$ double $>$ Partition::purity\-Score ({\bf Partition} $\ast$ {\em part2})}\label{classPartition_a37}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}vector$<$ double $>$ Partition::purity\-Score ({\bf Partition} $\ast$ {\em part2})}\label{classPartition_a44}
 
 
 Calculates both purity score values againts the given partition p2. 
@@ -292,7 +334,7 @@ Normalize by the reference partition
 
 Normalize by the target partition \index{Partition@{Partition}!vipp@{vipp}}
 \index{vipp@{vipp}!Partition@{Partition}}
-\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Partition::vipp ({\bf Partition} $\ast$ {\em part2})}\label{classPartition_a32}
+\subsubsection{\setlength{\rightskip}{0pt plus 5cm}void Partition::vipp ({\bf Partition} $\ast$ {\em part2})}\label{classPartition_a39}
 
 
 Calculates and prints vi distance againts given partition part2. 
