@@ -618,14 +618,81 @@ Partition& Partition::operator+=(Partition& part2){
 	return ((*this)=(*this)+part2);
 }
 
+	smat::iterator merge(smat::iterator& sv, smat& coverset){
+		smat::iterator it_cla=--coverset.end();
+		if(it_cla==coverset.begin())return coverset.end();
+		if(it_cla==sv)return coverset.end();
+		svect cla=*it_cla;
+		if(DEBUG) cout<<"#connected to : "<<*sv<<" ? ";//<<endl;
+		svect k=*sv;
+		svect ki=k*cla;
+		if(ki.size()!=0){
+			coverset.erase(it_cla);
+			if(DEBUG)cout<<"YES => merging "<<k<<" + "<<cla<<" = ";
+			cla+=k;
+			if(DEBUG)cout<<cla<<" ; ";
+			if(DEBUG) cout<<"#Erasing "<<k;
+			sv=coverset.erase(sv);
+			coverset.push_back(cla);
+			if(DEBUG) cout<<" ; Coverset: "<<coverset<<endl;
+			return sv;
+		}
+		else{
+			if(DEBUG) cout<<"NO"<<endl;
+			return ++sv;
+		}
+	}
+
 Partition Partition::operator+(Partition& part2){
-	///Offset of part2
-	//int ofs2=part2.cluster_offset();
+	///Will contain the set of pair-wise disjoint clusters defining the union
+	smat coverset;
+	///pitemsset is a pointer to the largest set of items between the two partitions
+	sset* pitemsset=&sitems;
+	long int nitems=part2.n_items();
+	if(nitems>_nitems)pitemsset=&part2.sitems;
+	else nitems=_nitems;
+	if(pitemsset->size()==0){
+		cout<<"Partition::operator+(...) : ERROR : number of items = "<<pitemsset->size()<<endl;
+		exit(1);
+	}
+	if(DEBUG) cout<<"#Coverset: "<<coverset<<endl;
+	///For each element of the underlying set, obtain the union of its 2 clusters from both partitions
+	for(sset::iterator it=pitemsset->begin();it!=pitemsset->end();it++){
+		svect cla=getClusterOf(*it);
+		svect clb=part2.getClusterOf(*it);
+		if(DEBUG) cout<<*it<<" : "<<cla<<" + "<<clb<<" = ";
+		cla+=clb;
+		if(DEBUG) cout<<cla<<" ";
+		///If cla fills completely the set of elements, we are done. Build a partition with it (partition 1) and return
+		if(cla.size()==nitems){
+			if(DEBUG) cout<<" Done merging... building partition 1 using cluster "<<cla<<endl;
+			smat cls (1,cla);
+			return Partition(&cls, 0);
+		}
+		coverset.push_back(cla);
+		if(DEBUG) cout<<"#inserted new block: "<<cla<<" coverset: "<<coverset<<" ";
+		///If cla is not the first element, remove the previous one if it's already contained within cla
+		smat::iterator sv=coverset.begin();
+		while(merge(sv,coverset)!=coverset.end()){
+			if((--coverset.end())->size()==nitems){
+				if(DEBUG) cout<<" Done merging... building partition 1 using cluster "<<*(--coverset.end())<<endl;
+				smat cls (1,*--coverset.end());
+				return Partition(&cls, 0);
+			}
+		}
+		if(DEBUG) cout<<endl;
+	}
+	smat join (coverset.begin(),coverset.end());
+	if(VERBOSE)cout<<"#Done merging ; building partition with coverset: "<<coverset<<endl;
+	return Partition(&join, 0);
+}
+
+/*
+Partition Partition::operator+(Partition& part2){
 	///Will contain the set of pair-wise disjoint clusters defining the union
 	set<svect,svect_compare> coverset;
-	set<svect>::iterator below_cla;
-	set<svect>::iterator above_cla;
-	//<svect above_cla;
+	set<svect,svect_compare>::iterator below_cla;
+	set<svect,svect_compare>::iterator above_cla;
 	///pitemsset is a pointer to the largest set of items between the two partitions
 	sset* pitemsset=&sitems;
 	long int nitems=part2.n_items();
@@ -650,9 +717,14 @@ Partition Partition::operator+(Partition& part2){
 			return Partition(&cls, 0);
 		}
 		coverset.insert(cla);
+		if(DEBUG) cout<<"#inserted new block: "<<cla<<" ("<<*coverset.find(cla)<<") ";
 		below_cla=coverset.find(cla);
 		if(DEBUG) cout<<"#Coverset: "<<coverset<<" / current="<<*below_cla<<endl;
-		//while(below_cla--!=coverset.begin() && *below_cla<=cla){
+		if(below_cla==coverset.end()){
+			cout<<"Partition::operator+(...) : ERROR : cluster "<<cla<<" was not found in coverset "<<coverset<<" !?"<<endl;
+			exit(1);
+		}
+		//exit(1);
 		///If cla is not the first element, remove the previous one if it's already contained within cla
 		while(below_cla--!=coverset.begin()){
 			if(DEBUG) cout<<"#connected to : "<<*below_cla<<" ? ";//<<endl;
@@ -672,7 +744,7 @@ Partition Partition::operator+(Partition& part2){
 				coverset.erase(coverset.find(k));
 				coverset.insert(cla);
 				below_cla=coverset.find(cla);
-				if(DEBUG) cout<<" ; Coverset: "<<coverset<<" ; next: "<<*below_cla<<endl;
+				if(DEBUG) cout<<" ; Coverset: "<<coverset<<" ; next below: "<<*below_cla<<endl;
 			}
 			else{
 				if(DEBUG) cout<<"NO"<<endl;
@@ -680,13 +752,14 @@ Partition Partition::operator+(Partition& part2){
 		}
 		///While cla is not the last element, remove it if it's already contained within next one
 		above_cla=coverset.upper_bound(cla);
-		svect k=*above_cla;
+		svect k;
 		svect ai;
+		k=*above_cla;
 		ai=k*cla;
 		if(DEBUG&&above_cla!=coverset.end())cout<<"#Upper bound of "<<cla<<" : "<<*above_cla<<endl;
 		while(above_cla!=coverset.end()&& ai.size()!=0  ){
 			coverset.erase(coverset.find(cla));
-			if(DEBUG)cout<<"# connected => merging "<<*above_cla<<" + "<<cla<<" = ";
+			if(DEBUG)cout<<"# connected with "<<*above_cla<<" => merging "<<cla<<" -> "<<*above_cla<<" + "<<cla<<" = ";
 			cla+=k;
 			if(DEBUG)cout<<cla<<" ; ";
 			if(cla.size()==nitems){
@@ -698,7 +771,7 @@ Partition Partition::operator+(Partition& part2){
 			coverset.erase(coverset.find(k));
 			coverset.insert(cla);
 			above_cla=coverset.upper_bound(cla);
-			if(DEBUG) cout<<" ; Coverset: "<<coverset<<" ; next: "<<*above_cla<<endl;
+			if(DEBUG) cout<<" ; Coverset: "<<coverset<<" ; next above: "<<*above_cla<<endl;
 			if(above_cla==coverset.end())break;
 			k=*above_cla;
 			ai=k*cla;
@@ -708,6 +781,7 @@ Partition Partition::operator+(Partition& part2){
 	if(VERBOSE)cout<<"#Done merging ; building partition with coverset: "<<coverset<<endl;
 	return Partition(&join, 0);
 }
+*/
 
 void Partition::tabFile(char* tabf){
 	_mcltabf=tabf; //we use the same private variable for storing the file name

@@ -19,6 +19,7 @@
 Copyright (C) Miguel A. Santos, HSC, Toronto, 2008-2011.
 Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html )
 */
+
 #include "partanalyzer_includes.h"
 #include "partanalyzer_definitions.h"
 #include "partanalyzer_basic_operations.h"
@@ -27,8 +28,9 @@ Licensed under GPL version 3 a later. (see http://www.gnu.org/copyleft/gpl.html 
 #ifndef _CLASS_PARTITION_H
 #define _CLASS_PARTITION_H 1
 
-/// Main class Partition implements a partition and its algebra
-/** Main class Partition implements a partition and its algebra
+/// Main class Partition implements a partition and its algebra.
+/** Main class Partition implements a partition and its algebra. The
+latter is defined by the join (union) and meet (intersection) operations.
 */
 class Partition
 {

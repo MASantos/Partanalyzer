@@ -124,7 +124,7 @@ _CLASS_MULTIPLESEQALIGN_H	MultipleSeqAlign.h	24;"	d
 _CLASS_PARTITION	Partition.cc	24;"	d	file:
 _CLASS_PARTITIONSTATS	PartitionStats.cc	25;"	d	file:
 _CLASS_PARTITIONSTATS_H	PartitionStats.h	27;"	d
-_CLASS_PARTITION_H	Partition.h	28;"	d
+_CLASS_PARTITION_H	Partition.h	29;"	d
 _CLASS_ROBUSTDIVISIVECLUSTERING	RobustDivisiveClustering.cc	24;"	d	file:
 _CLASS_ROBUSTDIVISIVECLUSTERING_H	RobustDivisiveClustering.h	24;"	d
 _CLASS_ROULETTE	Roulette.cc	25;"	d	file:
@@ -366,6 +366,7 @@ median	Statistics.cc	/^double Sampling::median(){ return _X[0];}$/;"	f	class:Sam
 median	Statistics.cc	/^double Sampling::median(double v){ double ov=_X[0] ; _X[0]=v ; return ov;}$/;"	f	class:Sampling
 merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2){$/;"	f	class:MatrixOfValues
 merge	MatrixOfValues.cc	/^void MatrixOfValues::merge(MatrixOfValues* mx2, Partition* pt){$/;"	f	class:MatrixOfValues
+merge	Partition.cc	/^	smat::iterator merge(smat::iterator& sv, smat& coverset){$/;"	f
 minimum_value	Statistics.cc	/^double Sampling::minimum_value(){ return _X[5];}$/;"	f	class:Sampling
 minimum_value	Statistics.cc	/^double Sampling::minimum_value(double v){ double ov=_X[5] ; _X[5]=v ; return ov;}$/;"	f	class:Sampling
 missing	Partition.cc	/^void Partition::missing(){$/;"	f	class:Partition
@@ -427,6 +428,7 @@ operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, const set<svect>& cl){$/;"	f
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, const sset& cl){$/;"	f
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, const svect& cl){$/;"	f
+operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, const vector<svect>& cl){$/;"	f
 operator <<	partanalyzer_basic_operations.h	/^inline ostream& operator<<(ostream& os, graph& g){$/;"	f
 operator <=	Partition.cc	/^bool Partition::operator<=(Partition& part2){$/;"	f	class:Partition
 operator <=	partanalyzer_basic_operations.h	/^inline bool operator<=(const svect& cla, const svect& clb){$/;"	f

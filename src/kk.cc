@@ -65,30 +65,44 @@ typedef vector<string > svect;
 ostream& operator<<(ostream& os, const svect& cl);
 
 bool operator==(const svect& cla, const svect& clb) {
-	//return (cla.size()<clb.size());
-	cout<<cla<<"=="<<clb<<"? ";
-	if(cla.size()!=clb.size()) { cout<<"NO"<<endl; return false; }
-        long int itfound=0;
-        cout<<"checking...";
+	//return (cla.size()==clb.size());
+	//cout<<cla<<"=="<<clb<<"? ";
+	if(cla.size()!=clb.size()) { 
+		//cout<<"NO"<<endl; 
+		return false; 
+	}
+	return equal(cla.begin(),cla.end(),clb.begin());
 	/*
+        cout<<"checking...";
+        long int itfound=0;
         for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)
                 for(svect::const_iterator itb=clb.begin();itb!=clb.end();itb++){
                         //cout<<"CL<= : "<<*ita<<"=="<<*itb<<"?"<<endl;
                         if((*ita).compare(*itb)==0)itfound++;
                 }
         if(itfound==cla.size()) { cout<<"SI"<<endl; return true;}
-	*/
 	set< string> elmts (clb.begin(), clb.end());
-        for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)elmts.insert(*ita);
-	if(elmts.size()==cla.size()){ cout<<"SI"<<endl; return true; }
-        cout<<"NO"<<endl; 
+        for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++){
+		string s=*ita;
+		pair< set< string>::iterator, bool> p=elmts.insert(s);
+		if(!p.second){
+			cout<<"While comparing "<<cla<<" & "<<clb<<" : INSERTING "<<*ita<<" into elmts failed"<<endl;
+			//exit(1);
+		}
+	}
+	if(elmts.size()==cla.size()){ 
+		//cout<<"SI"<<endl; 
+		return true; 
+	}
+        //cout<<"NO"<<endl; 
 	return false;
+	*/
 }
 
 bool operator<(const svect& cla, const svect& clb) {
 	//return (cla.size()<clb.size());
 	cout<<cla<<"<"<<clb<<"? ";
-	if(cla.size()>clb.size()) { cout<<"NO"<<endl; return false; }
+	if(cla.size()>=clb.size()) { cout<<"NO"<<endl; return false; }
         long int itfound=0;
         cout<<"checking...";
         for(svect::const_iterator ita=cla.begin();ita!=cla.end();ita++)
@@ -105,31 +119,32 @@ bool operator<(const svect& cla, const svect& clb) {
 struct vect_compare{
 	bool operator() (const svect& cla, const svect& clb) const {
 		if(cla.size()==clb.size() && cla==clb) return false;
+		//if(cla.size()==clb.size() ) return false;
 		return (cla.size()<=clb.size());
 		}
 };
 
-inline ostream& operator<<(ostream& os, const svect& cl){
-	cout<<"{";
+inline ostream& operator<<(ostream& os, const svect& cl) {
+	os<<"{";
 	svect::const_iterator clast;
 	svect::const_iterator it;
 	clast=cl.end();
 	clast--;
 	for(it=cl.begin();it!=clast;it++){
-		cout<<*it<<",";
+		os<<*it<<",";
 	}
-	if(!cl.empty())cout<<(*(it));
-	cout<<"}";
+	if(!cl.empty())os<<*it;
+	os<<"}";
 }
 
-inline ostream& operator<<(ostream& os, set< svect, vect_compare> S){
+inline ostream& operator<<(ostream& os, const set< svect, vect_compare>& S){
 	os<<"{";
 	if(S.empty()){ 
 		os<<"}";
 		return os;
 	}
-	set< svect, vect_compare>::iterator Slast;
-	set< svect, vect_compare>::iterator it;
+	set< svect, vect_compare>::const_iterator Slast;
+	set< svect, vect_compare>::const_iterator it;
 	Slast=S.end();
 	Slast--;
 	for(it=S.begin();it!=Slast;it++){
@@ -142,8 +157,9 @@ inline ostream& operator<<(ostream& os, set< svect, vect_compare> S){
 
 int main(int argc, char* argv[]){
 	set< svect, vect_compare> coverset;
-	svect cla,clb,clc, cld;
+	svect cla,clb,clc, cld,clap;
 	cla.push_back("1");
+	clap.push_back("5");
 	clb.push_back("3");
 	clb.push_back("4");
 	clc.push_back("2");
@@ -152,18 +168,24 @@ int main(int argc, char* argv[]){
 	cld.push_back("5");
 	cld.push_back("4");
 	cld.push_back("2");
-	cout<<"loading cla="<<cla<<" : "<<coverset<<endl;
+	cout<<"Start: coverset: "<<coverset<<endl;
 	coverset.insert(cla);
-	cout<<"loading clb="<<clb<<" : "<<coverset<<endl;
+	cout<<"loading cla="<<cla<<" : "<<coverset<<" find("<<cla<<")= "<<*coverset.find(cla)<<endl;
 	coverset.insert(clb);
-	cout<<"loading clc="<<clc<<" : "<<coverset<<endl;
+	cout<<"loading clb="<<clb<<" : "<<coverset<<" find("<<clb<<")= "<<*coverset.find(clb)<<endl;
 	coverset.insert(clc);
-	cout<<"loading AGAIN clc="<<clc<<" : "<<coverset<<endl;
+	cout<<"loading clc="<<clc<<" : "<<coverset<<" find("<<clc<<")= "<<*coverset.find(clc)<<endl;
+	/*
 	coverset.insert(clc);
-	cout<<"loading cld="<<cld<<" : "<<coverset<<endl;
+	cout<<"loading AGAIN clc="<<clc<<" : "<<coverset<<" find("<<clc<<")= "<<*coverset.find(clc)<<endl;
+	*/
 	coverset.insert(cld);
+	cout<<"loading cld="<<cld<<" : "<<coverset<<" find("<<cld<<")= "<<*coverset.find(cld)<<endl;
 	cout<<"------------------"<<endl;
 	cout<<coverset<<endl;
+	cout<<"{";
+	for(set< svect,vect_compare>::iterator sv=coverset.begin();sv!=coverset.end();sv++) cout<<*sv<<",";
+	cout<<"}"<<endl;
 	exit(0);
 	/*
 	

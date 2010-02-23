@@ -83,6 +83,21 @@ inline ostream& operator<<(ostream& os, const set<svect>& cl){
 	os<<*it<<"}";
 	return os;
 }
+///Stream out a vector of string vectors
+inline ostream& operator<<(ostream& os, const vector<svect>& cl){
+	os<<"{";
+	if(cl.empty()){
+		os<<"}";
+		return os;
+	}
+	vector< svect>::const_iterator it;
+	vector< svect>::const_iterator clast=cl.end();
+	clast--;
+	for(it=cl.begin();it!=clast;it++)
+		os<<*it<<",";
+	os<<*it<<"}";
+	return os;
+}
 /*  
 */
 /**Algebra of string vectors

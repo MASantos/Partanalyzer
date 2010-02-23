@@ -43,7 +43,7 @@ extern void systemDate();
 ///Type definition of a vector of partitions. Useful with trying to process multiple partitions at once, like in class PartitionStats
 typedef vector<Partition > ppvect;
 
-///Implements operations between multiple partitions. 
+///Implements analysis and operations between multiple partitions. 
 /**Implements operations between multiple partitions. 
 Calculates different kind of pair-wise potentials, distances, inequality-residuals, the cover, ...
 */
